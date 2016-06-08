@@ -1,4 +1,4 @@
-import WorldState from '../WorldState.js';
+import WorldState from './WorldState.js'
 
 export default class {
 	constructor() {
