@@ -1,4 +1,4 @@
-class Actuator {
+module.exports = class {
 	static send(slaveAddress, address, data) {
 		
 	}

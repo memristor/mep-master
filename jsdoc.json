@@ -1,0 +1,14 @@
+{
+  "source": {
+    "include": ["core"]
+  },
+  "plugins": [],
+  "opts": {
+    //"template": "templates/default",
+    "encoding": "utf8",
+    "destination": "web/docs",
+    "recurse": true,
+    //"tutorials": "path/to/tutorials",
+    "readme": "README.md"
+  }
+}

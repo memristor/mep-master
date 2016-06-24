@@ -1,4 +1,4 @@
-export default class {
+class Task {
 	onRun() {
 		console.log('Override onRun() please.');
 	}
@@ -12,3 +12,5 @@ export default class {
 		// Default action on stacked
 	}
 }
+
+module.exports = Task;
