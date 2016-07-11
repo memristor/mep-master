@@ -2,25 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db5ccf1c-3b19-40fa-b376-369590527693" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/hal/modbus/Modbus.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/hal/modbus/Modbus.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/hal/modbus/ModbusClientSwitzerland.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/hal/modbus/ModbusClientSwitzerland.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/hal/modbus/ModbusMaster.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/hal/modbus/ModbusMaster.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/hal/modbus/binding.gyp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/hal/modbus/rs485.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/hal/modbus/rs485.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/hal/motion/Motion.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/hal/motion/binding.gyp" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/core/PositionService.js" afterPath="$PROJECT_DIR$/core/services/PositionService.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/core/TerrainService.js" afterPath="$PROJECT_DIR$/core/services/TerrainService.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/hal/motion/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/App.js" afterPath="$PROJECT_DIR$/core/App.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/CallbackQueue.js" afterPath="$PROJECT_DIR$/core/CallbackQueue.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/types/Quant.js" afterPath="$PROJECT_DIR$/core/types/Quant.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
     </list>
     <ignored path="mep2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -101,11 +84,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UartConnection.h" pinned="false" current-in-tab="true">
+      <file leaf-file-name="UartConnection.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/hal/motion/UartConnection.h">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="391">
               <caret line="23" column="20" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/hal/motion/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="5" selection-start-line="0" selection-start-column="5" selection-end-line="0" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -176,6 +169,7 @@
         <option value="$PROJECT_DIR$/core/hal/motion/Motion.cpp" />
         <option value="$PROJECT_DIR$/core/hal/motion/MotionDriver.h" />
         <option value="$PROJECT_DIR$/core/hal/motion/MotionDriver.cpp" />
+        <option value="$PROJECT_DIR$/core/hal/motion/.gitignore" />
       </list>
     </option>
   </component>
@@ -482,12 +476,12 @@
       <workItem from="1466769189508" duration="3655000" />
       <workItem from="1468000617580" duration="5445000" />
       <workItem from="1468134007299" duration="1195000" />
-      <workItem from="1468258360888" duration="846000" />
+      <workItem from="1468258360888" duration="946000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="49840000" />
+    <option name="totallyTimeSpent" value="49940000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -528,13 +522,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/node_modules/detect-indent/cli.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/communication/SerialSimulator.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -857,6 +844,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
           <caret line="23" column="20" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/hal/motion/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="5" selection-start-line="0" selection-start-column="5" selection-end-line="0" selection-end-column="5" />
           <folding />
         </state>
       </provider>
