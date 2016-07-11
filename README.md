@@ -1,6 +1,6 @@
 ## Global npm modules
 ```
-npm install -g jsdoc mocha
+npm install -g jsdoc mocha node-gyp
 ```
 
 ## Windows only
@@ -12,4 +12,9 @@ npm install -g jsdoc mocha
 ## Generate docs
 ```
 npm run-script docs
+```
+
+## Run tests
+```
+npm test
 ```

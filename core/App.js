@@ -2,7 +2,7 @@
 // USAGE: `const Class = require(__base + 'Class');`
 global.__base = __dirname + '/';
 
-const WorldState = require('./TerrainService');
+const WorldState = require('./services/TerrainService');
 const Log = require('./Log');
 const Config = require('./Config');
 const MotionDriver = require('./drivers/motion/MotionDriver');

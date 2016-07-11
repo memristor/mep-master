@@ -18,9 +18,9 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/LukicDarkoo/mep2#readme",
   "dependencies": {
-    "modbus-rtu": "0.0.1",
+    "bindings": "^1.2.1",
+    "nan": "^2.3.5",
     "react": "^15.1.0",
-    "serialport": "^3.1.2",
     "should": "^9.0.2",
     "websocket": "^1.0.23"
   }

@@ -16,11 +16,11 @@ class Quant {
 		return this.requestedValue - this.currentValue;
 	}
 	
-	setRequested(_value) {
-		this.requestedValue = _value;
+	setRequested(value) {
+		this.requestedValue = value;
 	}
 	
-	setCurrent(_value) {
-		this.currentValue = _value;
+	setCurrent(value) {
+		this.currentValue = value;
 	}
 }
