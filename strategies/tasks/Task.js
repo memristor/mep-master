@@ -1,6 +1,10 @@
+const Log = require('../../core/Log');
+
+const TAG = 'Task';
+
 class Task {
 	onRun() {
-		console.log('Override onRun() please.');
+		Log.warn(TAG, 'Override onRun() please.', 2);
 	}
 	
 	onEnemyDetected(status) {

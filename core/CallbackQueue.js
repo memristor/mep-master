@@ -4,10 +4,12 @@ var TAG = 'CallbackQueue';
 
 /**
  * Queue of callback functions. It used when you want to allow other modules to subscribe to your events.
+ * NOTE: Deprecated!
  */
 class CallbackQueue {
     constructor() {
         this.callbacks = [];
+        Log.debug(TAG, 'Deprecated, use EventEmitter', 1);
     }
 
     /**

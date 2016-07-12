@@ -1,7 +1,6 @@
 /**
  * General configuration file
  */
-
 var Config = {
     /**
      * Enable console output.

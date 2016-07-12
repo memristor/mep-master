@@ -1,41 +1,30 @@
-const Log = require('../../Log');
-const Serial = require('../../communication/Serial');
+if (typeof __base == 'undefined') __base = '../../'; // Makes module independent
 
-var motion = null;
-const TAG = 'Motion';
+const MotionDriverBinder = require('bindings')('motion').MotionDriverBinder;
+const EventEmiter = require('events');
+const Util = require('util');
+const Log = require(__base + 'Log');
+const Config = require(__base + 'Config');
+const MotionDriverSimulator = require('./MotionDriverSimulator');
 
-module.exports = class Motion {
-	constructor() { }
+Util.inherits(MotionDriverBinder, EventEmiter);
 
-	
-	static getInstance() {
-		if (motion == null) {
-			motion = new Motion();
-		}
-		return motion;
-	}
-	
-	softStop() {
-		
-	}
-	
-	hardStop() {
-		
-	}
-	
-	moveForward() {
-		
-	}
-	
-	moveBackward() {
-		
-	}
-	
-	rotateTo() {
-		
-	}
-	
-	rotateFor() {
-		
-	}
-}
+const MotionDirection = {
+    FORWARD: 1,
+    BACKWARD: -1
+};
+
+// Choose what to export, simulation or real hardware
+module.exports = {
+    MotionDriver: (Config.SIMULATION == true) ? MotionDriverSimulator : MotionDriverBinder,
+    MotionDirection
+};
+
+
+// Simulation
+var motionDriver = new MotionDriverSimulator(0, 0);
+setTimeout(function() {
+    motionDriver.moveToPosition(1000, 1000, MotionDirection.BACKWARD);
+}, 5000);
+
+

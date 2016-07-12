@@ -1,3 +1,8 @@
+/*
+    Coded by Darko Lukic <lukicdarkoo@gmail.com>
+    Node.js and C++ bindigs with events (EventEmitter)
+*/
+
 #include <nan.h>
 #include <iostream>
 

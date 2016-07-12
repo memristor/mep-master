@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: App.js</title>
+    <title>JSDoc: Source: hal/motion/MotionDriver.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: App.js</h1>
+    <h1 class="page-title">Source: hal/motion/MotionDriver.js</h1>
 
     
 
@@ -26,47 +26,37 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>// You are able to require relative to root
-// USAGE: `const Class = require(__base + 'Class');`
-global.__base = __dirname + '/';
+            <pre class="prettyprint source linenums"><code>const MotionDriverBinder = require('bindings')('motion').MotionDriverBinder;
+const EventEmiter = require('events');
+const Util = require('util');
 
-const WorldState = require('./services/TerrainService');
-const Log = require('./Log');
-const Config = require('./Config');
-const MotionDriver = require('./drivers/motion/MotionDriver');
+Util.inherits(MotionDriverBinder, EventEmiter);
 
-const TAG = 'App';
+const MotionDirection = {
+    FORWARD: 1,
+    BACKWARD: -1
+};
+
 
 /**
- * Main class where execution starts
+ * This class enables to move robot using simple methods.
  */
-class App {
-	constructor() {
-		this.worldState = new WorldState();
-
-        Log.debug(TAG, Config.DEBUG);
-        Log.error(TAG, 'error');
-
-        const readline = require('readline');
-
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
-
-        rl.question('What do you think of Node.js? ', (answer) => {
-            // TODO: Log the answer in a database
-            console.log('Thank you for your valuable feedback:', answer);
-
-            rl.close();
-        });
-
-
-		// Init beacon, brkon, communicator, laser, lidar and motion
-	}
+class MotionDriver extends MotionDriverBinder {
+    /**
+     * Move to absolute position
+     * @param {Int32} x - X coordinate
+     * @param {Int32} y - Y coordinate
+     * @param {MotionDirection} direction - MotionDirection.FORWARD or MotionDirection.BACKWARD
+     */
+    _moveToPosition(x, y, direction) {}
 }
 
-new App();</code></pre>
+module.exports = {
+    MotionDriver,
+    MotionDirection
+};
+
+</code></pre>
         </article>
     </section>
 
