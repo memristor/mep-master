@@ -27,9 +27,17 @@ MotionDriver::~MotionDriver()
 	delete io_mutex;
 }
 
+void MotionDriver::debug(const string &message) {
+    cout << message << endl;
+}
+
+void MotionDriver::error(const string &message) {
+    cout << message << endl;
+}
+
 void MotionDriver::moveStraight(int distance)
 {
-    std::stringstream ss;
+    stringstream ss;
     ss<<"Move strait: "<<distance;
     debug(ss.str());
 	lock_guard<mutex> lock(*io_mutex);
@@ -160,7 +168,7 @@ int MotionDriver::getDirection()
 
 void MotionDriver::setSpeed(unsigned char speed)
 {
-    unsigned char newSpeed=0;
+    char newSpeed=0;
 
     std::stringstream ss;
     ss<<"Set speed "<<(int)speed;
@@ -174,7 +182,7 @@ void MotionDriver::setSpeed(unsigned char speed)
 
 	char message[] = {
 			'V',
-			speed
+			(char)speed
 	};
 	uart.writeUart(message, 2);
     uart.readAll(&newSpeed, 1);
@@ -182,7 +190,9 @@ void MotionDriver::setSpeed(unsigned char speed)
     if (newSpeed!=speed){
         error("Speed is not set!!");
     }
-    printf("--Received speed: %c %hex: X\n", newSpeed);
+
+    ss << "-- Received speed: " << newSpeed;
+    debug(ss.str());
 }
 
 void MotionDriver::setPositionAndOrientation(const geometry::Point2D position, int orientation)

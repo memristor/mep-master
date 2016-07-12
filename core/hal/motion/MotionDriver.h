@@ -10,11 +10,18 @@
 
 #include <thread>
 #include <mutex>
+#include <sstream>
+#include <iostream>
+#include <string>
 #include "UartConnection.h"
 #include "Point2D.h"
 
 namespace motion
 {
+
+using namespace std;
+
+
 
 class MotionDriver {
 public:
@@ -34,7 +41,10 @@ private:
 
 	int convertToInt(char msb, char lsb);
 	
-	boost::mutex *io_mutex;
+	mutex *io_mutex;
+
+	void debug(const string &message);
+	void error(const string &message);
 
 public:
 	MotionDriver(geometry::Point2D initPosition=geometry::Point2D(), RobotType robotType=VELIKI, int initOrientation=0, int initSpeed=100);

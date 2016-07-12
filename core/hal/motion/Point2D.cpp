@@ -5,7 +5,7 @@
  *      Author: PCX
  */
 
-#include "utils/geometry/Point2D.h"
+#include "Point2D.h"
 #include "math.h"
 
 double PI=3.141592653584;
