@@ -17,10 +17,32 @@ function Robot(x, y, widht, height) {
     this.node.style.borderWidth = '1px';
     this.node.style.borderStyle = 'solid';
     this.node.style.position = 'relative';
+    this.node.addEventListener('mousedown', this.onMouseDown);
+    this.node.addEventListener('mousemove', this.onMouseMove);
+    this.node.addEventListener('mouseup', this.onMouseUp);
+
+    this.moveActive = false;
+    this.onMouseDown.bind(this);
+    this.onMouseMove.bind(this);
+    this.onMouseUp.bind(this);
 
     // Default robot properties
     this.setDimensions(this.width, this.height);
     this.setPosition(this.x, this.y);
+}
+
+Robot.prototype.onMouseDown = function(e) {
+    this.moveActive = true;
+}
+
+Robot.prototype.onMouseMove = function(e) {
+    if (this.moveActive == true) {
+        this.node.style.left = e.clientX;
+    }
+}
+
+Robot.prototype.onMouseUp = function(e) {
+    this.moveActive = false;
 }
 
 Robot.prototype.getNode = function() {

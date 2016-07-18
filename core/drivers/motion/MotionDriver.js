@@ -1,30 +1,18 @@
-if (typeof __base == 'undefined') __base = '../../'; // Makes module independent
+if (typeof __core == 'undefined') __core = '../../'; // Makes module independent
 
 const MotionDriverBinder = require('bindings')('motion').MotionDriverBinder;
 const EventEmiter = require('events');
 const Util = require('util');
-const Log = require(__base + 'Log');
-const Config = require(__base + 'Config');
+const Log = require(__core + 'Log');
+const Config = require(__core + 'Config');
 const MotionDriverSimulator = require('./MotionDriverSimulator');
 
 Util.inherits(MotionDriverBinder, EventEmiter);
 
-const MotionDirection = {
-    FORWARD: 1,
-    BACKWARD: -1
-};
+class MotionDriver extends MotionDriverBinder {
+    static get DIRECTION_FORWARD() { return 1; }
+    static get DIRECTION_BACKWARD() { return -1; }
+}
 
 // Choose what to export, simulation or real hardware
-module.exports = {
-    MotionDriver: (Config.SIMULATION == true) ? MotionDriverSimulator : MotionDriverBinder,
-    MotionDirection
-};
-
-
-// Simulation
-var motionDriver = new MotionDriverSimulator(0, 0);
-setTimeout(function() {
-    motionDriver.moveToPosition(1000, 1000, MotionDirection.BACKWARD);
-}, 5000);
-
-
+module.exports = (Config.SIMULATION == true) ? MotionDriverSimulator : MotionDriver;

@@ -1,11 +1,10 @@
 // You are able to require relative to root
-// USAGE: `const Class = require(__base + 'Class');`
-global.__base = __dirname + '/';
+// USAGE: `const Class = require(__core + 'Class');`
+global.__core = __dirname + '/';
 
-const WorldState = require('./services/TerrainService');
 const Log = require('./Log');
 const Config = require('./Config');
-const MotionDriver = require('./drivers/motion/MotionDriver');
+const ServiceManager = require('./services/ServiceManager');
 
 const TAG = 'App';
 
@@ -14,27 +13,28 @@ const TAG = 'App';
  */
 class App {
 	constructor() {
-		this.worldState = new WorldState();
-
-        Log.debug(TAG, Config.DEBUG);
-        Log.error(TAG, 'error');
-
-        const readline = require('readline');
-
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
-
-        rl.question('What do you think of Node.js? ', (answer) => {
-            // TODO: Log the answer in a database
-            console.log('Thank you for your valuable feedback:', answer);
-
-            rl.close();
-        });
+	    // Start  ServiceManager
+        ServiceManager.getInstance();
 
 
-		// Init beacon, brkon, communicator, laser, lidar and motion
+        Log.debug(TAG, 'Start pathfinding', 2);
+        setTimeout(function() {
+            var PF = require('pathfinding');
+            var grid = new PF.Grid(2000, 3000);
+            var finder = new PF.AStarFinder();
+            var path = finder.findPath(0, 0, 1999, 2999, grid);
+            Log.debug(TAG, 'finished', 2);
+        }, 0);
+        Log.debug(TAG, 'End pathfinding', 2);
+
+
+        const Scheduler = require('../strategies/default/Scheduler');
+        var scheduler = new Scheduler();
+        scheduler.runTask(scheduler.findBestTask());
+
+        for (let i = 2; i < process.argv.length; i++) {
+            console.log(process.argv[i]);
+        }
 	}
 }
 

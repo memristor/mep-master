@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: CallbackQueue</title>
+    <title>JSDoc: Class: MotionDriverSimulator</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: CallbackQueue</h1>
+    <h1 class="page-title">Class: MotionDriverSimulator</h1>
 
     
 
@@ -28,10 +28,10 @@
 
 <header>
     
-        <h2>CallbackQueue</h2>
+        <h2>MotionDriverSimulator</h2>
         
-            <div class="class-description">Queue of callback functions. It used when you want to allow other modules to subscribe to your events.
-NOTE: Deprecated!</div>
+            <div class="class-description">MotionDriver simulation module. Has same methods as MotionDriver but
+this module send all commands to simulator.</div>
         
     
 </header>
@@ -45,18 +45,94 @@ NOTE: Deprecated!</div>
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="CallbackQueue"><span class="type-signature"></span>new CallbackQueue<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="MotionDriverSimulator"><span class="type-signature"></span>new MotionDriverSimulator<span class="signature">(x, y)</span><span class="type-signature"></span></h4>
 
     
 
 
 
+<div class="description">
+    Initialize robot position
+</div>
 
 
 
 
 
 
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>x</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Int32</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Start X coordinate</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Int32</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Start Y coordinate</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -92,7 +168,7 @@ NOTE: Deprecated!</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CallbackQueue.js.html">CallbackQueue.js</a>, <a href="CallbackQueue.js.html#line9">line 9</a>
+        <a href="drivers_motion_MotionDriverSimulator.js.html">drivers/motion/MotionDriverSimulator.js</a>, <a href="drivers_motion_MotionDriverSimulator.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -141,14 +217,14 @@ NOTE: Deprecated!</div>
 
     
 
-    <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="moveToPosition"><span class="type-signature"></span>moveToPosition<span class="signature">(x, y, direction)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Subscribe on event. Add callback function to queue.
+    Move to absolute position
 </div>
 
 
@@ -184,13 +260,13 @@ NOTE: Deprecated!</div>
 
         <tr>
             
-                <td class="name"><code>callback</code></td>
+                <td class="name"><code>x</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">Int32</span>
 
 
             
@@ -200,7 +276,53 @@ NOTE: Deprecated!</div>
 
             
 
-            <td class="description last">Pointer on callback function</td>
+            <td class="description last">X coordinate</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Int32</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Y coordinate</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>direction</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">MotionDirection</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">MotionDirection.FORWARD or MotionDirection.BACKWARD</td>
         </tr>
 
     
@@ -241,7 +363,7 @@ NOTE: Deprecated!</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CallbackQueue.js.html">CallbackQueue.js</a>, <a href="CallbackQueue.js.html#line19">line 19</a>
+        <a href="drivers_motion_MotionDriverSimulator.js.html">drivers/motion/MotionDriverSimulator.js</a>, <a href="drivers_motion_MotionDriverSimulator.js.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -272,14 +394,14 @@ NOTE: Deprecated!</div>
 
     
 
-    <h4 class="name" id="notifyAll"><span class="type-signature"></span>notifyAll<span class="signature">(params)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="sendToSimulator"><span class="type-signature"></span>sendToSimulator<span class="signature">(params)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Call all callback functions from queue with same parameters.
+    Send data to simulator
 </div>
 
 
@@ -321,7 +443,7 @@ NOTE: Deprecated!</div>
             <td class="type">
             
                 
-<span class="param-type">Array</span>
+<span class="param-type">Object</span>
 
 
             
@@ -331,7 +453,7 @@ NOTE: Deprecated!</div>
 
             
 
-            <td class="description last">Params which will passed to callback functions</td>
+            <td class="description last">Specific set of params for each command</td>
         </tr>
 
     
@@ -372,7 +494,7 @@ NOTE: Deprecated!</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CallbackQueue.js.html">CallbackQueue.js</a>, <a href="CallbackQueue.js.html#line27">line 27</a>
+        <a href="drivers_motion_MotionDriverSimulator.js.html">drivers/motion/MotionDriverSimulator.js</a>, <a href="drivers_motion_MotionDriverSimulator.js.html#line53">line 53</a>
     </li></ul></dd>
     
 
