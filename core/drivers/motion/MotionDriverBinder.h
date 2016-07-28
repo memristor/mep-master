@@ -13,6 +13,12 @@ using v8::Isolate;
 using v8::Exception;
 using namespace std;
 
+// `refreshData()` should be async
+// More details about async function implementation in Node.js:
+// https://blog.scottfrees.com/c-processing-from-node-js-part-4-asynchronous-addons
+// https://nikhilm.github.io/uvbook/threads.html
+// http://stackoverflow.com/questions/36987273/callback-nodejs-javascript-function-from-multithreaded-c-addon
+
 class MotionDriverBinder : public Nan::ObjectWrap {
 public:
     static void Init(Local<Object> exports);
@@ -25,6 +31,8 @@ private:
                            int initOrientation=0,
                            int initSpeed=100);
     static void moveToPosition(const Nan::FunctionCallbackInfo<Value> &args);
+    static void stop(const Nan::FunctionCallbackInfo<Value> &args);
+    static void moveStraight(const Nan::FunctionCallbackInfo<Value> &args);
 
     MotionDriver *motionDriver;
 };

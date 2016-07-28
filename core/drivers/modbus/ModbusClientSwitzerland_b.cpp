@@ -14,8 +14,14 @@ ModbusClientSW::ModbusClientSW(): m_mutex(new mutex()){
     config.errorTimeout = 1000;
     currentInstruction.instruction = NONE;
     std::cout<<"Created ModbusClientSW" << endl;
+
+	mainThread = thread(bind(&ModbusClientSW::main, this));
 }
 
+ModbusClientSW::~ModbusClientSW() {
+    stop();
+    mainThread.join();
+}
 
 ModbusClientSW* ModbusClientSW::getModbusClientInstance(){
     if(!modbusClientSWInstance){
@@ -25,7 +31,7 @@ ModbusClientSW* ModbusClientSW::getModbusClientInstance(){
     return modbusClientSWInstance;
 }
 
-void ModbusClientSW::main(uv_async_t *asyncCoilReading, ModbusCallbackData *modbusCallbackData){
+void ModbusClientSW::main(){
     //bool success;
     // TODO
     //
@@ -36,19 +42,6 @@ void ModbusClientSW::main(uv_async_t *asyncCoilReading, ModbusCallbackData *modb
             while(setQueue.empty() && readingMap.empty()){
                 std::cout << "waiting on sometin" << std::endl;
                 setQueueNotEmpty.wait(lock);
-
-                // START: Callback test section
-                modbusCallbackData->slaveAddress = 1;
-                modbusCallbackData->functionAddress = 2;
-                modbusCallbackData->detected = true;
-                asyncCoilReading->data = (void *)modbusCallbackData;
-                uv_async_send(asyncCoilReading);
-
-                int a;
-                cin >> a;
-                // END: Callback test section
-
-
                 break;
             }
             if(errorElectronic == ERROR){
@@ -123,23 +116,13 @@ void ModbusClientSW::main(uv_async_t *asyncCoilReading, ModbusCallbackData *modb
                         m_mutex->lock();
                         readingMap[counterMap].reading = false;
                         m_mutex->unlock();
-
-                        // TODO
-                        //ModbusCallbackData modbusCallbackData(allData.modID.slave_address, allData.modID.function_address, true);
-                        //asyncCoilReading->data = (void *)&modbusCallbackData;
-                        //uv_async_send(asyncCoilReading);
-
+                        allData.interface->callbackCoilFunction(counterMap, true);
                         counterRead = 0;
                     }else if(successReading && allData.callbackOnNotDetected){
                         m_mutex->lock();
                         readingMap[counterMap].reading = false;
                         m_mutex->unlock();
-
-                        // TODO
-                        //ModbusCallbackData modbusCallbackData(allData.modID.slave_address, allData.modID.function_address, false);
-                        //asyncCoilReading->data = (void *)&modbusCallbackData;
-                        //uv_async_send(asyncCoilReading);
-
+                        allData.interface->callbackCoilFunction(counterMap, false);
                         counterRead = 0;
                         if(allData.modID.function_address == char(7)){
 //                            std::cout << "reading coil, value: " << allData.detected << std::endl;
@@ -217,6 +200,7 @@ bool ModbusClientSW::setCoil(unsigned char _slave_address, short _function_addre
         m_mutex->lock();
         setQueue.push(Instruction(WRITE_COIL,data));
         m_mutex->unlock();
+        setQueueNotEmpty.notify_one();
         return true;
     }else{
         return writeRegister(data);
@@ -349,10 +333,10 @@ bool ModbusClientSW::readRegister(unsigned char _slaveAddress, short _functionAd
     return success;
 }
 
-int ModbusClientSW::registerCoilReading(unsigned char _slave_address, short _function_address , bool _callbackOnNotDetected){
-
+int ModbusClientSW::registerCoilReading(ModbusClientSWInterface* _interface, unsigned char _slave_address, short _function_address , bool _callbackOnNotDetected){
     callbackData data;
 
+    data.interface = _interface;
     data.reading = false;
     data.detected = false;
     data.modID.function_address = _function_address;
@@ -361,7 +345,6 @@ int ModbusClientSW::registerCoilReading(unsigned char _slave_address, short _fun
     data.callbackOnNotDetected = _callbackOnNotDetected;
 
     m_mutex->lock();
-
     readingMap[mapID] = data;
     mapID++;
     counterMap = 0;
@@ -371,9 +354,10 @@ int ModbusClientSW::registerCoilReading(unsigned char _slave_address, short _fun
     return id ;
 }
 
-int ModbusClientSW::registerRegisterReading(unsigned char _slave_address, short _function_address){
+int ModbusClientSW::registerRegisterReading(ModbusClientSWInterface *_interface,  unsigned char _slave_address, short _function_address){
     callbackData data;
 
+    data.interface = _interface;
     data.modID.slave_address = _slave_address;
     data.modID.function_address = _function_address;
     data.detected = false;

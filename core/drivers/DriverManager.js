@@ -1,29 +1,21 @@
+const Config = require('../config/Config');
 const MotionDriver = require('./motion/MotionDriver');
-
-const Constants = {
-    MOTION_DRIVER: 'MOTION_DRIVER',
-};
-
-var driverManager = null;
+const ModbusDriver = require('./modbus/ModbusDriver');
 
 /**
  * Manage services. Start all services and provides instance of required service.
  * Singleton class.
  */
 class DriverManager {
-    constructor() {
-        this.motionDriver = new MotionDriver.MotionDriver();
-    }
+    static get MOTION_DRIVER() { return 'MOTION_DRIVER'; }
+    static get MODBUS_DRIVER() { return 'MODBUS_DRIVER'; }
 
-    /**
-     * Get ServiceManager instance
-     * @returns {ServiceManager} - ServiceManager instance
-     */
-    static getInstance() {
-        if (driverManager == null) {
-            driverManager = new DriverManager();
-        }
-        return driverManager;
+    constructor(robot) {
+        this.robot = robot;
+
+        this.motionDriver = new MotionDriver(0, 0);
+        console.log('test');
+        this.modbusDriver = new ModbusDriver();
     }
 
     /**
@@ -34,8 +26,16 @@ class DriverManager {
      */
     getDriver(name) {
         switch (name) {
-            case Constants.MOTION_DRIVER:
-                return this.schedulerService;
+            case DriverManager.MOTION_DRIVER:
+                return this.motionDriver;
+                break;
+
+            case DriverManager.MODBUS_DRIVER:
+                return this.modbusDriver;
+                break;
+
+            default:
+                console.log('error gettting driver');
                 break;
         }
     }

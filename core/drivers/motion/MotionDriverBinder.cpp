@@ -15,6 +15,8 @@ void MotionDriverBinder::Init(Local<Object> exports) {
     tmpl->InstanceTemplate()->SetInternalFieldCount(1);
 
     Nan::SetPrototypeMethod(tmpl, "moveToPosition", moveToPosition);
+    Nan::SetPrototypeMethod(tmpl, "stop", stop);
+	Nan::SetPrototypeMethod(tmpl, "moveStraight", moveStraight);
 
     exports->Set(Nan::New("MotionDriverBinder").ToLocalChecked(), tmpl->GetFunction());
 }
@@ -29,11 +31,9 @@ void MotionDriverBinder::New(const Nan::FunctionCallbackInfo<Value> &args) {
         args[0]->IsInt32() == false ||
         args[1]->IsInt32() == false) {
 
-        /*
         args.GetIsolate()->ThrowException(Exception::TypeError(
             Nan::New("Constructor requires at least two arguments").ToLocalChecked()
         ));
-        */
         return;
     }
 
@@ -74,4 +74,31 @@ void MotionDriverBinder::moveToPosition(const Nan::FunctionCallbackInfo<Value> &
     MotionDriver::MovingDirection direction = (args[0]->Int32Value() == 1) ? MotionDriver::FORWARD : MotionDriver::BACKWARD;
 
     motionDriver->moveToPosition(position, direction);
+}
+
+/*
+    Original: MotionDriver::stop();
+*/
+void MotionDriverBinder::stop(const Nan::FunctionCallbackInfo<Value> &args) {
+    Nan::HandleScope scope;
+
+    MotionDriver *motionDriver = ObjectWrap::Unwrap<MotionDriverBinder>(args.Holder())->getMotionDriver();
+
+    motionDriver->stop();
+}
+
+void MotionDriverBinder::moveStraight(const Nan::FunctionCallbackInfo<Value> &args) {
+    Nan::HandleScope scope;
+
+	 if (args.Length() != 1 ||
+        args[0]->IsInt32() == false) {
+		
+		args.GetIsolate()->ThrowException(Exception::TypeError(
+            Nan::New("Please check arguments").ToLocalChecked()
+        ));
+	}
+
+    MotionDriver *motionDriver = ObjectWrap::Unwrap<MotionDriverBinder>(args.Holder())->getMotionDriver();
+
+    motionDriver->moveStraight(args[0]->Int32Value());
 }

@@ -1,19 +1,32 @@
 const Task = require(__core + 'Task');
-const MotionDriver = require(__core + 'drivers/motion/MotionDriver');
+const DriverManager = require(__core + 'drivers/DriverManager');
+
 
 class InitTask extends Task {
-    constructor() {
+    constructor(robot) {
         super();
+
+        this.motionDriver = robot.getDriver(DriverManager.MOTION_DRIVER);
+        this.modbusDriver = robot.getDriver(DriverManager.MODBUS_DRIVER);
     }
 
     onRun() {
-        var motionDriver = new MotionDriver(0, 0);
+        var that = this;
+
+		var slaveAddress = 1;
+		var functionAddress = 7; // Ono gore cudo
+		this.modbusDriver.registerCoilReading(slaveAddress, functionAddress);
+		this.modbusDriver.on('coilChanged', function(slaveAddress, functionAddress, state, id) {
+		    //that.motionDriver.stop();
+
+		    console.log('Coil Changed! Slave address: ' + slaveAddress + '; Function address: ' +
+		        functionAddress + '; State: ' + state);
+		});
+	
 
 
-
-        setTimeout(function() {
-            motionDriver.moveToPosition(23, 23, MotionDriver.DIRECTION_BACKWARD);
-        }, 1000);
+	//this.motionDriver.moveToPosition(100, 100, 1);
+	//this.motionDriver.moveStraight(100);
     }
 }
 

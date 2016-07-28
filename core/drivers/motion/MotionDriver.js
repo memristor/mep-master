@@ -4,7 +4,7 @@ const MotionDriverBinder = require('bindings')('motion').MotionDriverBinder;
 const EventEmiter = require('events');
 const Util = require('util');
 const Log = require(__core + 'Log');
-const Config = require(__core + 'Config');
+const Config = require(__core + 'config/Config');
 const MotionDriverSimulator = require('./MotionDriverSimulator');
 
 Util.inherits(MotionDriverBinder, EventEmiter);

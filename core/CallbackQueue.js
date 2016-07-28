@@ -9,7 +9,7 @@ var TAG = 'CallbackQueue';
 class CallbackQueue {
     constructor() {
         this.callbacks = [];
-        Log.debug(TAG, 'Deprecated, use EventEmitter', 1);
+        Log.debug(TAG, 'Deprecated, use please EventEmitter', 1);
     }
 
     /**

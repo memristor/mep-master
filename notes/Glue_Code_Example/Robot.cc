@@ -13,6 +13,8 @@ using v8::Value;
 using v8::Handle;
 using v8::Isolate;
 using v8::Exception;
+using v8::Persistent;
+using v8::Context;
 using namespace std;
 
 class Robot : public Nan::ObjectWrap {
@@ -39,8 +41,12 @@ class Robot : public Nan::ObjectWrap {
 		}
 
 		Robot() : x(0) {}
+
+		Persistent<Object> obj;
 	
 	private:
+
+
 		static void getX(const Nan::FunctionCallbackInfo<Value>& args) {
 			Nan::HandleScope scope;
 
@@ -50,7 +56,6 @@ class Robot : public Nan::ObjectWrap {
 		}
 
 		static void setX(const Nan::FunctionCallbackInfo<Value>& args) {
-			Isolate* isolate = args.GetIsolate();
 			Nan::HandleScope scope;
 
 			Robot *robot = ObjectWrap::Unwrap<Robot>(args.Holder());
@@ -66,13 +71,17 @@ class Robot : public Nan::ObjectWrap {
 				robot->x = args[0]->Int32Value();
 			}
 
+            (robot->obj).Reset(args.GetIsolate(), args.Holder());
+
+
 			// Fire event
-			Handle<Value> argv[2] = {
+			Handle<Value> argv[] = {
 				Nan::New("positionChanged").ToLocalChecked(),
 				Nan::New(robot->x)
 			};
 			
-			Nan::MakeCallback(args.This(), "emit", 2, argv);
+			Nan::MakeCallback(Nan::New(robot->obj), "emit", 2, argv);
+			//Nan::Call("emit", args.This(), 2, argv);
 		}
 
 		int x;

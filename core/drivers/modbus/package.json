@@ -1,0 +1,13 @@
+{
+  "name": "modbus",
+  "version": "1.0.0",
+  "description": "Modbus Driver for Memristor",
+  "main": "ModbusDriver.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "node-gyp rebuild"
+  },
+  "author": "",
+  "license": "ISC",
+  "gypfile": true
+}

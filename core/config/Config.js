@@ -9,6 +9,17 @@ var Config = {
     DEBUG: true,
     SIMULATION: false,
     DEBUG_TO_FILE: false,
+
+    Drivers: {
+        MotionDriver: {
+            //class: 'drivers/motion/MotionDriver'
+        }
+    },
+
+    Log: {
+        name: 'MEP',
+        src: true,
+    }
 }
 
 module.exports = Config;

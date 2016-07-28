@@ -1,16 +1,35 @@
-
 #ifndef MODBUS_CLIENT_SWITZERLAND
 #define MODBUS_CLIENT_SWITZERLAND
 
 #include "ModbusMaster.h"
 #include <mutex>
-#include <thread>
+#include <functional>
 #include <map>
 #include <queue>
 #include <iterator>
+#include <condition_variable>
+#include <iostream>
+#include <thread>
+#include <nan.h>
+#include <uv.h>
 
 using namespace std;
+using v8::Persistent;
+using v8::Object;
 
+class ModbusCallbackData {
+public:
+    unsigned char slaveAddress;
+    short functionAddress;
+    bool detected;
+    Persistent<Object> object;
+};
+
+class ModbusReqData {
+public:
+    uv_async_t *asyncReading;
+    ModbusCallbackData *modbusCallbackData;
+};
 
 class ModbusClientSWInterface{
 public:
@@ -109,12 +128,12 @@ public:
     bool readCoil(unsigned char _slave_address, short _function_address, bool* _callFunction); // done
     bool readRegister(unsigned char _slaveAddress, short _functionAddress, short* _data); // done
 
-    int registerCoilReading(ModbusClientSWInterface* _interface,   // done
-                             unsigned char _slave_address, short _function_address, bool _callbackOnNotDetected );
-    int registerRegisterReading(ModbusClientSWInterface* _interface, // done
-                                 unsigned char _slave_address, short _function_address );
+    int registerCoilReading(unsigned char _slave_address, short _function_address, bool _callbackOnNotDetected );
+    int registerRegisterReading(unsigned char _slave_address, short _function_address );
     void setReading(int _id, bool _readingTrue);
-    // TODO;
+
+    void main(uv_async_t *asyncCoilReading, ModbusCallbackData *modbusCallbackData);
+
 
 private:
     ModbusClientSW();
@@ -147,7 +166,6 @@ private:
     condition_variable setQueueNotEmpty;
     mutex InstructionQueueMutex;
 
-    void main();
     void stop();
 };
 

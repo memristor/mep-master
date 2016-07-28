@@ -7,6 +7,7 @@ class Task {
     static get READY() { return 1; }
     static get SUSPENDED() { return 2; }
     static get ACTIVE() { return 3; }
+    static get FINISHED() { return 4; }
 
     constructor() {
         this.state = Task.READY;

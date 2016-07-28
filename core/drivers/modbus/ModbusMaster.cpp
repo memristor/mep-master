@@ -1,10 +1,5 @@
 #include "ModbusMaster.h"
 
-//#define DELAY_TIME 150
-//#define xBlockTime 200
-
-namespace modbus {
-
 ModbusMaster::ModbusMaster(speed_t baudRate):rs485(true, baudRate)
 {}
 
@@ -510,5 +505,3 @@ ModbusMaster* ModbusMaster::getModbusInstance(){
 }
 
 ModbusMaster *ModbusMaster::instance = 0;
-
-}
