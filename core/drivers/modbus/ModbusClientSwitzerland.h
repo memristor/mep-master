@@ -14,21 +14,13 @@
 #include <uv.h>
 
 using namespace std;
-using v8::Persistent;
-using v8::Object;
+using Nan::AsyncProgressWorker;
 
 class ModbusCallbackData {
 public:
     unsigned char slaveAddress;
     short functionAddress;
     bool detected;
-    Persistent<Object> object;
-};
-
-class ModbusReqData {
-public:
-    uv_async_t *asyncReading;
-    ModbusCallbackData *modbusCallbackData;
 };
 
 class ModbusClientSWInterface{
@@ -132,8 +124,8 @@ public:
     int registerRegisterReading(unsigned char _slave_address, short _function_address );
     void setReading(int _id, bool _readingTrue);
 
-    void main(uv_async_t *asyncCoilReading, ModbusCallbackData *modbusCallbackData);
-
+    void main(const AsyncProgressWorker::ExecutionProgress& progress);
+    void stop();
 
 private:
     ModbusClientSW();
@@ -166,7 +158,7 @@ private:
     condition_variable setQueueNotEmpty;
     mutex InstructionQueueMutex;
 
-    void stop();
+
 };
 
 #endif // end MODBUS_CLIENT_SWITZERLAND

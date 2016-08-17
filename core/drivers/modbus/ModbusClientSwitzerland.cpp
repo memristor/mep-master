@@ -25,7 +25,7 @@ ModbusClientSW* ModbusClientSW::getModbusClientInstance(){
     return modbusClientSWInstance;
 }
 
-void ModbusClientSW::main(uv_async_t *asyncCoilReading, ModbusCallbackData *modbusCallbackData){
+void ModbusClientSW::main(const AsyncProgressWorker::ExecutionProgress& progress){
     //bool success;
     // TODO
     //
@@ -34,23 +34,29 @@ void ModbusClientSW::main(uv_async_t *asyncCoilReading, ModbusCallbackData *modb
         switch (currentState){
         case CHECK:{
             while(setQueue.empty() && readingMap.empty()){
-                std::cout << "waiting on sometin" << std::endl;
+                std::cout << "Modbus: Waiting for a check" << std::endl;
                 setQueueNotEmpty.wait(lock);
 
                 // START: Callback test section
-                modbusCallbackData->slaveAddress = 1;
-                modbusCallbackData->functionAddress = 2;
-                modbusCallbackData->detected = true;
-                asyncCoilReading->data = (void *)modbusCallbackData;
-                uv_async_send(asyncCoilReading);
+                /*
+                ModbusCallbackData modbusCallbackData;
+                modbusCallbackData.slaveAddress = 1;
+                modbusCallbackData.functionAddress = 5;
+                modbusCallbackData.detected = true;
 
-                int a;
-                cin >> a;
+
+                progress.Send(reinterpret_cast<const char*>(&modbusCallbackData), sizeof(modbusCallbackData));
+                this_thread::sleep_for(chrono::milliseconds(1000 * 1));
+
+                progress.Send(reinterpret_cast<const char*>(&modbusCallbackData), sizeof(modbusCallbackData));
+                this_thread::sleep_for(chrono::milliseconds(1000 * 10));
+                */
                 // END: Callback test section
 
 
                 break;
             }
+
             if(errorElectronic == ERROR){
                 this_thread::sleep_for(chrono::microseconds(config.errorTimeout));
 
@@ -124,10 +130,13 @@ void ModbusClientSW::main(uv_async_t *asyncCoilReading, ModbusCallbackData *modb
                         readingMap[counterMap].reading = false;
                         m_mutex->unlock();
 
-                        // TODO
-                        //ModbusCallbackData modbusCallbackData(allData.modID.slave_address, allData.modID.function_address, true);
-                        //asyncCoilReading->data = (void *)&modbusCallbackData;
-                        //uv_async_send(asyncCoilReading);
+                        // Notify
+                        ModbusCallbackData modbusCallbackData;
+                        modbusCallbackData.slaveAddress = allData.modID.slave_address;
+                        modbusCallbackData.functionAddress = allData.modID.function_address;
+                        modbusCallbackData.detected = true;
+                        progress.Send(reinterpret_cast<const char*>(&modbusCallbackData), sizeof(modbusCallbackData));
+
 
                         counterRead = 0;
                     }else if(successReading && allData.callbackOnNotDetected){
@@ -135,10 +144,12 @@ void ModbusClientSW::main(uv_async_t *asyncCoilReading, ModbusCallbackData *modb
                         readingMap[counterMap].reading = false;
                         m_mutex->unlock();
 
-                        // TODO
-                        //ModbusCallbackData modbusCallbackData(allData.modID.slave_address, allData.modID.function_address, false);
-                        //asyncCoilReading->data = (void *)&modbusCallbackData;
-                        //uv_async_send(asyncCoilReading);
+                        // Notify
+                        ModbusCallbackData modbusCallbackData;
+                        modbusCallbackData.slaveAddress = allData.modID.slave_address;
+                        modbusCallbackData.functionAddress = allData.modID.function_address;
+                        modbusCallbackData.detected = false;
+                        progress.Send(reinterpret_cast<const char*>(&modbusCallbackData), sizeof(modbusCallbackData));
 
                         counterRead = 0;
                         if(allData.modID.function_address == char(7)){

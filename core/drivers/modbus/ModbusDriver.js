@@ -4,18 +4,25 @@ const Util = require('util');
 
 Util.inherits(ModbusDriverBinder, EventEmiter);
 
-module.exports = ModbusDriverBinder;
+
+class ModbusDriver extends ModbusDriverBinder {
+    constructor() {
+        super(() => {}, () => {});
+    }
+}
+
+module.exports = ModbusDriver;
 
 
-
-var modbus = new ModbusDriverBinder();
-
-modbus.on('coilChanged', function(slaveAddress, functionAddress, state, id) {
-    console.log('Coil Changed! Slave address: ' + slaveAddress + '; Function address: ' +
-        functionAddress + '; State: ' + state);
+/*
+var modbus = new ModbusDriver(function(e) {
+    console.log('cccc' + e);
+}, function(e) {
+    console.log('CCC' + e);
 });
 
 modbus.registerCoilReading(1, 2);
 
 
 setTimeout(() => {}, 5 * 1000);
+    */

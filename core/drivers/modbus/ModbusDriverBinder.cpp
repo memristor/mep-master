@@ -1,49 +1,12 @@
 #include "ModbusDriverBinder.h"
 
-ModbusDriverBinder::ModbusDriverBinder() {
+ModbusDriverBinder::ModbusDriverBinder(Callback *progress, Callback *callback) {
     modbusClient = ModbusClientSW::getModbusClientInstance();
-
-    ModbusReqData *modbusReqData = new ModbusReqData();
-    modbusReqData->asyncReading = &asyncCoilReading;
-    modbusReqData->modbusCallbackData = modbusCallbackData;
-    reqCoilReading.data = (void *)modbusReqData;
-
-    uv_async_init(uv_default_loop(), &asyncCoilReading, ModbusDriverBinder::listenAsyncEvent);
-    uv_queue_work(uv_default_loop(), &reqCoilReading, ModbusDriverBinder::listenAsyncStart, ModbusDriverBinder::listenAsyncFinished);
-
-    //listenThread = thread(&ModbusClientSW::main, modbusClient, &asyncCoilReading, modbusCallbackData);
+    Nan::AsyncQueueWorker(new ModbusDataListenerWorker(callback, progress));
 }
-
-void ModbusDriverBinder::listenAsyncStart(uv_work_t *req) {
-    ModbusClientSW::getModbusClientInstance()->main(&asyncCoilReading, ());
-}
-
-void ModbusDriverBinder::listenAsyncFinished(uv_work_t *req, int status) {
-    uv_close((uv_handle_t*) &asyncCoilReading, nullptr);
-}
-
-void ModbusDriverBinder::listenAsyncEvent(uv_async_t *handle) {
-    cout << "ModbusDriverBinder::callbackCoilFunction()" << endl;
-
-    Nan::HandleScope scope;
-
-    ModbusCallbackData *modbusCallbackData = (ModbusCallbackData *)handle->data;
-
-    // Fire event
-    Handle<Value> argv[] = {
-        Nan::New("coilChanged").ToLocalChecked(),
-        Nan::New(modbusCallbackData->slaveAddress),
-        Nan::New(modbusCallbackData->functionAddress),
-        Nan::New(modbusCallbackData->detected)
-    };
-
-    Nan::MakeCallback(Nan::New(modbusCallbackData->object), "emit", 4, argv);
-}
-
-
 
 ModbusDriverBinder::~ModbusDriverBinder() {
-    delete modbusCallbackData;
+    modbusClient->stop();
 }
 
 void ModbusDriverBinder::registerCoilReading(unsigned char slaveAddress, short functionAddress) {
@@ -85,11 +48,22 @@ void ModbusDriverBinder::Init(Local<Object> exports) {
 void ModbusDriverBinder::New(const Nan::FunctionCallbackInfo<Value> &args) {
     Nan::HandleScope scope;
 
-    // Create object
-    ModbusDriverBinder *modbusDriverBinder = new ModbusDriverBinder();
+    if (args.Length() != 2 ||
+        args[0]->IsFunction() == false ||
+        args[1]->IsFunction() == false) {
+
+        args.GetIsolate()->ThrowException(Exception::TypeError(
+            Nan::New("Please check arguments").ToLocalChecked()
+        ));
+    }
+
+
+    Callback *progress = new Callback(args[0].As<v8::Function>());
+    Callback *callback = new Callback(args[1].As<v8::Function>());
+
+    ModbusDriverBinder *modbusDriverBinder = new ModbusDriverBinder(callback, progress);
     modbusDriverBinder->Wrap(args.This());
-    modbusDriverBinder->modbusCallbackData = new ModbusCallbackData();
-    ((modbusDriverBinder->modbusCallbackData)->object).Reset(args.GetIsolate(), args.Holder());
+
 
     // Return object
     args.GetReturnValue().Set(args.This());
