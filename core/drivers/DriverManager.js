@@ -1,4 +1,4 @@
-const Config = require('../config/Config');
+const Config = require('../config/default');
 const MotionDriver = require('./motion/MotionDriver');
 const ModbusDriver = require('./modbus/ModbusDriver');
 

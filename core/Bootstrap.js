@@ -1,12 +1,9 @@
 global.MepRequire = require('./MepRequire');
 
-const Config = require('./config/Config');
-const Robot = require('./Robot');
-
 /**
  * Main class where execution starts
  */
-class App {
+class Bootstrap {
 	constructor() {
 	    // Start  ServiceManager
         var robot = new Robot(Config);
@@ -30,4 +27,4 @@ class App {
 	}
 }
 
-new App();
+new Bootstrap();

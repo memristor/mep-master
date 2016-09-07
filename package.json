@@ -19,7 +19,6 @@
   "homepage": "https://bitbucket.org/LukicDarkoo/mep2#readme",
   "dependencies": {
     "bindings": "^1.2.1",
-    "bunyan": "^1.8.1",
     "nan": "^2.3.5",
     "pathfinding": "^0.4.18",
     "react": "^15.1.0",
