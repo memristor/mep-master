@@ -1,17 +1,16 @@
 const InitTask = require('./InitTask');
 
 class Scheduler {
-    constructor(robot) {
+    constructor() {
         this.tasks = [
             {
-                task: (new InitTask(robot)),
+                task: (new InitTask()),
                 weight: 10000,
                 time: 10,
                 state: 'Ready',
                 location: 1
             }
         ];
-
     }
 
     getTasks() {

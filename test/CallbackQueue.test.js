@@ -1,5 +1,5 @@
 const should = require('should');
-const CallbackQueue = require('../core/CallbackQueue');
+const CallbackQueue = require('../core/utils/CallbackQueue');
 
 describe('CallbackQueue', function() {
     var cq = new CallbackQueue();

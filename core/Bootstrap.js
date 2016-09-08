@@ -1,4 +1,4 @@
-global.MepRequire = require('./MepRequire');
+global.Mep = require('./Mep');
 
 /**
  * Main class where execution starts

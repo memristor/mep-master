@@ -1,31 +1,32 @@
-const Config = require('./Config');
+const SimulationSufix = (Mep.Config.get('Simulation') === true) ? 'Simulator' : '';
 
-var MotionDriver;
-var ModbusDriver;
-
-if (Config.get('Simulation') == true) {
-    MotionDriver = require('./drivers/motion/MotionDriverSimulator');
-    ModbusDriver = require('./drivers/modbus/ModbusDriverSimulator');
-} else {
-    MotionDriver = require('./drivers/motion/MotionDriver');
-    ModbusDriver = require('./drivers/modbus/ModbusDriver');
-}
+const SingletonException = require('../exceptions/SingletonException');
+const MotionDriver = require('./motion/MotionDriver' + SimulationSufix);
+const ModbusDriver = require('./modbus/ModbusDriver' + SimulationSufix);
 
 var instance = null;
 
 /**
- * Manage services. Start all services and provides instance of required service.
- * Singleton class.
+ * Manage drivers. Starts all drivers and provides instance of required driver.
  */
 class DriverManager {
     static get MOTION_DRIVER() { return 'MOTION_DRIVER'; }
     static get MODBUS_DRIVER() { return 'MODBUS_DRIVER'; }
 
     constructor() {
+        if (instance != null) {
+            throw new SingletonException('DriverManger is not meant to be initialized');
+        }
+        
+        // Drivers initialization
         this.motionDriver = new MotionDriver(0, 0);
         this.modbusDriver = new ModbusDriver();
     }
 
+    /**
+     * Get instance of DriverManager. Don't `new` to get instance of DriverManager!
+     * @returns {DriverManager}
+     */
     static get() {
         if (instance == null) {
             instance = new DriverManager();

@@ -1,4 +1,4 @@
-const Log = require('./Log');
+const Log = require('./../Log');
 
 var TAG = 'CallbackQueue';
 
