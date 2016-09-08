@@ -42,6 +42,7 @@ var Mep = {
 
     /**
      * Logging system
+     * @see Log
      * @memberof Mep
      * @example
      * Mep.Log.debug('Pathfinding', 'Start path finding for (x, y)');
