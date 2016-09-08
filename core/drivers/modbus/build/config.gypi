@@ -21,6 +21,7 @@
     "icu_small": "true",
     "icu_ver_major": "56",
     "node_byteorder": "little",
+    "node_enable_d8": "false",
     "node_enable_v8_vtunejit": "false",
     "node_install_npm": "true",
     "node_module_version": 48,
@@ -43,6 +44,7 @@
     "node_use_v8_platform": "true",
     "openssl_fips": "",
     "openssl_no_asm": 0,
+    "shlib_suffix": "so.48",
     "target_arch": "x64",
     "uv_parent_path": "/deps/uv/",
     "uv_use_dtrace": "false",
@@ -54,7 +56,7 @@
     "v8_random_seed": 0,
     "v8_use_snapshot": "true",
     "want_separate_host_toolset": 0,
-    "nodedir": "/home/lukicdarkoo/.node-gyp/6.3.0",
+    "nodedir": "/home/lukicdarkoo/.node-gyp/6.4.0",
     "copy_dev_lib": "true",
     "standalone_static_library": 1
   }
