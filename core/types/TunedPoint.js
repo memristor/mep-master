@@ -1,8 +1,10 @@
+/** @namespace types */
+
 const Point = require('./Point');
 
 /**
  * Tunable Point. Point coordinates are choose depends on table name in configuration.
- *
+ * @memberof types
  * @example
  * new TunePoint(
  *      new Point(150, 129),
@@ -10,7 +12,7 @@ const Point = require('./Point');
  *      new Point(148, 128, 'table_2')
  * );
  */
-class TunePoint {
+class TunedPoint {
     /**
      * Add multiple Points, add Points for each table. It must has
      * at least one Point which will be used as default. Other Points
@@ -41,4 +43,4 @@ class TunePoint {
     }
 }
 
-module.exports = TunePoint;
+module.exports = TunedPoint;

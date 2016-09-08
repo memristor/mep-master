@@ -1,3 +1,5 @@
+/** @namespace services */
+
 const SingletonException = require('../exceptions/SingletonException');
 const SchedulerService = require('./scheduler/SchedulerService');
 
@@ -5,6 +7,7 @@ var instance = null;
 
 /**
  * Manage services. Starts all services and provides instance of required service.
+ * @memberof services
  */
 class ServiceManager {
     constructor() {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: types/TunedPoint.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,47 +17,64 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: types/TunedPoint.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     <section>
-        <article><h2>Install Node.js</h2><h3>Linux Debian based</h3><pre class="prettyprint source"><code>curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-sudo apt-get install -y nodejs</code></pre><p>Alternative</p>
-<pre class="prettyprint source"><code>wget https://nodejs.org/dist/v6.3.0/node-v6.3.0-linux-armv6l.tar.xz
-tar -xvf node-v6.3.0-linux-armv6l.tar.xz
-cd node-v6.3.0-linux-armv6l
-sudo cp -R * /usr/local/</code></pre><h3>Windows</h3><ul>
-<li><a href="https://nodejs.org/en/download/current/">Node.js</a></li>
-<li><a href="https://www.microsoft.com/en-us/download/details.aspx?id=48145">Microsoft Visual C++</a></li>
-<li><a href="https://www.python.org/downloads/">Python 2.x</a></li>
-</ul>
-<h3>Global npm modules</h3><pre class="prettyprint source"><code>npm install -g jsdoc mocha node-gyp</code></pre><h2>Generate docs</h2><pre class="prettyprint source"><code>npm run-script docs</code></pre><h2>Run tests</h2><pre class="prettyprint source"><code>npm test</code></pre><h2>Run application</h2><pre class="prettyprint source"><code>npm start</code></pre><p>or if you want to load different configuration file</p>
-<pre class="prettyprint source"><code>npm start NODE_APP_INSTANCE={robot_name}</code></pre></article>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @namespace types */
+
+const Point = require('./Point');
+
+/**
+ * Tunable Point. Point coordinates are choose depends on table name in configuration.
+ * @memberof types
+ * @example
+ * new TunePoint(
+ *      new Point(150, 129),
+ *      new Point(151, 129, 'table_1'),
+ *      new Point(148, 128, 'table_2')
+ * );
+ */
+class TunedPoint {
+    /**
+     * Add multiple Points, add Points for each table. It must has
+     * at least one Point which will be used as default. Other Points
+     * must have tag!
+     *
+     * @param defaultPoint {Point} - Default point
+     */
+    constructor(defaultPoint) {
+        // If there are table dependent points
+        for (let i = 1; i &lt; arguments.length; i++) {
+            if (Mep.Config.get('Table') == arguments[i].getTag()) {
+                this.point = arguments[i];
+            }
+        }
+
+        if (typeof this.point === 'undefined') {
+            this.point = defaultPoint;
+        }
+    }
+
+    /**
+     * Get point depending on the choosen table in configuration.
+     *
+     * @returns {Point} - Point
+     */
+    getPoint() {
+        return this.point;
+    }
+}
+
+module.exports = TunedPoint;
+</code></pre>
+        </article>
     </section>
-
-
 
 
 

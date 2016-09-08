@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: MotionDriverSimulator</title>
+    <title>JSDoc: Class: Point</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: MotionDriverSimulator</h1>
+    <h1 class="page-title">Class: Point</h1>
 
     
 
@@ -28,9 +28,10 @@
 
 <header>
     
-        <h2>MotionDriverSimulator</h2>
+        <h2>
+            <span class="ancestors"><a href="types.html">types</a>.</span>Point</h2>
         
-            <div class="class-description">MotionDriver simulation module. Has same methods as MotionDriver butthis module send all commands to simulator.</div>
+            <div class="class-description">Point in 2D space.</div>
         
     
 </header>
@@ -44,14 +45,14 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="MotionDriverSimulator"><span class="type-signature"></span>new MotionDriverSimulator<span class="signature">(x, y)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Point"><span class="type-signature"></span>new Point<span class="signature">(x, y, tag)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Initialize robot position
+    Make new point.
 </div>
 
 
@@ -93,7 +94,7 @@
             <td class="type">
             
                 
-<span class="param-type">Int32</span>
+<span class="param-type">number</span>
 
 
             
@@ -103,7 +104,7 @@
 
             
 
-            <td class="description last">Start X coordinate</td>
+            <td class="description last">x coordinate</td>
         </tr>
 
     
@@ -116,7 +117,7 @@
             <td class="type">
             
                 
-<span class="param-type">Int32</span>
+<span class="param-type">number</span>
 
 
             
@@ -126,7 +127,30 @@
 
             
 
-            <td class="description last">Start Y coordinate</td>
+            <td class="description last">y coordinate</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Option parameter. It is used to determine to which table point belongs.</td>
         </tr>
 
     
@@ -167,7 +191,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="drivers_motion_MotionDriverSimulator.js.html">drivers/motion/MotionDriverSimulator.js</a>, <a href="drivers_motion_MotionDriverSimulator.js.html#line10">line 10</a>
+        <a href="types_Point.js.html">types/Point.js</a>, <a href="types_Point.js.html#line7">line 7</a>
     </li></ul></dd>
     
 
@@ -216,14 +240,14 @@
 
     
 
-    <h4 class="name" id="moveToPosition"><span class="type-signature"></span>moveToPosition<span class="signature">(x, y, direction)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getTag"><span class="type-signature"></span>getTag<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
 
 
 <div class="description">
-    Move to absolute position
+    Returns tag
 </div>
 
 
@@ -232,101 +256,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>x</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Int32</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">X coordinate</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>y</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Int32</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Y coordinate</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>direction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">MotionDirection</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">MotionDirection.FORWARD or MotionDirection.BACKWARD</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -362,7 +291,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="drivers_motion_MotionDriverSimulator.js.html">drivers/motion/MotionDriverSimulator.js</a>, <a href="drivers_motion_MotionDriverSimulator.js.html#line40">line 40</a>
+        <a href="types_Point.js.html">types/Point.js</a>, <a href="types_Point.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -385,6 +314,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -393,14 +340,14 @@
 
     
 
-    <h4 class="name" id="sendToSimulator"><span class="type-signature"></span>sendToSimulator<span class="signature">(params)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getX"><span class="type-signature"></span>getX<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
 
     
 
 
 
 <div class="description">
-    Send data to simulator
+    Return x coordinate
 </div>
 
 
@@ -409,55 +356,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>params</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Specific set of params for each command</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -493,7 +391,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="drivers_motion_MotionDriverSimulator.js.html">drivers/motion/MotionDriverSimulator.js</a>, <a href="drivers_motion_MotionDriverSimulator.js.html#line53">line 53</a>
+        <a href="types_Point.js.html">types/Point.js</a>, <a href="types_Point.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -516,6 +414,124 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getY"><span class="type-signature"></span>getY<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns y coordinate
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="types_Point.js.html">types/Point.js</a>, <a href="types_Point.js.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 

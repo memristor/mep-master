@@ -2,17 +2,19 @@ const Log = require('./Log');
 const Config = require('./Config');
 
 /**
- * Proxy to custom require(), Log, Config
- * @static
+ * Proxy to custom require(), Log & Config
+ * @namespace Mep
  */
 var Mep = {
     /**
      * Global function to require library relative to `core` directory
+     * @memberof Mep
+     * @method require
      * @example
-     * Mep.require('utils/Task');
+     * const Task = Mep.require('utils/Task');
      *
      * @param {String} library - Path to library
-     * @returns {*} - Required library
+     * @returns {Object} - Required library
      */
     require(library) {
         let allowedDirectories = ['types', 'utils'];
@@ -40,6 +42,7 @@ var Mep = {
 
     /**
      * Logging system
+     * @memberof Mep
      * @example
      * Mep.Log.debug('Pathfinding', 'Start path finding for (x, y)');
      *
@@ -49,6 +52,7 @@ var Mep = {
 
     /**
      * Access to current configuration
+     * @memberof Mep
      * @example
      * Mep.Config.get('Drivers.MotionDriver.class');
      *
