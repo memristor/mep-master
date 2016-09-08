@@ -1,10 +1,10 @@
 /** @namespace drivers */
 
-const SimulationSufix = (Mep.Config.get('Simulation') === true) ? 'Simulator' : '';
+const SimulationSuffix = (Mep.Config.get('Simulation') === true) ? 'Simulator' : '';
 
 const SingletonException = require('../exceptions/SingletonException');
-const MotionDriver = require('./motion/MotionDriver' + SimulationSufix);
-const ModbusDriver = require('./modbus/ModbusDriver' + SimulationSufix);
+const MotionDriver = require(Mep.Config.get('Drivers.MotionDriver.class') + SimulationSuffix);
+const ModbusDriver = require(Mep.Config.get('Drivers.ModbusDriver.class') + SimulationSuffix);
 
 var instance = null;
 

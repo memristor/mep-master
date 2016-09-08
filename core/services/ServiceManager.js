@@ -10,6 +10,8 @@ var instance = null;
  * @memberof services
  */
 class ServiceManager {
+    static get SCHEDULER_SERVICE() { return 'SCHEDULER_SERVICE'; }
+
     constructor() {
         if (instance != null) {
             throw new SingletonException('DriverManger is not meant to be initialized');
@@ -38,7 +40,7 @@ class ServiceManager {
      */
     getService(name) {
         switch (name) {
-            case 'SCHEDULER':
+            case ServiceManager.SCHEDULER_SERVICE:
                 return this.schedulerService;
                 break;
         }
