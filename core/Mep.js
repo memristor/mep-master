@@ -25,11 +25,6 @@ var Mep = {
             return require('./' + library);
         }
 
-        // Check if root
-        if (library.indexOf('/') < 0) {
-            throw new Error('Library can\'t be in root');
-        }
-
         // Check if dir is allowed
         var dir = library.split('/')[0];
         if (allowedDirectories.indexOf(dir) < 0) {
