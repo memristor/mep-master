@@ -1,11 +1,12 @@
 const Task = MepRequire('utils/Task');
+const DriverManager = MepRequire('DriverManager');
 
 class InitTask extends Task {
     constructor(robot) {
         super();
 
-        this.motionDriver = robot.getDriver(DriverManager.MOTION_DRIVER);
-        this.modbusDriver = robot.getDriver(DriverManager.MODBUS_DRIVER);
+        this.motionDriver = DriverManager.get().getDriver(DriverManager.MOTION_DRIVER);
+        this.modbusDriver = DriverManager.get().getDriver(DriverManager.MODBUS_DRIVER);
     }
 
     onRun() {

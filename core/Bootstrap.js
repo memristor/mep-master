@@ -5,24 +5,10 @@ global.MepRequire = require('./MepRequire');
  */
 class Bootstrap {
 	constructor() {
-	    // Start  ServiceManager
-        var robot = new Robot(Config);
-        var Log = robot.getLogger('app');
+        let schedulerPath = __dirname + '/../strategies/default/Scheduler.js';
 
-
-        Log.debug('Start pathfinding');
-        setTimeout(function() {
-            var PF = require('pathfinding');
-            var grid = new PF.Grid(2000, 3000);
-            var finder = new PF.AStarFinder();
-            var path = finder.findPath(0, 0, 1999, 2999, grid);
-            Log.debug('finished');
-        }, 0);
-        Log.debug('End pathfinding');
-
-
-        const Scheduler = require('../strategies/default/Scheduler');
-        var scheduler = new Scheduler(robot);
+        const Scheduler = require(schedulerPath);
+        let scheduler = new Scheduler();
         scheduler.runTask(scheduler.findBestTask());
 	}
 }

@@ -5,8 +5,7 @@
  * @param {Boolean} SIMULATION - Enable web simulation. Communication with the robot will redirected to web simulation interface.
  */
 var Config = {
-    DEBUG: true,
-    SIMULATION: true,
+    Simulation: true,
 
     Drivers: {
         MotionDriver: {

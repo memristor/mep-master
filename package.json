@@ -8,17 +8,19 @@
   },
   "scripts": {
     "test": "mocha",
-    "docs": "jsdoc -c jsdoc.json"
+    "docs": "jsdoc -c jsdoc.json",
+    "start": "node core/Bootstrap.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://bitbucket.org/LukicDarkoo/mep2.git"
+    "url": "git+https://bitbucket.org/ftn-memristor/mep2.git"
   },
   "author": "Darko Lukic <lukicdarkoo@gmail.com>",
   "license": "ISC",
   "homepage": "https://bitbucket.org/LukicDarkoo/mep2#readme",
   "dependencies": {
     "bindings": "^1.2.1",
+    "config": "^1.21.0",
     "nan": "^2.3.5",
     "pathfinding": "^0.4.18",
     "react": "^15.1.0",

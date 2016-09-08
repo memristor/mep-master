@@ -1,4 +1,4 @@
-const SchedulerService = require('./scheduler/SchedulerService');
+const SchedulerService = require('./services/scheduler/SchedulerService');
 
 /**
  * Manage services. Start all services and provides instance of required service.

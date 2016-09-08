@@ -1,4 +1,4 @@
-const Log = require(__core + 'Log');
+const Log = require('../../Log');
 const WebSocketServer = require('ws').Server;
 
 const TAG = 'MotionDriverSimulator';

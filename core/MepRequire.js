@@ -12,6 +12,10 @@ var allowedDirectories = ['types', 'utils'];
  * @returns {*} - Required library
  */
 function mepRequire(library) {
+    if (library === 'ServiceManager' || library === 'DriverManager') {
+        return require('./' + library);
+    }
+
     // Check if root
     if (library.indexOf('/') < 0) {
         throw new Error('Library can\'t be in root');

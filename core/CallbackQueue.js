@@ -9,7 +9,7 @@ var TAG = 'CallbackQueue';
 class CallbackQueue {
     constructor() {
         this.callbacks = [];
-        Log.debug(TAG, 'Deprecated, use please EventEmitter', 1);
+        Log.debug(TAG, 'Deprecated, use please EventEmitter');
     }
 
     /**
@@ -26,10 +26,10 @@ class CallbackQueue {
      */
     notifyAll(params) {
 		if (Array.isArray(params) == false) {
-			Log.error(TAG, 'notifyAll() expect array only', 3);
+			Log.error(TAG, 'notifyAll() expect array only');
 			return;
 		}
-		
+
         this.callbacks.forEach(function(callback) {
             callback(...params);
         });

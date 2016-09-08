@@ -1,6 +1,17 @@
-const Config = require('../config/default');
-const MotionDriver = require('./motion/MotionDriver');
-const ModbusDriver = require('./modbus/ModbusDriver');
+const Config = require('./Config');
+
+var MotionDriver;
+var ModbusDriver;
+
+if (Config.get('Simulation') == true) {
+    MotionDriver = require('./drivers/motion/MotionDriverSimulator');
+    ModbusDriver = require('./drivers/modbus/ModbusDriverSimulator');
+} else {
+    MotionDriver = require('./drivers/motion/MotionDriver');
+    ModbusDriver = require('./drivers/modbus/ModbusDriver');
+}
+
+var instance = null;
 
 /**
  * Manage services. Start all services and provides instance of required service.
@@ -10,12 +21,16 @@ class DriverManager {
     static get MOTION_DRIVER() { return 'MOTION_DRIVER'; }
     static get MODBUS_DRIVER() { return 'MODBUS_DRIVER'; }
 
-    constructor(robot) {
-        this.robot = robot;
-
+    constructor() {
         this.motionDriver = new MotionDriver(0, 0);
-        console.log('test');
         this.modbusDriver = new ModbusDriver();
+    }
+
+    static get() {
+        if (instance == null) {
+            instance = new DriverManager();
+        }
+        return instance;
     }
 
     /**
