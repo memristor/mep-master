@@ -1,7 +1,4 @@
-const Log = require('./../Log');
-
 const TAG = 'Task';
-
 
 class Task {
     static get READY() { return 1; }
@@ -9,9 +6,19 @@ class Task {
     static get ACTIVE() { return 3; }
     static get FINISHED() { return 4; }
 
-    constructor() {
+    constructor(weight, time, location) {
         this.state = Task.READY;
+        this.weight = weight;
+        this.time = time;
+        this.location = location;
     }
+
+    getLocation() { return this.location; }
+    getWeight() { return this.weight; }
+    getTime() { return this.time; }
+    getState() { return this.state; }
+    setWeight(weight) { this.weight = weight; }
+    setState(state) { this.state = state; }
 
     run() {
         this.state = Task.ACTIVE;
@@ -19,7 +26,7 @@ class Task {
     }
 
 	onRun() {
-		Log.warn(TAG, 'Override onRun() please.', 2);
+		Mep.Log.warn(TAG, 'Override onRun() please.');
 	}
 	
 	onEnemyDetected(status) {

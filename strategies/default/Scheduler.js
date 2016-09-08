@@ -3,13 +3,7 @@ const InitTask = require('./InitTask');
 class Scheduler {
     constructor() {
         this.tasks = [
-            {
-                task: (new InitTask()),
-                weight: 10000,
-                time: 10,
-                state: 'Ready',
-                location: 1
-            }
+            new InitTask(10000, 10, 1),
         ];
     }
 
@@ -22,7 +16,7 @@ class Scheduler {
     }
 
     runTask(task) {
-        task.task.run();
+        task.run();
     }
 }
 

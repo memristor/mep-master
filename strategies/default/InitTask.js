@@ -4,8 +4,8 @@ const DriverManager = Mep.require('drivers/DriverManager');
 const TAG = 'InitTask';
 
 class InitTask extends Task {
-    constructor() {
-        super();
+    constructor(weight, time, location) {
+        super(weight, time, location);
 
         Mep.Log.error(TAG, 'initialization');
 
