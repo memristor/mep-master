@@ -2,7 +2,31 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db5ccf1c-3b19-40fa-b376-369590527693" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/npm-debug.log" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/drivers/DriverManager.js" afterPath="$PROJECT_DIR$/core/drivers/DriverManager.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/CallbackQueue.html" afterPath="$PROJECT_DIR$/web/docs/CallbackQueue.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/Log.html" afterPath="$PROJECT_DIR$/web/docs/Log.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/Log.js.html" afterPath="$PROJECT_DIR$/web/docs/Log.js.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/Mep.html" afterPath="$PROJECT_DIR$/web/docs/Mep.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/Mep.js.html" afterPath="$PROJECT_DIR$/web/docs/Mep.js.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/MotionDriverSimulator.html" afterPath="$PROJECT_DIR$/web/docs/MotionDriverSimulator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/drivers.DriverManager.html" afterPath="$PROJECT_DIR$/web/docs/drivers.DriverManager.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/drivers.html" afterPath="$PROJECT_DIR$/web/docs/drivers.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/drivers_DriverManager.js.html" afterPath="$PROJECT_DIR$/web/docs/drivers_DriverManager.js.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/drivers_laser_LaserDriver.js.html" afterPath="$PROJECT_DIR$/web/docs/drivers_laser_LaserDriver.js.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/drivers_motion_MotionDriverSimulator.js.html" afterPath="$PROJECT_DIR$/web/docs/drivers_motion_MotionDriverSimulator.js.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/index.html" afterPath="$PROJECT_DIR$/web/docs/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/services.ServiceManager.html" afterPath="$PROJECT_DIR$/web/docs/services.ServiceManager.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/services.html" afterPath="$PROJECT_DIR$/web/docs/services.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/services_ServiceManager.js.html" afterPath="$PROJECT_DIR$/web/docs/services_ServiceManager.js.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/types.Point.html" afterPath="$PROJECT_DIR$/web/docs/types.Point.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/types.TunedPoint.html" afterPath="$PROJECT_DIR$/web/docs/types.TunedPoint.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/types.html" afterPath="$PROJECT_DIR$/web/docs/types.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/types_Point.js.html" afterPath="$PROJECT_DIR$/web/docs/types_Point.js.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/types_TunedPoint.js.html" afterPath="$PROJECT_DIR$/web/docs/types_TunedPoint.js.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/utils_CallbackQueue.js.html" afterPath="$PROJECT_DIR$/web/docs/utils_CallbackQueue.js.html" />
     </list>
     <ignored path="mep2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -54,11 +78,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DriverManager.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DriverManager.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/drivers/DriverManager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="47" column="7" selection-start-line="47" selection-start-column="7" selection-end-line="47" selection-end-column="7" />
+            <state relative-caret-position="270">
+              <caret line="15" column="3" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="36">
+              <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -131,7 +165,6 @@
         <option value="$PROJECT_DIR$/core/types/TunePoint.js" />
         <option value="$PROJECT_DIR$/core/utils/Task.js" />
         <option value="$PROJECT_DIR$/strategies/default/Scheduler.js" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/docs/Guide.md" />
         <option value="$PROJECT_DIR$/docs/Goals.md" />
         <option value="$PROJECT_DIR$/core/types/TunedPoint.js" />
@@ -151,6 +184,7 @@
         <option value="$PROJECT_DIR$/core/drivers/laser/LaserDriver.js" />
         <option value="$PROJECT_DIR$/core/drivers/starter/StarterDriver.js" />
         <option value="$PROJECT_DIR$/core/drivers/DriverManager.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -228,6 +262,38 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="mep2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mep2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mep2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="simulator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mep2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mep2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -550,7 +616,7 @@
       <workItem from="1473247579134" duration="1445000" />
       <workItem from="1473249059139" duration="3687000" />
       <workItem from="1473314828547" duration="26155000" />
-      <workItem from="1473373217872" duration="9535000" />
+      <workItem from="1473373217872" duration="11230000" />
     </task>
     <task id="LOCAL-00001" summary="Changed Task collection logic">
       <created>1473356547440</created>
@@ -584,7 +650,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="263250000" />
+    <option name="totallyTimeSpent" value="264945000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1301" height="744" extended-state="6" />
@@ -690,13 +756,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/MepRequire.js" />
     <entry file="file://$PROJECT_DIR$/core/types/TaggedPoint.js" />
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="5" selection-start-line="1" selection-start-column="5" selection-end-line="1" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/utils/Task.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -975,8 +1034,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/drivers/DriverManager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="47" column="7" selection-start-line="47" selection-start-column="7" selection-end-line="47" selection-end-column="7" />
+        <state relative-caret-position="270">
+          <caret line="15" column="3" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
           <folding />
         </state>
       </provider>
