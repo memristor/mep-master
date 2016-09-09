@@ -7,17 +7,19 @@ class InitTask extends Task {
     constructor(weight, time, location) {
         super(weight, time, location);
 
-        Mep.Log.error(TAG, 'initialization');
+        Mep.Log.debug(TAG, 'initialization');
 
-        this.motionDriver = DriverManager.get().getDriver(DriverManager.MOTION_DRIVER);
+        //this.motionDriver = DriverManager.get().getDriver(DriverManager.MOTION_DRIVER);
         this.modbusDriver = DriverManager.get().getDriver(DriverManager.MODBUS_DRIVER);
     }
 
     onRun() {
-
+        //this.testModbus();
     }
 
     testModbus() {
+        Mep.Log.debug(TAG, 'Start modbus coil reading');
+
         var that = this;
 
         var slaveAddress = 1;

@@ -6,6 +6,8 @@ Util.inherits(ModbusDriverBinder, EventEmiter);
 
 
 class ModbusDriver extends ModbusDriverBinder {
+    get COIL_CHANGED() { return 'coilChanged'; }
+
     constructor() {
         super(() => {}, () => {});
     }

@@ -22,7 +22,7 @@ class DriverManager {
         }
         
         // Drivers initialization
-        this.motionDriver = new MotionDriver(0, 0);
+        //this.motionDriver = new MotionDriver(0, 0);
         this.modbusDriver = new ModbusDriver();
     }
 
