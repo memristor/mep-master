@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db5ccf1c-3b19-40fa-b376-369590527693" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/drivers/starter/StarterDriver.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/drivers/DriverManager.js" afterPath="$PROJECT_DIR$/core/drivers/DriverManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/drivers/laser/LaserDriver.js" afterPath="$PROJECT_DIR$/core/drivers/laser/LaserDriver.js" />
     </list>
     <ignored path="mep2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -60,8 +57,8 @@
       <file leaf-file-name="DriverManager.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/drivers/DriverManager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="441">
-              <caret line="55" column="22" selection-start-line="55" selection-start-column="22" selection-end-line="55" selection-end-column="22" />
+            <state relative-caret-position="297">
+              <caret line="47" column="7" selection-start-line="47" selection-start-column="7" selection-end-line="47" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -553,7 +550,7 @@
       <workItem from="1473247579134" duration="1445000" />
       <workItem from="1473249059139" duration="3687000" />
       <workItem from="1473314828547" duration="26155000" />
-      <workItem from="1473373217872" duration="9424000" />
+      <workItem from="1473373217872" duration="9535000" />
     </task>
     <task id="LOCAL-00001" summary="Changed Task collection logic">
       <created>1473356547440</created>
@@ -587,7 +584,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="263139000" />
+    <option name="totallyTimeSpent" value="263250000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1301" height="744" extended-state="6" />
@@ -978,8 +975,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/drivers/DriverManager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="55" column="22" selection-start-line="55" selection-start-column="22" selection-end-line="55" selection-end-column="22" />
+        <state relative-caret-position="297">
+          <caret line="47" column="7" selection-start-line="47" selection-start-column="7" selection-end-line="47" selection-end-column="7" />
           <folding />
         </state>
       </provider>

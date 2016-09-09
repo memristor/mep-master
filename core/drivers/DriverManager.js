@@ -50,7 +50,7 @@ class DriverManager {
         let driver = this.drivers[name];
 
         if (typeof driver === 'undefined') {
-            Mep.Log.error(TAG, 'There is no driver with that name');
+            Mep.Log.error(TAG, 'There is no driver with name ' + name);
         }
 
         return driver;
