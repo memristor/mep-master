@@ -1,13 +1,13 @@
 /** @namespace drivers.laser */
 
-const EventEmiter = require('events');
+const EventEmitter = require('events');
 const DriverManager = Mep.require('drivers/DriverManager');
 
 /**
  * Uses data from laser sensors to determinate enemy robot and other obstacles.
  * @memberof drivers.laser
  */
-class LaserDriver extends EventEmiter {
+class LaserDriver extends EventEmitter {
     /**
      * Make instance of LaserDriver.
      *
@@ -56,7 +56,7 @@ class LaserDriver extends EventEmiter {
             let y = Math.round(this.laserDistance * Math.sin(this.getAngleRelativeToTerrain()));
 
             // Translate. Calculate relative to the
-            position = this.motionDriver.getPosition();
+            let position = this.motionDriver.getPosition();
             x += position.getX();
             y += position.getY();
 

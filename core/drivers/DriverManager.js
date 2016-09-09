@@ -6,6 +6,8 @@ const SingletonException = require('../exceptions/SingletonException');
 const MotionDriver = require(Mep.Config.get('Drivers.MotionDriver.class') + SimulationSuffix);
 const ModbusDriver = require(Mep.Config.get('Drivers.ModbusDriver.class') + SimulationSuffix);
 
+const TAG = 'DriverManager';
+
 var instance = null;
 
 /**
@@ -22,8 +24,9 @@ class DriverManager {
         }
         
         // Drivers initialization
-        //this.motionDriver = new MotionDriver(0, 0);
-        this.modbusDriver = new ModbusDriver();
+        this.drivers = {};
+        this.drivers[DriverManager.MOTION_DRIVER] = new MotionDriver(0, 0);
+        this.drivers[DriverManager.MODBUS_DRIVER] = new ModbusDriver();
     }
 
     /**
@@ -44,19 +47,13 @@ class DriverManager {
      * @returns {Object} - Required service
      */
     getDriver(name) {
-        switch (name) {
-            case DriverManager.MOTION_DRIVER:
-                return this.motionDriver;
-                break;
+        let driver = this.drivers[name];
 
-            case DriverManager.MODBUS_DRIVER:
-                return this.modbusDriver;
-                break;
-
-            default:
-                console.log('error gettting driver');
-                break;
+        if (typeof driver === 'undefined') {
+            Mep.Log.error(TAG, 'There is no driver with that name');
         }
+
+        return driver;
     }
 }
 
