@@ -1,8 +1,11 @@
+/** @namespace drivers.laser */
+
 const EventEmiter = require('events');
 const DriverManager = Mep.require('drivers/DriverManager');
 
 /**
  * Uses data from laser sensors to determinate enemy robot and other obstacles.
+ * @memberof drivers.laser
  */
 class LaserDriver extends EventEmiter {
     /**
