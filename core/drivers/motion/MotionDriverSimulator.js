@@ -1,4 +1,3 @@
-const Log = require('../../Log');
 const WebSocketServer = require('ws').Server;
 
 const TAG = 'MotionDriverSimulator';
@@ -13,7 +12,7 @@ class MotionDriverSimulator {
      * @param {Int32} x - Start X coordinate
      * @param {Int32} y - Start Y coordinate
      */
-    constructor(x, y) {
+    constructor() {
         var that = this;
 
         var websocketServer = new WebSocketServer({
@@ -25,8 +24,8 @@ class MotionDriverSimulator {
             that.opened = true;
             that.sendToSimulator({
                 func: 'constructor',
-                x: x,
-                y: y
+                x: Mep.Config.get('Drivers.MotionDriver.startX'),
+                y: Mep.Config.get('Drivers.MotionDriver.startY')
             });
         });
     }
@@ -57,9 +56,9 @@ class MotionDriverSimulator {
                 robot: 'big',
                 params: params
             }));
-            Log.debug(TAG, 'Data sended', 1);
+            Mep.Log.debug(TAG, 'Data sent');
         } else {
-            Log.error(TAG, 'Server is not opened', 1);
+            Mep.Log.error(TAG, 'Server is not opened');
         }
     }
 }

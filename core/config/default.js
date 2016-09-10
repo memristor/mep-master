@@ -1,11 +1,13 @@
 module.exports = {
-    Simulation: true,
+    Simulation: false,
     Table: 'table_1_red',
 
     Drivers: {
         'MotionDriver': {
             class: 'drivers/motion/MotionDriver',
-            init: [0, 0],
+            init: true,
+            startX: 0,
+            startY: 0
         },
 
         'ModbusDriver': {

@@ -7,9 +7,9 @@ class InitTask extends Task {
     constructor(weight, time, location) {
         super(weight, time, location);
 
-        Mep.Log.debug(TAG, 'initialization');
+        Mep.Log.debug(TAG, 'Initialization started');
 
-        //this.motionDriver = DriverManager.get().getDriver(DriverManager.MOTION_DRIVER);
+        this.motionDriver = DriverManager.get().getDriver('MotionDriver');
         this.modbusDriver = DriverManager.get().getDriver('ModbusDriver');
 
         Mep.Log.debug(TAG, 'Initialized');

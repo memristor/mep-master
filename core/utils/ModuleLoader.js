@@ -22,11 +22,11 @@ class ModuleLoader {
      * {
      *  ModuleID: {
      *      class: 'path/to/class',
-     *      init: true|false|Array of params
+     *      init: true|false
      *  },
      *  NextModuleID: {
      *      class: 'path/to/next/class',
-     *      init: true|false|Array of params
+     *      init: true|false
      *  }
      * }
      * </code>
@@ -52,14 +52,7 @@ class ModuleLoader {
             // Do not initialize if `init field == false`
             if (init != false) {
                 let DriverClass = Mep.require(moduleConfig.class + simulationSuffix);
-
-                // Use init field as array of arguments. If `init field == true` that means
-                // there is no parameters in constructor call
-                if (Array.isArray(init)) {
-                    modules[moduleName] = new DriverClass(...init);
-                } else {
-                    modules[moduleName] = new DriverClass();
-                }
+                modules[moduleName] = new DriverClass();
 
                 Mep.Log.debug(TAG, 'Module loaded', moduleName);
             }
