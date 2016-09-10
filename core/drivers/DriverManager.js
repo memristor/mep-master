@@ -51,17 +51,24 @@ class DriverManager {
     /**
      * Get driver instance by driver name
      *
-     * @param name {String} - Service name. Eg. `DriverManager.MOTION_DRIVER` or `DriverManager.MODBUS_DRIVER`
-     * @returns {Object} - Required service
+     * @param name {String} - Driver name, eg. "MotionDriver", or "ModbusDriver".
+     * @returns {Object} - Required driver
      */
     getDriver(name) {
-        let driver = this.drivers[name];
-
-        if (typeof driver === 'undefined') {
-            Mep.Log.error(TAG, 'There is no driver with name ' + name);
+        if (this.isDriverAvailable(name)) {
+            throw new Error('There is no driver with name ' + name);
         }
 
-        return driver;
+        return this.drivers[name];
+    }
+
+    /**
+     * Returns true if driver is available
+     * @param name - Driver name
+     * @returns {boolean} - Is driver available
+     */
+    isDriverAvailable(name) {
+        return (!(typeof this.drivers[name] === 'undefined'));
     }
 }
 
