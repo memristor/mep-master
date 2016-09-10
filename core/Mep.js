@@ -17,8 +17,8 @@ var Mep = {
      * @returns {Object} - Required library
      */
     require(library) {
-        let allowedDirectories = ['types', 'utils'];
-        let allowedLibraries = ['services/ServiceManager', 'drivers/DriverManager'];
+        let allowedDirectories = ['types', 'utils', 'drivers'];
+        let allowedLibraries = ['services/ServiceManager'];
 
         // Check if it is allowed
         if (allowedLibraries.indexOf(library) >= 0) {

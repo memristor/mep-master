@@ -1,5 +1,7 @@
 /** @namespace drivers */
 
+const ModuleLoader = Mep.require('utils/ModuleLoader');
+
 const TAG = 'DriverManager';
 
 var instance = null;
@@ -29,29 +31,10 @@ class DriverManager {
         }
         
         // Drivers initialization
-        // TODO: Handle errors...
-        this.drivers = {};
-        const SimulationSuffix = (Mep.Config.get('Simulation') === true) ? 'Simulator' : '';
-        const driversConfig = Mep.Config.get('Drivers');
-
-        for (let driverName in driversConfig) {
-            if (driversConfig.hasOwnProperty(driverName)) {
-                let init = driversConfig[driverName].init;
-
-                // Do not initialize if `init field == false`
-                if (init != false) {
-                    let DriverClass = require(driversConfig[driverName].class + SimulationSuffix);
-
-                    // Use init field as array of arguments. If `init field == true` that means
-                    // there is no parameters in constructor call
-                    if (Array.isArray(init)) {
-                        this.drivers[driverName] = new DriverClass(...init);
-                    } else {
-                        this.drivers[driverName] = new DriverClass();
-                    }
-                }
-            }
-        }
+        this.drivers = ModuleLoader.load(
+            Mep.Config.get('Drivers'),
+            Mep.Config.get('Simulation')
+        );
     }
 
     /**
