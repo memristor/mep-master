@@ -1,5 +1,21 @@
 const Winston = require('winston');
 
+const logger = new (Winston.Logger)({
+    transports: [
+        new (Winston.transports.File)({
+            level: 'debug',
+            filename: __dirname + '/trace.log'
+        }),
+        new (Winston.transports.Console)({
+            level: 'debug',
+            colorize: true,
+            timestamp: true,
+            tailable: true,
+        }),
+
+    ]
+});
+
 /**
  * This class allows advanced message formatting and it is able to print in the file or on the console.
  * @example
@@ -12,7 +28,7 @@ class Log {
      * @param {string} message - Message
      */
     static debug(module, message) {
-        Winston.debug(module + ' | ' + message);
+        logger.debug(module, message, ...Array.from(arguments).slice(2));
     }
 
     /**
@@ -21,7 +37,16 @@ class Log {
      * @param {string} message - Message
      */
     static error(module, message) {
-        Winston.error(module + ' | ' + message);
+        logger.error(module, message, ...Array.from(arguments).slice(2));
+    }
+
+    /**
+     * Use to report an info
+     * @param {string} module - Module name
+     * @param {string} message - Message
+     */
+    static info(module, message) {
+        logger.info(module, message, ...Array.from(arguments).slice(2));
     }
 
     /**
@@ -30,7 +55,7 @@ class Log {
      * @param {string} message - Message
      */
     static warn(module, message) {
-        Winston.warn(module + ' | ' + message);
+        logger.warn(module, message, ...Array.from(arguments).slice(2));
     }
 }
 

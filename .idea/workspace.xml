@@ -2,49 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db5ccf1c-3b19-40fa-b376-369590527693" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/utils/ModuleLoader.js" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/App.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/App.js.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/Bootstrap.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/Bootstrap.js.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/CallbackQueue.js.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/Config.js.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/DriverManager.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/LaserDriver.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/MotionDriver.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/Point.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/ServiceManager.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/TunePoint.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/TunedPoint.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/external-XMLHttpRequest.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/global.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/hal_motion_MotionDriver.js.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/docs/types_TunePoint.js.html" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Mep.js" afterPath="$PROJECT_DIR$/core/Mep.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/config/default.js" afterPath="$PROJECT_DIR$/core/config/default.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/drivers/DriverManager.js" afterPath="$PROJECT_DIR$/core/drivers/DriverManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/CallbackQueue.html" afterPath="$PROJECT_DIR$/web/docs/CallbackQueue.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/Log.html" afterPath="$PROJECT_DIR$/web/docs/Log.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/Log.js.html" afterPath="$PROJECT_DIR$/web/docs/Log.js.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/Mep.html" afterPath="$PROJECT_DIR$/web/docs/Mep.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/Mep.js.html" afterPath="$PROJECT_DIR$/web/docs/Mep.js.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/MotionDriverSimulator.html" afterPath="$PROJECT_DIR$/web/docs/MotionDriverSimulator.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/drivers.DriverManager.html" afterPath="$PROJECT_DIR$/web/docs/drivers.DriverManager.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/drivers.html" afterPath="$PROJECT_DIR$/web/docs/drivers.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/drivers_DriverManager.js.html" afterPath="$PROJECT_DIR$/web/docs/drivers_DriverManager.js.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/drivers_laser_LaserDriver.js.html" afterPath="$PROJECT_DIR$/web/docs/drivers_laser_LaserDriver.js.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/drivers_motion_MotionDriverSimulator.js.html" afterPath="$PROJECT_DIR$/web/docs/drivers_motion_MotionDriverSimulator.js.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/index.html" afterPath="$PROJECT_DIR$/web/docs/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/services.ServiceManager.html" afterPath="$PROJECT_DIR$/web/docs/services.ServiceManager.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/services.html" afterPath="$PROJECT_DIR$/web/docs/services.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/services_ServiceManager.js.html" afterPath="$PROJECT_DIR$/web/docs/services_ServiceManager.js.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/types.Point.html" afterPath="$PROJECT_DIR$/web/docs/types.Point.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/types.TunedPoint.html" afterPath="$PROJECT_DIR$/web/docs/types.TunedPoint.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/types.html" afterPath="$PROJECT_DIR$/web/docs/types.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/types_Point.js.html" afterPath="$PROJECT_DIR$/web/docs/types_Point.js.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/types_TunedPoint.js.html" afterPath="$PROJECT_DIR$/web/docs/types_TunedPoint.js.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/docs/utils_CallbackQueue.js.html" afterPath="$PROJECT_DIR$/web/docs/utils_CallbackQueue.js.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Bootstrap.js" afterPath="$PROJECT_DIR$/core/Bootstrap.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Log.js" afterPath="$PROJECT_DIR$/core/Log.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
     </list>
     <ignored path="mep2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -78,7 +39,17 @@
         <entry file="file://$PROJECT_DIR$/core/Config.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="36">
-              <caret line="2" column="9" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
+              <caret line="2" column="40" selection-start-line="2" selection-start-column="40" selection-end-line="2" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Log.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/Log.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -104,14 +75,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ModuleLoader.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ModuleLoader.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/utils/ModuleLoader.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-129">
+            <state relative-caret-position="270">
               <caret line="15" column="6" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Bootstrap.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/Bootstrap.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="7" column="61" selection-start-line="7" selection-start-column="61" selection-end-line="7" selection-end-column="61" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -128,41 +109,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Bootstrap.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/Bootstrap.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="3" column="19" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Mep.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/Mep.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="360">
               <caret line="20" column="57" selection-start-line="20" selection-start-column="57" selection-end-line="20" selection-end-column="57" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Scheduler.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/strategies/default/Scheduler.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="13" column="12" selection-start-line="13" selection-start-column="12" selection-end-line="13" selection-end-column="12" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LaserDriver.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/drivers/laser/LaserDriver.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="6" column="36" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -204,7 +155,6 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/core/MepRequire.js" />
         <option value="$PROJECT_DIR$/core/drivers/motion/MotionDriverSimulator.js" />
-        <option value="$PROJECT_DIR$/core/Config.js" />
         <option value="$PROJECT_DIR$/core/DriverManager.js" />
         <option value="$PROJECT_DIR$/core/drivers/modbus/ModbusDriverSimulator.js" />
         <option value="$PROJECT_DIR$/core/utils/Scheduler.js" />
@@ -218,7 +168,6 @@
         <option value="$PROJECT_DIR$/docs/Goals.md" />
         <option value="$PROJECT_DIR$/core/types/TunedPoint.js" />
         <option value="$PROJECT_DIR$/core/types/Point.js" />
-        <option value="$PROJECT_DIR$/core/Log.js" />
         <option value="$PROJECT_DIR$/core/drivers/motion/MotionDriver.js" />
         <option value="$PROJECT_DIR$/core/services/ServiceManager.js" />
         <option value="$PROJECT_DIR$/core/drivers/modbus/.gitignore" />
@@ -229,12 +178,14 @@
         <option value="$PROJECT_DIR$/core/drivers/motion/MotionDriver.h" />
         <option value="$PROJECT_DIR$/core/drivers/laser/LaserDriver.js" />
         <option value="$PROJECT_DIR$/core/drivers/starter/StarterDriver.js" />
-        <option value="$PROJECT_DIR$/core/Bootstrap.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/core/Mep.js" />
         <option value="$PROJECT_DIR$/core/config/default.js" />
         <option value="$PROJECT_DIR$/core/drivers/DriverManager.js" />
         <option value="$PROJECT_DIR$/core/utils/ModuleLoader.js" />
+        <option value="$PROJECT_DIR$/core/Config.js" />
+        <option value="$PROJECT_DIR$/core/Bootstrap.js" />
+        <option value="$PROJECT_DIR$/core/Log.js" />
       </list>
     </option>
   </component>
@@ -247,10 +198,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="65" />
-    <option name="y" value="24" />
-    <option name="width" value="1855" />
-    <option name="height" value="1056" />
+    <option name="x" value="1985" />
+    <option name="y" value="178" />
+    <option name="width" value="1301" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -297,6 +248,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -329,28 +281,6 @@
               <option name="myItemId" value="web" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="simulator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mep2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mep2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="docs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -380,81 +310,12 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="docs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mep2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mep2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mep2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mep2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="utils" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mep2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mep2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="types" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mep2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mep2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="drivers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -468,17 +329,17 @@
     <property name="editor.config.accepted" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/core/drivers/motion" />
-      <recent name="$PROJECT_DIR$/core/drivers/modbus" />
-      <recent name="C:\Users\LukicDarkoo\Desktop\mep2\core\hal\motion" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/core" />
       <recent name="C:\Users\LukicDarkoo\Desktop\mep2\core\services" />
       <recent name="C:\Users\LukicDarkoo\Desktop\mep2\core\drivers" />
       <recent name="C:\Users\LukicDarkoo\Desktop\mep2\core\utils" />
       <recent name="C:\Users\LukicDarkoo\Desktop\mep2\core" />
-      <recent name="C:\Users\LukicDarkoo\Desktop\mep2\docs" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/core/drivers/motion" />
+      <recent name="$PROJECT_DIR$/core/drivers/modbus" />
+      <recent name="C:\Users\LukicDarkoo\Desktop\mep2\core\hal\motion" />
     </key>
   </component>
   <component name="RunManager" selected="Node.js.App.js">
@@ -605,7 +466,8 @@
       <workItem from="1473249059139" duration="3687000" />
       <workItem from="1473314828547" duration="26155000" />
       <workItem from="1473373217872" duration="16739000" />
-      <workItem from="1473507281170" duration="2728000" />
+      <workItem from="1473507281170" duration="4162000" />
+      <workItem from="1473517909727" duration="3635000" />
     </task>
     <task id="LOCAL-00001" summary="Changed Task collection logic">
       <created>1473356547440</created>
@@ -646,15 +508,16 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="273182000" />
+    <option name="totallyTimeSpent" value="278251000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
+    <frame x="1985" y="178" width="1301" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13908356" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1383551" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32735425" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32735425" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3280757" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -667,7 +530,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3280757" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -694,7 +556,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/Bootstrap.js" />
     <entry file="file://$PROJECT_DIR$/core/drivers/modbus/ModbusDriverBinder.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="884">
@@ -702,13 +563,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/docs/App.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="93" column="30" selection-start-line="93" selection-start-column="30" selection-end-line="93" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/web/docs/App.html" />
     <entry file="file://$PROJECT_DIR$/core/Robot.js" />
     <entry file="file://$PROJECT_DIR$/notes/Links.txt">
       <provider selected="true" editor-type-id="text-editor">
@@ -757,11 +612,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/Guide.md">
+      <provider editor-type-id="MarkdownFxPreviewEditor">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="FIRST">
           <first_editor relative-caret-position="85">
@@ -770,11 +627,11 @@
           <second_editor />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/Goals.md">
       <provider editor-type-id="MarkdownFxPreviewEditor">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/Goals.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="FIRST">
           <first_editor relative-caret-position="51">
@@ -783,22 +640,12 @@
           <second_editor />
         </state>
       </provider>
-      <provider editor-type-id="MarkdownFxPreviewEditor">
-        <state />
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/exceptions/SingletonException.js" />
     <entry file="file://$PROJECT_DIR$/core/types/Quant.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Log.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -814,7 +661,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -854,6 +700,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
+      <provider editor-type-id="MarkdownFxPreviewEditor">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state relative-caret-position="390">
           <caret line="26" column="3" selection-start-line="26" selection-start-column="3" selection-end-line="26" selection-end-column="3" />
@@ -863,13 +712,9 @@
         <state split_layout="FIRST">
           <first_editor relative-caret-position="258">
             <caret line="31" column="12" selection-start-line="31" selection-start-column="12" selection-end-line="31" selection-end-column="12" />
-            <folding />
           </first_editor>
           <second_editor />
         </state>
-      </provider>
-      <provider editor-type-id="MarkdownFxPreviewEditor">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/drivers/modbus/ModbusDriver.js">
@@ -904,7 +749,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="441">
           <caret line="32" column="11" selection-start-line="26" selection-start-column="8" selection-end-line="32" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -926,9 +770,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
           <caret line="13" column="8" selection-start-line="13" selection-start-column="8" selection-end-line="13" selection-end-column="8" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -939,26 +780,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Bootstrap.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="3" column="19" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/strategies/default/Scheduler.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
           <caret line="13" column="12" selection-start-line="13" selection-start-column="12" selection-end-line="13" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -988,14 +813,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/Config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="9" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/Mep.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -1020,13 +837,52 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/core/utils/ModuleLoader.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-129">
+        <state relative-caret-position="270">
           <caret line="15" column="6" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trace.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="40" selection-start-line="2" selection-start-column="40" selection-end-line="2" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Bootstrap.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="7" column="61" selection-start-line="7" selection-start-column="61" selection-end-line="7" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Log.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
