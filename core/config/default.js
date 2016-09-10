@@ -1,5 +1,5 @@
 module.exports = {
-    Simulation: false,
+    Simulation: true,
     Table: 'table_1_red',
 
     Drivers: {
