@@ -1,6 +1,8 @@
 node_modules
 web/docs
-trace.log
+
+# Ignore log files
+*.log
 
 # Ignore hidden directories
 .*

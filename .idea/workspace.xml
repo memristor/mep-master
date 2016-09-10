@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db5ccf1c-3b19-40fa-b376-369590527693" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Bootstrap.js" afterPath="$PROJECT_DIR$/core/Bootstrap.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/config/default.js" afterPath="$PROJECT_DIR$/core/config/default.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/drivers/motion/MotionDriver.js" afterPath="$PROJECT_DIR$/core/drivers/motion/MotionDriver.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/drivers/motion/MotionDriverSimulator.js" afterPath="$PROJECT_DIR$/core/drivers/motion/MotionDriverSimulator.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/utils/ModuleLoader.js" afterPath="$PROJECT_DIR$/core/utils/ModuleLoader.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/strategies/default/InitTask.js" afterPath="$PROJECT_DIR$/strategies/default/InitTask.js" />
     </list>
     <ignored path="mep2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -38,11 +33,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Bootstrap.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Bootstrap.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/Bootstrap.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="162">
               <caret line="9" column="47" selection-start-line="9" selection-start-column="47" selection-end-line="9" selection-end-column="47" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="54">
+              <caret line="3" column="18" selection-start-line="3" selection-start-column="18" selection-end-line="3" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -116,7 +121,6 @@
         <option value="$PROJECT_DIR$/core/Mep.js" />
         <option value="$PROJECT_DIR$/core/Config.js" />
         <option value="$PROJECT_DIR$/trace.log" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/core/Log.js" />
         <option value="$PROJECT_DIR$/core/drivers/DriverManager.js" />
         <option value="$PROJECT_DIR$/strategies/default/InitTask.js" />
@@ -125,6 +129,7 @@
         <option value="$PROJECT_DIR$/core/config/default.js" />
         <option value="$PROJECT_DIR$/core/utils/ModuleLoader.js" />
         <option value="$PROJECT_DIR$/core/Bootstrap.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -483,7 +488,7 @@
       <workItem from="1473373217872" duration="16739000" />
       <workItem from="1473507281170" duration="4162000" />
       <workItem from="1473517909727" duration="7430000" />
-      <workItem from="1473529811128" duration="777000" />
+      <workItem from="1473529811128" duration="964000" />
     </task>
     <task id="LOCAL-00001" summary="Changed Task collection logic">
       <created>1473356547440</created>
@@ -538,7 +543,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="282823000" />
+    <option name="totallyTimeSpent" value="283010000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1985" y="178" width="1301" height="744" extended-state="6" />
@@ -814,13 +819,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/trace.log" />
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="9" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trace.log">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
@@ -904,6 +902,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
           <caret line="9" column="47" selection-start-line="9" selection-start-column="47" selection-end-line="9" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="3" column="18" selection-start-line="3" selection-start-column="18" selection-end-line="3" selection-end-column="18" />
           <folding />
         </state>
       </provider>
