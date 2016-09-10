@@ -1,11 +1,5 @@
 /** @namespace drivers */
 
-const SimulationSuffix = (Mep.Config.get('Simulation') === true) ? 'Simulator' : '';
-
-const SingletonException = require('../exceptions/SingletonException');
-const MotionDriver = require(Mep.Config.get('Drivers.MotionDriver.class') + SimulationSuffix);
-const ModbusDriver = require(Mep.Config.get('Drivers.ModbusDriver.class') + SimulationSuffix);
-
 const TAG = 'DriverManager';
 
 var instance = null;
@@ -15,8 +9,7 @@ var instance = null;
  *
  * The main goals of Driver manager are:
  * <ul>
- *  <li>to choose which drivers to initialize for the big robot and the small robot,</li>
- *  <li>to initialize drivers with correct parameters,</li>
+ *  <li>to choose which drivers to initialize and which arguments to pass depending on configuration,</li>
  *  <li>to choose between simulation and hardware implementation of driver,</li>
  *  <li>to provide correct instance of driver,</li>
  *  <li>to monitor if driver is active and to try to recover if it is not.</li>
@@ -24,18 +17,41 @@ var instance = null;
  * @memberof drivers
  */
 class DriverManager {
-    static get MOTION_DRIVER() { return 'MOTION_DRIVER'; }
-    static get MODBUS_DRIVER() { return 'MODBUS_DRIVER'; }
+    static get MOTION_DRIVER() { return 'MotionDriver'; }
+    static get MODBUS_DRIVER() { return 'ModbusDriver'; }
 
+    /**
+     * @private
+     */
     constructor() {
         if (instance != null) {
-            throw new SingletonException('DriverManger is not meant to be initialized');
+            throw new Error('DriverManger is not meant to be initialized');
         }
         
         // Drivers initialization
+        // TODO: Handle errors...
         this.drivers = {};
-        this.drivers[DriverManager.MOTION_DRIVER] = new MotionDriver(0, 0);
-        this.drivers[DriverManager.MODBUS_DRIVER] = new ModbusDriver();
+        const SimulationSuffix = (Mep.Config.get('Simulation') === true) ? 'Simulator' : '';
+        const driversConfig = Mep.Config.get('Drivers');
+
+        for (let driverName in driversConfig) {
+            if (driversConfig.hasOwnProperty(driverName)) {
+                let init = driversConfig[driverName].init;
+
+                // Do not initialize if `init field == false`
+                if (init != false) {
+                    let DriverClass = require(driversConfig[driverName].class + SimulationSuffix);
+
+                    // Use init field as array of arguments. If `init field == true` that means
+                    // there is no parameters in constructor call
+                    if (Array.isArray(init)) {
+                        this.drivers[driverName] = new DriverClass(...init);
+                    } else {
+                        this.drivers[driverName] = new DriverClass();
+                    }
+                }
+            }
+        }
     }
 
     /**

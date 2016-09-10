@@ -4,11 +4,13 @@ module.exports = {
 
     Drivers: {
         MotionDriver: {
-            class: './motion/MotionDriver'
+            class: './motion/MotionDriver',
+            init: [0, 0],
         },
 
         ModbusDriver: {
             class: './modbus/ModbusDriver',
+            init: true,
         }
     }
 };
