@@ -1,5 +1,6 @@
 /** @namespace utils */
 
+const TAG = 'ModuleLoader';
 
 /**
  * Make instance of class based on JSON
@@ -59,9 +60,10 @@ class ModuleLoader {
                 } else {
                     modules[moduleName] = new DriverClass();
                 }
+
+                Mep.Log.debug(TAG, 'Module loaded', moduleName);
             }
         }
-
         return modules;
     }
 }

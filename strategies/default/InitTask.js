@@ -10,7 +10,9 @@ class InitTask extends Task {
         Mep.Log.debug(TAG, 'initialization');
 
         //this.motionDriver = DriverManager.get().getDriver(DriverManager.MOTION_DRIVER);
-        this.modbusDriver = DriverManager.get().getDriver(DriverManager.MODBUS_DRIVER);
+        this.modbusDriver = DriverManager.get().getDriver('ModbusDriver');
+
+        Mep.Log.debug(TAG, 'Initialized');
     }
 
     onRun() {

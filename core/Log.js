@@ -4,13 +4,12 @@ const logger = new (Winston.Logger)({
     transports: [
         new (Winston.transports.File)({
             level: 'debug',
-            filename: __dirname + '/trace.log'
+            filename: __dirname + '/../trace.log'
         }),
         new (Winston.transports.Console)({
             level: 'debug',
             colorize: true,
-            timestamp: true,
-            tailable: true,
+            timestamp: true
         }),
 
     ]

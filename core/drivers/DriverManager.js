@@ -19,9 +19,6 @@ var instance = null;
  * @memberof drivers
  */
 class DriverManager {
-    static get MOTION_DRIVER() { return 'MotionDriver'; }
-    static get MODBUS_DRIVER() { return 'ModbusDriver'; }
-
     /**
      * @private
      */
@@ -55,7 +52,7 @@ class DriverManager {
      * @returns {Object} - Required driver
      */
     getDriver(name) {
-        if (this.isDriverAvailable(name)) {
+        if (this.isDriverAvailable(name) === false) {
             throw new Error('There is no driver with name ' + name);
         }
 
@@ -68,7 +65,7 @@ class DriverManager {
      * @returns {boolean} - Is driver available
      */
     isDriverAvailable(name) {
-        return (!(typeof this.drivers[name] === 'undefined'));
+        return (name in this.drivers)
     }
 }
 
