@@ -1,7 +1,7 @@
 {
   "name": "mep2",
-  "version": "0.0.0",
-  "description": "JavaScript based platform for Memristor",
+  "version": "2017.0.0",
+  "description": "Memristor's Eurobot Platform",
   "main": "core/App.js",
   "directories": {
     "test": "tests"
