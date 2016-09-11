@@ -4,11 +4,6 @@
     <list default="true" id="db5ccf1c-3b19-40fa-b376-369590527693" name="Default" comment="">
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/Inspiration.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/drivers/modbus/ModbusDriver.js" afterPath="$PROJECT_DIR$/core/drivers/modbus/ModbusDriver.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/drivers/modbus/ModbusDriverSimulator.js" afterPath="$PROJECT_DIR$/core/drivers/modbus/ModbusDriverSimulator.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/drivers/motion/MotionDriver.js" afterPath="$PROJECT_DIR$/core/drivers/motion/MotionDriver.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/drivers/motion/MotionDriverSimulator.js" afterPath="$PROJECT_DIR$/core/drivers/motion/MotionDriverSimulator.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/utils/ModuleLoader.js" afterPath="$PROJECT_DIR$/core/utils/ModuleLoader.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/Goals.md" afterPath="$PROJECT_DIR$/docs/Goals.md" />
     </list>
     <ignored path="mep2.iws" />
@@ -568,7 +563,7 @@
       <workItem from="1473373217872" duration="16739000" />
       <workItem from="1473507281170" duration="4162000" />
       <workItem from="1473517909727" duration="7430000" />
-      <workItem from="1473529811128" duration="6094000" />
+      <workItem from="1473529811128" duration="6170000" />
     </task>
     <task id="LOCAL-00001" summary="Changed Task collection logic">
       <created>1473356547440</created>
@@ -619,11 +614,18 @@
       <option name="project" value="LOCAL" />
       <updated>1473524422827</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Improved to ModuleLoader. Now it is adapted to track instances of drivers and to initialize them with custom config">
+      <created>1473596768419</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1473596768419</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="288140000" />
+    <option name="totallyTimeSpent" value="288216000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1301" height="744" extended-state="6" />
@@ -666,7 +668,8 @@
     <MESSAGE value="Use configuration to choose which drivers to initialize and which params to use" />
     <MESSAGE value="Improved DriverManager" />
     <MESSAGE value="Bug fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bug fixes" />
+    <MESSAGE value="Improved to ModuleLoader. Now it is adapted to track instances of drivers and to initialize them with custom config" />
+    <option name="LAST_COMMIT_MESSAGE" value="Improved to ModuleLoader. Now it is adapted to track instances of drivers and to initialize them with custom config" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />

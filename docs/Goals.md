@@ -5,4 +5,6 @@
 - Fast learning curve (software should be well organized and documented),
 - Tested (every module should be tested using Unit tests),
 - Package manager (don't rewrite software, if there is already packet written use it),
+- Hardware independent (services should be independent of drivers, 
+    practically that means if we disable LidarDriver TerrainService should work just fine),
 - Logging system (Elastic Search & Kibana will help us to find bugs).
