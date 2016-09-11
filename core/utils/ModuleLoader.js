@@ -52,7 +52,7 @@ class ModuleLoader {
             // Do not initialize if `init field == false`
             if (init != false) {
                 let DriverClass = Mep.require(moduleConfig.class + simulationSuffix);
-                modules[moduleName] = new DriverClass();
+                modules[moduleName] = new DriverClass(moduleName, moduleConfig);
 
                 Mep.Log.debug(TAG, 'Module loaded', moduleName);
             }

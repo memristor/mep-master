@@ -12,7 +12,7 @@ class MotionDriverSimulator {
      * @param {Int32} x - Start X coordinate
      * @param {Int32} y - Start Y coordinate
      */
-    constructor() {
+    constructor(name, config) {
         var that = this;
 
         var websocketServer = new WebSocketServer({
@@ -24,10 +24,14 @@ class MotionDriverSimulator {
             that.opened = true;
             that.sendToSimulator({
                 func: 'constructor',
-                x: Mep.Config.get('Drivers.MotionDriver.startX'),
-                y: Mep.Config.get('Drivers.MotionDriver.startY')
+                x: config.startX,
+                y: config.startY
             });
         });
+
+        this.name = name;
+
+        Mep.Log.debug(TAG, 'Driver with name', name, 'initialized');
     }
 
     /**

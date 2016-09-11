@@ -2,10 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db5ccf1c-3b19-40fa-b376-369590527693" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/npm-debug.log" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test/MepRequire.test.js" afterPath="$PROJECT_DIR$/test/Mep.test.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/Inspiration.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/config/default.js" afterPath="$PROJECT_DIR$/core/config/default.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/drivers/modbus/ModbusDriver.js" afterPath="$PROJECT_DIR$/core/drivers/modbus/ModbusDriver.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/drivers/modbus/ModbusDriverSimulator.js" afterPath="$PROJECT_DIR$/core/drivers/modbus/ModbusDriverSimulator.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/drivers/motion/MotionDriver.js" afterPath="$PROJECT_DIR$/core/drivers/motion/MotionDriver.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/drivers/motion/MotionDriverSimulator.js" afterPath="$PROJECT_DIR$/core/drivers/motion/MotionDriverSimulator.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/utils/ModuleLoader.js" afterPath="$PROJECT_DIR$/core/utils/ModuleLoader.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/Goals.md" afterPath="$PROJECT_DIR$/docs/Goals.md" />
     </list>
     <ignored path="mep2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,7 +28,90 @@
     <favorites_list name="mep2" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="ModuleLoader.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/utils/ModuleLoader.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="468">
+              <caret line="56" column="64" selection-start-line="56" selection-start-column="64" selection-end-line="56" selection-end-column="64" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ModbusDriver.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/drivers/modbus/ModbusDriver.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="432">
+              <caret line="24" column="27" selection-start-line="24" selection-start-column="27" selection-end-line="24" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ModbusDriverSimulator.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/drivers/modbus/ModbusDriverSimulator.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="16" column="39" selection-start-line="16" selection-start-column="39" selection-end-line="16" selection-end-column="39" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Goals.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/Goals.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+            <state split_layout="FIRST">
+              <first_editor relative-caret-position="180">
+                <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+                <folding />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+          <provider editor-type-id="MarkdownFxPreviewEditor">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Inspiration.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/docs/Inspiration.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+            <state split_layout="FIRST">
+              <first_editor relative-caret-position="0">
+                <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                <folding />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+          <provider editor-type-id="MarkdownFxPreviewEditor">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MotionDriver.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/drivers/motion/MotionDriver.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="16" column="25" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MotionDriverSimulator.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/drivers/motion/MotionDriverSimulator.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="33" column="68" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="68" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -40,7 +127,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/notes/Glue_Code_Example/Robot.cc" />
         <option value="$PROJECT_DIR$/core/drivers/modbus/ModbusClientSwitzerland.h" />
         <option value="$PROJECT_DIR$/core/drivers/modbus/ModbusDriverBinder.h" />
         <option value="$PROJECT_DIR$/core/drivers/modbus/ModbusClientSwitzerland.cpp" />
@@ -57,7 +143,6 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/core/MepRequire.js" />
         <option value="$PROJECT_DIR$/core/DriverManager.js" />
-        <option value="$PROJECT_DIR$/core/drivers/modbus/ModbusDriverSimulator.js" />
         <option value="$PROJECT_DIR$/core/utils/Scheduler.js" />
         <option value="$PROJECT_DIR$/core/types/TaggedPoint.js" />
         <option value="$PROJECT_DIR$/core/exceptions/SingletonException.js" />
@@ -66,14 +151,12 @@
         <option value="$PROJECT_DIR$/core/utils/Task.js" />
         <option value="$PROJECT_DIR$/strategies/default/Scheduler.js" />
         <option value="$PROJECT_DIR$/docs/Guide.md" />
-        <option value="$PROJECT_DIR$/docs/Goals.md" />
         <option value="$PROJECT_DIR$/core/types/TunedPoint.js" />
         <option value="$PROJECT_DIR$/core/types/Point.js" />
         <option value="$PROJECT_DIR$/core/services/ServiceManager.js" />
         <option value="$PROJECT_DIR$/core/drivers/modbus/.gitignore" />
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/core/drivers/modbus/ModbusMaster.cpp" />
-        <option value="$PROJECT_DIR$/core/drivers/modbus/ModbusDriver.js" />
         <option value="$PROJECT_DIR$/core/drivers/motion/MotionDriver.h" />
         <option value="$PROJECT_DIR$/core/drivers/laser/LaserDriver.js" />
         <option value="$PROJECT_DIR$/core/drivers/starter/StarterDriver.js" />
@@ -82,15 +165,19 @@
         <option value="$PROJECT_DIR$/core/Log.js" />
         <option value="$PROJECT_DIR$/core/drivers/DriverManager.js" />
         <option value="$PROJECT_DIR$/strategies/default/InitTask.js" />
-        <option value="$PROJECT_DIR$/core/drivers/motion/MotionDriver.js" />
-        <option value="$PROJECT_DIR$/core/drivers/motion/MotionDriverSimulator.js" />
-        <option value="$PROJECT_DIR$/core/utils/ModuleLoader.js" />
         <option value="$PROJECT_DIR$/core/Bootstrap.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/core/config/default.js" />
         <option value="$PROJECT_DIR$/trace.log" />
         <option value="$PROJECT_DIR$/test/MepRequire.test.js" />
         <option value="$PROJECT_DIR$/test/Mep.test.js" />
+        <option value="$PROJECT_DIR$/docs/Inspiration.md" />
+        <option value="$PROJECT_DIR$/docs/Goals.md" />
+        <option value="$PROJECT_DIR$/core/utils/ModuleLoader.js" />
+        <option value="$PROJECT_DIR$/core/drivers/motion/MotionDriver.js" />
+        <option value="$PROJECT_DIR$/core/drivers/motion/MotionDriverSimulator.js" />
+        <option value="$PROJECT_DIR$/core/drivers/modbus/ModbusDriver.js" />
+        <option value="$PROJECT_DIR$/core/drivers/modbus/ModbusDriverSimulator.js" />
       </list>
     </option>
   </component>
@@ -103,8 +190,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1985" />
-    <option name="y" value="178" />
+    <option name="x" value="65" />
+    <option name="y" value="24" />
     <option name="width" value="1301" />
     <option name="height" value="744" />
   </component>
@@ -211,6 +298,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="docs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mep2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mep2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -247,6 +348,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="services" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mep2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mep2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="drivers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -269,7 +388,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="laser" />
+              <option name="myItemId" value="motion" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -287,7 +406,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
+              <option name="myItemId" value="drivers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modbus" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -445,7 +568,7 @@
       <workItem from="1473373217872" duration="16739000" />
       <workItem from="1473507281170" duration="4162000" />
       <workItem from="1473517909727" duration="7430000" />
-      <workItem from="1473529811128" duration="3367000" />
+      <workItem from="1473529811128" duration="6094000" />
     </task>
     <task id="LOCAL-00001" summary="Changed Task collection logic">
       <created>1473356547440</created>
@@ -500,13 +623,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="285413000" />
+    <option name="totallyTimeSpent" value="288140000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1985" y="178" width="1301" height="744" extended-state="6" />
-    <editor active="false" />
+    <frame x="65" y="24" width="1301" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24289009" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24289009" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32735425" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
@@ -550,13 +673,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/notes/Links.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/config/Config.debug.js" />
     <entry file="file://$PROJECT_DIR$/jsdoc.json">
       <provider selected="true" editor-type-id="text-editor">
@@ -569,13 +685,6 @@
     <entry file="file://$PROJECT_DIR$/.node-version" />
     <entry file="file://$PROJECT_DIR$/.editorconfig" />
     <entry file="file://$PROJECT_DIR$/.eslintrc" />
-    <entry file="file://$PROJECT_DIR$/core/drivers/modbus/ModbusDriverSimulator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/MepRequire.js" />
     <entry file="file://$PROJECT_DIR$/core/types/TaggedPoint.js" />
     <entry file="file://$PROJECT_DIR$/core/utils/Task.js">
@@ -599,19 +708,6 @@
         <state split_layout="FIRST">
           <first_editor relative-caret-position="85">
             <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-      <provider editor-type-id="MarkdownFxPreviewEditor">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/Goals.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="FIRST">
-          <first_editor relative-caret-position="51">
-            <caret line="3" column="74" selection-start-line="3" selection-start-column="74" selection-end-line="3" selection-end-column="74" />
           </first_editor>
           <second_editor />
         </state>
@@ -693,13 +789,6 @@
       <provider editor-type-id="text-editor">
         <state relative-caret-position="390">
           <caret line="26" column="3" selection-start-line="26" selection-start-column="3" selection-end-line="26" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/drivers/modbus/ModbusDriver.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
         </state>
       </provider>
     </entry>
@@ -792,34 +881,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/drivers/motion/MotionDriverSimulator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="990">
-          <caret line="55" column="29" selection-start-line="55" selection-start-column="28" selection-end-line="55" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/drivers/motion/MotionDriver.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="28" selection-start-line="6" selection-start-column="28" selection-end-line="6" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
           <caret line="3" column="18" selection-start-line="3" selection-start-column="18" selection-end-line="3" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/utils/ModuleLoader.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="31" column="14" selection-start-line="31" selection-start-column="14" selection-end-line="31" selection-end-column="14" />
           <folding />
         </state>
       </provider>
@@ -884,6 +949,80 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
           <caret line="14" column="28" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/utils/ModuleLoader.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="56" column="64" selection-start-line="56" selection-start-column="64" selection-end-line="56" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/drivers/motion/MotionDriver.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="16" column="25" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/drivers/motion/MotionDriverSimulator.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="33" column="68" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/drivers/modbus/ModbusDriver.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="24" column="27" selection-start-line="24" selection-start-column="27" selection-end-line="24" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/drivers/modbus/ModbusDriverSimulator.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="16" column="39" selection-start-line="16" selection-start-column="39" selection-end-line="16" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/Goals.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="180">
+            <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownFxPreviewEditor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/Inspiration.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownFxPreviewEditor">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="17" column="56" selection-start-line="17" selection-start-column="56" selection-end-line="17" selection-end-column="56" />
           <folding />
         </state>
       </provider>

@@ -8,8 +8,10 @@ Util.inherits(ModbusDriverBinder, EventEmiter);
 class ModbusDriver extends ModbusDriverBinder {
     get COIL_CHANGED() { return 'coilChanged'; }
 
-    constructor() {
+    constructor(name, config) {
         super(() => {}, () => {});
+
+        Mep.Log.debug(TAG, 'Driver with name', name, 'initialized');
     }
 }
 

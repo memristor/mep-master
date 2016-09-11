@@ -8,11 +8,13 @@ class MotionDriver extends MotionDriverBinder {
     static get DIRECTION_FORWARD() { return 1; }
     static get DIRECTION_BACKWARD() { return -1; }
 
-    constructor() {
+    constructor(name, config) {
         super(
-            Mep.Config.get('Drivers.MotionDriver.startX'),
-            Mep.Config.get('Drivers.MotionDriver.startY')
+            config.startX,
+            config.startY
         );
+
+        this.name = name;
     }
 }
 
