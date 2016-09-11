@@ -5,9 +5,9 @@ const TAG = 'Bootstrap';
 class Bootstrap {
 	constructor() {
 	    // Print status
-	    Mep.Log.info(TAG, 'MEP (Memristor\'s Eurobot Platform) started!');
-        Mep.Log.info(TAG, 'Active table:', Mep.Config.get('Table'));
-        Mep.Log.info(TAG, 'Simulation activated:', Mep.Config.get('Simulation'));
+	    Mep.Log.info('MEP (Memristor\'s Eurobot Platform) started!');
+        Mep.Log.info('Active table:', Mep.Config.get('Table'));
+        Mep.Log.info('Simulation activated:', Mep.Config.get('Simulation'));
 
 
         // Load strategy
