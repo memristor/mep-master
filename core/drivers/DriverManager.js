@@ -67,6 +67,41 @@ class DriverManager {
     isDriverAvailable(name) {
         return (name in this.drivers)
     }
+
+    /**
+     * <p>Get all drivers that can provide specific type of data.</p>
+     *
+     * <p>Every driver that can provide a certain type of data has implemented
+     * universal mechanism for getting that data from the driver. That is extremely
+     * useful for services and in that case services implement only logic for
+     * data processing, not mechanisms for data collection from different drivers.
+     * Services are in this case also hardware independent.</p>
+     *
+     * @param type {String} - Data type which driver can provide
+     * @returns {Object} - List of filtered drivers
+     */
+    getDataProviderDrivers(type) {
+        var filteredDrivers = {};
+
+        for (let driverKey in this.drivers) {
+            if (this.drivers.hasOwnProperty(driverKey) == false) {
+                continue;
+            }
+
+            // Check if driver has defined list of data types which can provide
+            if (typeof this.drivers[driverKey].provides !== 'function') {
+                Mep.Log.warning(TAG, driverKey, 'doesn\'t have member provides()');
+                continue;
+            }
+
+            // Check if driver can provide data
+            if (this.drivers[driverKey].provides.indexOf(type) >= 0) {
+                filteredDrivers[driverKey] = this.drivers[driverKey];
+            }
+        }
+
+        return filteredDrivers;
+    }
 }
 
 module.exports = DriverManager;

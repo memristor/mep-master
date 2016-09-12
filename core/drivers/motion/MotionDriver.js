@@ -16,6 +16,10 @@ class MotionDriver extends MotionDriverBinder {
 
         this.name = name;
     }
+
+    provides() {
+        return ['position'];
+    }
 }
 
 module.exports = MotionDriver;
