@@ -1,5 +1,3 @@
-# Software Design Inspiration
-
 ## Previous Memristor's software
 The most of concepts are taken by previous software built by Pandurov.
 
@@ -9,8 +7,8 @@ Publish/Subscribe system is inspired by ROS.
 ## Android 
 Like Android's Service Manager and generally managers in Android platform 
 our software has DriverManager, ServiceManager, LaserManager...
-Necessarily module name in Android's Log class is great, and we also have 
-implemented it.
+Necessarily module name in Android's Log class is great, and we will
+also use it.
  
 ## Yii
 Ability to change module's class path in config file is implemented in 
