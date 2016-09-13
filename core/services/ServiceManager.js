@@ -1,28 +1,35 @@
 /** @namespace services */
 
-const SingletonException = require('../exceptions/SingletonException');
-const SchedulerService = require('./scheduler/SchedulerService');
+const ModuleLoader = Mep.require('utils/ModuleLoader');
 
 var instance = null;
 
 /**
  * Manage services. Starts all services and provides instance of required service.
+ *
+ * <p>CONSIDER: DriverManager is great thing, therefor I am not sure about Service Manager.
+ * I am not sure do we really need it and what is benefit of having it. In the future
+ * we should consider ServiceManager's existence.</p>
  * @memberof services
  */
 class ServiceManager {
-    static get SCHEDULER_SERVICE() { return 'SCHEDULER_SERVICE'; }
-
+    /**
+     * @private
+     */
     constructor() {
         if (instance != null) {
-            throw new SingletonException('DriverManger is not meant to be initialized');
+            throw new Error('ServiceManager is not meant to be initialized');
         }
 
-        // Start all services
-        this.schedulerService = new SchedulerService();
+        // Services initialization
+        this.services = ModuleLoader.load(
+            Mep.Config.get('Services'),
+            false
+        );
     }
 
     /**
-     * Get instance of ServiceManager. Don't `new` to get instance of ServiceManager!
+     * Get instance of ServiceManager. Do not use `new` to get instance of ServiceManager!
      * @returns {ServiceManager}
      */
     static get() {
@@ -32,18 +39,8 @@ class ServiceManager {
         return instance;
     }
 
-    /**
-     * Get service instance by service name
-     *
-     * @param name {String} - Service name. Eg. `SCHEDULER`
-     * @returns {Object} - Required service
-     */
-    getService(name) {
-        switch (name) {
-            case ServiceManager.SCHEDULER_SERVICE:
-                return this.schedulerService;
-                break;
-        }
+    getPositionService() {
+        return this.services['PositionService'];
     }
 }
 

@@ -51,10 +51,15 @@ class ModuleLoader {
 
             // Do not initialize if `init field == false`
             if (init != false) {
-                let DriverClass = Mep.require(moduleConfig.class + simulationSuffix);
-                modules[moduleName] = new DriverClass(moduleName, moduleConfig);
+                let modulePath = moduleConfig.class + simulationSuffix;
+                let DriverClass = Mep.require(modulePath);
 
-                Mep.Log.debug(TAG, 'Module loaded', moduleName);
+                if (typeof DriverClass === 'function') {
+                    modules[moduleName] = new DriverClass(moduleName, moduleConfig);
+                    Mep.Log.debug(TAG, 'Module loaded', moduleName);
+                } else {
+                    Mep.Log.error(TAG, 'There is no module on path', modulePath);
+                }
             }
         }
         return modules;

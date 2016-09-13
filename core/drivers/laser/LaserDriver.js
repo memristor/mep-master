@@ -11,6 +11,7 @@ class LaserDriver extends EventEmitter {
     /**
      * Make instance of LaserDriver.
      *
+     * <pre>
      * Check image bellow to understand `laserAngle`
      *  s1   s2   s2
      *   \   |   /
@@ -21,6 +22,7 @@ class LaserDriver extends EventEmitter {
      *  Sensor s1 has angle 20 degrees
      *  Sensor s2 has angle 0 degrees
      *  Sensor s3 has angle -30 degrees
+     *  </pre>
      *
      * @param slaveAddress
      * @param functionAddress

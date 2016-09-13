@@ -3,15 +3,22 @@ module.exports = {
     Table: 'table_1_red',
 
     Drivers: {
-        'MotionDriver': {
+        MotionDriver: {
             class: 'drivers/motion/MotionDriver',
             init: true,
             startX: 0,
             startY: 0
         },
 
-        'ModbusDriver': {
+        ModbusDriver: {
             class: 'drivers/modbus/ModbusDriver',
+            init: true,
+        }
+    },
+
+    Services: {
+        PositionService: {
+            class: 'services/position/PositionService',
             init: true,
         }
     }

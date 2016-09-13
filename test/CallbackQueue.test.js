@@ -1,3 +1,4 @@
+global.Mep = require('../core/Mep');
 const should = require('should');
 const CallbackQueue = require('../core/utils/CallbackQueue');
 

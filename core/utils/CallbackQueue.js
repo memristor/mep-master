@@ -1,15 +1,13 @@
-const Log = require('./../Log');
-
 var TAG = 'CallbackQueue';
 
 /**
  * Queue of callback functions. It used when you want to allow other modules to subscribe to your events.
- * NOTE: Deprecated!
+ * @deprecated
  */
 class CallbackQueue {
     constructor() {
         this.callbacks = [];
-        Log.debug(TAG, 'Deprecated, use please EventEmitter');
+        Mep.Log.warn(TAG, 'Deprecated!', 'Please use EventEmitter instead');
     }
 
     /**

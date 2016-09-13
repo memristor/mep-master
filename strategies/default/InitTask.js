@@ -1,5 +1,9 @@
 const Task = Mep.require('utils/Task');
+const TunedPoint = Mep.require('types/TunedPoint');
+const Point = Mep.require('types/Point');
+
 const DriverManager = Mep.require('drivers/DriverManager');
+const position = Mep.require('services/ServiceManager').get().getPositionService();
 
 const TAG = 'InitTask';
 
@@ -16,7 +20,9 @@ class InitTask extends Task {
     }
 
     onRun() {
-        //this.testModbus();
+        position.set(new TunedPoint(
+            new Point(120, 0)
+        ));
     }
 
     testModbus() {
