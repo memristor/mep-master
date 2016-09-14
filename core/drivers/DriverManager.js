@@ -7,15 +7,17 @@ const TAG = 'DriverManager';
 var instance = null;
 
 /**
- * <p>DriverManager's purpose is to manage drivers.</p>
+ * <p>Interact with the overall drivers implemented in the platform.</p>
  *
- * The main goals of Driver manager are:
+ * The main goals of DriverManager are:
  * <ul>
- *  <li>to choose which drivers to initialize and which arguments to pass depending on configuration,</li>
- *  <li>to choose between simulation and hardware implementation of driver,</li>
- *  <li>to provide correct instance of driver,</li>
- *  <li>to monitor if driver is active and to try to recover if it is not.</li>
+ *  <li>driver initialization and passing correct arguments depends on configuration,</li>
+ *  <li>choosing driver implementation (hardware or simulation),</li>
+ *  <li>filter drivers by data which they provide,</li>
+ *  <li>check if driver is available,</li>
+ *  <li>monitor if driver is active and to try to recover if it is not (not implemented).</li>
  * </ul>
+ *
  * @memberof drivers
  */
 class DriverManager {

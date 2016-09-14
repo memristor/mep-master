@@ -1,4 +1,5 @@
 global.Mep = require('./Mep');
+const Console = require('./Console');
 
 const TAG = 'Bootstrap';
 
@@ -18,5 +19,7 @@ class Bootstrap {
         scheduler.runTask(scheduler.findBestTask());
 	}
 }
+
+
 
 new Bootstrap();

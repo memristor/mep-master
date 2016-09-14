@@ -1,7 +1,7 @@
 ## Modular 
 Every driver or service can be easily replaced and tested separately.
 
-## Adapted to the team
+## Team orientated
 There is big picture & every module is separated.
 
 ## Easy & fast to make a change 

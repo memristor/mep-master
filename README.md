@@ -36,9 +36,9 @@ npm test
 
 ## Run application
 ```
-npm start
+npm start -- {arguments}
 ```
-or if you want to load different configuration file
+or
 ```
-npm start NODE_APP_INSTANCE={robot_name}
+./run {arguments}
 ```

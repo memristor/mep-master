@@ -13,6 +13,7 @@ software functionalities that can be for different purposes. The service
 implements complex algorithms to collect, synthesize and process data 
 from drivers and it also provides interface to control the robot.
 
-Services are hardware independent and all services are always available. 
-Using driver _provide_ mechanism services are able to collect data from
-unlimited number of drivers without needing to reprogram the service.
+In short, services are the brain of the platform. They are hardware 
+independent and all services are always available. Using driver 
+_provide_ mechanism services are able to collect data from unlimited 
+number of drivers without needing to reprogram the service.

@@ -20,6 +20,7 @@
   "homepage": "https://bitbucket.org/LukicDarkoo/mep2#readme",
   "dependencies": {
     "bindings": "^1.2.1",
+    "cli": "^1.0.0",
     "config": "^1.21.0",
     "latodoc": "github:smeijer/latodoc",
     "nan": "^2.3.5",
