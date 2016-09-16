@@ -1,1 +1,0 @@
-cmd_Release/obj.target/modbus.node := g++ -shared -pthread -rdynamic -m64  -Wl,-soname=modbus.node -o Release/obj.target/modbus.node -Wl,--start-group Release/obj.target/modbus/ModbusClientSwitzerland.o Release/obj.target/modbus/ModbusMaster.o Release/obj.target/modbus/rs485.o Release/obj.target/modbus/ModbusDriverBinder.o -Wl,--end-group 

@@ -17,6 +17,9 @@ class Point {
         this.tag = tag;
     }
 
+    setY(y) { this.y = y; }
+    setX(x) { this.x = x; }
+
     /**
      * Return x coordinate
      * @returns {number}

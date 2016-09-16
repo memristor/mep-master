@@ -36,9 +36,5 @@ npm test
 
 ## Run application
 ```
-npm start -- {arguments}
-```
-or
-```
-./run {arguments}
+./mep {arguments}
 ```

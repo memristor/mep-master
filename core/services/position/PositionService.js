@@ -1,14 +1,18 @@
 const driverManager = Mep.require('drivers/DriverManager').get();
 const MotionDriver = Mep.require('drivers/motion/MotionDriver');
+const PositionEstimator = require('./PositionEstimator');
 
 const TAG = 'PositionService';
 
 class PositionService {
      constructor() {
+         this.positionEstimator = new PositionEstimator();
+
          this.defaultMoveOptions = {
              pathfinding: false,
              direction: 'forward',
-             relative: false
+             relative: false,
+             tolerance: 3
          };
 
          this.defaultRotateOptions = {

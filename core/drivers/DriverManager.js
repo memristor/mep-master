@@ -79,7 +79,7 @@ class DriverManager {
      * data processing, not mechanisms for data collection from different drivers.
      * Services are in this case also hardware independent.</p>
      *
-     * @param type {String} - Data type which driver can provide
+     * @param type {String} - Data type which driver can provide. Can be: position & terrain.
      * @returns {Object} - List of filtered drivers
      */
     getDataProviderDrivers(type) {
@@ -92,12 +92,12 @@ class DriverManager {
 
             // Check if driver has defined list of data types which can provide
             if (typeof this.drivers[driverKey].provides !== 'function') {
-                Mep.Log.warning(TAG, driverKey, 'doesn\'t have member provides()');
+                Mep.Log.warn(TAG, driverKey, 'doesn\'t have member provides()');
                 continue;
             }
 
             // Check if driver can provide data
-            if (this.drivers[driverKey].provides.indexOf(type) >= 0) {
+            if (this.drivers[driverKey].provides().indexOf(type) >= 0) {
                 filteredDrivers[driverKey] = this.drivers[driverKey];
             }
         }

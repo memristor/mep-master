@@ -1,4 +1,5 @@
 const WebSocketServer = require('ws').Server;
+const EventEmitter = require('events');
 
 const TAG = 'MotionDriverSimulator';
 
@@ -6,13 +7,15 @@ const TAG = 'MotionDriverSimulator';
  * MotionDriver simulation module. Has same methods as MotionDriver but
  * this module send all commands to simulator.
  */
-class MotionDriverSimulator {
+class MotionDriverSimulator extends EventEmitter {
     /**
      * Initialize robot position
      * @param {Int32} x - Start X coordinate
      * @param {Int32} y - Start Y coordinate
      */
     constructor(name, config) {
+        super();
+
         var that = this;
 
         var websocketServer = new WebSocketServer({
@@ -33,6 +36,8 @@ class MotionDriverSimulator {
 
         Mep.Log.debug(TAG, 'Driver with name', name, 'initialized');
     }
+
+    provides() { return ['position']; }
 
     /**
      * Move to absolute position
