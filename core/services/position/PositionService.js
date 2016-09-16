@@ -45,6 +45,17 @@ class PositionService {
         );
 
         Mep.Log.debug(TAG, 'Robot move command sent.', tunedPoint.getPoint(), fullOptions);
+
+        // Check when robot reached the position
+        return new Promise(
+            function(resolve, reject) {
+                this.positionEstimator.on('positionChanged', function(position) {
+                    if (point.getDistance(position) <= fullOptions.tolerance) {
+                        resolve(1);
+                    }
+                });
+            }
+        );
     }
 
     rotate(tunedAngle, options) {

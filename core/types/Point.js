@@ -17,6 +17,13 @@ class Point {
         this.tag = tag;
     }
 
+    getDistance(point) {
+        return Math.sqrt(
+            Math.pow((point.getX() - this.x), 2) +
+            Math.pow((point.getY() - this.y), 2)
+        );
+    }
+
     setY(y) { this.y = y; }
     setX(x) { this.x = x; }
 

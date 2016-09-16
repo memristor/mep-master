@@ -25,9 +25,11 @@ class PositionEstimator extends EventEmitter {
         Mep.Log.debug(TAG, 'Received position from', driverName, '('+ x +', ' + y + ')');
         this.point.setX(x);
         this.point.setY(y);
+
+        this.emit('positionChanged', new Point(x, y));
     }
 
-    getPoint() {
+    getPosition() {
         return this.point();
     }
 }
