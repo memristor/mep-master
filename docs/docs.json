@@ -1,0 +1,25 @@
+{
+  "Guide": {
+    "title": "Guide for programming"
+  },
+
+  "Services_vs_Drivers": {
+    "title": "Services vs Drivers"
+  },
+
+  "Creating_Driver": {
+    "title": "Creating a Driver"
+  },
+
+  "Setting_Up_ElasticSearch": {
+    "title": "Setting Up ElasticSearch"
+  },
+
+  "Goals": {
+    "title": "About: Goals"
+  },
+
+  "Inspiration": {
+    "title": "About: Inspiration"
+  }
+}

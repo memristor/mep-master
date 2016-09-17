@@ -43,6 +43,10 @@ private:
 	
 	mutex *io_mutex;
 
+	thread *refreshThread;
+	int refreshInterval;
+	void refreshDataLoop();
+
 	void debug(const string &message);
 	void error(const string &message);
 

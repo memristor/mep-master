@@ -1,4 +1,4 @@
-global.Mep = require('../core/Mep');
+global.Mep = require('../src/Mep');
 const should = require('should');
 
 describe('Mep', function() {

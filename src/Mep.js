@@ -7,7 +7,7 @@ const Config = require('./Config');
  */
 var Mep = {
     /**
-     * Global function to require library relative to `core` directory
+     * Global function to require library relative to `src` directory
      * @memberof Mep
      * @method require
      * @example

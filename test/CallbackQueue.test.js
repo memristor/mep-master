@@ -1,6 +1,6 @@
-global.Mep = require('../core/Mep');
+global.Mep = require('../src/Mep');
 const should = require('should');
-const CallbackQueue = require('../core/utils/CallbackQueue');
+const CallbackQueue = require('../src/utils/CallbackQueue');
 
 describe('CallbackQueue', function() {
     var cq = new CallbackQueue();
