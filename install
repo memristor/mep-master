@@ -1,0 +1,23 @@
+#!/bin/bash
+
+FULL_NODE_VERSION=$(node -v)
+NODE_VERSION=${FULL_NODE_VERSION:1:1}
+
+# Install Node.js & npm
+if [ $NODE_VERSION \< 6 ]; then
+    curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+fi
+
+# Install npm global dependencies
+sudo npm install -g jsdoc mocha node-gyp
+
+# Install npm dependencies
+sudo npm install
+
+# Install native add-ons
+sudo node-gyp configure --directory src/drivers/modbus
+sudo node-gyp build --directory src/drivers/modbus
+
+sudo node-gyp configure --directory src/drivers/motion
+sudo node-gyp build --directory src/drivers/motion

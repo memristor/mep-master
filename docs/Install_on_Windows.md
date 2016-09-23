@@ -1,0 +1,5 @@
+- Install [Microsoft Visual C++](https://www.microsoft.com/en-us/download/details.aspx?id=48145)
+- Install [Python 2.x](https://www.python.org/downloads/)
+- Install [Node.js](https://nodejs.org/en/download/current/)
+- Run `npm install -g jsdoc mocha node-gyp`
+- RUn `npm install`

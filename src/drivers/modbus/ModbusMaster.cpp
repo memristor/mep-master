@@ -490,7 +490,7 @@ bool ModbusMaster::ModbusReadHoldingRegisters(unsigned char slave_address, unsig
 
 	if(LRC != receivedLRC)
 	{
-		printf("LRC=%d, receivedLRC=%lu\n", LRC, receivedLRC);
+		printf("LRC=%lu, receivedLRC=%d\n", LRC, receivedLRC);
 		return false;
 	}
 
