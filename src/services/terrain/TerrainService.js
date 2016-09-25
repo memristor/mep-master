@@ -1,7 +1,4 @@
-/* Combines data from multiple sensors to terrain state (position of objects on terrain) */
-
-var Point = require(__core + 'types/Point');
-
+var Point = Mep.require('types/Point');
 
 class TerrainService {
 	constructor() {

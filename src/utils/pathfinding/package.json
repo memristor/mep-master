@@ -1,0 +1,13 @@
+{
+  "name": "pathfinding",
+  "version": "1.0.0",
+  "description": "Pathfinding bindings for Memristor",
+  "main": "PathFinding.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "node-gyp rebuild"
+  },
+  "author": "",
+  "license": "ISC",
+  "gypfile": true
+}

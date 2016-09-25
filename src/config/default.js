@@ -20,6 +20,11 @@ module.exports = {
         PositionService: {
             class: 'services/position/PositionService',
             init: true,
+        },
+
+        TerrainService: {
+            class: 'services/position/PositionService',
+            init: true,
         }
     }
 };
