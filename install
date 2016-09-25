@@ -4,7 +4,7 @@ FULL_NODE_VERSION=$(node -v)
 NODE_VERSION=${FULL_NODE_VERSION:1:1}
 
 # Install Node.js & npm
-if [ $NODE_VERSION \< 6 ]; then
+if [ $NODE_VERSION -lt 6 ]; then
     curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
     sudo apt-get install -y nodejs
 fi

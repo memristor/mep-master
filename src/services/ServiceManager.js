@@ -42,6 +42,10 @@ class ServiceManager {
     getPositionService() {
         return this.services['PositionService'];
     }
+
+    getTerrainService() {
+        return this.services['TerrainService'];
+    }
 }
 
 module.exports = ServiceManager;

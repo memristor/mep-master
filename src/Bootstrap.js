@@ -1,6 +1,6 @@
 global.Mep = require('./Mep');
 const Console = require('./Console');
-
+const terrain = Mep.require('services/ServiceManager').get().getTerrainService();
 const TAG = 'Bootstrap';
 
 class Bootstrap {
