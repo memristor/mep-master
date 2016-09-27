@@ -1,5 +1,7 @@
 #include "MotionDriverBinder.h"
 
+#define TAG "MotionDriverBinder "
+
 MotionDriverBinder::MotionDriverBinder(Point2D initPosition,
        MotionDriver::RobotType robotType,
        int initOrientation,
@@ -11,12 +13,21 @@ MotionDriverBinder::MotionDriverBinder(Point2D initPosition,
 void MotionDriverBinder::Init(Local<Object> exports) {
     Nan::HandleScope scope;
 
+	// Set logger
+	el::Configurations defaultConf;
+   defaultConf.setToDefault();
+   defaultConf.set(el::Level::Debug, el::ConfigurationType::Format, "%datetime %level %msg");
+    el::Loggers::reconfigureLogger("default", defaultConf);
+
+	
+	// Set Node/v8 stuff
     Local<FunctionTemplate> tmpl = Nan::New<FunctionTemplate>(New);
     tmpl->InstanceTemplate()->SetInternalFieldCount(1);
 
     Nan::SetPrototypeMethod(tmpl, "moveToPosition", moveToPosition);
     Nan::SetPrototypeMethod(tmpl, "stop", stop);
 	Nan::SetPrototypeMethod(tmpl, "moveStraight", moveStraight);
+	Nan::SetPrototypeMethod(tmpl, "setSpeed", setSpeed);
 
     exports->Set(Nan::New("MotionDriverBinder").ToLocalChecked(), tmpl->GetFunction());
 }
@@ -71,7 +82,7 @@ void MotionDriverBinder::moveToPosition(const Nan::FunctionCallbackInfo<Value> &
     MotionDriver *motionDriver = ObjectWrap::Unwrap<MotionDriverBinder>(args.Holder())->getMotionDriver();
 
     Point2D position(args[0]->Int32Value(), args[1]->Int32Value());
-    MotionDriver::MovingDirection direction = (args[0]->Int32Value() == 1) ? MotionDriver::FORWARD : MotionDriver::BACKWARD;
+    MotionDriver::MovingDirection direction = (args[2]->Int32Value() == 1) ? MotionDriver::FORWARD : MotionDriver::BACKWARD;
 
     motionDriver->moveToPosition(position, direction);
 }
@@ -83,8 +94,9 @@ void MotionDriverBinder::stop(const Nan::FunctionCallbackInfo<Value> &args) {
     Nan::HandleScope scope;
 
     MotionDriver *motionDriver = ObjectWrap::Unwrap<MotionDriverBinder>(args.Holder())->getMotionDriver();
-
-    motionDriver->stop();
+    
+	LOG(INFO) << TAG << "Stop command is sending";
+	motionDriver->stop();
 }
 
 void MotionDriverBinder::moveStraight(const Nan::FunctionCallbackInfo<Value> &args) {
@@ -102,3 +114,20 @@ void MotionDriverBinder::moveStraight(const Nan::FunctionCallbackInfo<Value> &ar
 
     motionDriver->moveStraight(args[0]->Int32Value());
 }
+
+void MotionDriverBinder::setSpeed(const Nan::FunctionCallbackInfo<Value> &args) {
+	Nan::HandleScope scope;
+
+	if (args.Length() != 1 ||
+        args[0]->IsInt32() == false) {
+		
+		args.GetIsolate()->ThrowException(Exception::TypeError(
+            Nan::New("Please check arguments. Expected arguments: (uint32 speed)").ToLocalChecked()
+        ));
+	}
+
+    MotionDriver *motionDriver = ObjectWrap::Unwrap<MotionDriverBinder>(args.Holder())->getMotionDriver();
+
+    motionDriver->setSpeed(args[0]->Int32Value());
+}
+

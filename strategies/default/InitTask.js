@@ -11,35 +11,13 @@ class InitTask extends Task {
     constructor(weight, time, location) {
         super(weight, time, location);
 
-        Mep.Log.debug(TAG, 'Initialization started');
-
-        this.motionDriver = DriverManager.get().getDriver('MotionDriver');
-        this.modbusDriver = DriverManager.get().getDriver('ModbusDriver');
-
         Mep.Log.debug(TAG, 'Initialized');
     }
 
     onRun() {
-        position.set(new TunedPoint(
-            new Point(120, 0)
-        ));
+        position.set(new TunedPoint(new Point(500, 0)), { speed: 100 });
     }
 
-    testModbus() {
-        Mep.Log.debug(TAG, 'Start modbus coil reading');
-
-        var that = this;
-
-        var slaveAddress = 1;
-        var functionAddress = 7; // Ono gore cudo
-        this.modbusDriver.registerCoilReading(slaveAddress, functionAddress);
-        this.modbusDriver.on('coilChanged', function(slaveAddress, functionAddress, state, id) {
-            //that.motionDriver.stop();
-
-            console.log('Coil Changed! Slave address: ' + slaveAddress + '; Function address: ' +
-                functionAddress + '; State: ' + state);
-        });
-    }
 }
 
 module.exports = InitTask;
