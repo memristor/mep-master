@@ -1,6 +1,8 @@
 {
   "source": {
-    "include": ["core"]
+    "include": [
+      "core"
+    ]
   },
   "plugins": [],
   "opts": {

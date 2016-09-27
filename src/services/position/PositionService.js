@@ -5,50 +5,50 @@ const PositionEstimator = require('./PositionEstimator');
 const TAG = 'PositionService';
 
 class PositionService {
-     constructor() {
-		var that = this;
+    constructor() {
+        var that = this;
 
-		this.currentSpeed = 100;
-         this.positionEstimator = new PositionEstimator();
-		this.modbusDriver = driverManager.getDriver('ModbusDriver');
-		this.motionDriver = null;
-		this.motionDriverAvailable = true;
+        this.currentSpeed = 100;
+        this.positionEstimator = new PositionEstimator();
+        this.modbusDriver = driverManager.getDriver('ModbusDriver');
+        this.motionDriver = null;
+        this.motionDriverAvailable = true;
 
 
         // Check if driver is active
         if (driverManager.isDriverAvailable('MotionDriver') === true) {
-			this.motionDriver = driverManager.getDriver('MotionDriver');
+            this.motionDriver = driverManager.getDriver('MotionDriver');
         } else {
-			this.motionDriverAvailable = false;
-			Mep.Log.warn(TAG, 'No motion driver available');
-		}
+            this.motionDriverAvailable = false;
+            Mep.Log.warn(TAG, 'No motion driver available');
+        }
 
 
-         this.defaultMoveOptions = {
-             pathfinding: false,
-             direction: 'forward',
-             relative: false,
-             tolerance: 3,
-			speed: 100
-         };
+        this.defaultMoveOptions = {
+            pathfinding: false,
+            direction: 'forward',
+            relative: false,
+            tolerance: 3,
+            speed: 100
+        };
 
-         this.defaultRotateOptions = {
-             relative: false
-         };
+        this.defaultRotateOptions = {
+            relative: false
+        };
 
-		// Subscribe to stop
-		for (let iSlaveAddress = 1; iSlaveAddress <= 1; iSlaveAddress++) {
-			for (let iFunctionAddress = 0; iFunctionAddress <= 9; iFunctionAddress++) {
-				this.modbusDriver.registerCoilReading(iSlaveAddress, iFunctionAddress);
-			}
-		}
+        // Subscribe to stop
+        for (let iSlaveAddress = 1; iSlaveAddress <= 1; iSlaveAddress++) {
+            for (let iFunctionAddress = 0; iFunctionAddress <= 9; iFunctionAddress++) {
+                this.modbusDriver.registerCoilReading(iSlaveAddress, iFunctionAddress);
+            }
+        }
 
-		this.modbusDriver.on('coilChanged', function(slaveAddress, functionAddress, state, id) {
-			if (that.motionDriverAvailable === true) {
-				that.motionDriver.stop();
-			}
-	    });
-     }
+        this.modbusDriver.on('coilChanged', function (slaveAddress, functionAddress, state, id) {
+            if (that.motionDriverAvailable === true) {
+                that.motionDriver.stop();
+            }
+        });
+    }
 
     set(tunedPoint, options, done, progress) {
         // Override the default options
@@ -57,11 +57,11 @@ class PositionService {
             fullOptions[optionKey] = options[optionKey];
         }
 
-		// Set speed
-		if (this.currentSpeed !== fullOptions.speed) {
-			this.currentSpeed = fullOptions.speed;
-			this.motionDriver.setSpeed(fullOptions.speed);
-		}
+        // Set speed
+        if (this.currentSpeed !== fullOptions.speed) {
+            this.currentSpeed = fullOptions.speed;
+            this.motionDriver.setSpeed(fullOptions.speed);
+        }
 
         // Move the robot
         var point = tunedPoint.getPoint();
@@ -77,8 +77,8 @@ class PositionService {
 
         // Check when robot reached the position
         return new Promise(
-            function(resolve, reject) {
-                this.positionEstimator.on('positionChanged', function(position) {
+            function (resolve, reject) {
+                this.positionEstimator.on('positionChanged', function (position) {
                     if (point.getDistance(position) <= fullOptions.tolerance) {
                         resolve(1);
                     }

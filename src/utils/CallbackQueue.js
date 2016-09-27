@@ -23,12 +23,12 @@ class CallbackQueue {
      * @param {Array} params - Params which will passed to callback functions
      */
     notifyAll(params) {
-		if (Array.isArray(params) == false) {
-			Log.error(TAG, 'notifyAll() expect array only');
-			return;
-		}
+        if (Array.isArray(params) == false) {
+            Log.error(TAG, 'notifyAll() expect array only');
+            return;
+        }
 
-        this.callbacks.forEach(function(callback) {
+        this.callbacks.forEach(function (callback) {
             callback(...params);
         });
     }

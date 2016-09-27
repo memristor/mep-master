@@ -12,7 +12,7 @@ class Console {
 }
 
 CLI.parse({
-    robot: [ 'r', 'Choose which robot `small` or `big`', 'string', 'big' ],
+    robot: ['r', 'Choose which robot `small` or `big`', 'string', 'big'],
     strategy: ['s', 'Path to Scheduler of strategy', 'path']
 });
 

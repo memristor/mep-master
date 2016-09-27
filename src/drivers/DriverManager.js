@@ -28,7 +28,7 @@ class DriverManager {
         if (instance != null) {
             throw new Error('DriverManger is not meant to be initialized');
         }
-        
+
         // Drivers initialization
         this.drivers = ModuleLoader.load(
             Mep.Config.get('Drivers'),

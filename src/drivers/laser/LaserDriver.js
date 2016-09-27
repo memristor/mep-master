@@ -75,7 +75,9 @@ class LaserDriver extends EventEmitter {
         return this.motionDriver.getOrientation() + this.laserAngle;
     }
 
-    provides() { return ['terrain']; }
+    provides() {
+        return ['terrain'];
+    }
 }
 
 module.exports = LaserDriver;
