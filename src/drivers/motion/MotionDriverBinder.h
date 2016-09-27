@@ -1,6 +1,9 @@
 #include <nan.h>
 #include "MotionDriver.h"
 #include "Point2D.h"
+#include "easylogging++.h"
+
+INITIALIZE_EASYLOGGINGPP
 
 using motion::MotionDriver;
 using geometry::Point2D;
@@ -33,6 +36,7 @@ private:
     static void moveToPosition(const Nan::FunctionCallbackInfo<Value> &args);
     static void stop(const Nan::FunctionCallbackInfo<Value> &args);
     static void moveStraight(const Nan::FunctionCallbackInfo<Value> &args);
+	static void setSpeed(const Nan::FunctionCallbackInfo<Value> &args);
 
     MotionDriver *motionDriver;
 };

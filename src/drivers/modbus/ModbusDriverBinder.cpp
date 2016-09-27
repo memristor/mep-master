@@ -1,5 +1,7 @@
 #include "ModbusDriverBinder.h"
 
+#define TAG "ModbusDriverBinder "
+
 ModbusDriverBinder::ModbusDriverBinder(Callback *progress, Callback *callback) {
     modbusClient = ModbusClientSW::getModbusClientInstance();
     Nan::AsyncQueueWorker(new ModbusDataListenerWorker(callback, progress));
@@ -37,6 +39,14 @@ void ModbusDriverBinder::registerCoilReadingFunction(const Nan::FunctionCallback
 void ModbusDriverBinder::Init(Local<Object> exports) {
     Nan::HandleScope scope;
 
+	// Set logger
+	el::Configurations defaultConf;
+	defaultConf.setToDefault();
+	defaultConf.set(el::Level::Debug, el::ConfigurationType::Format, "%datetime %level %msg");
+	el::Loggers::reconfigureLogger("default", defaultConf);
+
+
+	// Set Node/v8 stuff
     Local<FunctionTemplate> tmpl = Nan::New<FunctionTemplate>(New);
     tmpl->InstanceTemplate()->SetInternalFieldCount(1);
 

@@ -2,6 +2,9 @@
 #include <uv.h>
 #include <thread>
 #include "ModbusClientSwitzerland.h"
+#include "easylogging++.h"
+
+INITIALIZE_EASYLOGGINGPP
 
 using namespace std;
 using v8::Local;

@@ -1,5 +1,7 @@
 #include "ModbusClientSwitzerland.h"
 
+#define TAG "ModbusClientSwitzerland "
+
 ModbusClientSW* ModbusClientSW::modbusClientSWInstance = 0;
 
 ModbusClientSW::ModbusClientSW(): m_mutex(new mutex()){
@@ -136,7 +138,7 @@ void ModbusClientSW::main(const AsyncProgressWorker::ExecutionProgress& progress
                         modbusCallbackData.functionAddress = allData.modID.function_address;
                         modbusCallbackData.detected = true;
                         progress.Send(reinterpret_cast<const char*>(&modbusCallbackData), sizeof(modbusCallbackData));
-
+			LOG(INFO) << TAG << "Coil state (" << modbusCallbackData.slaveAddress << ", " << modbusCallbackData.functionAddress << ") changed";
 
                         counterRead = 0;
                     }else if(successReading && allData.callbackOnNotDetected){
