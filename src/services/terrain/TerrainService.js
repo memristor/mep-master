@@ -12,6 +12,14 @@ class TerrainService {
 			}
 		};
 	}
+
+	addObstacle(name, duration, points) {
+
+    }
+
+    removeObstacle(name) {
+
+    }
 }
 
 module.exports = TerrainService;

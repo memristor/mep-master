@@ -25,6 +25,7 @@
     "latodoc": "github:smeijer/latodoc",
     "nan": "^2.3.5",
     "pathfinding": "^0.4.18",
+    "polygon": "^1.0.2",
     "should": "^9.0.2",
     "winston": "^2.2.0",
     "winston-elasticsearch": "^0.4.0",
