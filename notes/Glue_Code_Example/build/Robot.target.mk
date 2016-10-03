@@ -31,13 +31,15 @@ CFLAGS_C_Debug :=
 CFLAGS_CC_Debug := \
 	-fno-rtti \
 	-fno-exceptions \
-	-std=gnu++0x
+	-std=gnu++0x \
+	-std=c++11 \
+	-fexceptions
 
 INCS_Debug := \
-	-I/home/lukicdarkoo/.node-gyp/6.3.1/include/node \
-	-I/home/lukicdarkoo/.node-gyp/6.3.1/src \
-	-I/home/lukicdarkoo/.node-gyp/6.3.1/deps/uv/include \
-	-I/home/lukicdarkoo/.node-gyp/6.3.1/deps/v8/include \
+	-I/home/lukicdarkoo/.node-gyp/6.4.0/include/node \
+	-I/home/lukicdarkoo/.node-gyp/6.4.0/src \
+	-I/home/lukicdarkoo/.node-gyp/6.4.0/deps/uv/include \
+	-I/home/lukicdarkoo/.node-gyp/6.4.0/deps/v8/include \
 	-I$(srcdir)/../../node_modules/nan
 
 DEFS_Release := \
@@ -67,13 +69,15 @@ CFLAGS_C_Release :=
 CFLAGS_CC_Release := \
 	-fno-rtti \
 	-fno-exceptions \
-	-std=gnu++0x
+	-std=gnu++0x \
+	-std=c++11 \
+	-fexceptions
 
 INCS_Release := \
-	-I/home/lukicdarkoo/.node-gyp/6.3.1/include/node \
-	-I/home/lukicdarkoo/.node-gyp/6.3.1/src \
-	-I/home/lukicdarkoo/.node-gyp/6.3.1/deps/uv/include \
-	-I/home/lukicdarkoo/.node-gyp/6.3.1/deps/v8/include \
+	-I/home/lukicdarkoo/.node-gyp/6.4.0/include/node \
+	-I/home/lukicdarkoo/.node-gyp/6.4.0/src \
+	-I/home/lukicdarkoo/.node-gyp/6.4.0/deps/uv/include \
+	-I/home/lukicdarkoo/.node-gyp/6.4.0/deps/v8/include \
 	-I$(srcdir)/../../node_modules/nan
 
 OBJS := \

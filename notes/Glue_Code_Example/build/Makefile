@@ -308,8 +308,8 @@ ifeq ($(strip $(foreach prefix,$(NO_LOAD),\
 endif
 
 quiet_cmd_regen_makefile = ACTION Regenerating $@
-cmd_regen_makefile = cd $(srcdir); /usr/lib/node_modules/node-gyp/gyp/gyp_main.py -fmake --ignore-environment "--toplevel-dir=." -I/home/lukicdarkoo/Desktop/mep2/notes/Glue_Code_Example/build/config.gypi -I/usr/lib/node_modules/node-gyp/addon.gypi -I/home/lukicdarkoo/.node-gyp/6.3.1/include/node/common.gypi "--depth=." "-Goutput_dir=." "--generator-output=build" "-Dlibrary=shared_library" "-Dvisibility=default" "-Dnode_root_dir=/home/lukicdarkoo/.node-gyp/6.3.1" "-Dnode_gyp_dir=/usr/lib/node_modules/node-gyp" "-Dnode_lib_file=node.lib" "-Dmodule_root_dir=/home/lukicdarkoo/Desktop/mep2/notes/Glue_Code_Example" binding.gyp
-Makefile: $(srcdir)/../../../../../../usr/lib/node_modules/node-gyp/addon.gypi $(srcdir)/../../../../.node-gyp/6.3.1/include/node/common.gypi $(srcdir)/build/config.gypi $(srcdir)/binding.gyp
+cmd_regen_makefile = cd $(srcdir); /usr/lib/node_modules/node-gyp/gyp/gyp_main.py -fmake --ignore-environment "--toplevel-dir=." -I/home/lukicdarkoo/Desktop/mep2/notes/Glue_Code_Example/build/config.gypi -I/usr/lib/node_modules/node-gyp/addon.gypi -I/home/lukicdarkoo/.node-gyp/6.4.0/include/node/common.gypi "--depth=." "-Goutput_dir=." "--generator-output=build" "-Dlibrary=shared_library" "-Dvisibility=default" "-Dnode_root_dir=/home/lukicdarkoo/.node-gyp/6.4.0" "-Dnode_gyp_dir=/usr/lib/node_modules/node-gyp" "-Dnode_lib_file=node.lib" "-Dmodule_root_dir=/home/lukicdarkoo/Desktop/mep2/notes/Glue_Code_Example" binding.gyp
+Makefile: $(srcdir)/../../../../../../usr/lib/node_modules/node-gyp/addon.gypi $(srcdir)/build/config.gypi $(srcdir)/binding.gyp $(srcdir)/../../../../.node-gyp/6.4.0/include/node/common.gypi
 	$(call do_cmd,regen_makefile)
 
 # "all" is a concatenation of the "all" targets from all the included

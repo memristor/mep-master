@@ -5,14 +5,10 @@ const Util = require('util');
 Util.inherits(Robot, EventEmiter);
 
 var robot = new Robot();
-robot.on('positionChanged', function (e) {
-    console.log('positionChanged() ' + e);
-});
-robot.setX(3);
-console.log(robot.getX());
 
-var robot2 = new Robot();
-console.log(robot2.getX());
+robot.getX();
+console.log(new Date());
+
 
 
 // EventEmiter test

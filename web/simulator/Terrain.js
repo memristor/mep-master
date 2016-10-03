@@ -19,7 +19,7 @@ function Terrain(terrainNode) {
     this.scaleFactorHeight = simulationHeight / TERRAIN_HEIGHT;
 }
 
-Terrain.prototype.addRobot = function(robot) {
+Terrain.prototype.addRobot = function (robot) {
     robot.setVisualScale(this.scaleFactorWidth, this.scaleFactorHeight);
     this.terrainNode.appendChild(robot.getNode());
 }

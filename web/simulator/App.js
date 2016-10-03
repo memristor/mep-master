@@ -18,11 +18,11 @@ function Init() {
 
 
     ws = new WebSocket("ws://127.0.0.1:8080");
-    ws.onmessage = function(e) {
+    ws.onmessage = function (e) {
         var command = JSON.parse(e.data);
         console.log(command);
 
-        switch(command.params.func) {
+        switch (command.params.func) {
             case 'constructor':
                 bigRobot.setPosition(command.params.x, command.params.y);
                 break;

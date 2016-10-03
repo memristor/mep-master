@@ -5,6 +5,10 @@
 
 #include <nan.h>
 #include <iostream>
+#include "easylogging++.h"
+
+INITIALIZE_EASYLOGGINGPP
+
 
 using v8::Local;
 using v8::FunctionTemplate;
@@ -21,6 +25,11 @@ class Robot : public Nan::ObjectWrap {
 	public:
 		static void Init(Local<Object> exports) {
 			Nan::HandleScope scope;
+
+			el::Configurations defaultConf;
+               defaultConf.setToDefault();
+               defaultConf.set(el::Level::Debug, el::ConfigurationType::Format, "%datetime %level %msg");
+                el::Loggers::reconfigureLogger("default", defaultConf);
 
 			Local<FunctionTemplate> tmpl = Nan::New<FunctionTemplate>(New);
 			tmpl->InstanceTemplate()->SetInternalFieldCount(1);
@@ -43,16 +52,19 @@ class Robot : public Nan::ObjectWrap {
 		Robot() : x(0) {}
 
 		Persistent<Object> obj;
-	
+
 	private:
-
-
 		static void getX(const Nan::FunctionCallbackInfo<Value>& args) {
+		    LOG(INFO) << "getX()";
+
 			Nan::HandleScope scope;
+			LOG(INFO) << "getX() Nan::HandleScope scope";
 
 			Robot *robot = ObjectWrap::Unwrap<Robot>(args.Holder());
+			LOG(INFO) << "getX() Robot *robot = ObjectWrap::Unwrap<Robot>(args.Holder())";
 
 			args.GetReturnValue().Set(robot->x++);
+			LOG(INFO) << "getX() args.GetReturnValue().Set(robot->x++)";
 		}
 
 		static void setX(const Nan::FunctionCallbackInfo<Value>& args) {
