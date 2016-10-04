@@ -13,7 +13,6 @@ class PositionEstimator extends EventEmitter {
 
         // Subscribe on drivers
         this.drivers = driverManager.getDataProviderDrivers('position');
-        Mep.Log.debug(TAG, 'Used drivers', this.drivers);
 
         for (var driverName in this.drivers) {
             this.drivers[driverName].on('positionChanged', this.processPositionChange);

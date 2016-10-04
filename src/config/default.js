@@ -1,11 +1,11 @@
 module.exports = {
-    Simulation: false,
+    Simulation: true,
     Table: 'table_1_red',
 
     Drivers: {
         MotionDriver: {
             class: 'drivers/motion/MotionDriver',
-            init: false,
+            init: true,
             startX: 0,
             startY: 0
         },

@@ -6,8 +6,9 @@ Util.inherits(Robot, EventEmiter);
 
 var robot = new Robot();
 
+console.log(new Date(), "JavaScript Interplay");
 robot.getX();
-console.log(new Date());
+console.log(new Date(), "JavaScript");
 
 
 

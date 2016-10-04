@@ -1,5 +1,5 @@
 const driverManager = Mep.require('drivers/DriverManager').get();
-const MotionDriver = Mep.require('drivers/motion/MotionDriver');
+const MotionDriverConstants = Mep.require('drivers/motion/Constants');
 const PositionEstimator = require('./PositionEstimator');
 
 const TAG = 'PositionService';
@@ -69,8 +69,8 @@ class PositionService {
             point.getX(),
             point.getY(),
             (fullOptions.direction === 'backward') ?
-                MotionDriver.DIRECTION_BACKWARD :
-                MotionDriver.DIRECTION_FORWARD
+                MotionDriverConstants.DIRECTION_BACKWARD :
+                MotionDriverConstants.DIRECTION_FORWARD
         );
 
         Mep.Log.debug(TAG, 'Robot move command sent.', tunedPoint.getPoint(), fullOptions);
