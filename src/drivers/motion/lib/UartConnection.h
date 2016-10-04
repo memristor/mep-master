@@ -8,7 +8,12 @@
 #ifndef UART_H_
 #define UART_H_
 
-#include <termios.h>		//Used for UART
+#include <termios.h>
+#include "easylogging++.h"
+
+#define MAX_RETRY_COUNT 5
+#define PRINT_RETRY_COUNT_EVERY 200
+#define RETRY_DELAY 5000
 
 namespace uart
 {

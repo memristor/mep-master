@@ -2,7 +2,12 @@
   "targets": [
     {
       "target_name": "motion",
-      "sources": [ "MotionDriverBinder.cpp", "MotionDriver.cpp", "Point2D.cpp", "UartConnection.cpp" ],
+      "sources": [
+        "lib/MotionDriverBinder.cpp",
+        "lib/MotionDriver.cpp",
+        "lib/Point2D.cpp",
+        "lib/UartConnection.cpp"
+        ],
       "include_dirs": [
         "<!(node -e \"require('nan')\")"
       ],

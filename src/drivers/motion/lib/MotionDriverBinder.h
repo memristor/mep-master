@@ -3,8 +3,6 @@
 #include "Point2D.h"
 #include "easylogging++.h"
 
-INITIALIZE_EASYLOGGINGPP
-
 using motion::MotionDriver;
 using geometry::Point2D;
 using v8::Local;

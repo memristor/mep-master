@@ -8,6 +8,8 @@
 #include "MotionDriver.h"
 #include <stdio.h>
 
+#define TAG "MotionDriver "
+
 namespace motion
 {
 
@@ -39,19 +41,10 @@ MotionDriver::~MotionDriver()
 	delete refreshThread;
 }
 
-void MotionDriver::debug(const string &message) {
-    cout << message << endl;
-}
-
-void MotionDriver::error(const string &message) {
-    cout << message << endl;
-}
-
 void MotionDriver::moveStraight(int distance)
 {
-    stringstream ss;
-    ss<<"Move strait: "<<distance;
-    debug(ss.str());
+    LOG(INFO) << TAG << "moveStraight(" << distance << ")";
+
 	lock_guard<mutex> lock(*io_mutex);
 	
 	char message[] = {
@@ -68,9 +61,8 @@ void MotionDriver::moveStraight(int distance)
 
 void MotionDriver::rotateFor(int relativeAngle)
 {
-    std::stringstream ss;
-    ss<<"Rotate for: "<<(int)relativeAngle;
-    debug(ss.str());
+    LOG(INFO) << TAG << "rotateFor(" << relativeAngle << ")";
+
 	lock_guard<mutex> lock(*io_mutex);
 	
 	char message[] = {
@@ -84,9 +76,8 @@ void MotionDriver::rotateFor(int relativeAngle)
 
 void MotionDriver::rotateTo(int absoluteAngle)
 {
-    std::stringstream ss;
-    ss<<"Rotate to: "<<(int)absoluteAngle;
-    debug(ss.str());
+    LOG(INFO) << TAG << "rotateTo(" << absoluteAngle << ")";
+
 	lock_guard<mutex> lock(*io_mutex);
 	
 	char message[] = {
@@ -100,9 +91,8 @@ void MotionDriver::rotateTo(int absoluteAngle)
 
 void MotionDriver::moveToPosition(geometry::Point2D position, MovingDirection direction)
 {   
-    std::stringstream ss;
-    ss<<"Move to position: "<<position;
-    debug(ss.str());
+    LOG(INFO) << TAG << "moveToPosition(" << position.getX() << ", " << position.getY() << ", " << (int)direction << ")";
+
 	lock_guard<mutex> lock(*io_mutex);
 	
 	char message[] = {
@@ -121,6 +111,9 @@ void MotionDriver::moveToPosition(geometry::Point2D position, MovingDirection di
 
 void MotionDriver::moveArc(geometry::Point2D center, int angle, MovingDirection direction)
 {
+    LOG(INFO) << TAG << "moveArc(" << center.getX() << ", " << center.getY() <<
+        ", " << angle << ", " << (int)direction << ")";
+
 	lock_guard<mutex> lock(*io_mutex);
 
 	char message[] = {
@@ -140,14 +133,16 @@ void MotionDriver::moveArc(geometry::Point2D center, int angle, MovingDirection 
 
 void MotionDriver::stop()
 {
-    debug("Stop command received");
+     LOG(INFO) << TAG << "stop()";
+
 	lock_guard<mutex> lock(*io_mutex);
 
 	uart.writeUart('S');
 }
 
 void MotionDriver::softStop(){
-    debug("Soft stop");
+     LOG(INFO) << TAG << "softStop()";
+
     lock_guard<mutex> lock(*io_mutex);
 
     uart.writeUart('s');
@@ -182,9 +177,7 @@ void MotionDriver::setSpeed(unsigned char speed)
 {
     char newSpeed=0;
 
-    std::stringstream ss;
-    ss<<"Set speed "<<(int)speed;
-    debug(ss.str());
+     LOG(INFO) << TAG << "setSpeed(" << (int)speed << ")";
     lock_guard<mutex> lock(*io_mutex);
 
     uart.flushOutput();
@@ -199,17 +192,16 @@ void MotionDriver::setSpeed(unsigned char speed)
 	uart.writeUart(message, 2);
     uart.readAll(&newSpeed, 1);
 
-    if (newSpeed!=speed){
-        error("Speed is not set!!");
+    if (newSpeed != speed){
+         LOG(ERROR) << TAG << "Speed is not set";
     }
-
-    ss << "-- Received speed: " << newSpeed;
-    debug(ss.str());
 }
 
 void MotionDriver::setPositionAndOrientation(const geometry::Point2D position, int orientation)
 {
-    debug("Set position and orientation");
+     LOG(INFO) << TAG << "setPositionAndOrientation(" << position.getX() << ", " <<
+        position.getY() << ", " << orientation << ")";
+
 	lock_guard<mutex> lock(*io_mutex);
 
 	this->position = position;

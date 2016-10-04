@@ -15,6 +15,7 @@
 #include <string>
 #include "UartConnection.h"
 #include "Point2D.h"
+#include "easylogging++.h"
 
 namespace motion
 {
@@ -46,9 +47,6 @@ private:
 	thread *refreshThread;
 	int refreshInterval;
 	void refreshDataLoop();
-
-	void debug(const string &message);
-	void error(const string &message);
 
 public:
 	MotionDriver(geometry::Point2D initPosition=geometry::Point2D(), RobotType robotType=VELIKI, int initOrientation=0, int initSpeed=100);

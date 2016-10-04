@@ -2,6 +2,8 @@
 
 #define TAG "MotionDriverBinder "
 
+INITIALIZE_EASYLOGGINGPP
+
 MotionDriverBinder::MotionDriverBinder(Point2D initPosition,
        MotionDriver::RobotType robotType,
        int initOrientation,
@@ -13,13 +15,6 @@ MotionDriverBinder::MotionDriverBinder(Point2D initPosition,
 void MotionDriverBinder::Init(Local<Object> exports) {
     Nan::HandleScope scope;
 
-	// Set logger
-	el::Configurations defaultConf;
-   defaultConf.setToDefault();
-   defaultConf.set(el::Level::Debug, el::ConfigurationType::Format, "%datetime %level %msg");
-    el::Loggers::reconfigureLogger("default", defaultConf);
-
-	
 	// Set Node/v8 stuff
     Local<FunctionTemplate> tmpl = Nan::New<FunctionTemplate>(New);
     tmpl->InstanceTemplate()->SetInternalFieldCount(1);
@@ -38,17 +33,28 @@ void MotionDriverBinder::New(const Nan::FunctionCallbackInfo<Value> &args) {
     // Get params
     Point2D initPosition;
 
-    if (args.Length() < 2 ||
-        args[0]->IsInt32() == false ||
-        args[1]->IsInt32() == false) {
+    if (args.Length() < 3 ||
+        args[0]->IsBoolean() == false ||
+        args[1]->IsInt32() == false ||
+        args[2]->IsInt32() == false) {
 
         args.GetIsolate()->ThrowException(Exception::TypeError(
-            Nan::New("Constructor requires at least two arguments").ToLocalChecked()
+            Nan::New("Constructor prototype is (boolean log, int startX, int startY)").ToLocalChecked()
         ));
         return;
     }
 
-    initPosition = Point2D(args[0]->Int32Value(), args[1]->Int32Value());
+    // Set log level
+    el::Configurations defaultConf;
+    defaultConf.setToDefault();
+    defaultConf.setGlobally(el::ConfigurationType::Format, "%datetime %level %msg");
+    defaultConf.setGlobally(el::ConfigurationType::Enabled, args[0]->BooleanValue() ? "true" : "false");
+    defaultConf.set(el::Level::Warning, el::ConfigurationType::Enabled, "true");
+    defaultConf.set(el::Level::Error, el::ConfigurationType::Enabled, "true");
+    el::Loggers::reconfigureLogger("default", defaultConf);
+
+    // Create a starting point
+    initPosition = Point2D(args[1]->Int32Value(), args[2]->Int32Value());
 
     // Create object
     MotionDriverBinder *motionDriverBinder = new MotionDriverBinder(initPosition);

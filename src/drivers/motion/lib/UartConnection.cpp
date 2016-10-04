@@ -10,6 +10,8 @@
 #include <fcntl.h>			//Used for UART
 #include <cstdio>
 
+#define TAG "UartConnection "
+
 namespace uart
 {
 
@@ -80,7 +82,7 @@ void UartConnection::dumpReadGarbage()
 	char dump;
 	while(readUart(&dump, 1))
 	{
-		printf("garbage detected = %x\n", dump);
+		LOG(WARNING) << TAG << "Garbage detected = " << dump;
 	}
 }
 
@@ -115,16 +117,22 @@ void UartConnection::readAll(char output[], int numOfBytes)
 
     while(true)
 	{
-        if (retryCount>=5){
-            throw "UART not available";
+        if (retryCount >= MAX_RETRY_COUNT){
+            LOG(ERROR) << TAG << "UART not available";
+            throw;
         }
+
 		currentByte += readUart(output+currentByte, numOfBytes-currentByte);
 		if(currentByte >= numOfBytes) break;
 		printCont++;
-		if((printCont%200)==0) printf("uart readAll spin, retryCount=%d\n", (retryCount++)*200);
-		usleep(5*1000);
+
+		if(printCont % PRINT_RETRY_COUNT_EVERY == 0) {
+		    retryCount++;
+		    LOG(WARNING) << TAG << "UART spin, retry count " << retryCount * PRINT_RETRY_COUNT_EVERY;
+		}
+
+		usleep(RETRY_DELAY);
 	}
-	// TODO ubaciti vremenski uslov da se ne zaglavi u while vecno
 }
 
 int UartConnection::readUart(char output[], int numOfBytes)
