@@ -29,26 +29,37 @@ class Point {
         );
     }
 
-    setY(y) { this.y = y; }
-    setX(x) { this.x = x; }
+    setY(y) {
+        this.y = y;
+    }
+
+    setX(x) {
+        this.x = x;
+    }
 
     /**
      * Return x coordinate
      * @returns {number}
      */
-    getX() { return this.x; }
+    getX() {
+        return this.x;
+    }
 
     /**
      * Returns y coordinate
      * @returns {number}
      */
-    getY() { return this.y; }
+    getY() {
+        return this.y;
+    }
 
     /**
      * Returns tag
      * @returns {string}
      */
-    getTag() { return this.tag; }
+    getTag() {
+        return this.tag;
+    }
 }
 
 module.exports = Point;

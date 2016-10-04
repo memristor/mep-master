@@ -31,25 +31,25 @@ function Robot(x, y, widht, height) {
     this.setPosition(this.x, this.y);
 }
 
-Robot.prototype.onMouseDown = function(e) {
+Robot.prototype.onMouseDown = function (e) {
     this.moveActive = true;
 }
 
-Robot.prototype.onMouseMove = function(e) {
+Robot.prototype.onMouseMove = function (e) {
     if (this.moveActive == true) {
         this.node.style.left = e.clientX;
     }
 }
 
-Robot.prototype.onMouseUp = function(e) {
+Robot.prototype.onMouseUp = function (e) {
     this.moveActive = false;
 }
 
-Robot.prototype.getNode = function() {
+Robot.prototype.getNode = function () {
     return this.node;
 }
 
-Robot.prototype.moveToPosition = function(x, y, direction) {
+Robot.prototype.moveToPosition = function (x, y, direction) {
     var that = this;
 
     var move = function () {
@@ -80,7 +80,7 @@ Robot.prototype.moveToPosition = function(x, y, direction) {
     move();
 }
 
-Robot.prototype.setVisualScale = function(width, height) {
+Robot.prototype.setVisualScale = function (width, height) {
     this.visualScaleWidth = width;
     this.visualScaleHeight = height;
 
@@ -88,14 +88,14 @@ Robot.prototype.setVisualScale = function(width, height) {
     this.setPosition(this.x, this.y);
 }
 
-Robot.prototype.setDimensions = function(width, height) {
+Robot.prototype.setDimensions = function (width, height) {
     this.width = width;
     this.height = height;
     this.node.style.width = (width * this.visualScaleWidth) + 'px';
     this.node.style.height = (height * this.visualScaleHeight) + 'px';
 }
 
-Robot.prototype.setPosition = function(x, y) {
+Robot.prototype.setPosition = function (x, y) {
     this.x = x;
     this.y = y;
     this.node.style.left = (x * this.visualScaleWidth - this.width * this.visualScaleWidth / 2) + 'px';

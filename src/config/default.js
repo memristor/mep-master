@@ -5,7 +5,7 @@ module.exports = {
     Drivers: {
         MotionDriver: {
             class: 'drivers/motion/MotionDriver',
-            init: true,
+            init: false,
             startX: 0,
             startY: 0
         },

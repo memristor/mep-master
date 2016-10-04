@@ -22,7 +22,7 @@ class MotionDriverSimulator extends EventEmitter {
             port: 8080
         });
 
-        websocketServer.on('connection', function(ws) {
+        websocketServer.on('connection', function (ws) {
             that.ws = ws;
             that.opened = true;
             that.sendToSimulator({
@@ -37,7 +37,9 @@ class MotionDriverSimulator extends EventEmitter {
         Mep.Log.debug(TAG, 'Driver with name', name, 'initialized');
     }
 
-    provides() { return ['position']; }
+    provides() {
+        return ['position'];
+    }
 
     /**
      * Move to absolute position

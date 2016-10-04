@@ -22,7 +22,7 @@ class PositionEstimator extends EventEmitter {
 
     processPositionChange(driverName, x, y, precision) {
         // TODO: Here we need some complex algorithm to synthesize data from multiple sensors
-        Mep.Log.debug(TAG, 'Received position from', driverName, '('+ x +', ' + y + ')');
+        Mep.Log.debug(TAG, 'Received position from', driverName, '(' + x + ', ' + y + ')');
         this.point.setX(x);
         this.point.setY(y);
 

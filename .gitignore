@@ -2,7 +2,7 @@ node_modules
 web
 
 # Ignore log files
-*.log
+logs
 
 # Ignore hidden directories
 .idea

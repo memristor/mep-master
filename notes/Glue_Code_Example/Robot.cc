@@ -5,6 +5,10 @@
 
 #include <nan.h>
 #include <iostream>
+#include "easylogging++.h"
+
+INITIALIZE_EASYLOGGINGPP
+
 
 using v8::Local;
 using v8::FunctionTemplate;
@@ -20,6 +24,13 @@ using namespace std;
 class Robot : public Nan::ObjectWrap {
 	public:
 		static void Init(Local<Object> exports) {
+			Nan::HandleScope scope;
+
+			el::Configurations defaultConf;
+               defaultConf.setToDefault();
+               defaultConf.set(el::Level::Debug, el::ConfigurationType::Format, "%datetime %level %msg");
+                el::Loggers::reconfigureLogger("default", defaultConf);
+
 			Local<FunctionTemplate> tmpl = Nan::New<FunctionTemplate>(New);
 			tmpl->InstanceTemplate()->SetInternalFieldCount(1);
 
@@ -30,36 +41,50 @@ class Robot : public Nan::ObjectWrap {
 		}
 
 		static void New(const Nan::FunctionCallbackInfo<Value>& args) {
+			Nan::HandleScope scope;
+
 			Robot *robot = new Robot();
 			robot->Wrap(args.This());
+
 			args.GetReturnValue().Set(args.This());
 		}
 
 		Robot() : x(0) {}
 
 		Persistent<Object> obj;
-	
-	private:
-        int x;
 
+	private:
 		static void getX(const Nan::FunctionCallbackInfo<Value>& args) {
+		    LOG(INFO) << "getX()";
+
+			Nan::HandleScope scope;
+			LOG(INFO) << "getX() Nan::HandleScope scope";
+
 			Robot *robot = ObjectWrap::Unwrap<Robot>(args.Holder());
-			args.GetReturnValue().Set(robot->x);
+			LOG(INFO) << "getX() Robot *robot = ObjectWrap::Unwrap<Robot>(args.Holder())";
+
+			args.GetReturnValue().Set(robot->x++);
+			LOG(INFO) << "getX() args.GetReturnValue().Set(robot->x++)";
 		}
 
 		static void setX(const Nan::FunctionCallbackInfo<Value>& args) {
+			Nan::HandleScope scope;
+
 			Robot *robot = ObjectWrap::Unwrap<Robot>(args.Holder());
 
 			// Set x
-			if (args.Length() < 1 || args[0]->IsInt32() == false) {
+			if (args.Length() != 1 || args[0]->IsInt32() == false) {
 				args.GetIsolate()->ThrowException(Exception::TypeError(
 					Nan::New("Function requires one argument").ToLocalChecked()
 				));
 				return;
 			}
+			else {
+				robot->x = args[0]->Int32Value();
+			}
 
-			robot->x = args[0]->Int32Value();
             (robot->obj).Reset(args.GetIsolate(), args.Holder());
+
 
 			// Fire event
 			Handle<Value> argv[] = {
@@ -70,7 +95,7 @@ class Robot : public Nan::ObjectWrap {
 			Nan::MakeCallback(Nan::New(robot->obj), "emit", 2, argv);
 		}
 
-
+		int x;
 };
 
 NODE_MODULE(Robot, Robot::Init)

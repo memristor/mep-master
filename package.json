@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --slow 0",
     "docs": "jsdoc -c jsdoc.json -u docs",
     "start": "node src/Bootstrap.js"
   },

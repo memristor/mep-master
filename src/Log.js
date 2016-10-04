@@ -7,7 +7,7 @@ const logger = new (Winston.Logger)({
         new (Winston.transports.File)({
             level: 'debug',
             timestamp: true,
-            filename: __dirname + '/../trace.log'
+            filename: __dirname + '/../logs/javascript.log'
         }),
         new (Winston.transports.Console)({
             level: 'debug',
@@ -20,7 +20,7 @@ const logger = new (Winston.Logger)({
             timestamp: true,
             clientOpts: {
                 host: 'http://127.0.0.1:9200',
-                log: { levels: [] }
+                log: {levels: []}
             }
         })
     ]

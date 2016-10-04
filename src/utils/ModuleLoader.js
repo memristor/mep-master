@@ -10,7 +10,8 @@ class ModuleLoader {
     /**
      * @private
      */
-     constructor() {}
+    constructor() {
+    }
 
     /**
      * <p>Initialize modules</p>
