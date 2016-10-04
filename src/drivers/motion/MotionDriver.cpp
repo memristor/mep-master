@@ -21,7 +21,7 @@ MotionDriver::MotionDriver(geometry::Point2D initPosition, RobotType robotType, 
 
     // TODO: To be reviewed
 	refreshInterval = 10;
-	// refreshThread = new thread(&MotionDriver::refreshDataLoop, this);
+	refreshThread = new thread(&MotionDriver::refreshDataLoop, this);
 
 	reverseAngle = robotType;
 }
