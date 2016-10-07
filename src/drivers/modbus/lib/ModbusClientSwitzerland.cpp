@@ -2,6 +2,8 @@
 
 #define TAG "ModbusClientSwitzerland "
 
+#define SIMULATE_CALLBACK false
+
 ModbusClientSW* ModbusClientSW::modbusClientSWInstance = 0;
 
 ModbusClientSW::ModbusClientSW(): m_mutex(new mutex()){
@@ -15,7 +17,8 @@ ModbusClientSW::ModbusClientSW(): m_mutex(new mutex()){
     config.retryDelay = 5;
     config.errorTimeout = 1000;
     currentInstruction.instruction = NONE;
-    std::cout<<"Created ModbusClientSW" << endl;
+
+    LOG(INFO) << TAG << "Client Created" << endl;
 }
 
 
@@ -28,33 +31,27 @@ ModbusClientSW* ModbusClientSW::getModbusClientInstance(){
 }
 
 void ModbusClientSW::main(const AsyncProgressWorker::ExecutionProgress& progress){
-    //bool success;
-    // TODO
-    //
     unique_lock<mutex> lock(InstructionQueueMutex);
     while(!shouldStop){
         switch (currentState){
         case CHECK:{
             while(setQueue.empty() && readingMap.empty()){
-                std::cout << "Modbus: Waiting for a check" << std::endl;
+                LOG(DEBUG) << TAG << "Waiting for a check";
+
                 setQueueNotEmpty.wait(lock);
 
-                // START: Callback test section
-                /*
-                ModbusCallbackData modbusCallbackData;
-                modbusCallbackData.slaveAddress = 1;
-                modbusCallbackData.functionAddress = 5;
-                modbusCallbackData.detected = true;
+                #if SIMULATE_CALLBACK == true
+                    ModbusCallbackData modbusCallbackData;
+                    modbusCallbackData.slaveAddress = 1;
+                    modbusCallbackData.functionAddress = 5;
+                    modbusCallbackData.detected = true;
 
+                    this_thread::sleep_for(chrono::milliseconds(1000 * 1));
+                    progress.Send(reinterpret_cast<const char*>(&modbusCallbackData), sizeof(modbusCallbackData));
+                    this_thread::sleep_for(chrono::milliseconds(1000 * 1));
 
-                progress.Send(reinterpret_cast<const char*>(&modbusCallbackData), sizeof(modbusCallbackData));
-                this_thread::sleep_for(chrono::milliseconds(1000 * 1));
-
-                progress.Send(reinterpret_cast<const char*>(&modbusCallbackData), sizeof(modbusCallbackData));
-                this_thread::sleep_for(chrono::milliseconds(1000 * 10));
-                */
-                // END: Callback test section
-
+                    progress.Send(reinterpret_cast<const char*>(&modbusCallbackData), sizeof(modbusCallbackData));
+                #endif
 
                 break;
             }
@@ -138,7 +135,7 @@ void ModbusClientSW::main(const AsyncProgressWorker::ExecutionProgress& progress
                         modbusCallbackData.functionAddress = allData.modID.function_address;
                         modbusCallbackData.detected = true;
                         progress.Send(reinterpret_cast<const char*>(&modbusCallbackData), sizeof(modbusCallbackData));
-			LOG(INFO) << TAG << "Coil state (" << modbusCallbackData.slaveAddress << ", " << modbusCallbackData.functionAddress << ") changed";
+			            LOG(INFO) << TAG << "Coil state (" << modbusCallbackData.slaveAddress << ", " << modbusCallbackData.functionAddress << ") changed";
 
                         counterRead = 0;
                     }else if(successReading && allData.callbackOnNotDetected){
@@ -154,9 +151,6 @@ void ModbusClientSW::main(const AsyncProgressWorker::ExecutionProgress& progress
                         progress.Send(reinterpret_cast<const char*>(&modbusCallbackData), sizeof(modbusCallbackData));
 
                         counterRead = 0;
-                        if(allData.modID.function_address == char(7)){
-//                            std::cout << "reading coil, value: " << allData.detected << std::endl;
-                        }
                     }else{
                         counterRead = 0;
                     }
@@ -189,7 +183,8 @@ ModbusClientSW::Instruction ModbusClientSW::getNextInstruction(){
         setQueue.pop();
         m_mutex->unlock();
     }else{
-        std::cout << "returningNone" << std::endl;
+        LOG(INFO) << TAG << "Returning None";
+
         inst.instruction = NONE;
     }
     return inst;
@@ -239,10 +234,11 @@ bool ModbusClientSW::setCoil(unsigned char _slave_address, short _function_addre
 bool ModbusClientSW::writeRegister(writeData _data){
     int counter = 0 ;
     bool success = false;
-    std::cout << "writeing to register: "
-              << int(_data.id.slave_address) << ":"
-              << _data.id.function_address << ":"
-              << _data.data << std::endl;
+
+    LOG(INFO) << TAG << "Writing to register: " <<
+                int(_data.id.slave_address) << ", " <<
+                _data.id.function_address << ", " <<
+                _data.data;
 
     lock_guard<mutex> lock(*m_mutex);
 
@@ -255,7 +251,7 @@ bool ModbusClientSW::writeRegister(writeData _data){
     }
 
     if (!success){
-        std::cout << "ERROR IN ELECTRONIC" << std::endl;
+        LOG(ERROR) << TAG << "Problem in electronics";
         errorElectronic = ERROR;
     }
 
@@ -266,10 +262,11 @@ bool ModbusClientSW::writeCoil(writeData _data){
 
     int counter = 0 ;
     bool success = false;
-    std::cout << "writeing to register: "
-              << int(_data.id.slave_address) << ":"
-              << _data.id.function_address << ":"
-              << _data.data << std::endl;
+
+    LOG(INFO) << TAG << "Writing to register: " <<
+              int(_data.id.slave_address) << ", " <<
+              _data.id.function_address << ", " <<
+              _data.data;
 
     lock_guard<mutex> lock(*m_mutex);
 
@@ -282,7 +279,7 @@ bool ModbusClientSW::writeCoil(writeData _data){
     }
 
     if (!success){
-        std::cout << "ERROR IN ELECTRONIC" << std::endl;
+        LOG(ERROR) << TAG << "Problem in electronics";
         errorElectronic = ERROR;
     }
 
@@ -304,20 +301,11 @@ bool ModbusClientSW::readCoil(unsigned char _slave_address, short _function_addr
     }
 
     if (!success){
-        std::cout << "ERROR IN ELECTRONIC" << std::endl;
+        LOG(ERROR) << TAG << "Problem in electronics";
         errorElectronic = ERROR;
         *_callFunction = false;
         return false;
     }
-
-    /*
-    std::cout << "reading from register: "
-              << int(_id.slaveAddress) << " : "
-              << _id.functionAddress << " = "
-              << int(data) << " : "
-              << data
-              << std::endl;
-*/
 
     if(data == char(1)){
         *_callFunction = true;
@@ -330,7 +318,7 @@ bool ModbusClientSW::readCoil(unsigned char _slave_address, short _function_addr
     }else if(data == '0'){
         *_callFunction = false;
     }else{
-        std::cout << "ERRORO IN CHECKING STATE" << std::endl;
+        LOG(ERROR) << TAG << "Error in checking state";
         *_callFunction = false;
     }
 
@@ -353,7 +341,7 @@ bool ModbusClientSW::readRegister(unsigned char _slaveAddress, short _functionAd
     }
 
     if (!success){
-        std::cout << "ERROR IN ELECTRONIC" << std::endl;
+        LOG(ERROR) << TAG << "Problem in electronics";
         errorElectronic = ERROR;
         return false;
     }
@@ -407,12 +395,10 @@ void ModbusClientSW::setReading(int _id, bool _readingTrue){
         if(_readingTrue){
             m_mutex->lock();
             readingMap[_id].reading = true;
-            //std::cout << "reading true" << std::endl;
             m_mutex->unlock();
         }else{
             m_mutex->lock();
             readingMap[_id].reading = false;
-            //std::cout << "reading false" << std::endl;
             m_mutex->unlock();
         }
     }

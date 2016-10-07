@@ -1,9 +1,6 @@
-
 #include "rs485.h"
-//#include <stdio.h>
 
-//namespace uart1
-//{
+#define TAG "RS485 "
 
 rs485Connection::rs485Connection(bool openNow, speed_t baudRate):baudRate(baudRate)
 {
@@ -21,25 +18,22 @@ rs485Connection::~rs485Connection()
 
 int rs485Connection::openUart()
 {
-    /* open the port */
-    printf("opening device %s...", RS485_DEVICE);
     if ( (fd = open(RS485_DEVICE, O_RDWR | O_NOCTTY | O_NDELAY)) < 0 )
     {
-        printf("failed.\n");
-        printf("possible causes:\n");
-        printf("1) the raspicomm device driver is not loaded. type 'lsmod' and verify that you 'raspicommrs485' is loaded.\n");
-        printf("2) the raspicomm device driver is in use. Is another application using the device driver?\n" );
-        printf("3) something went wrong when loading the device driver. type 'dmesg' and check the kernel messages\n");
+        LOG(ERROR) << TAG << "Failed to open " << RS485_DEVICE << ". Possible causes:\n" <<
+            "\t1) The raspicomm device driver is not loaded. type 'lsmod' and verify that you 'raspicommrs485'\n" <<
+            "\t2) The raspicomm device driver is in use. Is another application using the device driver?\n" <<
+            "\t3) Something went wrong when loading the device driver. Type 'dmesg' and check the kernel messages";
         return -1;
     }
 
-    printf("successful. fd=%i\n", fd);
+    LOG(INFO) << TAG << "Device " << RS485_DEVICE << " opened";
 
     struct termios tty;
     memset (&tty, 0, sizeof tty);
     if (tcgetattr (fd, &tty) != 0)
     {
-        printf("error using tcgetattr\n");
+        LOG(ERROR) << TAG << "Error using tcgetattr";
         return -2;
     }
 
@@ -69,7 +63,7 @@ int rs485Connection::openUart()
 
     if (tcsetattr (fd, TCSANOW, &tty) != 0)
     {
-        printf("error from tcsetattr\n");
+        LOG(ERROR) << TAG << "Error caused by tcsetattr";
         return -3;
     }
 
@@ -78,21 +72,19 @@ int rs485Connection::openUart()
 
 void rs485Connection::closeUart()
 {
-	printf("close uart1\n");
+	LOG(INFO) << TAG << "Uart closed";
     close(fd);
     fd = -1;
 }
 
 void rs485Connection::putString(const char *data, int dataSize)
 {
-	//printf("putString %c%c%c%c\n",data[0],data[1],data[2],data[3]);
     if (fd != -1)
     {
         int count = write(fd, data, dataSize); //Filestream, bytes to write, number of bytes to write
-        //printf("putString count = %d\n",count);
         if (count < 0)
         {
-            printf("UART TX error\n");
+            LOG(ERROR) << TAG << "Uart TX Error";
         }
     }
 }
@@ -121,7 +113,7 @@ int rs485Connection::getString(char output[], int numOfBytes)
 			rv = select(fd + 1, &set, NULL, NULL, &timeout);
 			if(rv == -1)
 			{
-				perror("select err\n"); // an error accured
+				LOG(ERROR) << TAG << "Select error";
 				return -1;
 			}
 			else if(rv == 0)
@@ -137,13 +129,13 @@ int rs485Connection::getString(char output[], int numOfBytes)
 				if (rx_length < 0)
 				{
 					//An error occured (will occur if there are no bytes)
-					printf("An error occured (will occur if there are no bytes)\n");
+					LOG(ERROR) << TAG << "An error occured (will occur if there are no bytes)";
 					return -1;
 				}
 				else if (rx_length == 0)
 				{
 					//No data waiting
-					printf("received %d of %dbytes\n",numOfBytesReceived,numOfBytes);
+					LOG(DEBUG) << TAG << "Received " << numOfBytesReceived << " of " << numOfBytes;
 				}
 				else
 				{
@@ -152,14 +144,8 @@ int rs485Connection::getString(char output[], int numOfBytes)
 					numOfBytesReceived += rx_length;
 					if(numOfBytes == numOfBytesReceived)
 					{
-						//if(i>0) printf("received %d of %dbytes\n",numOfBytesReceived,numOfBytes);
-						//Bytes received
 						return numOfBytesReceived;
 					}
-					/*else
-					{
-						printf("received %d of %dbytes\n",numOfBytesReceived,numOfBytes);
-					}*/
 				}
 			}
 		}

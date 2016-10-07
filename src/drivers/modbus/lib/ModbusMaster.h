@@ -2,6 +2,7 @@
 #define MODBUSMASTER_H_
 
 #include "rs485.h"
+#include "easylogging++.h"
 
 class ModbusMaster {
 private:

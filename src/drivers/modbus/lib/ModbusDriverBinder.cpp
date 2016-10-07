@@ -2,9 +2,9 @@
 
 #define TAG "ModbusDriverBinder "
 
-ModbusDriverBinder::ModbusDriverBinder(Callback *progress, Callback *callback) {
+ModbusDriverBinder::ModbusDriverBinder(Callback *callback) {
     modbusClient = ModbusClientSW::getModbusClientInstance();
-    Nan::AsyncQueueWorker(new ModbusDataListenerWorker(callback, progress));
+    Nan::AsyncQueueWorker(new ModbusDataListenerWorker(callback));
 }
 
 ModbusDriverBinder::~ModbusDriverBinder() {
@@ -25,7 +25,7 @@ void ModbusDriverBinder::registerCoilReadingFunction(const Nan::FunctionCallback
         args[1]->IsInt32() == false) {
 
         args.GetIsolate()->ThrowException(Exception::TypeError(
-            Nan::New("Invalid arguments. Please use registerCoilReading(int slaveAddress, int functionAddress)").ToLocalChecked()
+            Nan::New("Please check arguments").ToLocalChecked()
         ));
     }
 
@@ -51,13 +51,12 @@ void ModbusDriverBinder::Init(Local<Object> exports) {
 void ModbusDriverBinder::New(const Nan::FunctionCallbackInfo<Value> &args) {
     Nan::HandleScope scope;
 
-    if (args.Length() != 3 ||
+    if (args.Length() != 2 ||
         args[0]->IsBoolean() == false ||
-        args[1]->IsFunction() == false ||
-        args[2]->IsFunction() == false) {
+        args[1]->IsFunction() == false) {
 
         args.GetIsolate()->ThrowException(Exception::TypeError(
-            Nan::New("Constructor prototype is (boolean log, function progressCallback, function finishCallback)").ToLocalChecked()
+            Nan::New("Constructor prototype is (boolean log, function progressCallback").ToLocalChecked()
         ));
     }
 
@@ -71,12 +70,11 @@ void ModbusDriverBinder::New(const Nan::FunctionCallbackInfo<Value> &args) {
     el::Loggers::reconfigureLogger("default", defaultConf);
 
     // Apply arguments
-    Callback *progress = new Callback(args[1].As<v8::Function>());
-    Callback *callback = new Callback(args[2].As<v8::Function>());
+    Callback *callback = new Callback(args[1].As<v8::Function>());
 
-
-    ModbusDriverBinder *modbusDriverBinder = new ModbusDriverBinder(callback, progress);
+    ModbusDriverBinder *modbusDriverBinder = new ModbusDriverBinder(callback);
     modbusDriverBinder->Wrap(args.This());
+
 
     // Return object
     args.GetReturnValue().Set(args.This());

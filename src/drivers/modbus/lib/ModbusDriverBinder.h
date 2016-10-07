@@ -19,9 +19,8 @@ using Nan::Callback;
 
 class ModbusDataListenerWorker : public Nan::AsyncProgressWorker {
 public:
-  ModbusDataListenerWorker(Callback *callback, Callback *progress)
-    : Nan::AsyncProgressWorker(callback), progress(progress) {}
-  ~ModbusDataListenerWorker() {}
+  ModbusDataListenerWorker(Callback *callback)
+    : Nan::AsyncProgressWorker(callback) {}
 
   void Execute(const Nan::AsyncProgressWorker::ExecutionProgress& progress) {
      ModbusClientSW::getModbusClientInstance()->main(progress);
@@ -29,7 +28,6 @@ public:
 
   void HandleProgressCallback(const char *data, size_t size) {
     Nan::HandleScope scope;
-
 
     ModbusCallbackData modbusCallbackData = *reinterpret_cast<ModbusCallbackData*>(const_cast<char*>(data));
     v8::Local<v8::Value> argv[] = {
@@ -39,9 +37,6 @@ public:
     };
     callback->Call(3, argv);
   }
-
- private:
-  Callback *progress;
 };
 
 class ModbusDriverBinder : public Nan::ObjectWrap {
@@ -49,7 +44,7 @@ class ModbusDriverBinder : public Nan::ObjectWrap {
 public:
     static void Init(Local<Object> exports);
     static void New(const Nan::FunctionCallbackInfo<Value> &args);
-    ModbusDriverBinder(Callback *progress, Callback *callback);
+    ModbusDriverBinder(Callback *callback);
 
     ModbusCallbackData *modbusCallbackData;
 

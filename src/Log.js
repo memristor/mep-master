@@ -23,7 +23,7 @@ let transports = [
     })
 ];
 
-transports = [];
+// transports = [];
 
 const logger = new (Winston.Logger)({
     transports: transports

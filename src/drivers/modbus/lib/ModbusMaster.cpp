@@ -1,5 +1,7 @@
 #include "ModbusMaster.h"
 
+#define TAG "ModbusMaster "
+
 ModbusMaster::ModbusMaster(speed_t baudRate):rs485(true, baudRate)
 {}
 
@@ -98,14 +100,8 @@ bool ModbusMaster::ModbusGetStartChar()
 		{
 			return true;
 		}
-		else
-		{
-            //if(c!=0) printf("wrong start char c=%c, hex=%x \n", c, c);  TOME
-//			else printf("wrong start char c=NULL\n");
-		}
 		attempts--;
 	}
-    //printf("didn't get start char, after attempts=%d\n", 30-attempts);
 	return false;
 }
 
@@ -200,7 +196,9 @@ bool ModbusMaster::ModbusForceSingleCoil(unsigned char slave_address, unsigned s
 	{
 		if(asciiMessage[i] != asciiMessageRecive[i])
 		{
-			printf("modbus return message fault, should be hex=%x, actualy is hex=%x\n", asciiMessage[i], asciiMessageRecive[i]);
+			LOG(INFO) << TAG << "Return message fault. Should be " <<
+			    asciiMessage[i] << " but it is " << asciiMessageRecive[i];
+
 			return false;
 		}
 	}
@@ -490,7 +488,7 @@ bool ModbusMaster::ModbusReadHoldingRegisters(unsigned char slave_address, unsig
 
 	if(LRC != receivedLRC)
 	{
-		printf("LRC=%lu, receivedLRC=%d\n", LRC, receivedLRC);
+		LOG(INFO) << TAG << "LRC = " << LRC << "; Received LRC = " << receivedLRC;
 		return false;
 	}
 

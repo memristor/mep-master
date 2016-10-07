@@ -3,13 +3,14 @@ const EventEmiter = require('events');
 const Util = require('util');
 
 const TAG = 'ModbusDriver';
+const DEBUG = true;
 
 Util.inherits(ModbusDriverBinder, EventEmiter);
 
 class ModbusDriver extends ModbusDriverBinder {
     constructor(name, config) {
 
-        super(false, (functionAddress, slaveAddress, detected) => {
+        super(DEBUG, (functionAddress, slaveAddress, detected) => {
             // Emit
             super.emit('coilChanged', slaveAddress, functionAddress, detected);
             super.emit('coilChanged_' + slaveAddress + '_' + functionAddress, detected);
@@ -20,7 +21,6 @@ class ModbusDriver extends ModbusDriverBinder {
                 functionAddress: functionAddress,
                 detected: detected
             });
-        }, () => {
         });
 
         Mep.Log.debug(TAG, 'Driver with name', name, 'initialized');
@@ -29,17 +29,3 @@ class ModbusDriver extends ModbusDriverBinder {
 }
 
 module.exports = ModbusDriver;
-
-
-/*
- var modbus = new ModbusDriver(function(e) {
- console.log('cccc' + e);
- }, function(e) {
- console.log('CCC' + e);
- });
-
- modbus.registerCoilReading(1, 2);
-
-
- setTimeout(() => {}, 5 * 1000);
- */
