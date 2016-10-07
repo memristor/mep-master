@@ -11,10 +11,9 @@ class Point {
      * @param y {number} - y coordinate
      * @param tag {string} - Option parameter. It is used to determine to which table point belongs.
      */
-    constructor(x, y, tag) {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.tag = tag;
     }
 
     /**
@@ -29,10 +28,18 @@ class Point {
         );
     }
 
+    /**
+     * Set Y coordinate
+     * @param y {number} - Y coordinate
+     */
     setY(y) {
         this.y = y;
     }
 
+    /**
+     * Set X coordinate
+     * @param x {number} - X coordinate
+     */
     setX(x) {
         this.x = x;
     }
@@ -51,14 +58,6 @@ class Point {
      */
     getY() {
         return this.y;
-    }
-
-    /**
-     * Returns tag
-     * @returns {string}
-     */
-    getTag() {
-        return this.tag;
     }
 }
 

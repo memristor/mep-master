@@ -7,7 +7,6 @@ var TAG = 'CallbackQueue';
 class CallbackQueue {
     constructor() {
         this.callbacks = [];
-        Mep.Log.warn(TAG, 'Deprecated!', 'Please use EventEmitter instead');
     }
 
     /**
@@ -24,7 +23,7 @@ class CallbackQueue {
      */
     notifyAll(params) {
         if (Array.isArray(params) == false) {
-            Log.error(TAG, 'notifyAll() expect array only');
+            Mep.Log.error(TAG, 'notifyAll() expect array only');
             return;
         }
 
