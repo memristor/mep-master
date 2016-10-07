@@ -1,5 +1,5 @@
 module.exports = {
-    Simulation: false,
+    Simulation: true,
     Table: 'table_1_red',
 
     Drivers: {
@@ -20,6 +20,16 @@ module.exports = {
         PositionService: {
             class: 'services/position/PositionService',
             init: true,
+            moveOptions: {
+                pathfinding: false,
+                direction: 'forward',
+                relative: false,
+                tolerance: 3,
+                speed: 100
+            },
+            rotateOptions: {
+                relative: false
+            }
         },
 
         TerrainService: {

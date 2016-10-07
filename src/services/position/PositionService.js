@@ -5,9 +5,10 @@ const PositionEstimator = require('./PositionEstimator');
 const TAG = 'PositionService';
 
 class PositionService {
-    constructor() {
+    constructor(name, config) {
         var that = this;
 
+        this.config = config;
         this.currentSpeed = 100;
         this.positionEstimator = new PositionEstimator();
         this.modbusDriver = driverManager.getDriver('ModbusDriver');
@@ -23,19 +24,6 @@ class PositionService {
             Mep.Log.warn(TAG, 'No motion driver available');
         }
 
-
-        this.defaultMoveOptions = {
-            pathfinding: false,
-            direction: 'forward',
-            relative: false,
-            tolerance: 3,
-            speed: 100
-        };
-
-        this.defaultRotateOptions = {
-            relative: false
-        };
-
         // Subscribe to stop
         for (let iSlaveAddress = 1; iSlaveAddress <= 1; iSlaveAddress++) {
             for (let iFunctionAddress = 0; iFunctionAddress <= 9; iFunctionAddress++) {
@@ -50,9 +38,10 @@ class PositionService {
         });
     }
 
-    set(tunedPoint, options, done, progress) {
+    set(tunedPoint, options) {
         // Override the default options
-        var fullOptions = this.defaultMoveOptions;
+        var fullOptions = Object.assign({}, this.config.moveOptions);
+
         for (let optionKey in options) {
             fullOptions[optionKey] = options[optionKey];
         }
@@ -76,15 +65,13 @@ class PositionService {
         Mep.Log.debug(TAG, 'Robot move command sent.', tunedPoint.getPoint(), fullOptions);
 
         // Check when robot reached the position
-        return new Promise(
-            function (resolve, reject) {
-                this.positionEstimator.on('positionChanged', function (position) {
-                    if (point.getDistance(position) <= fullOptions.tolerance) {
-                        resolve(1);
-                    }
-                });
-            }
-        );
+        return new Promise((resolve, reject) => {
+            this.positionEstimator.on('positionChanged', (position) => {
+                if (point.getDistance(position) <= fullOptions.tolerance) {
+                    resolve();
+                }
+            });
+        });
     }
 
     rotate(tunedAngle, options) {

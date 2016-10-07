@@ -14,7 +14,8 @@ class InitTask extends Task {
     }
 
     onRun() {
-        position.set(new TunedPoint(600, 0), {speed: 100});
+        position.set(new TunedPoint(600, 0), {speed: 100})
+            .then(() => { position.set(new TunedPoint(300, 0)); });
     }
 
 }

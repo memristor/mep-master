@@ -54,7 +54,11 @@ var Mep = {
      *
      * @returns {Config}
      */
-    Config: Config
+    Config: Config,
+
+    init() {
+        this.DriverManager = require('./drivers/DriverManager').get();
+    }
 };
 
 module.exports = Mep;

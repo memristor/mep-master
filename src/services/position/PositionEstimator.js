@@ -20,7 +20,9 @@ class PositionEstimator extends EventEmitter {
     }
 
     processPositionChange(driverName, x, y, precision) {
-        // TODO: Here we need some complex algorithm to synthesize data from multiple sensors
+        // TODO: Sensor Fusion problem: https://en.wikipedia.org/wiki/Sensor_fusion
+        // Implement Kalman filter: https://en.wikipedia.org/wiki/Kalman_filter
+
         Mep.Log.debug(TAG, 'Received position from', driverName, '(' + x + ', ' + y + ')');
         this.point.setX(x);
         this.point.setY(y);
