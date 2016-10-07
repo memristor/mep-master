@@ -9,7 +9,7 @@ Util.inherits(ModbusDriverBinder, EventEmiter);
 class ModbusDriver extends ModbusDriverBinder {
     constructor(name, config) {
 
-        super((functionAddress, slaveAddress, detected) => {
+        super(false, (functionAddress, slaveAddress, detected) => {
             // Emit
             super.emit('coilChanged', slaveAddress, functionAddress, detected);
             super.emit('coilChanged_' + slaveAddress + '_' + functionAddress, detected);

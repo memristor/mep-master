@@ -25,7 +25,7 @@ void ModbusDriverBinder::registerCoilReadingFunction(const Nan::FunctionCallback
         args[1]->IsInt32() == false) {
 
         args.GetIsolate()->ThrowException(Exception::TypeError(
-            Nan::New("Please check arguments").ToLocalChecked()
+            Nan::New("Invalid arguments. Please use registerCoilReading(int slaveAddress, int functionAddress)").ToLocalChecked()
         ));
     }
 
@@ -39,13 +39,6 @@ void ModbusDriverBinder::registerCoilReadingFunction(const Nan::FunctionCallback
 void ModbusDriverBinder::Init(Local<Object> exports) {
     Nan::HandleScope scope;
 
-	// Set logger
-	el::Configurations defaultConf;
-	defaultConf.setToDefault();
-	defaultConf.set(el::Level::Debug, el::ConfigurationType::Format, "%datetime %level %msg");
-	el::Loggers::reconfigureLogger("default", defaultConf);
-
-
 	// Set Node/v8 stuff
     Local<FunctionTemplate> tmpl = Nan::New<FunctionTemplate>(New);
     tmpl->InstanceTemplate()->SetInternalFieldCount(1);
@@ -58,22 +51,32 @@ void ModbusDriverBinder::Init(Local<Object> exports) {
 void ModbusDriverBinder::New(const Nan::FunctionCallbackInfo<Value> &args) {
     Nan::HandleScope scope;
 
-    if (args.Length() != 2 ||
-        args[0]->IsFunction() == false ||
-        args[1]->IsFunction() == false) {
+    if (args.Length() != 3 ||
+        args[0]->IsBoolean() == false ||
+        args[1]->IsFunction() == false ||
+        args[2]->IsFunction() == false) {
 
         args.GetIsolate()->ThrowException(Exception::TypeError(
-            Nan::New("Please check arguments").ToLocalChecked()
+            Nan::New("Constructor prototype is (boolean log, function progressCallback, function finishCallback)").ToLocalChecked()
         ));
     }
 
+    // Set log level
+    el::Configurations defaultConf;
+    defaultConf.setToDefault();
+    defaultConf.setGlobally(el::ConfigurationType::Format, "%datetime %level %msg");
+    defaultConf.setGlobally(el::ConfigurationType::Enabled, args[0]->BooleanValue() ? "true" : "false");
+    defaultConf.set(el::Level::Warning, el::ConfigurationType::Enabled, "true");
+    defaultConf.set(el::Level::Error, el::ConfigurationType::Enabled, "true");
+    el::Loggers::reconfigureLogger("default", defaultConf);
 
-    Callback *progress = new Callback(args[0].As<v8::Function>());
-    Callback *callback = new Callback(args[1].As<v8::Function>());
+    // Apply arguments
+    Callback *progress = new Callback(args[1].As<v8::Function>());
+    Callback *callback = new Callback(args[2].As<v8::Function>());
+
 
     ModbusDriverBinder *modbusDriverBinder = new ModbusDriverBinder(callback, progress);
     modbusDriverBinder->Wrap(args.This());
-
 
     // Return object
     args.GetReturnValue().Set(args.This());

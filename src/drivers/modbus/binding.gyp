@@ -2,7 +2,12 @@
   "targets": [
     {
       "target_name": "modbus",
-      "sources": [ "ModbusClientSwitzerland.cpp", "ModbusMaster.cpp", "rs485.cpp", "ModbusDriverBinder.cpp" ],
+      "sources": [
+        "lib/ModbusClientSwitzerland.cpp",
+        "lib/ModbusMaster.cpp",
+        "lib/rs485.cpp",
+        "lib/ModbusDriverBinder.cpp"
+      ],
       "include_dirs": [
         "<!(node -e \"require('nan')\")"
       ],
