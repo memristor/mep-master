@@ -1,4 +1,3 @@
-const WebSocketServer = require('ws').Server;
 const EventEmitter = require('events');
 
 const TAG = 'MotionDriverSimulator';
@@ -15,22 +14,6 @@ class MotionDriverSimulator extends EventEmitter {
      */
     constructor(name, config) {
         super();
-
-        var that = this;
-
-        var websocketServer = new WebSocketServer({
-            port: 8080
-        });
-
-        websocketServer.on('connection', function (ws) {
-            that.ws = ws;
-            that.opened = true;
-            that.sendToSimulator({
-                func: 'constructor',
-                x: config.startX,
-                y: config.startY
-            });
-        });
 
         this.name = name;
 

@@ -56,8 +56,41 @@ var Mep = {
      */
     Config: Config,
 
+    /**
+     * Provides an instance of the PositionService.
+     * @memberof Mep
+     * @see PositionService
+     * @example
+     * let position = Mep.getPositionService();
+     * position.set(new TunedPoint(100, 100), { speed: 100 });
+     *
+     * @returns {PositionService}
+     */
+    getPositionService() {
+        return this.positionService;
+    },
+
+    /**
+     * Provides an instance of the DriverManager.
+     * @memberof Mep
+     * @see DriverManager
+     * @example
+     * let laserDriver = Mep.getDriverManager().getDriver('LaserDriver');
+     *
+     * @returns {DriverManager}
+     */
+    getDriverManager() {
+        return this.driverManager;
+    },
+
+    /**
+     * Initialize necessary modules. Should be called only once during an application bootstrapping
+     * @memberof Mep
+     */
     init() {
-        this.DriverManager = require('./drivers/DriverManager').get();
+        this.driverManager = new (require('./drivers/DriverManager'))();
+        this.positionService =
+            new (require('./services/position/PositionService'))(Config.get('Services.PositionService'));
     }
 };
 

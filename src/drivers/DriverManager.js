@@ -4,8 +4,6 @@ const ModuleLoader = Mep.require('utils/ModuleLoader');
 
 const TAG = 'DriverManager';
 
-var instance = null;
-
 /**
  * <p>Interact with the overall drivers implemented in the platform.</p>
  *
@@ -21,30 +19,12 @@ var instance = null;
  * @memberof drivers
  */
 class DriverManager {
-    /**
-     * @private
-     */
     constructor() {
-        if (instance != null) {
-            throw new Error('DriverManger is not meant to be initialized');
-        }
-
         // Drivers initialization
         this.drivers = ModuleLoader.load(
             Mep.Config.get('Drivers'),
             Mep.Config.get('Simulation')
         );
-    }
-
-    /**
-     * Get instance of DriverManager. Do not use `new` to get instance of DriverManager!
-     * @returns {DriverManager}
-     */
-    static get() {
-        if (instance == null) {
-            instance = new DriverManager();
-        }
-        return instance;
     }
 
     /**

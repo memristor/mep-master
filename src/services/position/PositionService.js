@@ -1,11 +1,11 @@
-const driverManager = Mep.require('drivers/DriverManager').get();
+const driverManager = Mep.getDriverManager();
 const MotionDriverConstants = Mep.require('drivers/motion/Constants');
 const PositionEstimator = require('./PositionEstimator');
 
 const TAG = 'PositionService';
 
 class PositionService {
-    constructor(name, config) {
+    constructor(config) {
         var that = this;
 
         this.config = config;

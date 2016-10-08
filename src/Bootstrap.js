@@ -1,6 +1,5 @@
 global.Mep = require('./Mep');
 const Console = require('./Console');
-const terrain = Mep.require('services/ServiceManager').get().getTerrainService();
 const TAG = 'Bootstrap';
 
 class Bootstrap {
@@ -10,6 +9,8 @@ class Bootstrap {
         Mep.Log.info('Active table:', Mep.Config.get('Table'));
         Mep.Log.info('Simulation activated:', Mep.Config.get('Simulation'));
 
+        // Initialize DriverManager & services
+        Mep.init();
 
         // Load strategy
         // TODO: Load strategy from CLI

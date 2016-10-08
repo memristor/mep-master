@@ -1,4 +1,4 @@
-const driverManager = Mep.require('drivers/DriverManager').get();
+const driverManager = Mep.getDriverManager();
 const Point = Mep.require('types/Point');
 const EventEmitter = require('events');
 
