@@ -1,0 +1,31 @@
+{
+  "name": "mep2",
+  "version": "2017.0.0",
+  "description": "Memristor's Eurobot Platform",
+  "main": "src/Bootstrap.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha --slow 0",
+    "docs": "jsdoc -c jsdoc.json -u docs",
+    "start": "node src/Bootstrap.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://bitbucket.org/ftn-memristor/mep2.git"
+  },
+  "author": "Darko Lukic <lukicdarkoo@gmail.com>",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/LukicDarkoo/mep2#readme",
+  "dependencies": {
+    "bindings": "^1.2.1",
+    "cli": "^1.0.0",
+    "config": "^1.21.0",
+    "latodoc": "github:smeijer/latodoc",
+    "nan": "^2.3.5",
+    "should": "^9.0.2",
+    "winston": "^2.2.0",
+    "winston-elasticsearch": "^0.4.0"
+  }
+}

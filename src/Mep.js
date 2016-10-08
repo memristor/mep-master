@@ -37,7 +37,7 @@ var Mep = {
 
     /**
      * Logging system
-     * @see Log
+     * @see {@link https://github.com/winstonjs/winston|WinstonLogger}
      * @memberof Mep
      * @example
      * Mep.Log.debug('Pathfinding', 'Start path finding for (x, y)');
@@ -48,6 +48,7 @@ var Mep = {
 
     /**
      * Access to current configuration
+     * @see {@link https://github.com/lorenwest/node-config|NodeConfig}
      * @memberof Mep
      * @example
      * Mep.Config.get('Drivers.MotionDriver.class');
@@ -59,7 +60,7 @@ var Mep = {
     /**
      * Provides an instance of the PositionService.
      * @memberof Mep
-     * @see PositionService
+     * @see {@link services.PositionService}
      * @example
      * let position = Mep.getPositionService();
      * position.set(new TunedPoint(100, 100), { speed: 100 });
@@ -73,7 +74,7 @@ var Mep = {
     /**
      * Provides an instance of the DriverManager.
      * @memberof Mep
-     * @see DriverManager
+     * @see {@link drivers.DriverManager}
      * @example
      * let laserDriver = Mep.getDriverManager().getDriver('LaserDriver');
      *
