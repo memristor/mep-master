@@ -63,6 +63,7 @@ void ModbusDriverBinder::New(const Nan::FunctionCallbackInfo<Value> &args) {
     // Set log level
     el::Configurations defaultConf;
     defaultConf.setToDefault();
+    defaultConf.setGlobally(el::ConfigurationType::ToFile, "false");
     defaultConf.setGlobally(el::ConfigurationType::Format, "%datetime %level %msg");
     defaultConf.setGlobally(el::ConfigurationType::Enabled, args[0]->BooleanValue() ? "true" : "false");
     defaultConf.set(el::Level::Warning, el::ConfigurationType::Enabled, "true");

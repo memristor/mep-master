@@ -1,3 +1,5 @@
+#define _ELPP_NO_DEFAULT_LOG_FILE
+
 #include <nan.h>
 #include <uv.h>
 #include <thread>
