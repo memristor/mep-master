@@ -12,6 +12,8 @@ using v8::Value;
 using v8::Handle;
 using v8::Isolate;
 using v8::Exception;
+using v8::Array;
+using v8::Integer;
 using namespace std;
 
 // `refreshData()` should be async
@@ -35,6 +37,7 @@ private:
     static void stop(const Nan::FunctionCallbackInfo<Value> &args);
     static void moveStraight(const Nan::FunctionCallbackInfo<Value> &args);
 	static void setSpeed(const Nan::FunctionCallbackInfo<Value> &args);
+	static void getPosition(const Nan::FunctionCallbackInfo<Value> &args);
 
     MotionDriver *motionDriver;
 };

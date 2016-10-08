@@ -19,7 +19,10 @@ using v8::Isolate;
 using v8::Exception;
 using v8::Persistent;
 using v8::Context;
+using v8::Array;
+using v8::Integer;
 using namespace std;
+
 
 class Robot : public Nan::ObjectWrap {
 	public:
@@ -58,12 +61,13 @@ class Robot : public Nan::ObjectWrap {
 		    LOG(INFO) << "getX()";
 
 			Nan::HandleScope scope;
-			LOG(INFO) << "getX() Nan::HandleScope scope";
-
 			Robot *robot = ObjectWrap::Unwrap<Robot>(args.Holder());
-			LOG(INFO) << "getX() Robot *robot = ObjectWrap::Unwrap<Robot>(args.Holder())";
 
-			args.GetReturnValue().Set(robot->x++);
+            Local<Array> nodes = Array::New(args.GetIsolate());
+            nodes->Set(0, Integer::New(args.GetIsolate(), 200));
+            nodes->Set(1, Integer::New(args.GetIsolate(), 100));
+
+            args.GetReturnValue().Set(nodes);
 			LOG(INFO) << "getX() args.GetReturnValue().Set(robot->x++)";
 		}
 

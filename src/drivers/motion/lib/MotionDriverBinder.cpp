@@ -23,6 +23,7 @@ void MotionDriverBinder::Init(Local<Object> exports) {
     Nan::SetPrototypeMethod(tmpl, "stop", stop);
 	Nan::SetPrototypeMethod(tmpl, "moveStraight", moveStraight);
 	Nan::SetPrototypeMethod(tmpl, "setSpeed", setSpeed);
+	Nan::SetPrototypeMethod(tmpl, "getPosition", getPosition);
 
     exports->Set(Nan::New("MotionDriverBinder").ToLocalChecked(), tmpl->GetFunction());
 }
@@ -137,3 +138,14 @@ void MotionDriverBinder::setSpeed(const Nan::FunctionCallbackInfo<Value> &args) 
     motionDriver->setSpeed(args[0]->Int32Value());
 }
 
+void MotionDriverBinder::getPosition(const Nan::FunctionCallbackInfo<Value> &args) {
+    Nan::HandleScope scope;
+
+    MotionDriver *motionDriver = ObjectWrap::Unwrap<MotionDriverBinder>(args.Holder())->getMotionDriver();
+    geometry::Point2D point = motionDriver->getPosition();
+
+    Local<Array> nodes = Array::New(args.GetIsolate());
+    nodes->Set(0, Integer::New(args.GetIsolate(), point.getX()));
+    nodes->Set(1, Integer::New(args.GetIsolate(), point.getY()));
+    args.GetReturnValue().Set(nodes);
+}
