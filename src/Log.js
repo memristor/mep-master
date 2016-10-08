@@ -1,32 +1,37 @@
-const Winston = require('winston');
-const WinstonElasticSearch = require('winston-elasticsearch');
+const Bunyan = require('bunyan');
+const BunyanFormat = require('bunyan-format');
+const BunyanElasticSearch = require('bunyan-elasticsearch');
 
-let transports = [
-    new (Winston.transports.File)({
-        level: 'debug',
-        timestamp: true,
-        filename: __dirname + '/../logs/javascript.log'
-    }),
-    new (Winston.transports.Console)({
-        level: 'debug',
-        colorize: true,
-        timestamp: true
-    }),
-    new WinstonElasticSearch({
-        // See all options: https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/configuration.html
-        level: 'debug',
-        timestamp: true,
-        clientOpts: {
-            host: 'http://127.0.0.1:9200',
-            log: {levels: []}
-        }
+
+let streams = [];
+
+// Add console output
+streams.push({
+    level: 'debug',
+    stream: BunyanFormat({ outputMode: 'short' })
+});
+
+// Add file output
+streams.push({
+    level: 'debug',
+    path: __dirname + '/../logs/javascript.log'
+});
+
+// Add ElasticSearch
+/*
+streams.push({
+    level: 'error',
+    stream: new BunyanElasticSearch({
+        indexPattern: '[logstash-]YYYY.MM.DD',
+        type: 'logs',
+        host: 'localhost:9200'
     })
-];
+});
+*/
 
-// transports = [];
-
-const logger = new (Winston.Logger)({
-    transports: transports
+var logger = Bunyan.createLogger({
+    name: 'mep',
+    streams: streams
 });
 
 // Deprecated wrapper is available at: http://pastebin.com/aJRfQvAF
