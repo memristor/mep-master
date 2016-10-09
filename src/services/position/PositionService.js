@@ -4,6 +4,11 @@ const PositionEstimator = require('./PositionEstimator');
 
 const TAG = 'PositionService';
 
+/**
+ * Provides a very abstract way to control and estimate robot position
+ * @class
+ * @author Darko Lukic <lukicdarkoo@gmail.com>
+ */
 class PositionService {
     constructor(config) {
         var that = this;
@@ -38,18 +43,30 @@ class PositionService {
         });
     }
 
-    set(tunedPoint, options) {
-        // Override the default options
-        var fullOptions = Object.assign({}, this.config.moveOptions);
-
-        for (let optionKey in options) {
-            fullOptions[optionKey] = options[optionKey];
-        }
+    /**
+     * Move the robot, set new position of the robot
+     *
+     * @param {TunedPoint} tunedPoint - Point that should be reached
+     * @param {Boolean} pathfinding - Use path finding algorithm
+     * @param {String} direction - Direction of robot movement
+     * @param {Boolean} relative - Use relative to previous position
+     * @param {Number} tolerance - Position will consider as reached if Euclid's distance between current
+     * and required position is less than tolerance
+     * @param {Number} speed - Speed of the robot movement in range (0, 255)
+     * @returns {Promise}
+     */
+    set(tunedPoint, {
+        pathfinding = this.config.moveOptions.pathfinding,
+        direction = this.config.moveOptions.direction,
+        relative = this.config.moveOptions.relative,
+        tolerance = this.config.moveOptions.tolerance,
+        speed = this.config.moveOptions.speed
+    } = {}) {
 
         // Set speed
-        if (this.currentSpeed !== fullOptions.speed) {
-            this.currentSpeed = fullOptions.speed;
-            this.motionDriver.setSpeed(fullOptions.speed);
+        if (this.currentSpeed !== speed) {
+            this.currentSpeed = speed;
+            this.motionDriver.setSpeed(speed);
         }
 
         // Move the robot
@@ -57,17 +74,17 @@ class PositionService {
         this.motionDriver.moveToPosition(
             point.getX(),
             point.getY(),
-            (fullOptions.direction === 'backward') ?
+            (direction === 'backward') ?
                 MotionDriverConstants.DIRECTION_BACKWARD :
                 MotionDriverConstants.DIRECTION_FORWARD
         );
 
-        Mep.Log.debug(TAG, 'Robot move command sent.', tunedPoint.getPoint(), fullOptions);
+        Mep.Log.debug(TAG, 'Robot move command sent.', tunedPoint.getPoint());
 
         // Check when robot reached the position
         return new Promise((resolve, reject) => {
             this.positionEstimator.on('positionChanged', (position) => {
-                if (point.getDistance(position) <= fullOptions.tolerance) {
+                if (point.getDistance(position) <= tolerance) {
                     resolve();
                 }
             });
