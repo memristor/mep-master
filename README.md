@@ -4,7 +4,7 @@
 [![Issue Count](https://codeclimate.com/github/Memristor-Robotics/mep2/badges/issue_count.svg)](https://codeclimate.com/github/Memristor-Robotics/mep2)
 
 # MEP (Memristor's Eurobot Platform)
-MEP is a development platform for building software for robots. It allows easy developing communication with hardware modules, implementation control algorithms and testing new strategies.  
+MEP is a development platform for easy building and prototyping software for robots. It allows developing drivers for hardware modules, implementation of control algorithms and testing new strategies.
 
 Read more about Memristor at [our website](https://memristor-robotics.github.io/).
 
