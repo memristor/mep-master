@@ -40,7 +40,6 @@ class ModuleLoader {
      */
     static load(modulesConfig, simulation) {
         var modules = {};
-        var simulationSuffix = (simulation === true) ? 'Simulator' : '';
 
         for (let moduleName in modulesConfig) {
             if (modulesConfig.hasOwnProperty(moduleName) == false) {
@@ -48,15 +47,15 @@ class ModuleLoader {
             }
 
             let moduleConfig = modulesConfig[moduleName];
-            let init = moduleConfig.init;
+            let init = (simulation === true) ? moduleConfig.simInit : moduleConfig.init;
+            let classPath = (simulation === true) ? moduleConfig.simClass : moduleConfig.class;
 
             // Do not initialize if `init field == false`
             if (init != false) {
-                let modulePath = moduleConfig.class + simulationSuffix;
-                let DriverClass = Mep.require(modulePath);
+                let ModuleClass = Mep.require(classPath);
 
-                if (typeof DriverClass === 'function') {
-                    modules[moduleName] = new DriverClass(moduleName, moduleConfig);
+                if (typeof ModuleClass === 'function') {
+                    modules[moduleName] = new ModuleClass(moduleName, moduleConfig);
                     Mep.Log.debug(TAG, 'Module loaded', moduleName);
                 } else {
                     Mep.Log.error(TAG, 'There is no module on path', modulePath);
