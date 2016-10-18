@@ -5,6 +5,11 @@ const Point = Mep.require('types/Point');
 
 Util.inherits(MotionDriverBinder, EventEmiter);
 
+/**
+ * Driver enables communication with Memristor's motion driver.
+ *
+ * @author Darko Lukic <lukicdarkoo@gmail.com>
+ */
 class MotionDriver extends MotionDriverBinder {
     constructor(name, config) {
         super(
@@ -22,7 +27,7 @@ class MotionDriver extends MotionDriverBinder {
     }
 
     provides() {
-        return ['position'];
+        return ['position', 'control'];
     }
 }
 

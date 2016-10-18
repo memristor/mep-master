@@ -3,6 +3,8 @@ const Log = require('./Log');
 
 /**
  * Proxy to custom require(), Log & Config
+ *
+ * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @namespace Mep
  */
 var Mep = {

@@ -4,6 +4,8 @@ const TAG = 'ModuleLoader';
 
 /**
  * Make instance of class based on JSON
+ *
+ * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @memberof utils
  */
 class ModuleLoader {

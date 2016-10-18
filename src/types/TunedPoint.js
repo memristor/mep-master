@@ -6,6 +6,8 @@ const TAG = 'TunedPoint';
 
 /**
  * Tunable Point. Point coordinates are choose depends on table name in configuration.
+ *
+ * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @memberof types
  * @example
  * new TunePoint(

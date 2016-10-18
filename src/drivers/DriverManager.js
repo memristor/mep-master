@@ -17,6 +17,7 @@ const TAG = 'DriverManager';
  * </ul>
  *
  * @memberof drivers
+ * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
 class DriverManager {
     constructor() {

@@ -1,7 +1,9 @@
 /** @namespace types */
 
 /**
- * Point in 2D space.
+ * Point in 2D space
+ *
+ * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @memberof types
  */
 class Point {
