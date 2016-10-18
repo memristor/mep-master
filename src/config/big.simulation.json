@@ -1,0 +1,11 @@
+{
+  "Drivers": {
+    "MotionDriver": {
+      "class": "drivers/motion/MotionDriverSimulator"
+    },
+
+    "ModbusDriver": {
+      "class": "drivers/modbus/ModbusDriverSimulator"
+    }
+  }
+}

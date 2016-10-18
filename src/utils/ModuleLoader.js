@@ -38,7 +38,7 @@ class ModuleLoader {
      * @param simulation {boolean} - Use simulation suffix
      * @returns {Object} - Returns associative array of instantiated modules
      */
-    static load(modulesConfig, simulation) {
+    static load(modulesConfig) {
         var modules = {};
 
         for (let moduleName in modulesConfig) {
@@ -47,8 +47,8 @@ class ModuleLoader {
             }
 
             let moduleConfig = modulesConfig[moduleName];
-            let init = (simulation === true) ? moduleConfig.simInit : moduleConfig.init;
-            let classPath = (simulation === true) ? moduleConfig.simClass : moduleConfig.class;
+            let init = moduleConfig.init;
+            let classPath = moduleConfig.class;
 
             // Do not initialize if `init field == false`
             if (init != false) {

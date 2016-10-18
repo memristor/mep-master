@@ -23,10 +23,9 @@
     "bunyan": "^1.8.1",
     "bunyan-elasticsearch": "^1.0.0",
     "bunyan-format": "^0.2.1",
-    "cli": "^1.0.0",
-    "config": "^1.21.0",
     "latodoc": "github:smeijer/latodoc",
     "nan": "^2.3.5",
+    "nconf": "^0.8.4",
     "should": "^9.0.2",
     "winston-elasticsearch": "^0.4.0"
   }

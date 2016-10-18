@@ -21,10 +21,7 @@ const TAG = 'DriverManager';
 class DriverManager {
     constructor() {
         // Drivers initialization
-        this.drivers = ModuleLoader.load(
-            Mep.Config.get('Drivers'),
-            Mep.Config.get('Simulation')
-        );
+        this.drivers = ModuleLoader.load(Mep.Config.get('Drivers'));
     }
 
     /**

@@ -1,22 +1,20 @@
 {
-    "Simulation": true,
-    "Table": "table_1_red",
+    "simulation": true,
+    "table": "table_1_red",
+    "performance": false,
+    "robot": "big",
 
     "Drivers": {
         "MotionDriver": {
             "class": "drivers/motion/MotionDriver",
-            "simClass": "drivers/motion/MotionDriverSimulator",
             "init": true,
-            "simInit": true,
             "startX": 0,
             "startY": 0
         },
 
         "ModbusDriver": {
             "class": "drivers/modbus/ModbusDriver",
-            "simClass": "drivers/modbus/ModbusDriverSimulator",
-            "init": true,
-            "simInit": true
+            "init": true
         }
     },
 

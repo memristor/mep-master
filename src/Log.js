@@ -1,3 +1,4 @@
+const Config = require('./Config');
 const Bunyan = require('bunyan');
 const BunyanFormat = require('bunyan-format');
 const BunyanElasticSearch = require('bunyan-elasticsearch');
@@ -7,13 +8,13 @@ let streams = [];
 
 // Add console output
 streams.push({
-    level: 'debug',
+    level: Config.get('performance') ? 'info' : 'debug',
     stream: BunyanFormat({ outputMode: 'short' })
 });
 
 // Add file output
 streams.push({
-    level: 'debug',
+    level: Config.get('performance') ? 'info' : 'debug',
     path: __dirname + '/../logs/javascript.log'
 });
 

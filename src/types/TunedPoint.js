@@ -37,7 +37,7 @@ class TunedPoint {
             }
 
             // Check if table name matches
-            if (Mep.Config.get('Table') == arguments[i][2]) {
+            if (Mep.Config.get('table') == arguments[i][2]) {
                 this.point = new Point(arguments[i][0], arguments[i][1]);
             }
         }

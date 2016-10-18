@@ -1,5 +1,5 @@
-const Log = require('./Log');
 const Config = require('./Config');
+const Log = require('./Log');
 
 /**
  * Proxy to custom require(), Log & Config
@@ -91,7 +91,7 @@ var Mep = {
     init() {
         this.driverManager = new (require('./drivers/DriverManager'))();
         this.positionService =
-            new (require('./services/position/PositionService'))(Config.get('Services.PositionService'));
+            new (require('./services/position/PositionService'))(Config.get('Services:PositionService'));
     }
 };
 
