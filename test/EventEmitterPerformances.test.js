@@ -1,4 +1,3 @@
-global.Mep = require('../src/Mep');
 const EventEmitter = require('events');
 
 const N = 50;
