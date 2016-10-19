@@ -1,3 +1,4 @@
+const Path = require('path');
 const Config = require('./Config');
 const Bunyan = require('bunyan');
 const BunyanFormat = require('bunyan-format');
@@ -15,7 +16,7 @@ streams.push({
 // Add file output
 streams.push({
     level: Config.get('performance') ? 'info' : 'debug',
-    path: __dirname + '/../logs/javascript.log'
+    path: Path.join(__dirname, '/../logs/javascript.log')
 });
 
 // Add ElasticSearch

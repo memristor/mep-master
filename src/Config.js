@@ -2,7 +2,7 @@ const Path = require('path');
 const NConf = require('nconf');
 const Yargs = require('yargs');
 
-const CONFIG_DIR =  __dirname + '/config';
+const CONFIG_DIR = Path.join(__dirname, '/config');
 
 // Set config parameters from CLI
 NConf.argv({
