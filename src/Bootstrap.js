@@ -1,5 +1,4 @@
 global.Mep = require('./Mep');
-const TAG = 'Bootstrap';
 
 class Bootstrap {
     constructor() {
