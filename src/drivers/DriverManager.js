@@ -5,16 +5,17 @@ const ModuleLoader = Mep.require('utils/ModuleLoader');
 const TAG = 'DriverManager';
 
 /**
- * <p>Interact with the overall drivers implemented in the platform.</p>
+ * <p>Control drivers implemented in the platform.</p>
  *
  * The main goals of DriverManager are:
  * <ul>
- *  <li>driver initialization and passing correct arguments depends on configuration,</li>
- *  <li>choosing driver implementation (hardware or simulation),</li>
+ *  <li>driver initialization and passing arguments dependent to configuration,</li>
  *  <li>filter drivers by data which they provide,</li>
  *  <li>check if driver is available,</li>
- *  <li>monitor if driver is active and to try to recover if it is not (not implemented).</li>
+ *  <li>monitor if driver is active and to try to recover if it is not (not implemented yet).</li>
  * </ul>
+ *
+ * List of of data types which driver can provide: control, terrain & position.
  *
  * @memberof drivers
  * @author Darko Lukic <lukicdarkoo@gmail.com>

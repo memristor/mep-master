@@ -1,78 +1,68 @@
 /** @namespace drivers.laser */
 
 const EventEmitter = require('events');
-const DriverManager = Mep.require('drivers/DriverManager');
+
+const TAG = 'LaserDriver';
 
 /**
- * Uses data from laser sensors to determinate enemy robot and other obstacles.
+ * Uses data from laser sensors to determine where is an enemy robot and other obstacles.
+ *
  * @memberof drivers.laser
+ * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
 class LaserDriver extends EventEmitter {
     /**
      * Make instance of LaserDriver.
      *
      * <pre>
-     * Check image bellow to understand `laserAngle`
-     *  s1   s2   s2
+     * Check image bellow to understand `laserAngle`, `laserX` & `laserY`
+     *  s1   s2   s3
      *   \   |   /
      *  |---------|
      *  |  Robot  |
      *  |_________|
      *
-     *  Sensor s1 has angle 20 degrees
-     *  Sensor s2 has angle 0 degrees
-     *  Sensor s3 has angle -30 degrees
+     *  Sensor s1 params: laserAngle~=60, laserX~=-10, laserY~=10
+     *  Sensor s2 params: laserAngle~=90, laserX~=0, laserY~=10
+     *  Sensor s3 params: laserAngle~=110, laserX~=10, laserY~=10
      *  </pre>
      *
-     * @param slaveAddress
-     * @param functionAddress
-     * @param laserAngle {number} - Relative to robot's y axis. Range (-180, 180).
-     * @param laserDistance {number} - Maximum distance between sensor and obstacle when sensor returns detected signal
+     * @param name {String} - Unique driver name
+     * @param config.laserMaxDistance {Number} - Maximum distance when driver detects an object
+     * @param config.laserAngle {Number} - Angle relative to the robot (look at the picture above)
+     * @param config.laserX {Number} - Sensor translated on x coordinate
+     * @param config.laserY {Number} - Sensor translated on y coordinate
+     * @param config.functionAddress {Number} - Function address of Modbus coil
+     * @param config.slaveAddress {Number} - Slave address of Modbus coil
      */
-    constructor(slaveAddress, functionAddress, laserAngle, laserDistance) {
-        this.laserAngle = laserAngle;
-        this.laserDistance = laserDistance;
-        this.slaveAddress = slaveAddress;
-        this.functionAddress = functionAddress;
+    constructor(name, config) {
+        super();
 
-        this.motionDriver = DriverManager.get().getDriver(DriverManager.MOTION_DRIVER);
-        this.modbusDriver = DriverManager.get().getDriver(DriverManager.MODBUS_DRIVER);
+        this.modbusDriver = Mep.getDriverManager().getDriver('ModbusDriver');
+        this.modbusDriver.registerCoilReading(config.slaveAddress, config.functionAddress);
+        this.modbusDriver.on('coilChanged_' + config.slaveAddress + '_' + config.functionAddress, this.processDetection);
 
-        this.modbusDriver.registerCoilReading(slaveAddress, functionAddress);
-        this.modbusDriver.on('coilChanged', this.processDetection);
+        // Pre-calculate coordinates relative to robot
+        this.x = Math.round(config.laserMaxDistance * Math.cos(config.laserAngle * Math.PI / 180));
+        this.y = Math.round(config.laserMaxDistance * Math.sin(config.laserAngle * Math.PI / 180));
+
+        // Translate
+        this.x += config.laserX;
+        this.y += config.laserY;
+
+        Mep.Log.debug(TAG, name, 'Detects at x = ', this.x, '; y = ', this.y);
     }
 
     /**
      * Process detected obstacle
      *
      * @private
-     * @param slaveAddress
-     * @param functionAddress
-     * @param state
-     * @param ID
+     * @param state {boolean} - Object is detected or not
      */
-    processDetection(slaveAddress, functionAddress, state, ID) {
-        if (slaveAddress == this.slaveAddress && functionAddress == this.functionAddress) {
-            // Calculate relative to robot coordinates
-            let x = Math.round(this.laserDistance * Math.cos(this.getAngleRelativeToTerrain()));
-            let y = Math.round(this.laserDistance * Math.sin(this.getAngleRelativeToTerrain()));
+    processDetection(state) {
+        this.emit('terrain', this.x, this.y);
 
-            // Translate. Calculate relative to the
-            let position = this.motionDriver.getPosition();
-            x += position.getX();
-            y += position.getY();
-
-            // TODO: Process...
-        }
-    }
-
-    /**
-     * Calculate angle relative to terrain
-     * @private
-     * @returns {number} - Angle
-     */
-    getAngleRelativeToTerrain() {
-        return this.motionDriver.getOrientation() + this.laserAngle;
+        Mep.Log.debug(TAG, 'Detected at x = ', this.x, '; y = ', this.y);
     }
 
     provides() {
