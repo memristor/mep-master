@@ -1,8 +1,9 @@
 {
     "simulation": true,
-    "table": "table_1_red",
+    "table": "",
     "performance": false,
-    "robot": "big",
+    "robot": "",
+    "scheduler": "",
 
     "Drivers": {
         "MotionDriver": {

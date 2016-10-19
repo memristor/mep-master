@@ -13,9 +13,7 @@ class Bootstrap {
         Mep.init();
 
         // Load strategy
-        // TODO: Load strategy from CLI
-        let schedulerPath = __dirname + '/../strategies/default/Scheduler.js';
-        const Scheduler = require(schedulerPath);
+        const Scheduler = require(Mep.Config.get('scheduler'));
         let scheduler = new Scheduler();
         scheduler.runTask(scheduler.findBestTask());
     }
