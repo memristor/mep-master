@@ -11,6 +11,11 @@
     "ModbusDriver": {
       "class": "drivers/modbus/ModbusDriverSimulator",
       "load": true
+    },
+
+    "LaserDriver": {
+      "class": "drivers/laser/LaserDriver",
+      "load": true
     }
   }
 }

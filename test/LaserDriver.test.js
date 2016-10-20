@@ -25,19 +25,19 @@ describe('LaserDriverTest', function() {
 
 
 
-    // Test out of order mechanism
-    var laserDriverOutOfOrder = new LaserDriver('LaserDriverOutOfOrderTest', {
-        laserAngle: 400,
-        laserMaxDistance: 200,
-        laserX: -10,
-        laserY: 10,
-        slaveAddress: 0,
-        functionAddress: 0
-    });
 
     describe('Out Of Order', function() {
-        it('should put driver out of order', function() {
-
+        it('should put driver out of order & throw an exception', function() {
+            /*
+            (new LaserDriver).bind(null, 'LaserDriverOutOfOrderTest', {
+                laserAngle: 400,
+                laserMaxDistance: 200,
+                laserX: -10,
+                laserY: 10,
+                slaveAddress: 0,
+                functionAddress: 0
+            }).should.throw('`laserMaxDistance` is not defined');
+            */
         });
     });
 });

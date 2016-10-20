@@ -38,25 +38,31 @@ class LaserDriver extends EventEmitter {
     constructor(name, config) {
         super();
 
-        Mep.getDriverManager()
-            .assertDriver(name,
-                typeof config.laserMaxDistance === 'undefined',
-                '`laserMaxDistance` is not defined'
-            );
+        // Check arguments
+        if (typeof config.laserMaxDistance === 'undefined') {
+            throw '`config.laserMaxDistance` is not defined';
+        }
+        if (typeof config.laserAngle === 'undefined' || config.laserAngle < 0 || config.laserAngle > 360) {
+            throw '`config.laserAngle` is not defined or angle is out of the range (0 - 360)';
+        }
+        if (typeof config.laserX === 'undefined' || typeof config.laserY === 'undefined') {
+            throw '`config.laserX` or `config.laserY` is not defined';
+        }
+        if (typeof config.functionAddress === 'undefined' || typeof config.slaveAddress === 'undefined') {
+            throw '`config.functionAddress` or `config.slaveAddress` is not defined';
+        }
 
-        Mep.getDriverManager()
-            .assertDriver(name,
-                typeof config.laserAngle === 'undefined' || config.laserAngle < 0 || config.laserAngle > 360,
-                '`laserAngle` is not defined or angle is out of the range (0 - 360)'
-            );
 
+        // Subscribe on ModbusDriver
         this.modbusDriver = Mep.getDriverManager().getDriver('ModbusDriver');
         this.modbusDriver.registerCoilReading(config.slaveAddress, config.functionAddress);
         this.modbusDriver.on('coilChanged_' + config.slaveAddress + '_' + config.functionAddress, this.processDetection);
 
+
         // Pre-calculate coordinates relative to robot
         this.x = Math.round(config.laserMaxDistance * Math.cos(config.laserAngle * Math.PI / 180));
         this.y = Math.round(config.laserMaxDistance * Math.sin(config.laserAngle * Math.PI / 180));
+
 
         // Translate
         this.x += config.laserX;

@@ -42,15 +42,16 @@ class DriverManager {
                 let ModuleClass = Mep.require(classPath);
 
                 if (typeof ModuleClass === 'function') {
-                    let driverInstance = new ModuleClass(driverIdentifier, moduleConfig);
-
-                    // Check if driver is asserted during initialization
-                    if (this.isDriverOutOfOrder(driverIdentifier) === false) {
+                    try {
+                        let driverInstance = new ModuleClass(driverIdentifier, moduleConfig);
                         this.drivers[driverIdentifier] = driverInstance;
+                        Mep.Log.debug(TAG, 'Driver `' + driverIdentifier + '` loaded');
+                    } catch (error) {
+                        this.putDriverOutOfOrder(driverIdentifier, error);
                     }
+                }
 
-                    Mep.Log.debug(TAG, 'Driver `' + driverIdentifier + '` loaded');
-                } else {
+                 else {
                     Mep.Log.error(TAG, 'There is no module on path', modulePath);
                 }
             }
@@ -121,18 +122,16 @@ class DriverManager {
         return filteredDrivers;
     }
 
-    assertDriver(name, condition, message) {
-        if (condition === true) {
-            // Move to outOfOther pool
-            if (this.isDriverAvailable(name) === true) {
-                delete this.drivers[name];
-            }
-            this.driversOutOfOrder[name] = true;
-
-            // Notify user
-            Mep.Log.error(TAG, name, message);
-            Mep.Log.error(TAG, name, 'is out of the order');
+    putDriverOutOfOrder(name, message) {
+        // Move to outOfOther pool
+        if (this.isDriverAvailable(name) === true) {
+            delete this.drivers[name];
         }
+        this.driversOutOfOrder[name] = true;
+
+        // Notify user
+        Mep.Log.error(TAG, name, message);
+        Mep.Log.error(TAG, name, 'is out of the order');
     }
 }
 
