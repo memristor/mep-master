@@ -38,6 +38,18 @@ class LaserDriver extends EventEmitter {
     constructor(name, config) {
         super();
 
+        Mep.getDriverManager()
+            .assertDriver(name,
+                typeof config.laserMaxDistance === 'undefined',
+                '`laserMaxDistance` is not defined'
+            );
+
+        Mep.getDriverManager()
+            .assertDriver(name,
+                typeof config.laserAngle === 'undefined' || config.laserAngle < 0 || config.laserAngle > 360,
+                '`laserAngle` is not defined or angle is out of the range (0 - 360)'
+            );
+
         this.modbusDriver = Mep.getDriverManager().getDriver('ModbusDriver');
         this.modbusDriver.registerCoilReading(config.slaveAddress, config.functionAddress);
         this.modbusDriver.on('coilChanged_' + config.slaveAddress + '_' + config.functionAddress, this.processDetection);

@@ -1,7 +1,5 @@
 /** @namespace drivers */
 
-const ModuleLoader = Mep.require('utils/ModuleLoader');
-
 const TAG = 'DriverManager';
 
 /**
@@ -22,8 +20,45 @@ const TAG = 'DriverManager';
  */
 class DriverManager {
     constructor() {
+        this.drivers = {};
+        this.driversOutOfOrder = {};
+    }
+
+    init() {
         // Drivers initialization
-        this.drivers = ModuleLoader.load(Mep.Config.get('Drivers'));
+        let config = Mep.Config.get('Drivers');
+
+        for (let driverIdentifier in config) {
+            if (config.hasOwnProperty(driverIdentifier) == false) {
+                continue;
+            }
+
+            let moduleConfig = config[driverIdentifier];
+            let load = moduleConfig.load;
+            let classPath = moduleConfig.class;
+
+            // Do not initialize if `init field == false`
+            if (load != false) {
+                let ModuleClass = Mep.require(classPath);
+
+                if (typeof ModuleClass === 'function') {
+                    let driverInstance = new ModuleClass(driverIdentifier, moduleConfig);
+
+                    // Check if driver is asserted during initialization
+                    if (this.isDriverOutOfOrder(driverIdentifier) === false) {
+                        this.drivers[driverIdentifier] = driverInstance;
+                    }
+
+                    Mep.Log.debug(TAG, 'Driver `' + driverIdentifier + '` loaded');
+                } else {
+                    Mep.Log.error(TAG, 'There is no module on path', modulePath);
+                }
+            }
+        }
+    }
+
+    isDriverOutOfOrder(name) {
+        return (name in this.driversOutOfOrder);
     }
 
     /**
@@ -34,7 +69,9 @@ class DriverManager {
      */
     getDriver(name) {
         if (this.isDriverAvailable(name) === false) {
-            throw new Error('There is no driver with name ' + name);
+            let message = 'There is no driver with name ' + name;
+            Mep.Log.error(TAG, message);
+            throw new Error(message);
         }
 
         return this.drivers[name];
@@ -46,7 +83,7 @@ class DriverManager {
      * @returns {boolean} - Is driver available
      */
     isDriverAvailable(name) {
-        return (name in this.drivers)
+        return (name in this.drivers);
     }
 
     /**
@@ -82,6 +119,20 @@ class DriverManager {
         }
 
         return filteredDrivers;
+    }
+
+    assertDriver(name, condition, message) {
+        if (condition === true) {
+            // Move to outOfOther pool
+            if (this.isDriverAvailable(name) === true) {
+                delete this.drivers[name];
+            }
+            this.driversOutOfOrder[name] = true;
+
+            // Notify user
+            Mep.Log.error(TAG, name, message);
+            Mep.Log.error(TAG, name, 'is out of the order');
+        }
     }
 }
 

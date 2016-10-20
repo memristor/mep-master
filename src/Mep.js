@@ -92,6 +92,8 @@ var Mep = {
      */
     init() {
         this.driverManager = new (require('./drivers/DriverManager'))();
+        this.driverManager.init();
+
         this.positionService =
             new (require('./services/position/PositionService'))(Config.get('Services:PositionService'));
     }
