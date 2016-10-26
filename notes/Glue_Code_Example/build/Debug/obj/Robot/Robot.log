@@ -1,4 +1,0 @@
-﻿  Robot.cc
-  win_delay_load_hook.cc
-  Generating Code...
-LINK : fatal error LNK1104: cannot open file 'C:\Users\LukicDarkoo\.node-gyp\6.2.1\Debug\node.lib'
