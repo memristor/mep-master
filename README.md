@@ -29,4 +29,4 @@ create a documentation locally
 ```
 npm run-script docs
 ```
-or check for [online docs](https://memristor-robotics.github.io/docs/)
+or check for [online docs](https://doclets.io/Memristor-Robotics/mep2/master)
