@@ -1,10 +1,10 @@
 dir: src
 packageJson: package.json
 articles:
- 	- Overview: README.md
- 	- Creating a Driver: docs/Creating_Driver.md
- 	- Goals: docs/Goals.md
- 	- Inspiration: docs/Inspiration.md
- 	- Install on Windows: docs/Install_on_Windows.md
- 	- Services vs Drivers: docs/Services_vs_Drivers.md
- 	- Setting up ElastiSearch: docs/Setting_Up_ElasticSearch.md
+  - Overview: README.md
+  - Creating a Driver: docs/Creating_Driver.md
+  - Goals: docs/Goals.md
+  - Inspiration: docs/Inspiration.md
+  - Install on Windows: docs/Install_on_Windows.md
+  - Services vs Drivers: docs/Services_vs_Drivers.md
+  - Setting up ElastiSearch: docs/Setting_Up_ElasticSearch.md
