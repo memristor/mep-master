@@ -24,6 +24,10 @@ class DriverManager {
         this.driversOutOfOrder = {};
     }
 
+
+    /**
+     * Initialize all drivers
+     */
     init() {
         // Drivers initialization
         let config = Mep.Config.get('Drivers');
@@ -58,6 +62,11 @@ class DriverManager {
         }
     }
 
+    /**
+     * Check if driver is out of order
+     * @param name {String} - Unique name of a driver
+     * @returns {boolean}
+     */
     isDriverOutOfOrder(name) {
         return (name in this.driversOutOfOrder);
     }
@@ -122,6 +131,11 @@ class DriverManager {
         return filteredDrivers;
     }
 
+    /**
+     * Put driver out of order
+     * @param name {String} - Unique name of a driver
+     * @param message {String} - Describe more why the fault happened
+     */
     putDriverOutOfOrder(name, message) {
         // Move to outOfOther pool
         if (this.isDriverAvailable(name) === true) {
