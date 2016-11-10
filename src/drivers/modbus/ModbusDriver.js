@@ -7,12 +7,38 @@ const DEBUG = true;
 
 Util.inherits(ModbusDriverBinder, EventEmiter);
 
+/**
+ * Driver for Modbus communication protocol.
+ *
+ * @fires ModbusDriver#coilChanged
+ * @fires ModbusDriver#coilChanged_[slaveAddress]_[functionAddress]
+ */
 class ModbusDriver extends ModbusDriverBinder {
-    constructor(name, config) {
 
+    /**
+     * Creates instance of ModbusDriver
+     *
+     * @param name {String} - Unique name of a driver
+     * @param config {Object} - Configuration presented as an associative array
+     */
+    constructor(name, config) {
         super(DEBUG, (functionAddress, slaveAddress, detected) => {
-            // Emit
+            /**
+             * Coil value changed event.
+             *
+             * @event ModbusDriver#coilChanged
+             * @property {Number} slaveAddress - Slave address
+             * @property {Number} functionAddress - Function address
+             * @property {Boolean} detected - Value on slave address and function address
+             */
             super.emit('coilChanged', slaveAddress, functionAddress, detected);
+
+            /**
+             * Coil value changed event on single address.
+             *
+             * @event ModbusDriver#coilChanged_[slaveAddress]_[functionAddress]
+             * @property {Boolean} detected - Value on slave address and function address
+             */
             super.emit('coilChanged_' + slaveAddress + '_' + functionAddress, detected);
 
             // Send to Logger
