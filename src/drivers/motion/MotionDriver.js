@@ -13,7 +13,7 @@ Util.inherits(MotionDriverBinder, EventEmiter);
 class MotionDriver extends MotionDriverBinder {
     constructor(name, config) {
         super(
-            false,
+            true,
             config.startX,
             config.startY
         );

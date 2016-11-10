@@ -17,28 +17,16 @@ MotionDriver::MotionDriver(geometry::Point2D initPosition, RobotType robotType, 
     io_mutex(new mutex())
 {
 	setPositionAndOrientation(initPosition, initOrientation);
-	setSpeed(initSpeed);
+	setSpeed(initSpeed);;
 	direction = FORWARD;
 	state = IDLE;
 
-    // TODO: To be reviewed
-	refreshInterval = 10;
-	refreshThread = new thread(&MotionDriver::refreshDataLoop, this);
-
 	reverseAngle = robotType;
-}
-
-void MotionDriver::refreshDataLoop() {
-    while (true) {
-        refreshData();
-        this_thread::sleep_for(chrono::milliseconds(refreshInterval));
-    }
 }
 
 MotionDriver::~MotionDriver()
 {
 	delete io_mutex;
-	delete refreshThread;
 }
 
 void MotionDriver::moveStraight(int distance)

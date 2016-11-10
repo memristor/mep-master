@@ -4,6 +4,23 @@
 
 INITIALIZE_EASYLOGGINGPP
 
+
+
+class AsyncRefreshDataWorker : public Nan::AsyncWorker {
+public:
+    AsyncRefreshDataWorker(Nan::Callback* callback, MotionDriverBinder* motionDriverBinder) :
+        Nan::AsyncWorker(callback),
+        motionDriverBinder(motionDriverBinder) { }
+    ~AsyncRefreshDataWorker() { }
+    void Execute() {
+        MotionDriver *motionDriver = motionDriverBinder->getMotionDriver();
+        motionDriver->refreshData();
+
+    }
+private:
+    MotionDriverBinder* motionDriverBinder;
+};
+
 MotionDriverBinder::MotionDriverBinder(Point2D initPosition,
        MotionDriver::RobotType robotType,
        int initOrientation,
@@ -24,6 +41,7 @@ void MotionDriverBinder::Init(Local<Object> exports) {
 	Nan::SetPrototypeMethod(tmpl, "moveStraight", moveStraight);
 	Nan::SetPrototypeMethod(tmpl, "setSpeed", setSpeed);
 	Nan::SetPrototypeMethod(tmpl, "getPosition", getPosition);
+	Nan::SetPrototypeMethod(tmpl, "refreshData", refreshData);
 
     exports->Set(Nan::New("MotionDriverBinder").ToLocalChecked(), tmpl->GetFunction());
 }
@@ -149,4 +167,11 @@ void MotionDriverBinder::getPosition(const Nan::FunctionCallbackInfo<Value> &arg
     nodes->Set(0, Integer::New(args.GetIsolate(), point.getX()));
     nodes->Set(1, Integer::New(args.GetIsolate(), point.getY()));
     args.GetReturnValue().Set(nodes);
+}
+
+void MotionDriverBinder::refreshData(const Nan::FunctionCallbackInfo<Value> &args) {
+    Nan::HandleScope scope;
+
+    Callback *callback = new Callback(args[0].As<v8::Function>());
+    AsyncQueueWorker(new AsyncRefreshDataWorker(callback, ObjectWrap::Unwrap<MotionDriverBinder>(args.Holder())));
 }

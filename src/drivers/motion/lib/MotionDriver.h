@@ -44,10 +44,6 @@ private:
 	
 	mutex *io_mutex;
 
-	thread *refreshThread;
-	int refreshInterval;
-	void refreshDataLoop();
-
 public:
 	MotionDriver(geometry::Point2D initPosition=geometry::Point2D(), RobotType robotType=VELIKI, int initOrientation=0, int initSpeed=100);
 	~MotionDriver();
