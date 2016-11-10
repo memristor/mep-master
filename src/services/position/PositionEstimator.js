@@ -19,15 +19,13 @@ class PositionEstimator extends EventEmitter {
         }
     }
 
-    processPositionChange(driverName, x, y, precision) {
+    processPositionChange(driverName, point, precision) {
         // TODO: Sensor Fusion problem: https://en.wikipedia.org/wiki/Sensor_fusion
         // Implement Kalman filter: https://en.wikipedia.org/wiki/Kalman_filter
 
-        Mep.Log.debug(TAG, 'Received position from', driverName, '(' + x + ', ' + y + ')');
-        this.point.setX(x);
-        this.point.setY(y);
+        Mep.Log.debug(TAG, 'Received position from', driverName, point);
 
-        this.emit('positionChanged', new Point(x, y));
+        this.emit('positionChanged', point);
     }
 
     getPosition() {

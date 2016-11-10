@@ -9,6 +9,7 @@ Util.inherits(MotionDriverBinder, EventEmiter);
  * Driver enables communication with Memristor's motion driver.
  *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
+ * @fires MotionDriver#positionChanged
  */
 class MotionDriver extends MotionDriverBinder {
     /**
@@ -57,8 +58,38 @@ class MotionDriver extends MotionDriverBinder {
             config.startX,
             config.startY
         );
-
         this.name = name;
+        this.config = config;
+        this.lastPositon = new Point(0, 0);
+
+        this.refreshDataLoop.bind(this);
+    }
+
+    refreshDataLoop() {
+        let that = this;
+
+        this.refreshData(() => {
+            let position = that.getPosition();
+
+            // If position is changed fire an event
+            if (position.equals(that.lastPositon) === false) {
+                /**
+                 * Position changed event.
+                 * @event MotionDriver#positionChanged
+                 * @property {String} driverName - Unique name of a driver
+                 * @property {Point} point - Position of the robot
+                 */
+                that.emit('positionChanged',
+                    that.name,
+                    that.getPosition(),
+                    that.config.precision
+                );
+
+                that.lastPositon.clone(position);
+            }
+        });
+
+        setTimeout(this.refreshDataLoop, this.config.refreshDataPeriod);
     }
 
     /**

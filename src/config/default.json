@@ -10,7 +10,9 @@
             "class": "drivers/motion/MotionDriver",
             "load": true,
             "startX": 0,
-            "startY": 0
+            "startY": 0,
+            "refreshDataPeriod": 100,
+            "precision": 2
         },
 
         "ModbusDriver": {
