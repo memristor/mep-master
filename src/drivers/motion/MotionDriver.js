@@ -11,6 +11,46 @@ Util.inherits(MotionDriverBinder, EventEmiter);
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
 class MotionDriver extends MotionDriverBinder {
+    /**
+     * Read data from motion driver (as the electronic component)
+     * @method refreshData
+     * @memberof MotionDriver#
+     * @param callback {Function} - Callback function will be called after data is refreshed
+     */
+
+    /**
+     * Stop the robot.
+     * @method stop
+     * @memberof MotionDriver#
+     */
+
+    /**
+     * Move robot straight
+     * @method moveStraight
+     * @memberof MotionDriver#
+     * @param distance {Number} - Distance in mm
+     */
+
+    /**
+     * Set default speed of the robot
+     * @method setSpeed
+     * @memberof MotionDriver#
+     * @param speed {Number} - Speed (0 - 255)
+     */
+
+    /**
+     * Move robot to the absolute position
+     * @method moveToPosition
+     * @memberof MotionDriver#
+     * @param positionX {Number} - X coordinate relative to start position of the robot
+     * @param positionY {Number} - Y coordinate relative to start position of the robot
+     * @param direction {Number} - Direction, can be Constants.DIRECTION_FORWARD or Constants.DIRECTION_BACKWARD
+     */
+
+    /**
+     * @param name {String} - Unique driver name
+     * @param config {Object} - Configuration presented as an associative array
+     */
     constructor(name, config) {
         super(
             true,
@@ -21,6 +61,10 @@ class MotionDriver extends MotionDriverBinder {
         this.name = name;
     }
 
+    /**
+     * Get position of the robot
+     * @return {Point} - Position of the robot
+     */
     getPosition() {
         let position = super.getPosition();
         return (new Point(position[0], position[1]));
