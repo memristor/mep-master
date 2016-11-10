@@ -63,6 +63,7 @@ class MotionDriver extends MotionDriverBinder {
         this.lastPositon = new Point(0, 0);
 
         this.refreshDataLoop.bind(this);
+        this.refreshDataLoop();
     }
 
     refreshDataLoop() {
@@ -89,7 +90,8 @@ class MotionDriver extends MotionDriverBinder {
             }
         });
 
-        setTimeout(this.refreshDataLoop, this.config.refreshDataPeriod);
+        // Call refreshDataLoop() again with a delay
+        setTimeout(this.refreshDataLoop.bind(this), this.config.refreshDataPeriod);
     }
 
     /**

@@ -6,6 +6,6 @@ let motionDriver = new MotionDriver('MotionDriver', {
     startY: 0
 });
 
-motionDriver.refreshData(() => {
-    console.log(motionDriver.getPosition());
+motionDriver.on('positionChanged', (name, position) => {
+    console.log(position);
 });
