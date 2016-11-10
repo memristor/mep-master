@@ -18,5 +18,8 @@
     "camelcase": 1,
     "new-cap": [1, { "capIsNew": false }],
     "no-undef": 2
+  },
+  "ecmaFeatures": {
+    "blockBindings": true
   }
 }
