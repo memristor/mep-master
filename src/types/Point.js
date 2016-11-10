@@ -31,6 +31,24 @@ class Point {
     }
 
     /**
+     * Check if points are equal
+     * @param point {Point} - Another point to be compared
+     * @returns {boolean}
+     */
+    equals(point) {
+        return point.getX() === this.getX() && point.getY() === this.getY();
+    }
+
+    /**
+     * Clone the point
+     * @param point {Point} - Values from point will applied to object
+     */
+    clone(point) {
+        this.setX(point.getX());
+        this.setY(point.getY());
+    }
+
+    /**
      * Set Y coordinate
      * @param y {number} - Y coordinate
      */
