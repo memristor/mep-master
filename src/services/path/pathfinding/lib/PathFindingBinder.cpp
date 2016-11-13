@@ -86,7 +86,11 @@ void PathFindingBinder::addObstacle(const Nan::FunctionCallbackInfo<Value> &args
 }
 
 void PathFindingBinder::removeObstacle(const Nan::FunctionCallbackInfo<Value> &args) {
+   Nan::HandleScope scope;
 
+   int id = args[0]->IntegerValue();
+   PathFinding *pathFinding = ObjectWrap::Unwrap<PathFindingBinder>(args.Holder())->getPathFinding();
+   pathFinding->removeObstacle(id);
 }
 
 void PathFindingBinder::New(const Nan::FunctionCallbackInfo<Value> &args) {
