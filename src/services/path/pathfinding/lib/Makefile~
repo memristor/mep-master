@@ -1,0 +1,2 @@
+all:
+    g++ $(find -name '*.cpp' ! -name '*Binder.cpp') -o test

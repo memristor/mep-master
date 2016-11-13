@@ -1,0 +1,67 @@
+                 U __assert_fail@@GLIBC_2.2.5
+                 U atan2@@GLIBC_2.2.5
+                 U __cxa_atexit@@GLIBC_2.2.5
+                 U __cxa_begin_catch@@CXXABI_1.3
+                 U __cxa_end_catch@@CXXABI_1.3
+                 U __cxa_rethrow@@CXXABI_1.3
+                 U __gxx_personality_v0@@CXXABI_1.3
+                 U memmove@@GLIBC_2.2.5
+                 U node_module_register
+                 U sqrt@@GLIBC_2.2.5
+                 U _Unwind_Resume@@GCC_3.0
+                 U operator delete(void*)@@GLIBCXX_3.4
+                 U v8::HandleScope::CreateHandle(v8::internal::HeapObject*, v8::internal::Object*)
+                 U v8::HandleScope::HandleScope(v8::Isolate*)
+                 U v8::HandleScope::~HandleScope()
+                 U v8::HandleScope::~HandleScope()
+                 U v8::ObjectTemplate::NewInstance(v8::Local<v8::Context>)
+                 U v8::ObjectTemplate::SetInternalFieldCount(int)
+                 U v8::ObjectTemplate::New(v8::Isolate*, v8::Local<v8::FunctionTemplate>)
+                 U v8::FunctionTemplate::GetFunction()
+                 U v8::FunctionTemplate::SetClassName(v8::Local<v8::String>)
+                 U v8::FunctionTemplate::InstanceTemplate()
+                 U v8::FunctionTemplate::PrototypeTemplate()
+                 U v8::FunctionTemplate::New(v8::Isolate*, void (*)(v8::FunctionCallbackInfo<v8::Value> const&), v8::Local<v8::Value>, v8::Local<v8::Signature>, int, v8::ConstructorBehavior)
+                 U v8::EscapableHandleScope::Escape(v8::internal::Object**)
+                 U v8::EscapableHandleScope::EscapableHandleScope(v8::Isolate*)
+                 U v8::V8::ToLocalEmpty()
+                 U v8::V8::DisposeGlobal(v8::internal::Object**)
+                 U v8::V8::GlobalizeReference(v8::internal::Isolate*, v8::internal::Object**)
+                 U v8::V8::MakeWeak(v8::internal::Object**, void*, void (*)(v8::WeakCallbackInfo<void> const&), v8::WeakCallbackType)
+                 U v8::V8::ClearWeak(v8::internal::Object**)
+                 U v8::Object::SetInternalField(int, v8::Local<v8::Value>)
+                 U v8::Object::InternalFieldCount()
+                 U v8::Object::SlowGetInternalField(int)
+                 U v8::Object::SetAlignedPointerInInternalField(int, void*)
+                 U v8::Object::SlowGetAlignedPointerFromInternalField(int)
+                 U v8::Object::Get(unsigned int)
+                 U v8::Object::Get(v8::Local<v8::Value>)
+                 U v8::Object::Set(v8::Local<v8::Value>, v8::Local<v8::Value>)
+                 U v8::String::NewFromUtf8(v8::Isolate*, char const*, v8::NewStringType, int)
+                 U v8::Isolate::GetCurrent()
+                 U v8::Isolate::ThrowException(v8::Local<v8::Value>)
+                 U v8::Isolate::GetCurrentContext()
+                 U v8::External::New(v8::Isolate*, void*)
+                 U v8::Template::Set(v8::Local<v8::Name>, v8::Local<v8::Data>, v8::PropertyAttribute)
+                 U v8::Exception::TypeError(v8::Local<v8::String>)
+                 U v8::Signature::New(v8::Isolate*, v8::Local<v8::FunctionTemplate>)
+                 U geometry::GeometryUtil::linesIntersect(geometry::Point2D const&, geometry::Point2D const&, geometry::Point2D const&, geometry::Point2D const&)
+                 U v8::Value::Int32Value() const
+                 U v8::Value::Uint32Value() const
+                 U v8::Value::IntegerValue() const
+                 U v8::Value::IsInt32() const
+                 U v8::Value::ToObject(v8::Local<v8::Context>) const
+                 U v8::External::Value() const
+                 U std::ostream::operator<<(int)@@GLIBCXX_3.4
+                 U std::ios_base::Init::Init()@@GLIBCXX_3.4
+                 U std::ios_base::Init::~Init()@@GLIBCXX_3.4
+                 U std::basic_ios<char, std::char_traits<char> >::clear(std::_Ios_Iostate)@@GLIBCXX_3.4
+                 U operator new(unsigned long)@@GLIBCXX_3.4
+                 U std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
+                 U std::__throw_bad_alloc()@@GLIBCXX_3.4
+                 U std::_Rb_tree_decrement(std::_Rb_tree_node_base*)@@GLIBCXX_3.4
+                 U std::_Rb_tree_increment(std::_Rb_tree_node_base const*)@@GLIBCXX_3.4
+                 U std::_Rb_tree_increment(std::_Rb_tree_node_base*)@@GLIBCXX_3.4
+                 U std::__throw_length_error(char const*)@@GLIBCXX_3.4
+                 U std::_Rb_tree_rebalance_for_erase(std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)@@GLIBCXX_3.4
+                 U std::_Rb_tree_insert_and_rebalance(bool, std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)@@GLIBCXX_3.4

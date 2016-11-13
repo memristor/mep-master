@@ -1,6 +1,8 @@
 /** @namespace drivers.laser */
 
 const EventEmitter = require('events');
+const Point = Mep.require('types/Point');
+const Polygon = Mep.require('types/Polygon');
 
 const TAG = 'LaserDriver';
 
@@ -9,6 +11,7 @@ const TAG = 'LaserDriver';
  *
  * @memberof drivers.laser
  * @author Darko Lukic <lukicdarkoo@gmail.com>
+ * @fires LaserDriver#terrain
  */
 class LaserDriver extends EventEmitter {
     /**
@@ -68,7 +71,16 @@ class LaserDriver extends EventEmitter {
         this.x += config.laserX;
         this.y += config.laserY;
 
-        Mep.Log.debug(TAG, name, 'Detects at x = ', this.x, '; y = ', this.y);
+        let points = [
+            new Point(this.x, this.y),
+            new Point(this.x, this.y),
+            new Point(this.x, this.y),
+            new Point(this.x, this.y)
+        ];
+        this.polygon = new Polygon(name, 2000, points);
+        this.centerPoint = new Point(this.x, this.y);
+
+        Mep.Log.debug(TAG, name, 'Detects at ', this.x, this.y);
     }
 
     /**
@@ -78,13 +90,21 @@ class LaserDriver extends EventEmitter {
      * @param state {boolean} - Object is detected or not
      */
     processDetection(state) {
-        this.emit('terrain', this.x, this.y);
+        /**
+         * Obstacle detected event.
+         *
+         * @event LaserDriver#terrain
+         * @property {Point} - Center of detected obstacle
+         * @property {Polygon} - Obstacle is approximated with a polygon
+         * @property {Boolean} - Is objected detected or not
+         */
+        this.emit('obstacleDetected', this.centerPoint, this.polygon, state);
 
-        Mep.Log.debug(TAG, 'Detected at x = ', this.x, '; y = ', this.y);
+        Mep.Log.debug(TAG, 'Detected at', this.x, this.y);
     }
 
     provides() {
-        return ['terrain'];
+        return ['path'];
     }
 }
 

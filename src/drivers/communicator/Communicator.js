@@ -1,1 +1,0 @@
-// Communicate with the small robot over TCP to derminate possition and which tasks are done.

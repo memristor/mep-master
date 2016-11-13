@@ -13,7 +13,7 @@ const TAG = 'DriverManager';
  *  <li>monitor if driver is active and to try to recover if it is not (not implemented yet).</li>
  * </ul>
  *
- * List of of data types which driver can provide: control, terrain & position.
+ * List of of data types which driver can provide: control, path & position.
  *
  * @memberof drivers
  * @author Darko Lukic <lukicdarkoo@gmail.com>
@@ -105,7 +105,7 @@ class DriverManager {
      * data processing, not mechanisms for data collection from different drivers.
      * Services are in this case also hardware independent.</p>
      *
-     * @param type {String} - Data type which driver can provide. Can be: position & terrain.
+     * @param type {String} - Data type which driver can provide. Can be: position & path.
      * @returns {Object} - List of filtered drivers
      */
     getDataProviderDrivers(type) {
