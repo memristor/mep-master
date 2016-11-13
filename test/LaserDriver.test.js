@@ -1,6 +1,7 @@
 const should = require('should');
 const sinon = require('sinon');
 const LaserDriver = require('../src/drivers/laser/LaserDriver');
+const Point = Mep.require('types/Point');
 
 describe('LaserDriverTest', function() {
     var laserDriver = new LaserDriver('LaserDriver', {
@@ -14,12 +15,12 @@ describe('LaserDriverTest', function() {
 
     describe('#processDetection(true)', function () {
         let terrainSpy = sinon.spy();
-        laserDriver.on('terrain', terrainSpy);
+        laserDriver.on('obstacleDetected', terrainSpy);
 
         laserDriver.processDetection(true);
 
         it('should callback with params(90, 183)', function() {
-            terrainSpy.calledWith(100 - 10, 173 + 10).should.be.ok();
+            terrainSpy.calledWith(new Point(100 - 10, 173 + 10)).should.be.ok();
         });
     });
 
