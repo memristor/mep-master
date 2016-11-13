@@ -101,4 +101,8 @@ class Robot {
     setSimulationPosition(x, y) {
         this.setPosition(this.startX + x, this.startY + y);
     }
+
+    getSimulatedPosition(x, y) {
+        return { x: x - this.startX, y: y - this.startY};
+    }
 }

@@ -33,6 +33,16 @@
             "rotateOptions": {
                 "relative": false
             }
+        },
+
+        "PathService": {
+            "staticObstacles": [
+                [
+                  { "x": 655, "y": 1225 },
+                  { "x": 710, "y": 440 },
+                  { "x": 2090, "y": 365 }
+                ]
+            ]
         }
     }
 }

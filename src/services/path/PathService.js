@@ -13,9 +13,20 @@ const TAG = 'PathService';
 class PathService {
     constructor(config) {
         this.obstacles = [];
-        this.pf = new PathFinding(2000, 0, 3000, 0);
+        this.pf = new PathFinding(3000, 0, 1300, -800);
 
         this.processObstacleDetection.bind(this);
+
+        // Add static obstacles
+        for (let pointsArray of config.staticObstacles) {
+            let points = [];
+            for (let point of pointsArray) {
+                points.push(new Point(point.x, point.y));
+            }
+            let polygon = new Polygon('static', 900 * 1000, points);
+
+            this.addObstacle(polygon);
+        }
 
         // Subscribe on drivers
         this.drivers = driverManager.getDataProviderDrivers('terrain');
@@ -40,17 +51,23 @@ class PathService {
         // Convert to `Array<Point>`
         for (let point of pointPairs) {
             points.push(new Point(point.x, point.y));
-
         }
+
         return points;
     }
 
     addObstacle(polygon) {
+        let pathService = this;
+
         this.obstacles.push(polygon);
         let id = this.pf.addObstacle(polygon.getPoints());
         polygon.setId(id);
 
         Mep.Log.debug(TAG, 'Obstacle Added', polygon);
+
+        setTimeout(() => {
+            pathService.removeObstacle(id);
+        }, polygon.getDuration());
 
         return id;
     }

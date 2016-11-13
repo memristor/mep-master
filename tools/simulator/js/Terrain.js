@@ -1,5 +1,7 @@
 class Terrain {
     constructor(terrainNode) {
+        let terrain = this;
+
         this.terrain = [];
         this.scaleFactorWidth = 0;
         this.scaleFactorHeight = 0;
@@ -8,16 +10,23 @@ class Terrain {
         let simulationWidth = terrainNode.offsetWidth;
         let simulationHeight = terrainNode.offsetHeight;
 
-
-        for (let i = 0; i < TERRAIN_WIDTH; i++) {
-            this.terrain[i] = [];
-            for (let j = 0; j < TERRAIN_HEIGHT; j++) {
-                this.terrain[i][j] = 0;
-            }
-        }
-
         this.scaleFactorWidth = simulationWidth / TERRAIN_WIDTH;
         this.scaleFactorHeight = simulationHeight / TERRAIN_HEIGHT;
+
+        this.cursorCoordinates = {};
+        this.terrainNode.addEventListener('mousemove', (e) => {
+            let x = e.clientX - terrain.terrainNode.offsetLeft;
+            let y = e.clientY - terrain.terrainNode.offsetTop;
+
+            terrain.cursorCoordinates = {
+                x: x / terrain.scaleFactorWidth,
+                y: y / terrain.scaleFactorHeight
+            };
+        });
+    }
+
+    getCursorPosition() {
+        return this.cursorCoordinates;
     }
 
     addRobot(robot) {

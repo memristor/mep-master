@@ -64,8 +64,8 @@ class PositionService {
 
         // Apply relative
         if (relative === true) {
-            destinationPoint.setX(destinationPoint.getX() + this.positionEstimator.getPosition().getX())
-            destinationPoint.setY(destinationPoint.getY() + this.positionEstimator.getPosition().getY())
+            destinationPoint.setX(destinationPoint.getX() + this.positionEstimator.getPosition().getX());
+            destinationPoint.setY(destinationPoint.getY() + this.positionEstimator.getPosition().getY());
         }
 
         // Apply path finding
@@ -74,6 +74,7 @@ class PositionService {
                 this.positionEstimator.getPosition(),
                 destinationPoint
             );
+            Mep.Log.debug(TAG, 'Start path finding', points);
         } else {
             points = [destinationPoint];
         }

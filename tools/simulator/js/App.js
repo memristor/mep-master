@@ -18,6 +18,12 @@ class App {
         bigRobot = new Robot(150, 760, 230, 230);
         terrain.addRobot(bigRobot);
 
+        document.getElementById('terrain').addEventListener('mousemove', () => {
+            let cursorPosition = terrain.getCursorPosition();
+            document.getElementById('cursorPosition').innerHTML =
+                JSON.stringify(bigRobot.getSimulatedPosition(cursorPosition.x, cursorPosition.y));
+        });
+
         ws.addEventListener('message', (e) => { app.onCommand(e); });
     }
 

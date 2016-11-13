@@ -14,12 +14,9 @@ class InitTask extends Task {
 
     onRun() {
         setTimeout(() => {
-            position.set(new TunedPoint(600, 0), {speed: 100})
+            position.set(new TunedPoint(20, 0), {speed: 100})
                 .then(() => {
-                    return position.set(new TunedPoint(300, 0))
-                })
-                .then(() => {
-                    return position.set(new TunedPoint(600, 200))
+                    return position.set(new TunedPoint(2370, 1130), { pathfinding: true })
                 })
                 .then(() => {
                     return position.set(new TunedPoint(0, 0))
