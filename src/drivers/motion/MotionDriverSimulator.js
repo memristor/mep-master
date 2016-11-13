@@ -5,9 +5,9 @@ const Point = Mep.require('types/Point');
 const TAG = 'MotionDriverSimulator';
 
 /**
- * MotionDriver simulation module. Has same methods as MotionDriver but
+ * MotionDriverSimulator simulation module. Has same methods as MotionDriver but
  * this module send all commands to simulator.
- *
+ * @see MotionDriver
  *
  * <pre>
  * Protocol
@@ -48,6 +48,7 @@ class MotionDriverSimulator extends EventEmitter {
         this.opened = false;
         this.ws.on('open', () => { that.opened = true; });
         this.ws.on('message', (data) => { that.processEventData(data); });
+        this.ws.on('error', () => { Mep.Log.error(TAG, 'Please run simulator server first'); });
 
         Mep.Log.debug(TAG, 'Driver with name', name, 'initialized');
     }
@@ -103,7 +104,7 @@ class MotionDriverSimulator extends EventEmitter {
                 params: params
             }));
         } else {
-            Mep.Log.error(TAG, 'Server is not opened');
+            Mep.Log.warn(TAG, 'Server is not opened');
         }
     }
 }
