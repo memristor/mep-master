@@ -1,5 +1,8 @@
 #include <nan.h>
+#include <vector>
+#include <deque>
 #include "PathFinding.h"
+#include "Point2D.h"
 
 using v8::Local;
 using v8::FunctionTemplate;
@@ -14,6 +17,7 @@ using path_finding::PathFinding;
 class PathFindingBinder : public Nan::ObjectWrap {
 public:
     static void Init(Local<Object> exports);
+    PathFinding* getPathFinding();
 
 private:
     static void New(const Nan::FunctionCallbackInfo<Value> &args);
@@ -23,7 +27,7 @@ private:
     static void addObstacle(const Nan::FunctionCallbackInfo<Value> &args);
     static void removeObstacle(const Nan::FunctionCallbackInfo<Value> &args);
 
-    PathFinding *pathFinding;
+    PathFinding* pathFinding;
 };
 
 NODE_MODULE(PathFindingBinder, PathFindingBinder::Init)
