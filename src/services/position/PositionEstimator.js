@@ -8,14 +8,19 @@ class PositionEstimator extends EventEmitter {
     constructor() {
         super();
 
+        let object = this;
+
         // Set default position
         this.point = new Point(0, 0);
 
+        this.processPositionChange.bind(this);
+
         // Subscribe on drivers
         this.drivers = driverManager.getDataProviderDrivers('position');
-
         for (var driverName in this.drivers) {
-            this.drivers[driverName].on('positionChanged', this.processPositionChange);
+            this.drivers[driverName].on('positionChanged', (driverName, point, precision) => {
+                object.processPositionChange(driverName, point, precision);
+            });
         }
     }
 

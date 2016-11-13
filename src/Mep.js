@@ -101,7 +101,7 @@ var Mep = {
         this.positionService =
             new (require('./services/position/PositionService'))(Config.get('Services:PositionService'));
 
-        this.pathService =  new (require('./services/position/PositionService'))({});
+        this.pathService =  new (require('./services/path/PathService'))({});
     }
 };
 

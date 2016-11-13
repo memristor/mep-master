@@ -13,10 +13,18 @@ class InitTask extends Task {
     }
 
     onRun() {
-        position.set(new TunedPoint(600, 0), {speed: 100})
-            .then(() => { return position.set(new TunedPoint(300, 0)) })
-            .then(() => { return position.set(new TunedPoint(600, 0)) })
-            .then(() => { return position.set(new TunedPoint(0, 0)) });
+        setTimeout(() => {
+            position.set(new TunedPoint(600, 0), {speed: 100})
+                .then(() => {
+                    return position.set(new TunedPoint(300, 0))
+                })
+                .then(() => {
+                    return position.set(new TunedPoint(600, 0))
+                })
+                .then(() => {
+                    return position.set(new TunedPoint(0, 0))
+                });
+        }, 200);
     }
 
 }
