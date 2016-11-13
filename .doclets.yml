@@ -8,3 +8,4 @@ articles:
   - Install on Windows: docs/Install_on_Windows.md
   - Services vs Drivers: docs/Services_vs_Drivers.md
   - Setting up ElastiSearch: docs/Setting_Up_ElasticSearch.md
+  - Simulator: docs/Simulator.md

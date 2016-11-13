@@ -1,4 +1,6 @@
 const WebSocket = require('ws').Server;
+const OpenUrl = require('openurl');
+const Path = require('path');
 
 // Start server
 let wss = new WebSocket({ port: 8080 });
@@ -20,3 +22,6 @@ wss.on('connection', (socket) => {
 wss.on('error', (err) => {
     console.log('Error: ', err);
 });
+
+// Open a simulator
+OpenUrl.open('file://' + Path.join(__dirname, 'index.html'));

@@ -19,7 +19,7 @@ class InitTask extends Task {
                     return position.set(new TunedPoint(300, 0))
                 })
                 .then(() => {
-                    return position.set(new TunedPoint(600, 0))
+                    return position.set(new TunedPoint(600, 200))
                 })
                 .then(() => {
                     return position.set(new TunedPoint(0, 0))
