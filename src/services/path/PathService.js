@@ -1,5 +1,6 @@
 const Point = Mep.require('types/Point');
 const Polygon = Mep.require('types/Polygon');
+const PathFinding = require('./pathfinding/PathFinding');
 const driverManager = Mep.getDriverManager();
 
 const TAG = 'PathService';
@@ -10,8 +11,9 @@ const TAG = 'PathService';
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
 class PathService {
-    constructor() {
+    constructor(config) {
         this.obstacles = [];
+        this.pf = new PathFinding(2000, 0, 3000, 0);
 
         this.processObstacleDetection.bind(this);
 
@@ -31,19 +33,26 @@ class PathService {
         }
     }
 
-    addObstacle(polygon, addToPathFinding = true) {
-        let that = this;
+    search(start, goal) {
+        let points = [];
+        let pointPairs = this.pf.search(start, goal);
 
-        // Add to local list
+        // Convert to `Array<Point>`
+        for (let point of pointPairs) {
+            points.push(new Point(point.x, point.y));
+
+        }
+        return points;
+    }
+
+    addObstacle(polygon) {
         this.obstacles.push(polygon);
-        polygon.setId(1);
+        let id = this.pf.addObstacle(polygon.getPoints());
+        polygon.setId(id);
 
-        // Remove obstacle after timeout
-        setTimeout(() => {
-            that.removeObstacle(polygon.getId());
-        }, polygon.getDuration());
+        Mep.Log.debug(TAG, 'Obstacle Added', polygon);
 
-        return 1;
+        return id;
     }
 
     removeObstacle(id) {
@@ -53,12 +62,11 @@ class PathService {
                 this.obstacles.splice(i, 1);
 
                 // Try to remove from path finding algorithm
-                // TODO: pf.remove...
-
+                this.pf.removeObstacle(id);
+                Mep.Log.debug(TAG, 'Obstacle Removed', id);
                 return true;
             }
         }
-
         return false;
     }
 }

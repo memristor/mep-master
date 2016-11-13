@@ -12,23 +12,6 @@ class Polygon {
         this.source = source;
         this.points = points;
         this.id = null;
-        this.pfId = null;
-    }
-
-    /**
-     * Get specific ID for path finding algorithm
-     * @returns {Number} - ID for path finding algorithm
-     */
-    getPfId() {
-        return this.pfId;
-    }
-
-    /**
-     * Set specific ID for path finding algorithm
-     * @param pfId - Specific ID for path finding algorithm
-     */
-    setPfId(pfId) {
-        this.pfId = pfId;
     }
 
     getId() {
