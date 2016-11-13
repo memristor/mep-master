@@ -17,5 +17,11 @@
       "class": "drivers/laser/LaserDriver",
       "load": true
     }
+  },
+
+  "Services": {
+    "PathService": {
+      "staticObstacles": []
+    }
   }
 }

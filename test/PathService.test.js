@@ -1,10 +1,10 @@
 const should = require('should');
-const TerrainService = Mep.require('services/path/PathService');
+const PathService = Mep.require('services/path/PathService');
 const Point = Mep.require('types/Point');
 const Polygon = Mep.require('types/Polygon');
 
 describe('PathService', () => {
-    let pathService = new TerrainService();
+    let pathService = new PathService({ staticObstacles: [] });
     let points = [
         new Point(1, 1),
         new Point(100, 1),
