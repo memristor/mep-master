@@ -29,7 +29,7 @@ class PositionEstimator extends EventEmitter {
     }
 
     getPosition() {
-        return this.point();
+        return this.point;
     }
 }
 

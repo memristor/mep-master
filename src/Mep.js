@@ -73,6 +73,10 @@ var Mep = {
         return this.positionService;
     },
 
+    getPathService() {
+        return this.pathService;
+    },
+
     /**
      * Provides an instance of the DriverManager.
      * @memberof Mep
@@ -96,6 +100,8 @@ var Mep = {
 
         this.positionService =
             new (require('./services/position/PositionService'))(Config.get('Services:PositionService'));
+
+        this.pathService =  new (require('./services/position/PositionService'))({});
     }
 };
 

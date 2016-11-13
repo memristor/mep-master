@@ -58,7 +58,43 @@ class PositionService {
         tolerance = this.config.moveOptions.tolerance,
         speed = this.config.moveOptions.speed
     } = {}) {
+        let object = this;
+        let destinationPoint = tunedPoint.getPoint();
+        let points = [];
 
+        // Apply relative
+        if (relative === true) {
+            destinationPoint.setX(destinationPoint.getX() + this.positionEstimator.getPosition().getX())
+            destinationPoint.setY(destinationPoint.getY() + this.positionEstimator.getPosition().getY())
+        }
+
+        // Apply path finding
+        if (pathfinding === true) {
+            points = Mep.getPathService().search(
+                this.positionEstimator.getPosition(),
+                destinationPoint
+            );
+        } else {
+            points = [destinationPoint];
+        }
+
+        return new Promise((resolve, reject) => {
+            function goToNext() {
+                let point;
+                if (points.length > 0) {
+                    point = points[0];
+                    points.splice(0, 1);
+                    object.basicSet(point, direction, tolerance, speed).then(goToNext);
+                    return;
+                }
+                resolve();
+            }
+
+            goToNext();
+        });
+    }
+
+    basicSet(point, direction, tolerance, speed) {
         // Set speed
         if (this.currentSpeed !== speed) {
             this.currentSpeed = speed;
@@ -66,7 +102,6 @@ class PositionService {
         }
 
         // Move the robot
-        var point = tunedPoint.getPoint();
         this.motionDriver.moveToPosition(
             point.getX(),
             point.getY(),
@@ -75,7 +110,7 @@ class PositionService {
                 MotionDriverConstants.DIRECTION_FORWARD
         );
 
-        Mep.Log.debug(TAG, 'Robot move command sent.', tunedPoint.getPoint());
+        Mep.Log.debug(TAG, 'Robot move command sent.', point);
 
         // Check when robot reached the position
         return new Promise((resolve, reject) => {
@@ -88,7 +123,7 @@ class PositionService {
     }
 
     rotate(tunedAngle, options) {
-
+        // TODO
     }
 }
 

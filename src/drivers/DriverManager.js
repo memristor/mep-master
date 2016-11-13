@@ -50,6 +50,12 @@ class DriverManager {
                         let driverInstance = new ModuleClass(driverIdentifier, moduleConfig);
                         this.drivers[driverIdentifier] = driverInstance;
                         Mep.Log.debug(TAG, 'Driver `' + driverIdentifier + '` loaded');
+
+                        // Check for `provides()` method
+                        if (typeof driverInstance.provides !== 'function') {
+                            Mep.Log.warn(TAG, driverIdentifier, 'doesn\'t have member provides()');
+                        }
+
                     } catch (error) {
                         this.putDriverOutOfOrder(driverIdentifier, error);
                     }
@@ -118,7 +124,6 @@ class DriverManager {
 
             // Check if driver has defined list of data types which can provide
             if (typeof this.drivers[driverKey].provides !== 'function') {
-                Mep.Log.warn(TAG, driverKey, 'doesn\'t have member provides()');
                 continue;
             }
 
