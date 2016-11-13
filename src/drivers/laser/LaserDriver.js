@@ -37,6 +37,7 @@ class LaserDriver extends EventEmitter {
      * @param config.laserY {Number} - Sensor translated on y coordinate
      * @param config.functionAddress {Number} - Function address of Modbus coil
      * @param config.slaveAddress {Number} - Slave address of Modbus coil
+     * @param config.objectSize {Number} - Approximation coefficient for obstacle size. Distance between edges and point of interest.
      */
     constructor(name, config) {
         super();
@@ -71,14 +72,18 @@ class LaserDriver extends EventEmitter {
         this.x += config.laserX;
         this.y += config.laserY;
 
+        // Approximation of detected object
+        this.pointOfInterest = new Point(this.x, this.y);
         let points = [
-            new Point(this.x, this.y),
-            new Point(this.x, this.y),
-            new Point(this.x, this.y),
-            new Point(this.x, this.y)
+            new Point(this.x - config.objectSize, this.y - config.objectSize),
+            new Point(this.x + config.objectSize, this.y - config.objectSize),
+            new Point(this.x + config.objectSize, this.y + config.objectSize),
+            new Point(this.x - config.objectSize, this.y + config.objectSize)
         ];
         this.polygon = new Polygon(name, 2000, points);
-        this.centerPoint = new Point(this.x, this.y);
+
+        // Additional information
+        this.front = (config.laserAngle > 0 && config.laserAngle < 180) ? true : false;
 
         Mep.Log.debug(TAG, name, 'Detects at ', this.x, this.y);
     }
@@ -90,21 +95,31 @@ class LaserDriver extends EventEmitter {
      * @param state {boolean} - Object is detected or not
      */
     processDetection(state) {
+        if (this.front === true) {
+            /**
+             * Obstacle detected on the robot's path event. We need to stop robot as fast as possible.
+             * @event LaserDriver#pathObstacleDetected
+             * @property {Boolean} - Obstacle is detected
+             */
+            this.emit('pathObstacleDetected', state);
+        }
+
         /**
          * Obstacle detected event.
          *
-         * @event LaserDriver#terrain
+         * @event LaserDriver#obstacleDetected
          * @property {Point} - Center of detected obstacle
          * @property {Polygon} - Obstacle is approximated with a polygon
          * @property {Boolean} - Is objected detected or not
+         * @property {Object} - Additional information about detected object
          */
-        this.emit('obstacleDetected', this.centerPoint, this.polygon, state);
+        this.emit('obstacleDetected', this.pointOfInterest, this.polygon, state);
 
         Mep.Log.debug(TAG, 'Detected at', this.x, this.y);
     }
 
     provides() {
-        return ['path'];
+        return ['terrain'];
     }
 }
 

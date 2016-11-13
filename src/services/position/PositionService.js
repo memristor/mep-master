@@ -6,41 +6,37 @@ const TAG = 'PositionService';
 
 /**
  * Provides a very abstract way to control and estimate robot position
- * @class
+ *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
 class PositionService {
     constructor(config) {
-        var that = this;
-
         this.config = config;
         this.currentSpeed = 100;
         this.positionEstimator = new PositionEstimator();
-        this.modbusDriver = driverManager.getDriver('ModbusDriver');
         this.motionDriver = null;
-        this.motionDriverAvailable = true;
 
+        // Prepare methods
+        this.startAvoidingStrategy.bind(this);
 
         // Check if driver is active
         if (driverManager.isDriverAvailable('MotionDriver') === true) {
             this.motionDriver = driverManager.getDriver('MotionDriver');
         } else {
-            this.motionDriverAvailable = false;
             Mep.Log.warn(TAG, 'No motion driver available');
         }
 
-        // Subscribe to stop
-        for (let iSlaveAddress = 1; iSlaveAddress <= 1; iSlaveAddress++) {
-            for (let iFunctionAddress = 0; iFunctionAddress <= 9; iFunctionAddress++) {
-                this.modbusDriver.registerCoilReading(iSlaveAddress, iFunctionAddress);
-            }
+        // Subscribe on sensors that can provide obstacles on the robot's path
+        this.drivers = driverManager.getDataProviderDrivers('terrain');
+        for (var driverName in this.drivers) {
+            this.drivers[driverName].on('pathObstacleDetected', this.startAvoidingStrategy);
         }
+    }
 
-        this.modbusDriver.on('coilChanged', function (slaveAddress, functionAddress, state, id) {
-            if (that.motionDriverAvailable === true) {
-                that.motionDriver.stop();
-            }
-        });
+    startAvoidingStrategy(state) {
+        if (state === true) {
+            this.motionDriver.stop();
+        }
     }
 
     /**

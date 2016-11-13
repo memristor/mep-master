@@ -6,6 +6,18 @@
 
     "ModbusDriver": {
       "class": "drivers/modbus/ModbusDriverSimulator"
+    },
+
+    "LaserFrontLeft": {
+      "class": "drivers/laser/LaserDriver",
+      "load": true,
+      "laserMaxDistance": 100,
+      "laserAngle": 90,
+      "laserX": 0,
+      "laserY": 0,
+      "functionAddress": 1,
+      "slaveAddress": 5,
+      "objectSize": 100
     }
   }
 }
