@@ -37,7 +37,7 @@ class MotionDriverSimulator extends EventEmitter {
         super();
 
         let that = this;
-        this.processEventData.bind(this);
+        this._processEventData.bind(this);
         this.name = name;
         this.config = config;
 
@@ -47,13 +47,12 @@ class MotionDriverSimulator extends EventEmitter {
         this.ws = WebSocketClient.getInstance();
         this.opened = false;
         this.ws.on('open', () => { that.opened = true; });
-        this.ws.on('message', (data) => { that.processEventData(data); });
-        this.ws.on('error', () => { Mep.Log.error(TAG, 'Please run simulator server first'); });
+        this.ws.on('message', (data) => { that._processEventData(data); });
 
         Mep.Log.debug(TAG, 'Driver with name', name, 'initialized');
     }
 
-    processEventData(data) {
+    _processEventData(data) {
         let that = this;
         let eventObject = JSON.parse(data);
 
@@ -85,7 +84,7 @@ class MotionDriverSimulator extends EventEmitter {
      * @param {MotionDirection} direction - MotionDirection.FORWARD or MotionDirection.BACKWARD
      */
     moveToPosition(x, y, direction) {
-        this.sendToSimulator('moveToPosition', {
+        this._sendToSimulator('moveToPosition', {
             x: x,
             y: y,
             direction: direction
@@ -96,16 +95,12 @@ class MotionDriverSimulator extends EventEmitter {
      * Send data to simulator
      * @param {Object} params - Specific set of params for each command
      */
-    sendToSimulator(command, params) {
-        if (this.opened == true) {
-            this.ws.send(JSON.stringify({
-                robot: 'robot:' + Mep.Config.get('robot'),
-                command: command,
-                params: params
-            }));
-        } else {
-            Mep.Log.warn(TAG, 'Server is not opened');
-        }
+    _sendToSimulator(command, params) {
+        this.ws.send(JSON.stringify({
+            robot: 'robot:' + Mep.Config.get('robot'),
+            command: command,
+            params: params
+        }));
     }
 }
 
