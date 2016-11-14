@@ -3,17 +3,19 @@
 const TAG = 'DriverManager';
 
 /**
- * <p>Control drivers implemented in the platform.</p>
+ * <p>Class manipulate drivers</p>
  *
- * The main goals of DriverManager are:
+ * DriverManager provides mechanisms to:
  * <ul>
- *  <li>driver initialization and passing arguments dependent to configuration,</li>
- *  <li>filter drivers by data which they provide,</li>
+ *  <li>initialize and configure drivers based on config files,</li>
+ *  <li>return instance of driver by driver unique identifier,</li>
+ *  <li>filter drivers by groups,</li>
  *  <li>check if driver is available,</li>
- *  <li>monitor if driver is active and to try to recover if it is not (not implemented yet).</li>
+ *  <li>resolve dependencies and</li>
+ *  <li>put driver out of order or recover driver if it is possible.</li>
  * </ul>
  *
- * List of of data types which driver can provide: control, path & position.
+ * Each driver can be part of one or more of following groups: control, path & position.
  *
  * @memberof drivers
  * @author Darko Lukic <lukicdarkoo@gmail.com>
@@ -22,6 +24,7 @@ class DriverManager {
     constructor() {
         this.drivers = {};
         this.driversOutOfOrder = {};
+        this.initialized = false;
     }
 
 
@@ -29,42 +32,79 @@ class DriverManager {
      * Initialize all drivers
      */
     init() {
+        // Protect from multiple initialization
+        if (this.initialized === true) {
+            return;
+        }
+        this.initialized = true;
+        
         // Drivers initialization
         let config = Mep.Config.get('Drivers');
 
         for (let driverIdentifier in config) {
-            if (config.hasOwnProperty(driverIdentifier) == false) {
+            if (config.hasOwnProperty(driverIdentifier) === false) {
                 continue;
             }
 
-            let moduleConfig = config[driverIdentifier];
-            let load = moduleConfig.load;
-            let classPath = moduleConfig.class;
+            // Initialize driver
+            this._initDriver(config, driverIdentifier);
+        }
+    }
 
-            // Do not initialize if `init field == false`
-            if (load != false) {
-                let ModuleClass = Mep.require(classPath);
+    _initDriver(config, driverIdentifier) {
+        let moduleConfig = config[driverIdentifier];
 
-                if (typeof ModuleClass === 'function') {
-                    try {
-                        let driverInstance = new ModuleClass(driverIdentifier, moduleConfig);
-                        this.drivers[driverIdentifier] = driverInstance;
-                        Mep.Log.debug(TAG, 'Driver `' + driverIdentifier + '` loaded');
+        if (this.isDriverAvailable(driverIdentifier) || this.isDriverOutOfOrder(driverIdentifier)) {
+            return;
+        }
 
-                        // Check for `provides()` method
-                        if (typeof driverInstance.provides !== 'function') {
-                            Mep.Log.warn(TAG, driverIdentifier, 'doesn\'t have member provides()');
-                        }
+        // Load driver
+        let load = moduleConfig.load;
+        let classPath = moduleConfig.class;
 
-                    } catch (error) {
-                        this.putDriverOutOfOrder(driverIdentifier, error);
+        // Do not initialize if `init field == false`
+        if (load != false) {
+            let ModuleClass = Mep.require(classPath);
+
+            // Resolve dependencies
+            if (typeof ModuleClass.dependencies === 'function') {
+                this._resolveDependencies(config, ModuleClass.dependencies());
+            }
+
+            if (typeof ModuleClass === 'function') {
+                try {
+                    let driverInstance = new ModuleClass(driverIdentifier, moduleConfig);
+                    this.drivers[driverIdentifier] = driverInstance;
+                    Mep.Log.debug(TAG, 'Driver `' + driverIdentifier + '` loaded');
+
+                    // Check for `provides()` method
+                    if (typeof driverInstance.provides !== 'function') {
+                        Mep.Log.warn(TAG, driverIdentifier, 'doesn\'t have member provides()');
                     }
-                }
 
-                 else {
-                    Mep.Log.error(TAG, 'There is no module on path', modulePath);
+                } catch (error) {
+                    this.putDriverOutOfOrder(driverIdentifier, error);
                 }
             }
+
+            else {
+                Mep.Log.error(TAG, 'There is no module on path', modulePath);
+            }
+        }
+    }
+
+    _resolveDependencies(config, dependecies) {
+        for (let dependentDriverIdentifier of dependecies) {
+            if (this.isDriverAvailable(dependentDriverIdentifier) === true) {
+                continue;
+            }
+
+            if (this.isDriverOutOfOrder(dependentDriverIdentifier) === true) {
+                this.putDriverOutOfOrder(driverIdentifier,
+                    'Cannot resolve dependency: ' + dependentDriverIdentifier);
+            }
+
+            this._initDriver(config, dependentDriverIdentifier);
         }
     }
 

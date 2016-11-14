@@ -121,6 +121,10 @@ class LaserDriver extends EventEmitter {
     provides() {
         return ['terrain'];
     }
+
+    static dependencies() {
+        return ['ModbusDriver'];
+    }
 }
 
 module.exports = LaserDriver;
