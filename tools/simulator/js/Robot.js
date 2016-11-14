@@ -3,36 +3,46 @@ const ROBOT_PERIOD = 1;
 
 class Robot {
     constructor(x, y, widht, height) {
+        let robot = this;
+
         this.width = widht;
         this.height = height;
         this.startX = x;
         this.startY = y;
         this.x = x;
         this.y = y;
+        this.angle = 0;
 
         this.visualScaleWidth = 1;
         this.visualScaleHeight = 1;
 
         // Default node properties
         this.node = document.createElement('div');
-        this.node.style.backgroundColor = 'red';
-        this.node.style.borderColor = 'black';
-        this.node.style.borderWidth = '1px';
+        this.node.style.backgroundColor = '#333';
+        this.node.style.borderColor = 'red';
+        this.node.style.borderWidth = '3px';
         this.node.style.borderStyle = 'solid';
         this.node.style.position = 'relative';
-        this.node.addEventListener('mousedown', this.onMouseDown);
-        this.node.addEventListener('mousemove', this.onMouseMove);
+        this.node.style.boxShadow = '0px 0px 10px #000000';
+        this.node.addEventListener('mousedown', () => { robot.onMouseDown(); });
+        this.node.addEventListener('mousemove', (e) => { robot.onMouseMove(e); });
         this.node.addEventListener('mouseup', this.onMouseUp);
 
-        //this.moveActive = false;
-        //this.onMouseDown.bind(this);
-        //this.onMouseMove.bind(this);
-        //this.onMouseUp.bind(this);
 
         // Default robot properties
         this.setDimensions(this.width, this.height);
         this.setPosition(this.x, this.y);
     }
+
+    onMouseDown() {
+        this.moveActive = true;
+    }
+
+    onMouseMove(e) {
+        console.log(e);
+    }
+
+    onMouseUp() { }
 
     getNode() {
         return this.node;
@@ -49,6 +59,8 @@ class Robot {
         let startY = this.y;
         let destinationX = x;
         let destinationY = y;
+
+        let destinationAngle = Math.tan((destinationY - startY) / (destinationX - startX)) * (180 / Math.PI);
 
         let determineY = (tempX) => {
             return ((destinationY - startY) / (destinationX - startX)) * (tempX - startX) + startY;
@@ -73,7 +85,20 @@ class Robot {
             }, ROBOT_PERIOD);
         };
 
-        move();
+        let rotate = () => {
+            setTimeout(() => {
+                robot.angle = (destinationAngle < robot.angle) ? robot.angle - 1 : robot.angle + 1;
+                robot.setAngle(robot.angle);
+
+                if (Math.abs(robot.angle - destinationAngle) < 2) {
+                    move();
+                } else {
+                    rotate();
+                }
+            }, 30);
+        };
+
+        rotate();
     }
 
     setVisualScale(width, height) {
@@ -100,6 +125,11 @@ class Robot {
 
     setSimulationPosition(x, y) {
         this.setPosition(this.startX + x, this.startY + y);
+    }
+
+    setAngle(angle) {
+        this.angle = angle;
+        this.node.style.transform = 'rotate(' + angle + 'deg)';
     }
 
     getSimulatedPosition(x, y) {

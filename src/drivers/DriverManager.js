@@ -37,7 +37,7 @@ class DriverManager {
             return;
         }
         this.initialized = true;
-        
+
         // Drivers initialization
         let config = Mep.Config.get('Drivers');
 
