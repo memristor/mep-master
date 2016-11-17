@@ -19,7 +19,7 @@ class InitTask extends Task {
                     return position.set(new TunedPoint(2370, 1130), { pathfinding: true })
                 })
                 .then(() => {
-                    return position.set(new TunedPoint(0, 0))
+                    return position.set(new TunedPoint(30, 30), { pathfinding: true })
                 });
         }, 200);
     }

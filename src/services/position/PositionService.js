@@ -70,11 +70,10 @@ class PositionService {
 
         // Apply path finding
         if (pathfinding === true) {
-            points = Mep.getPathService().search(
-                this.positionEstimator.getPosition(),
-                destinationPoint
-            );
-            Mep.Log.debug(TAG, 'Start path finding', points);
+            let currentPoint = this.positionEstimator.getPosition();
+
+            points = Mep.getPathService().search(currentPoint, destinationPoint);
+            Mep.Log.debug(TAG, 'Start path finding', points, 'from point', currentPoint);
         } else {
             points = [destinationPoint];
         }

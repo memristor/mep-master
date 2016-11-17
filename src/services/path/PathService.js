@@ -66,7 +66,7 @@ class PathService {
         Mep.Log.debug(TAG, 'Obstacle Added', polygon);
 
         setTimeout(() => {
-            pathService.removeObstacle(id);
+            //pathService.removeObstacle(id);
         }, polygon.getDuration());
 
         return id;

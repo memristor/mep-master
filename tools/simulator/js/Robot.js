@@ -18,12 +18,12 @@ class Robot {
 
         // Default node properties
         this.node = document.createElement('div');
-        this.node.style.backgroundColor = '#333';
-        this.node.style.borderColor = 'red';
-        this.node.style.borderWidth = '3px';
+        this.node.style.backgroundColor = 'red';
+        this.node.style.borderColor = 'black';
+        this.node.style.borderWidth = '1px';
         this.node.style.borderStyle = 'solid';
         this.node.style.position = 'relative';
-        this.node.style.boxShadow = '0px 0px 10px #000000';
+        this.node.style.boxShadow = '10px 0px 20px #000000';
         this.node.addEventListener('mousedown', () => { robot.onMouseDown(); });
         this.node.addEventListener('mousemove', (e) => { robot.onMouseMove(e); });
         this.node.addEventListener('mouseup', this.onMouseUp);
