@@ -56,7 +56,9 @@ class MotionDriver extends MotionDriverBinder {
         super(
             true,
             config.startX,
-            config.startY
+            config.startY,
+            config.startOrientation,
+            config.startSpeed
         );
         this.name = name;
         this.config = config;

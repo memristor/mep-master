@@ -11,6 +11,8 @@
             "load": true,
             "startX": 0,
             "startY": 0,
+            "startOrientation": 90,
+            "startSpeed": 100,
             "refreshDataPeriod": 100,
             "precision": 2
         },

@@ -52,13 +52,15 @@ void MotionDriverBinder::New(const Nan::FunctionCallbackInfo<Value> &args) {
     // Get params
     Point2D initPosition;
 
-    if (args.Length() < 3 ||
+    if (args.Length() != 5 ||
         args[0]->IsBoolean() == false ||
         args[1]->IsInt32() == false ||
-        args[2]->IsInt32() == false) {
+        args[2]->IsInt32() == false ||
+        args[3]->IsInt32() == false ||
+        args[4]->IsInt32() == false) {
 
         args.GetIsolate()->ThrowException(Exception::TypeError(
-            Nan::New("Constructor prototype is (boolean log, int startX, int startY)").ToLocalChecked()
+            Nan::New("Constructor prototype is (boolean log, int startX, int startY, int startOrientation, int startSpeed)").ToLocalChecked()
         ));
         return;
     }
@@ -77,7 +79,14 @@ void MotionDriverBinder::New(const Nan::FunctionCallbackInfo<Value> &args) {
     initPosition = Point2D(args[1]->Int32Value(), args[2]->Int32Value());
 
     // Create object
-    MotionDriverBinder *motionDriverBinder = new MotionDriverBinder(initPosition);
+    MotionDriverBinder *motionDriverBinder =
+        new MotionDriverBinder(
+            initPosition,
+            MotionDriver::VELIKI,
+            args[3]->Int32Value(),
+            args[4]->Int32Value()
+        );
+
     motionDriverBinder->Wrap(args.This());
 
     args.GetReturnValue().Set(args.This());

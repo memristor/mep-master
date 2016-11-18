@@ -22,6 +22,12 @@ class InitTask extends Task {
                     return position.set(new TunedPoint(30, 30), { pathfinding: true })
                 });
         }, 200);
+
+        /*
+        hand.open();
+        await position.set(new TunedPoint(2370, 1130), { pathfinding: true });
+        await position.set(new TunedPoint(30, 30), { pathfinding: true });
+        */
     }
 
 }
