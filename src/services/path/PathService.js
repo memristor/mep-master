@@ -23,7 +23,7 @@ class PathService {
             for (let point of pointsArray) {
                 points.push(new Point(point.x, point.y));
             }
-            let polygon = new Polygon('static', 900 * 1000, points);
+            let polygon = new Polygon('static', Infinity, points);
 
             this.addObstacle(polygon);
         }

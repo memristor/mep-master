@@ -84,7 +84,7 @@ class PositionService {
                 if (points.length > 0) {
                     point = points[0];
                     points.splice(0, 1);
-                    object.basicSet(point, direction, tolerance, speed).then(goToNext);
+                    object._basicSet(point, direction, tolerance, speed).then(goToNext);
                     return;
                 }
                 resolve();
@@ -94,7 +94,7 @@ class PositionService {
         });
     }
 
-    basicSet(point, direction, tolerance, speed) {
+    _basicSet(point, direction, tolerance, speed) {
         // Set speed
         if (this.currentSpeed !== speed) {
             this.currentSpeed = speed;
