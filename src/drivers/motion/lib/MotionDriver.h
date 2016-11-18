@@ -15,7 +15,7 @@
 #include <string>
 #include "UartConnection.h"
 #include "Point2D.h"
-#include "easylogging++.h"
+// #include "Log.h"
 
 namespace motion
 {

@@ -2,9 +2,7 @@
 
 #define TAG "MotionDriverBinder "
 
-INITIALIZE_EASYLOGGINGPP
-
-
+LOG_INIT
 
 class AsyncRefreshDataWorker : public Nan::AsyncWorker {
 public:
@@ -66,14 +64,11 @@ void MotionDriverBinder::New(const Nan::FunctionCallbackInfo<Value> &args) {
     }
 
     // Set log level
-    el::Configurations defaultConf;
-    defaultConf.setToDefault();
-    defaultConf.setGlobally(el::ConfigurationType::ToFile, "false");
-    defaultConf.setGlobally(el::ConfigurationType::Format, "%datetime %level %msg");
-    defaultConf.setGlobally(el::ConfigurationType::Enabled, args[0]->BooleanValue() ? "true" : "false");
-    defaultConf.set(el::Level::Warning, el::ConfigurationType::Enabled, "true");
-    defaultConf.set(el::Level::Error, el::ConfigurationType::Enabled, "true");
-    el::Loggers::reconfigureLogger("default", defaultConf);
+    if (args[0]->BooleanValue() == true) {
+        LOG::setLevel(INFO);
+    } else {
+        LOG::setLevel(INFO);
+    }
 
     // Create a starting point
     initPosition = Point2D(args[1]->Int32Value(), args[2]->Int32Value());

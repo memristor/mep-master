@@ -1,5 +1,7 @@
 #include "ModbusDriverBinder.h"
 
+LOG_INIT
+
 #define TAG "ModbusDriverBinder "
 
 ModbusDriverBinder::ModbusDriverBinder(Callback *callback) {
@@ -61,14 +63,11 @@ void ModbusDriverBinder::New(const Nan::FunctionCallbackInfo<Value> &args) {
     }
 
     // Set log level
-    el::Configurations defaultConf;
-    defaultConf.setToDefault();
-    defaultConf.setGlobally(el::ConfigurationType::ToFile, "false");
-    defaultConf.setGlobally(el::ConfigurationType::Format, "%datetime %level %msg");
-    defaultConf.setGlobally(el::ConfigurationType::Enabled, args[0]->BooleanValue() ? "true" : "false");
-    defaultConf.set(el::Level::Warning, el::ConfigurationType::Enabled, "true");
-    defaultConf.set(el::Level::Error, el::ConfigurationType::Enabled, "true");
-    el::Loggers::reconfigureLogger("default", defaultConf);
+    if (args[0]->BooleanValue() == true) {
+        LOG::setLevel(INFO);
+    } else {
+        LOG::setLevel(INFO);
+    }
 
     // Apply arguments
     Callback *callback = new Callback(args[1].As<v8::Function>());

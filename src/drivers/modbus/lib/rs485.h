@@ -7,7 +7,7 @@
 #include <termios.h> /* included for functions and defines used in set_interface_attribs */
 #include <unistd.h>  /* included for function write() */
 #include <string.h>  /* included for memset */
-#include "easylogging++.h"
+#include "Log.h"
 
 //int set_interface_attribs(int fd, int speed, int parity);
 

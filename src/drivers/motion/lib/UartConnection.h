@@ -9,7 +9,7 @@
 #define UART_H_
 
 #include <termios.h>
-#include "easylogging++.h"
+#include "Log.h"
 
 #define MAX_RETRY_COUNT 5
 #define PRINT_RETRY_COUNT_EVERY 200

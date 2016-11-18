@@ -1,9 +1,7 @@
-#define _ELPP_NO_DEFAULT_LOG_FILE
-
 #include <nan.h>
 #include "MotionDriver.h"
 #include "Point2D.h"
-#include "easylogging++.h"
+#include "Log.h"
 
 using motion::MotionDriver;
 using geometry::Point2D;

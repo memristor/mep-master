@@ -18,7 +18,7 @@ ModbusClientSW::ModbusClientSW(): m_mutex(new mutex()){
     config.errorTimeout = 1000;
     currentInstruction.instruction = NONE;
 
-    LOG(INFO) << TAG << "Client Created" << endl;
+    LOG(INFO) << TAG << "Client Created";
 }
 
 
@@ -251,7 +251,7 @@ bool ModbusClientSW::writeRegister(writeData _data){
     }
 
     if (!success){
-        LOG(ERROR) << TAG << "Problem in electronics";
+        LOG(LogType::ERROR) << TAG << "Problem in electronics";
         errorElectronic = ERROR;
     }
 
@@ -279,7 +279,7 @@ bool ModbusClientSW::writeCoil(writeData _data){
     }
 
     if (!success){
-        LOG(ERROR) << TAG << "Problem in electronics";
+        LOG(LogType::ERROR) << TAG << "Problem in electronics";
         errorElectronic = ERROR;
     }
 
@@ -301,7 +301,7 @@ bool ModbusClientSW::readCoil(unsigned char _slave_address, short _function_addr
     }
 
     if (!success){
-        LOG(ERROR) << TAG << "Problem in electronics";
+        LOG(LogType::ERROR) << TAG << "Problem in electronics";
         errorElectronic = ERROR;
         *_callFunction = false;
         return false;
@@ -318,7 +318,7 @@ bool ModbusClientSW::readCoil(unsigned char _slave_address, short _function_addr
     }else if(data == '0'){
         *_callFunction = false;
     }else{
-        LOG(ERROR) << TAG << "Error in checking state";
+        LOG(LogType::ERROR) << TAG << "Error in checking state";
         *_callFunction = false;
     }
 
@@ -341,7 +341,7 @@ bool ModbusClientSW::readRegister(unsigned char _slaveAddress, short _functionAd
     }
 
     if (!success){
-        LOG(ERROR) << TAG << "Problem in electronics";
+        LOG(LogType::ERROR) << TAG << "Problem in electronics";
         errorElectronic = ERROR;
         return false;
     }

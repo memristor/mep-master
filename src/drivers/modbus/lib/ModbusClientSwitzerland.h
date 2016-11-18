@@ -12,7 +12,7 @@
 #include <thread>
 #include <nan.h>
 #include <uv.h>
-#include "easylogging++.h"
+#include "Log.h"
 
 using namespace std;
 using Nan::AsyncProgressWorker;

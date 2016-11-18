@@ -82,7 +82,7 @@ void UartConnection::dumpReadGarbage()
 	char dump;
 	while(readUart(&dump, 1))
 	{
-		LOG(WARNING) << TAG << "Garbage detected = " << dump;
+		LOG(WARN) << TAG << "Garbage detected = " << dump;
 	}
 }
 
@@ -128,7 +128,7 @@ void UartConnection::readAll(char output[], int numOfBytes)
 
 		if(printCont % PRINT_RETRY_COUNT_EVERY == 0) {
 		    retryCount++;
-		    LOG(WARNING) << TAG << "UART spin, retry count " << retryCount * PRINT_RETRY_COUNT_EVERY;
+		    LOG(WARN) << TAG << "UART spin, retry count " << retryCount * PRINT_RETRY_COUNT_EVERY;
 		}
 
 		usleep(RETRY_DELAY);

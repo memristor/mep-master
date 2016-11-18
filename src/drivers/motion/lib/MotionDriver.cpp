@@ -99,8 +99,7 @@ void MotionDriver::moveToPosition(geometry::Point2D position, MovingDirection di
 
 void MotionDriver::moveArc(geometry::Point2D center, int angle, MovingDirection direction)
 {
-    LOG(INFO) << TAG << "moveArc(" << center.getX() << ", " << center.getY() <<
-        ", " << angle << ", " << (int)direction << ")";
+    LOG(INFO) << TAG << "moveArc(" << center.getX() << ", " << center.getY() << ", " << angle << ", " << (int)direction << ")";
 
 	lock_guard<mutex> lock(*io_mutex);
 
@@ -181,14 +180,13 @@ void MotionDriver::setSpeed(unsigned char speed)
     uart.readAll(&newSpeed, 1);
 
     if (newSpeed != speed){
-         LOG(ERROR) << TAG << "Speed is not set";
+         LOG(LogType::ERROR) << TAG << "Speed is not set";
     }
 }
 
 void MotionDriver::setPositionAndOrientation(const geometry::Point2D position, int orientation)
 {
-     LOG(INFO) << TAG << "setPositionAndOrientation(" << position.getX() << ", " <<
-        position.getY() << ", " << orientation << ")";
+     LOG(INFO) << TAG << "setPositionAndOrientation(" << position.getX() << ", " << position.getY() << ", " << orientation << ")";
 
 	lock_guard<mutex> lock(*io_mutex);
 
