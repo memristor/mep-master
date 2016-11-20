@@ -1,11 +1,5 @@
-const TERRAIN_WIDTH = 3000;
-const TERRAIN_HEIGHT = 2000;
-
-var terrain;
-var ws;
-var smallRobot;
-var bigRobot;
-
+let bigRobot;
+let ws;
 
 class App {
     constructor() {
@@ -14,14 +8,15 @@ class App {
 
         ws = new WebSocket("ws://127.0.0.1:8080");
 
-        terrain = new Terrain(document.getElementById('terrain'));
-        bigRobot = new Robot(150, 760, 230, 230);
+        let terrainConfig = new TerrainConfig();
+        let terrain = new Terrain(terrainConfig, document.getElementById('terrain'));
+        bigRobot = new Robot(terrainConfig, 0, -1300, 230, 230);
         terrain.addRobot(bigRobot);
 
+
         document.getElementById('terrain').addEventListener('mousemove', () => {
-            let cursorPosition = terrain.getCursorPosition();
             document.getElementById('cursorPosition').innerHTML =
-                JSON.stringify(bigRobot.getSimulatedPosition(cursorPosition.x, cursorPosition.y));
+                JSON.stringify(terrain.getCursorPosition());
         });
 
         ws.addEventListener('message', (e) => { app.onCommand(e); });
@@ -32,11 +27,11 @@ class App {
 
         switch (data.command) {
             case 'init':
-                bigRobot.setSimulationPosition(data.params.x, data.params.y);
+                bigRobot.setPosition(data.params.x, data.params.y);
                 break;
 
             case 'moveToPosition':
-                bigRobot.moveToSimulatedPosition(data.params.x, data.params.y);
+                bigRobot.moveToPosition(data.params.x, data.params.y);
                 break;
         }
     }
