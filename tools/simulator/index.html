@@ -1,12 +1,13 @@
 <html>
 <head>
+    <title>MES - Memristor's Eurobot Simulator</title>
+
     <script src="js/libs/Controller.js"></script>
     <script src="js/App.js"></script>
     <script src="js/Terrain.js"></script>
     <script src="js/TerrainConfig.js"></script>
     <script src="js/Point.js"></script>
     <script src="js/Robot.js"></script>
-
 
     <style>
         body {
@@ -15,21 +16,33 @@
 
         #terrain {
             margin: auto;
-            margin-top: 50px;
-            background-color: #666;
             width: 400px;
             height: 600px;
             background-image: url('images/terrain.png');
             background-size: cover;
+        }
+
+        #terrain-holder {
+            margin: auto;
+            /* Here goes cool design stuff */
         }
     </style>
 </head>
 
 
 <body>
-<div id="terrain"></div>
+<div id="terrain-holder">
+    <div id="terrain"></div>
+</div>
+
+
+<div id="control">
+    <button id="btn-rotate">Rotate</button>
+</div>
+
 <div id="info">
     <div id="cursorPosition"></div>
 </div>
+
 </body>
 </html>

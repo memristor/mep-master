@@ -13,6 +13,10 @@ class App {
         bigRobot = new Robot(terrainConfig, 0, -1300, 230, 230);
         terrain.addRobot(bigRobot);
 
+        document.getElementById('btn-rotate').addEventListener('click', () => {
+            terrain.rotate();
+        });
+
 
         document.getElementById('terrain').addEventListener('mousemove', () => {
             document.getElementById('cursorPosition').innerHTML =

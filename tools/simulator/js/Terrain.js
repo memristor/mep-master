@@ -21,6 +21,15 @@ class Terrain {
         });
     }
 
+    rotate() {
+        if (this.terrainConfig.terrainOrientation < 270) {
+            this.terrainConfig.terrainOrientation += 90;
+        } else {
+            this.terrainConfig.terrainOrientation = 0;
+        }
+        this.terrainNode.style.transform = 'rotate(' + this.terrainConfig.terrainOrientation + 'deg)';
+    }
+
     getCursorPosition() {
         return this.cursorCoordinates;
     }
