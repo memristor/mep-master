@@ -40,7 +40,9 @@ void MotionDriverBinder::Init(Local<Object> exports) {
 	Nan::SetPrototypeMethod(tmpl, "getPosition", getPosition);
 	Nan::SetPrototypeMethod(tmpl, "getState", getPosition);
 	Nan::SetPrototypeMethod(tmpl, "refreshData", refreshData);
-	Nan::SetPrototypeMethod(tmpl, "getData", refreshData);
+	Nan::SetPrototypeMethod(tmpl, "getData", getData);
+	Nan::SetPrototypeMethod(tmpl, "moveArc", moveArc);
+	Nan::SetPrototypeMethod(tmpl, "rotateTo", rotateTo);
 
     exports->Set(Nan::New("MotionDriverBinder").ToLocalChecked(), tmpl->GetFunction());
 }
@@ -214,6 +216,44 @@ void MotionDriverBinder::getState(const Nan::FunctionCallbackInfo<Value> &args) 
     MotionDriver::State state = motionDriver->getState();
 
     args.GetReturnValue().Set(state);
+}
+
+void MotionDriverBinder::rotateTo(const Nan::FunctionCallbackInfo<Value> &args) {
+	Nan::HandleScope scope;
+
+	if (args.Length() != 1 ||
+		args[0]->IsInt32() == false) {
+		
+			args.GetIsolate()->ThrowException(Exception::TypeError(
+		    Nan::New("Please check arguments. Expected arguments: (uint32 speed)").ToLocalChecked()
+		));
+	}
+
+	MotionDriver *motionDriver = ObjectWrap::Unwrap<MotionDriverBinder>(args.Holder())->getMotionDriver();
+	motionDriver->rotateTo(args[0]->Int32Value());
+}
+
+void MotionDriverBinder::moveArc(const Nan::FunctionCallbackInfo<Value> &args) {
+	Nan::HandleScope scope;
+
+	if (args.Length() != 4 ||
+		args[0]->IsInt32() == false ||
+		args[1]->IsInt32() == false ||
+		args[2]->IsInt32() == false ||
+		args[3]->IsInt32() == false) {
+
+		args.GetIsolate()->ThrowException(Exception::TypeError(
+		    Nan::New("Please check arguments").ToLocalChecked()
+		));
+    	}
+
+    	MotionDriver *motionDriver = ObjectWrap::Unwrap<MotionDriverBinder>(args.Holder())->getMotionDriver();
+
+    	Point2D center(args[0]->Int32Value(), args[1]->Int32Value());
+	int angle = args[2]->Int32Value();
+    	MotionDriver::MovingDirection direction = (args[3]->Int32Value() == 1) ? MotionDriver::FORWARD : MotionDriver::BACKWARD;
+
+    	motionDriver->moveArc(center, angle, direction);
 }
 
 void MotionDriverBinder::refreshData(const Nan::FunctionCallbackInfo<Value> &args) {

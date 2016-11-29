@@ -41,6 +41,8 @@ private:
 	static void refreshData(const Nan::FunctionCallbackInfo<Value> &args);
 	static void getState(const Nan::FunctionCallbackInfo<Value> &args);
 	static void getData(const Nan::FunctionCallbackInfo<Value> &args);
+	static void rotateTo(const Nan::FunctionCallbackInfo<Value> &args);
+	static void moveArc(const Nan::FunctionCallbackInfo<Value> &args);
 
     MotionDriver *motionDriver;
 };

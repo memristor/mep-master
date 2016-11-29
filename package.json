@@ -23,6 +23,7 @@
     "bunyan": "^1.8.1",
     "bunyan-elasticsearch": "^1.0.0",
     "bunyan-format": "^0.2.1",
+    "es6-mixin": "^0.3.0",
     "latodoc": "github:smeijer/latodoc",
     "nan": "^2.3.5",
     "nconf": "^0.8.4",
@@ -31,6 +32,7 @@
     "require-new": "^1.1.0",
     "should": "^11.1.1",
     "sinon": "^1.17.6",
-    "ws": "^1.1.1"
+    "ws": "^1.1.1",
+    "xmultiple": "^1.0.0"
   }
 }

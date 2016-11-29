@@ -2,6 +2,12 @@ const MotionDriverBinder = require('bindings')('motion').MotionDriverBinder;
 const Point = Mep.require('types/Point');
 const PositionDriver = Mep.require('types/PositionDriver');
 const Constants = require('./Constants');
+const Util = require('util');
+const EventEmitter = require('events');
+//const mixin = require('es6-mixin').mixin;
+
+Util.inherits(MotionDriverBinder, EventEmitter);
+
 
 /**
  * Driver enables communication with Memristor's motion driver.
@@ -9,7 +15,7 @@ const Constants = require('./Constants');
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @fires MotionDriver#positionChanged
  */
-class MotionDriver extends classes(MotionDriverBinder, PositionDriver) {
+class MotionDriver extends MotionDriverBinder  {
     /**
      * Read data from motion driver (as the electronic component)
      * @method refreshData
@@ -51,17 +57,18 @@ class MotionDriver extends classes(MotionDriverBinder, PositionDriver) {
      * @param config {Object} - Configuration presented as an associative array
      */
     constructor(name, config) {
-        super([
+        super(
             true,
             config.startX,
             config.startY,
             config.startOrientation,
             config.startSpeed
-        ], []);
+        );
+
         this.name = name;
         this.config = config;
 
-        this.positon = new Point(0, 0);
+        this.positon = new Point(config.startX, config.startY);
         this.direction = Constants.DIRECTION_FORWARD;
         this.state = Constants.STATE_IDLE;
 
@@ -73,6 +80,7 @@ class MotionDriver extends classes(MotionDriverBinder, PositionDriver) {
         let motionDriver = this;
 
         this.refreshData(() => {
+		
             let data = motionDriver.getData();
 
             // If position is changed fire an event
@@ -90,7 +98,7 @@ class MotionDriver extends classes(MotionDriverBinder, PositionDriver) {
                  */
                 motionDriver.emit('positionChanged',
                     motionDriver.name,
-                    motionDriver.getPosition(),
+                    motionDriver.positon,
                     motionDriver.config.precision
                 );
             }
@@ -132,6 +140,10 @@ class MotionDriver extends classes(MotionDriverBinder, PositionDriver) {
     getState() {
         return this.state;
     }
+
+	getGroups() {
+		return ['position'];
+	}
 }
 
 module.exports = MotionDriver;

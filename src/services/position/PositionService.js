@@ -68,7 +68,7 @@ class PositionService {
         direction = this.config.moveOptions.direction,
         relative = this.config.moveOptions.relative,
         tolerance = this.config.moveOptions.tolerance,
-        speed = this.config.moveOptions.speed
+        speed = undefined
     } = {}) {
         let positionService = this;
         let destinationPoint = tunedPoint.getPoint();
@@ -82,7 +82,9 @@ class PositionService {
 
         // Apply path finding
         if (pathfinding === true) {
+		
             let currentPoint = this.positionEstimator.getPosition();
+		Mep.Log.debug(TAG, 'Start path finding from position', currentPoint);
 
             points = Mep.getPathService().search(currentPoint, destinationPoint);
             Mep.Log.debug(TAG, 'Start path finding', points, 'from point', currentPoint);
@@ -108,7 +110,7 @@ class PositionService {
 
     _basicSet(point, direction, tolerance, speed) {
         // Set speed
-        if (this.currentSpeed !== speed) {
+        if (speed !== undefined && this.currentSpeed !== speed) {
             this.currentSpeed = speed;
             this.motionDriver.setSpeed(speed);
         }
@@ -137,6 +139,22 @@ class PositionService {
             });
         });
     }
+
+	arc(point, angle, direction) {
+		this.motionDriver.moveArc(point.getX(), point.getY(), angle, direction);
+
+		return new Promise((resolve, reject) => {
+		    this.motionDriver.on('stateChanged', (state) => {
+		        if (state === MotionDriverConstants.STATE_IDLE) {
+		            resolve();
+		        }
+		        else if (state === MotionDriverConstants.STATE_ERROR ||
+		            state === MotionDriverConstants.STATE_STUCK) {
+		            reject(state);
+		        }
+		    });
+		});
+	}
 
     rotate(tunedAngle, options) {
         // TODO
