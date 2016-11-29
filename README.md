@@ -12,7 +12,7 @@ Read more about Memristor at [our website](https://memristor-robotics.github.io/
 ## Installation
 *only for Debian distros
 ```
-git clone https://github.com/Memristor-Robotics/mep2.git --depth 1 && ./mep2/install
+git clone https://github.com/Memristor-Robotics/mep2.git --depth 1 && cd mep2 && sudo ./install
 ```
 
 ## Execute
