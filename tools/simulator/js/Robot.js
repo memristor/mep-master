@@ -1,7 +1,7 @@
 const ROBOT_REFRESH_PERIOD = 1;
 const ROBOT_ROTATION_CORRECTIVE_FACTOR = 0.01;
-const ROBOT_MOVE_CORRECTIVE_FACTOR = 0.01;
-const ROBOT_MOVE_TOLERANCE = 2;
+const ROBOT_MOVE_CORRECTIVE_FACTOR = 0.03;
+const ROBOT_MOVE_TOLERANCE = 3;
 
 class Robot {
     constructor(name, terrainConfig, x, y, width, height) {

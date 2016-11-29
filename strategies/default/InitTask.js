@@ -16,12 +16,15 @@ class InitTask extends Task {
 
         setTimeout(() => {
             if (true) {
-                position.set(new TunedPoint(-1200, 100), {speed: 100})
+                position.set(new TunedPoint(-735, -850), { pathfinding: true})
                     .then(() => {
-                        return position.set(new TunedPoint(-800, 50), {pathfinding: true})
+                        return position.set(new TunedPoint(765, -850), {pathfinding: true})
                     })
                     .then(() => {
-                        return position.set(new TunedPoint(-850, 400), {pathfinding: true})
+                        return position.set(new TunedPoint(-1200, 400), {pathfinding: true})
+                    })
+                    .then(() => {
+                        return position.set(new TunedPoint(-170, 820), {pathfinding: true})
                     });
             } else {
                 //await position.set(new TunedPoint(20, 0), {speed: 100});

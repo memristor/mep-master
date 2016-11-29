@@ -13,7 +13,7 @@ const TAG = 'PathService';
 class PathService {
     constructor(config) {
         this.obstacles = [];
-        this.pf = new PathFinding(3000, 0, 1300, -800);
+        this.pf = new PathFinding(1500, -1500, 1000, -1000);
 
         this.processObstacleDetection.bind(this);
 
