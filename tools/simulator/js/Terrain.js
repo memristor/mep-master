@@ -15,8 +15,9 @@ class Terrain {
         this.terrainNode.addEventListener('mousemove', (e) => {
             terrain.cursorCoordinates.importWindowCoordinates(
                 terrain.terrainConfig,
-                e.clientX - terrain.terrainNode.offsetLeft,
-                e.clientY - terrain.terrainNode.offsetTop
+
+                e.clientY - terrain.terrainNode.offsetTop,
+                e.clientX - terrain.terrainNode.offsetLeft
             );
         });
     }

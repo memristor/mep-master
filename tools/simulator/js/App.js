@@ -10,7 +10,7 @@ class App {
 
         let terrainConfig = new TerrainConfig();
         let terrain = new Terrain(terrainConfig, document.getElementById('terrain'));
-        bigRobot = new Robot(terrainConfig, 0, -1300, 230, 230);
+        bigRobot = new Robot('big', terrainConfig, -1300, 0, 230, 230);
         terrain.addRobot(bigRobot);
 
         document.getElementById('btn-rotate').addEventListener('click', () => {

@@ -4,19 +4,13 @@ const ROBOT_MOVE_CORRECTIVE_FACTOR = 0.01;
 const ROBOT_MOVE_TOLERANCE = 2;
 
 class Robot {
-    constructor(terrainConfig, x, y, width, height) {
-        let robot = this;
+    constructor(name, terrainConfig, x, y, width, height) {
+        this.communicator = new Communicator(name);
 
         this.width = width;
         this.height = height;
 
         this.terrainConfig = terrainConfig;
-        this.controller = new Controller({
-            k_p: 0.25,
-            k_i: 0.01,
-            k_d: 0.01,
-            dt: 1
-        });
 
         // Default node properties
         this.node = document.createElement('div');
@@ -66,14 +60,13 @@ class Robot {
 
         let startPoint = new Point(this.position.x, this.position.y);
         let destinationPoint = new Point(x, y);
-        this.controller.setTarget(startPoint.getDistance(destinationPoint));
 
         let destinationAngle = Math.round(Math.atan2(
                 (destinationPoint.getY() - startPoint.getY()),
                 (destinationPoint.getX() - startPoint.getX())
-            ) * (180 / Math.PI));
+            ) * (180 / Math.PI)) + 90;
 
-        let moveStepSizeX = this.moveStep * Math.abs(Math.cos(destinationAngle * (Math.PI / 180)));
+        let moveStepSizeX = this.moveStep * Math.abs(Math.cos((destinationAngle - 90) * (Math.PI / 180)));
 
         let determineY = (tempX) => {
             return ((destinationPoint.getY() - startPoint.getY()) /
@@ -90,11 +83,10 @@ class Robot {
 
                 robot.setPosition(newPoint);
 
-                ws.send(JSON.stringify({
-                    'to': 'brain:big',
-                    'event': 'positionChanged',
-                    'params': { x: newPoint.getX(), y: newPoint.getY() }
-                }));
+                robot.communicator.sendEvent('positionChanged', {
+                    x: newPoint.getX(),
+                    y: newPoint.getY()
+                });
 
                 if (robot.position.getDistance(new Point(x, y)) > ROBOT_MOVE_TOLERANCE) {
                     move();
@@ -134,13 +126,13 @@ class Robot {
 
         // Visual
         let centralizedPoint = new Point(
-            point.getX() - this.height / 2,
-            point.getY() + this.width / 2
+            point.getX() + this.width / 2,
+            point.getY() - this.height / 2
         );
         let coordinates = centralizedPoint.exportWindowCoordinates(this.terrainConfig);
 
-        this.node.style.left = coordinates.x + 'px';
-        this.node.style.top = coordinates.y + 'px';
+        this.node.style.left = coordinates.y + 'px';
+        this.node.style.top = coordinates.x + 'px';
     }
 
     getPosition() {
@@ -149,6 +141,6 @@ class Robot {
 
     setAngle(angle) {
         this.angle = angle;
-        this.node.style.transform = 'rotate(' + (90 - angle) + 'deg)';
+        this.node.style.transform = 'rotate(' + (angle - 90) + 'deg)';
     }
 }

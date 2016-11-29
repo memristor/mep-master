@@ -19,31 +19,31 @@ class Point {
     importWindowCoordinates(terrainConfig, x, y) {
         switch (terrainConfig.terrainOrientation) {
             case 0:
-                this.x = x / terrainConfig.scaleFactorWidth - terrainConfig.width / 2;
-                this.y = terrainConfig.height / 2 - y / terrainConfig.scaleFactorHeight;
+                this.y = y / terrainConfig.scaleFactorWidth - terrainConfig.width / 2;
+                this.x = terrainConfig.height / 2 - x / terrainConfig.scaleFactorHeight;
                 break;
 
             case 90:
-                this.y = x / terrainConfig.scaleFactorWidth - terrainConfig.width / 2;
-                this.x = terrainConfig.height / 2 - y / terrainConfig.scaleFactorHeight;
+                this.x = y / terrainConfig.scaleFactorWidth - terrainConfig.width / 2;
+                this.y = terrainConfig.height / 2 - x / terrainConfig.scaleFactorHeight;
                 break;
 
             case 180:
-                this.x = terrainConfig.width / 2 - x / terrainConfig.scaleFactorWidth;
-                this.y = y / terrainConfig.scaleFactorHeight - terrainConfig.height / 2;
+                this.y = terrainConfig.width / 2 - y / terrainConfig.scaleFactorWidth;
+                this.x = x / terrainConfig.scaleFactorHeight - terrainConfig.height / 2;
                 break;
 
             case 270:
-                this.y = terrainConfig.width / 2 - x / terrainConfig.scaleFactorWidth;
-                this.x   = y / terrainConfig.scaleFactorHeight - terrainConfig.height / 2;
+                this.x = terrainConfig.width / 2 - y / terrainConfig.scaleFactorWidth;
+                this.y = x / terrainConfig.scaleFactorHeight - terrainConfig.height / 2;
                 break;
         }
     }
 
     exportWindowCoordinates(terrainConfig) {
         return {
-            x: terrainConfig.scaleFactorWidth * (this.x + terrainConfig.width / 2),
-            y: terrainConfig.scaleFactorHeight * (terrainConfig.height / 2 - this.y)
+            x: terrainConfig.scaleFactorHeight * (terrainConfig.height / 2 - this.x),
+            y: terrainConfig.scaleFactorWidth * (this.y + terrainConfig.width / 2)
         };
     }
 }
