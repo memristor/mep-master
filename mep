@@ -12,4 +12,4 @@ if [ $SHOW_LOGO = true ]; then
     echo ""
 fi
 
-node src/Bootstrap.js "$@"
+node --harmony-async-await src/Bootstrap.js "$@"
