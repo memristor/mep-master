@@ -1,7 +1,7 @@
 const Path = require('path');
 const NConf = require('nconf');
 const Yargs = require('yargs');
-
+const fs = require('fs');
 const CONFIG_DIR = Path.join(__dirname, '/config');
 
 NConf.use('memory');
@@ -54,8 +54,12 @@ if (process.env.MEP_TEST) {
         .epilog('Copyright @2016 Memristor')
         .argv;
 
-    let simulationSuffix = NConf.get('simulation') ? 'simulation' : '';
-    NConf.file(CONFIG_DIR + '/' + NConf.get('robot') + '.' + simulationSuffix + '.json');
+    let simulationSuffix = NConf.get('simulation') ? '.simulation' : '';
+    let configFilePath = CONFIG_DIR + '/' + NConf.get('robot') + simulationSuffix + '.json';
+    if (fs.existsSync(configFilePath) === false) {
+        throw Error('There is no config file at path: ' + configFilePath);
+    }
+    NConf.file(configFilePath);
 
     // Fill the rest of the configuration with default values
     NConf.add('test', {
@@ -64,8 +68,5 @@ if (process.env.MEP_TEST) {
     });
 
 }
-
-
-
 
 module.exports = NConf;
