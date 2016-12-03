@@ -1,6 +1,6 @@
-const EventEmitter = require('events');
 const WebSocketClient = Mep.require('utils/WebSocketClient');
 const Point = Mep.require('types/Point');
+const PositionDriver = Mep.require('types/PositionDriver');
 
 const TAG = 'MotionDriverSimulator';
 
@@ -32,7 +32,7 @@ const TAG = 'MotionDriverSimulator';
  * }
  * </pre>
  */
-class MotionDriverSimulator extends EventEmitter {
+class MotionDriverSimulator extends PositionDriver {
     constructor(name, config) {
         super();
 
@@ -69,10 +69,6 @@ class MotionDriverSimulator extends EventEmitter {
         }
     }
 
-    provides() {
-        return ['position'];
-    }
-
     getPosition() {
         return this.currentPosition;
     }
@@ -89,6 +85,10 @@ class MotionDriverSimulator extends EventEmitter {
             y: y,
             direction: direction
         });
+    }
+
+    setSpeed(speed) {
+        Mep.Log.warn(TAG, 'setSpeed() not implemented');
     }
 
     /**

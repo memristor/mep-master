@@ -12,7 +12,7 @@ const TAG = 'PositionService';
 class PositionService {
     constructor(config) {
         this.config = config;
-        this.currentSpeed = 100;
+        this.currentSpeed = 0;
         this.positionEstimator = new PositionEstimator();
         this.motionDriver = null;
 
@@ -27,7 +27,7 @@ class PositionService {
         }
 
         // Subscribe on sensors that can provide obstacles on the robot's path
-        this.drivers = driverManager.getDataProviderDrivers('terrain');
+        this.drivers = driverManager.getDriversByGroup('terrain');
         for (var driverName in this.drivers) {
             this.drivers[driverName].on('pathObstacleDetected', this.startAvoidingStrategy);
         }

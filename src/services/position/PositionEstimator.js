@@ -16,7 +16,7 @@ class PositionEstimator extends EventEmitter {
         this.processPositionChange.bind(this);
 
         // Subscribe on drivers
-        this.drivers = driverManager.getDataProviderDrivers('position');
+        this.drivers = driverManager.getDriversByGroup('position');
         for (var driverName in this.drivers) {
             this.drivers[driverName].on('positionChanged', (driverName, point, precision) => {
                 object.processPositionChange(driverName, point, precision);

@@ -1,8 +1,8 @@
-const EventEmiter = require('events');
+const BaseDriver = Mep.require('types/BaseDriver');
 
 const TAG = 'ModbusDriverSimulator';
 
-class ModbusDriverSimulator extends EventEmiter {
+class ModbusDriverSimulator extends BaseDriver {
     constructor(name, config) {
         super();
 

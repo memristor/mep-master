@@ -1,11 +1,8 @@
 const ModbusDriverBinder = require('bindings')('modbus').ModbusDriverBinder;
-const EventEmiter = require('events');
-const Util = require('util');
+const BaseDriver = Mep.require('types/BaseDriver');
 
 const TAG = 'ModbusDriver';
 const DEBUG = true;
-
-Util.inherits(ModbusDriverBinder, EventEmiter);
 
 /**
  * Driver for Modbus communication protocol.
@@ -13,7 +10,7 @@ Util.inherits(ModbusDriverBinder, EventEmiter);
  * @fires ModbusDriver#coilChanged
  * @fires ModbusDriver#coilChanged_[slaveAddress]_[functionAddress]
  */
-class ModbusDriver extends ModbusDriverBinder {
+class ModbusDriver extends classes(ModbusDriverBinder, BaseDriver) {
 
     /**
      * Creates instance of ModbusDriver

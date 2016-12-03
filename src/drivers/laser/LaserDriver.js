@@ -1,6 +1,6 @@
 /** @namespace drivers.laser */
 
-const EventEmitter = require('events');
+const TerrainDriver = Mep.require('types/TerrainDriver');
 const Point = Mep.require('types/Point');
 const Polygon = Mep.require('types/Polygon');
 
@@ -13,7 +13,7 @@ const TAG = 'LaserDriver';
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @fires LaserDriver#terrain
  */
-class LaserDriver extends EventEmitter {
+class LaserDriver extends TerrainDriver {
     /**
      * Make instance of LaserDriver.
      *
@@ -83,7 +83,7 @@ class LaserDriver extends EventEmitter {
         this.polygon = new Polygon(name, 2000, points);
 
         // Additional information
-        this.front = (config.laserAngle > 0 && config.laserAngle < 180) ? true : false;
+        this.front = (config.laserAngle > 0 && config.laserAngle < 180);
 
         Mep.Log.debug(TAG, name, 'Detects at ', this.x, this.y);
     }
@@ -116,10 +116,6 @@ class LaserDriver extends EventEmitter {
         this.emit('obstacleDetected', this.pointOfInterest, this.polygon, state);
 
         Mep.Log.debug(TAG, 'Detected at', this.x, this.y);
-    }
-
-    provides() {
-        return ['terrain'];
     }
 
     static dependencies() {

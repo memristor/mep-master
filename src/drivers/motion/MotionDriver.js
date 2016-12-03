@@ -1,9 +1,6 @@
 const MotionDriverBinder = require('bindings')('motion').MotionDriverBinder;
-const EventEmiter = require('events');
-const Util = require('util');
 const Point = Mep.require('types/Point');
-
-Util.inherits(MotionDriverBinder, EventEmiter);
+const PositionDriver = Mep.require('types/PositionDriver');
 
 /**
  * Driver enables communication with Memristor's motion driver.
@@ -11,7 +8,7 @@ Util.inherits(MotionDriverBinder, EventEmiter);
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @fires MotionDriver#positionChanged
  */
-class MotionDriver extends MotionDriverBinder {
+class MotionDriver extends classes(MotionDriverBinder, PositionDriver) {
     /**
      * Read data from motion driver (as the electronic component)
      * @method refreshData
@@ -53,13 +50,13 @@ class MotionDriver extends MotionDriverBinder {
      * @param config {Object} - Configuration presented as an associative array
      */
     constructor(name, config) {
-        super(
+        super([
             true,
             config.startX,
             config.startY,
             config.startOrientation,
             config.startSpeed
-        );
+        ], []);
         this.name = name;
         this.config = config;
         this.lastPositon = new Point(0, 0);
@@ -103,10 +100,6 @@ class MotionDriver extends MotionDriverBinder {
     getPosition() {
         let position = super.getPosition();
         return (new Point(position[0], position[1]));
-    }
-
-    provides() {
-        return ['position', 'control'];
     }
 }
 

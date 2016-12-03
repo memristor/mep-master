@@ -29,7 +29,7 @@ class PathService {
         }
 
         // Subscribe on drivers
-        this.drivers = driverManager.getDataProviderDrivers('terrain');
+        this.drivers = driverManager.getDriversByGroup('terrain');
         for (var driverName in this.drivers) {
             this.drivers[driverName].on('obstacleDetected', this.processObstacleDetection);
         }

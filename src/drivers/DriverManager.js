@@ -77,11 +77,6 @@ class DriverManager {
                     this.drivers[driverIdentifier] = driverInstance;
                     Mep.Log.debug(TAG, 'Driver `' + driverIdentifier + '` loaded');
 
-                    // Check for `provides()` method
-                    if (typeof driverInstance.provides !== 'function') {
-                        Mep.Log.warn(TAG, driverIdentifier, 'doesn\'t have member provides()');
-                    }
-
                 } catch (error) {
                     this.putDriverOutOfOrder(driverIdentifier, error);
                 }
@@ -151,10 +146,10 @@ class DriverManager {
      * data processing, not mechanisms for data collection from different drivers.
      * Services are in this case also hardware independent.</p>
      *
-     * @param type {String} - Data type which driver can provide. Can be: position & path.
+     * @param type {String} - Data type which driver can provide. Can be: position & terrain.
      * @returns {Object} - List of filtered drivers
      */
-    getDataProviderDrivers(type) {
+    getDriversByGroup(type) {
         var filteredDrivers = {};
 
         for (let driverKey in this.drivers) {
@@ -163,12 +158,12 @@ class DriverManager {
             }
 
             // Check if driver has defined list of data types which can provide
-            if (typeof this.drivers[driverKey].provides !== 'function') {
+            if (typeof this.drivers[driverKey].getGroups !== 'function') {
                 continue;
             }
 
             // Check if driver can provide data
-            if (this.drivers[driverKey].provides().indexOf(type) >= 0) {
+            if (this.drivers[driverKey].getGroups().indexOf(type) >= 0) {
                 filteredDrivers[driverKey] = this.drivers[driverKey];
             }
         }

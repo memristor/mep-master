@@ -1,4 +1,4 @@
-const Task = Mep.require('utils/Task');
+const Task = Mep.require('types/Task');
 const TunedPoint = Mep.require('types/TunedPoint');
 const Delay = Mep.require('utils/Delay');
 const position = Mep.getPositionService();

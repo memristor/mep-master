@@ -1,3 +1,4 @@
+require('proxymi'); // Enable multiple ES6 inheritance
 global.Mep = require('./Mep');
 
 const TAG = 'Bootstrap';
