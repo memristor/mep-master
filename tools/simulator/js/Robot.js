@@ -90,6 +90,8 @@ class Robot {
 
                 if (robot.position.getDistance(new Point(x, y)) > ROBOT_MOVE_TOLERANCE) {
                     move();
+                } else {
+                    robot.communicator.sendEvent('stateChanged', { state: 1 });
                 }
 
             }, ROBOT_REFRESH_PERIOD);
@@ -105,6 +107,7 @@ class Robot {
 
                 if (Math.abs(robot.angle - destinationAngle) <= robot.angleStep) {
                     move();
+                    robot.communicator.sendEvent('stateChanged', { state: 3 });
                 } else {
                     rotate();
                 }
@@ -112,6 +115,7 @@ class Robot {
         };
 
         rotate();
+        robot.communicator.sendEvent('stateChanged', { state: 4 });
     }
 
     setDimensions(width, height) {

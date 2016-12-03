@@ -41,7 +41,7 @@ class MotionDriverSimulator extends PositionDriver {
         this.name = name;
         this.config = config;
 
-        this.currentPosition = new Point(0, 0);
+        this.position = new Point(0, 0);
 
         // Get a client
         this.ws = WebSocketClient.getInstance();
@@ -53,7 +53,7 @@ class MotionDriverSimulator extends PositionDriver {
     }
 
     _processEventData(data) {
-        let that = this;
+        let motionDriverSimulator = this;
         let eventObject = JSON.parse(data);
 
         if (eventObject.to !== 'brain:' + Mep.Config.get('robot')) {
@@ -62,15 +62,30 @@ class MotionDriverSimulator extends PositionDriver {
 
         switch (eventObject.event) {
             case 'positionChanged':
-                that.currentPosition.setX(eventObject.params.x);
-                that.currentPosition.setY(eventObject.params.y);
-                that.emit('positionChanged', that.name, that.getPosition(), that.config.precision);
+                motionDriverSimulator.position.setX(eventObject.params.x);
+                motionDriverSimulator.position.setY(eventObject.params.y);
+                motionDriverSimulator.emit(
+                    'positionChanged',
+                    motionDriverSimulator.name,
+                    motionDriverSimulator.getPosition(),
+                    motionDriverSimulator.config.precision
+                );
+                break;
+
+            case 'stateChanged':
+                Mep.Log.debug(TAG, 'New state', motionDriverSimulator.state);
+                motionDriverSimulator.state = eventObject.params.state;
+                motionDriverSimulator.emit('stateChanged', motionDriverSimulator.getState());
                 break;
         }
     }
 
+    getState() {
+        return this.state;
+    }
+
     getPosition() {
-        return this.currentPosition;
+        return this.position;
     }
 
     /**

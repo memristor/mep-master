@@ -95,14 +95,12 @@ class LaserDriver extends TerrainDriver {
      * @param state {boolean} - Object is detected or not
      */
     processDetection(state) {
-        if (this.front === true) {
-            /**
-             * Obstacle detected on the robot's path event. We need to stop robot as fast as possible.
-             * @event LaserDriver#pathObstacleDetected
-             * @property {Boolean} - Obstacle is detected
-             */
-            this.emit('pathObstacleDetected', state);
-        }
+        /**
+         * Obstacle detected on the robot's path event. We need to stop robot as fast as possible.
+         * @event LaserDriver#pathObstacleDetected
+         * @property {Boolean} - Obstacle is detected
+         */
+        this.emit('pathObstacleDetected', state, this.front);
 
         /**
          * Obstacle detected event.

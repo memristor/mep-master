@@ -1,6 +1,7 @@
 const MotionDriverBinder = require('bindings')('motion').MotionDriverBinder;
 const Point = Mep.require('types/Point');
 const PositionDriver = Mep.require('types/PositionDriver');
+const Constants = require('./Constants');
 
 /**
  * Driver enables communication with Memristor's motion driver.
@@ -59,33 +60,56 @@ class MotionDriver extends classes(MotionDriverBinder, PositionDriver) {
         ], []);
         this.name = name;
         this.config = config;
-        this.lastPositon = new Point(0, 0);
+
+        this.positon = new Point(0, 0);
+        this.direction = Constants.DIRECTION_FORWARD;
+        this.state = Constants.STATE_IDLE;
 
         this.refreshDataLoop.bind(this);
         this.refreshDataLoop();
     }
 
     refreshDataLoop() {
-        let that = this;
+        let motionDriver = this;
 
         this.refreshData(() => {
-            let position = that.getPosition();
+            let data = motionDriver.getData();
 
             // If position is changed fire an event
-            if (position.equals(that.lastPositon) === false) {
+            if (data.position.x !== motionDriver.positon.getX() ||
+                data.position.y !== motionDriver.positon.getY()) {
+
+                motionDriver.positon.setX(data.position.x);
+                motionDriver.positon.setY(data.position.y);
+
                 /**
                  * Position changed event.
                  * @event MotionDriver#positionChanged
                  * @property {String} driverName - Unique name of a driver
                  * @property {Point} point - Position of the robot
                  */
-                that.emit('positionChanged',
-                    that.name,
-                    that.getPosition(),
-                    that.config.precision
+                motionDriver.emit('positionChanged',
+                    motionDriver.name,
+                    motionDriver.getPosition(),
+                    motionDriver.config.precision
                 );
+            }
 
-                that.lastPositon.clone(position);
+            // If state is changed
+            if (data.state !== motionDriver.state) {
+                motionDriver.state = data.state;
+
+                /**
+                 * State change event.
+                 * @event MotionDriver#stateChanged
+                 * @property {Number} state - New state
+                 */
+                motionDriver.emit('stateChanged', motionDriver.getState());
+            }
+
+            // If direction changed
+            if (data.direction !== motionDriver.direction) {
+                motionDriver.direction = data.direction;
             }
         });
 
@@ -98,8 +122,15 @@ class MotionDriver extends classes(MotionDriverBinder, PositionDriver) {
      * @return {Point} - Position of the robot
      */
     getPosition() {
-        let position = super.getPosition();
-        return (new Point(position[0], position[1]));
+        return this.position;
+    }
+
+    getDirection() {
+        return this.direction;
+    }
+
+    getState() {
+        return this.state;
     }
 }
 
