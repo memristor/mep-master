@@ -40,6 +40,7 @@ void MotionDriverBinder::Init(Local<Object> exports) {
 	Nan::SetPrototypeMethod(tmpl, "getPosition", getPosition);
 	Nan::SetPrototypeMethod(tmpl, "getState", getPosition);
 	Nan::SetPrototypeMethod(tmpl, "refreshData", refreshData);
+	Nan::SetPrototypeMethod(tmpl, "getData", refreshData);
 
     exports->Set(Nan::New("MotionDriverBinder").ToLocalChecked(), tmpl->GetFunction());
 }
@@ -170,6 +171,40 @@ void MotionDriverBinder::getPosition(const Nan::FunctionCallbackInfo<Value> &arg
     nodes->Set(0, Integer::New(args.GetIsolate(), point.getX()));
     nodes->Set(1, Integer::New(args.GetIsolate(), point.getY()));
     args.GetReturnValue().Set(nodes);
+}
+
+void MotionDriverBinder::getData(const Nan::FunctionCallbackInfo<Value> &args) {
+    Nan::HandleScope scope;
+
+    MotionDriver *motionDriver = ObjectWrap::Unwrap<MotionDriverBinder>(args.Holder())->getMotionDriver();
+
+    // Prepare data object
+    Local<Object> jsData = Nan::New<Object>();
+
+    // Push position to data object
+    geometry::Point2D point = motionDriver->getPosition();
+    Local<Object> jsDataPosition = Nan::New<Object>();
+    jsDataPosition->Set(Nan::New<v8::String>("x").ToLocalChecked(), Nan::New<v8::Number>(point.getX()));
+    jsDataPosition->Set(Nan::New<v8::String>("y").ToLocalChecked(), Nan::New<v8::Number>(point.getY()));
+    jsData->Set(Nan::New<v8::String>("position").ToLocalChecked(), jsDataPosition);
+
+    // Push orientation to data object
+    int orientation = motionDriver->getOrientation();
+    jsData->Set(Nan::New<v8::String>("orientation").ToLocalChecked(), Nan::New<v8::Number>(orientation));
+
+    // Push state to data object
+    MotionDriver::State state = motionDriver->getState();
+    jsData->Set(Nan::New<v8::String>("state").ToLocalChecked(), Nan::New<v8::Number>(state));
+
+    // Push speed to data object
+    int speed = motionDriver->getSpeed();
+    jsData->Set(Nan::New<v8::String>("speed").ToLocalChecked(), Nan::New<v8::Number>(speed));
+
+    // Push direction to data object
+    int direction = motionDriver->getDirection();
+    jsData->Set(Nan::New<v8::String>("direction").ToLocalChecked(), Nan::New<v8::Number>(direction));
+
+    args.GetReturnValue().Set(jsData);
 }
 
 void MotionDriverBinder::getState(const Nan::FunctionCallbackInfo<Value> &args) {

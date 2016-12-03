@@ -40,6 +40,7 @@ private:
 	static void getPosition(const Nan::FunctionCallbackInfo<Value> &args);
 	static void refreshData(const Nan::FunctionCallbackInfo<Value> &args);
 	static void getState(const Nan::FunctionCallbackInfo<Value> &args);
+	static void getData(const Nan::FunctionCallbackInfo<Value> &args);
 
     MotionDriver *motionDriver;
 };
