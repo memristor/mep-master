@@ -4,6 +4,7 @@
     "performance": false,
     "robot": "",
     "scheduler": "",
+    "elasticHost": "",
 
     "Drivers": {
         "MotionDriver": {

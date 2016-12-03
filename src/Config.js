@@ -42,6 +42,12 @@ if (process.env.MEP_TEST) {
             describe: 'Path to strategy\'s scheduler',
             type: 'path',
             default: Path.join(__dirname, '/../strategies/default/Scheduler.js')
+        },
+        'e': {
+            alias: 'elasticHost',
+            describe: 'Host for ElasticSearch server, eg. 127.0.0.1:9200',
+            type: 'string',
+            default: ''
         }
     });
 

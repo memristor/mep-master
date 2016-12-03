@@ -16,20 +16,23 @@ streams.push({
 // Add file output
 streams.push({
     level: Config.get('performance') ? 'info' : 'debug',
-    path: Path.join(__dirname, '/../logs/javascript.log')
+    type: 'rotating-file',
+    path: Path.join(__dirname, '/../logs/javascript.log'),
+    period: '1d',
+    count: 3
 });
 
 // Add ElasticSearch
-/*
-streams.push({
-    level: 'error',
-    stream: new BunyanElasticSearch({
-        indexPattern: '[logstash-]YYYY.MM.DD',
-        type: 'logs',
-        host: 'localhost:9200'
-    })
-});
-*/
+if (Config.get('elasticHost') !== '') {
+    streams.push({
+        level: 'debug',
+        stream: new BunyanElasticSearch({
+            indexPattern: '[logstash-]YYYY.MM.DD',
+            type: 'logs',
+            host: Config.get('elasticHost')
+        })
+    });
+}
 
 var logger = Bunyan.createLogger({
     name: 'mep',

@@ -19,14 +19,12 @@ http.cors.allow-origin: "*"
 ```
 
 ### 3. Start ElasticSearch
-```sudo /etc/init.d/elasticsearch start```
+```sudo /etc/init.d/elasticsearch restart```
 
 ### 4. Override config in MEP
 Insert your PC's IP address in MEP's config
 
 ### 5. Use ElasticSearch GUI
 Find and pick your favorite ElasticSearch GUI and start exploring the logs.
-- Kopf (http://lmenezes.com/elasticsearch-kopf/?location=http://127.0.0.1:9200#!/cluster)
-- Chrome Plugin (https://chrome.google.com/webstore/detail/sense-beta/lhjgkmllcaadmopgmanpapmpjgmfcfig/related?hl=en)
-- GridShore (http://www.gridshore.nl/esgui/#/search)
+- ElasticHQ (http://www.elastichq.org/app/index.php)
 - Head (https://github.com/mobz/elasticsearch-head)
