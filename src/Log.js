@@ -23,7 +23,8 @@ streams.push({
 });
 
 // Add ElasticSearch
-if (Config.get('elasticHost') !== '') {
+if (Config.get('elasticHost') !== '' &&
+    typeof Config.get('elasticHost') !== 'undefined') {
     streams.push({
         level: 'debug',
         stream: new BunyanElasticSearch({
