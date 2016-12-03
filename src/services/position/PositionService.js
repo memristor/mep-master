@@ -58,7 +58,7 @@ class PositionService {
         tolerance = this.config.moveOptions.tolerance,
         speed = this.config.moveOptions.speed
     } = {}) {
-        let object = this;
+        let positionService = this;
         let destinationPoint = tunedPoint.getPoint();
         let points = [];
 
@@ -84,7 +84,7 @@ class PositionService {
                 if (points.length > 0) {
                     point = points[0];
                     points.splice(0, 1);
-                    object._basicSet(point, direction, tolerance, speed).then(goToNext);
+                    positionService._basicSet(point, direction, tolerance, speed).then(goToNext);
                     return;
                 }
                 resolve();

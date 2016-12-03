@@ -15,20 +15,16 @@
 #include <string>
 #include "UartConnection.h"
 #include "Point2D.h"
-// #include "Log.h"
 
 namespace motion
 {
 
 using namespace std;
 
-
-
 class MotionDriver {
 public:
-	enum State{IDLE, STUCK, MOVING, ROTATING, ERROR};
-	enum MovingDirection{FORWARD=1, BACKWARD=-1};
-	enum RobotType {MALI = 1, VELIKI = -1};
+	enum State { IDLE = 1, STUCK = 2, MOVING = 3, ROTATING = 4, ERROR = 5};
+	enum MovingDirection { FORWARD = 1, BACKWARD = -1 };
 
 private:
 	geometry::Point2D position;
@@ -36,7 +32,6 @@ private:
 	State state;
 	char speed;
 	MovingDirection direction;
-	int reverseAngle;
 
     uart::UartConnection uart;
 
@@ -45,7 +40,7 @@ private:
 	mutex *io_mutex;
 
 public:
-	MotionDriver(geometry::Point2D initPosition=geometry::Point2D(), RobotType robotType=VELIKI, int initOrientation=0, int initSpeed=100);
+	MotionDriver(geometry::Point2D initPosition=geometry::Point2D(), int initOrientation=0, int initSpeed=100);
 	~MotionDriver();
 	
 	void moveStraight(int distance);

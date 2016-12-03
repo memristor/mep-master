@@ -13,15 +13,13 @@
 namespace motion
 {
 
-MotionDriver::MotionDriver(geometry::Point2D initPosition, RobotType robotType, int initOrientation, int initSpeed):
+MotionDriver::MotionDriver(geometry::Point2D initPosition, int initOrientation, int initSpeed):
     io_mutex(new mutex())
 {
 	setPositionAndOrientation(initPosition, initOrientation);
 	setSpeed(initSpeed);;
 	direction = FORWARD;
 	state = IDLE;
-
-	reverseAngle = robotType;
 }
 
 MotionDriver::~MotionDriver()
@@ -55,8 +53,8 @@ void MotionDriver::rotateFor(int relativeAngle)
 	
 	char message[] = {
 			'T',
-			(char)(reverseAngle*relativeAngle>>8),
-			(char)(reverseAngle*relativeAngle)
+			(char)(relativeAngle>>8),
+			(char)(relativeAngle)
 	};
 
 	uart.writeUart(message, 3);
@@ -70,8 +68,8 @@ void MotionDriver::rotateTo(int absoluteAngle)
 	
 	char message[] = {
 			'A',
-			(char)(reverseAngle*absoluteAngle>>8),
-			(char)(reverseAngle*absoluteAngle)
+			(char)(absoluteAngle>>8),
+			(char)(absoluteAngle)
 	};
 
 	uart.writeUart(message, 3);
@@ -87,8 +85,8 @@ void MotionDriver::moveToPosition(geometry::Point2D position, MovingDirection di
 			'G',
 			(char)(position.getX()>>8),
 			(char)(position.getX()),
-			(char)(reverseAngle*position.getY()>>8),
-			(char)(reverseAngle*position.getY()),
+			(char)(position.getY()>>8),
+			(char)(position.getY()),
 			0, // krajnja brzina (za sada fiksirana na 0)
 			direction
 	};
@@ -107,10 +105,10 @@ void MotionDriver::moveArc(geometry::Point2D center, int angle, MovingDirection 
 			'Q',
 			(char)(center.getX()>>8),
 			(char)(center.getX()),
-			(char)(reverseAngle*center.getY()>>8),
-			(char)(reverseAngle*center.getY()),
-			(char)(reverseAngle*angle>>8),
-			(char)(reverseAngle*angle),
+			(char)(center.getY()>>8),
+			(char)(center.getY()),
+			(char)(angle>>8),
+			(char)(angle),
 			direction
 	};
 
@@ -197,10 +195,10 @@ void MotionDriver::setPositionAndOrientation(const geometry::Point2D position, i
 			'I',
 			(char)(position.getX()>>8),
 			(char)(position.getX()),
-			(char)(reverseAngle*position.getY()>>8),
-			(char)(reverseAngle*position.getY()),
-			(char)(reverseAngle*orientation>>8),
-			(char)(reverseAngle*orientation)
+			(char)(position.getY()>>8),
+			(char)(position.getY()),
+			(char)(orientation>>8),
+			(char)(orientation)
 	};
 
 	uart.writeUart(message, 7);
@@ -246,9 +244,9 @@ void MotionDriver::refreshData()
 	}
 	}
 
-	position.setX( convertToInt(receiveBuffer[1], receiveBuffer[2]) );
-	position.setY( reverseAngle*convertToInt(receiveBuffer[3], receiveBuffer[4]) );
-	orientation = reverseAngle*convertToInt(receiveBuffer[5], receiveBuffer[6]);
+	position.setX(convertToInt(receiveBuffer[1], receiveBuffer[2]));
+	position.setY(convertToInt(receiveBuffer[3], receiveBuffer[4]));
+	orientation = convertToInt(receiveBuffer[5], receiveBuffer[6]);
 }
 
 int MotionDriver::convertToInt(char msb, char lsb)

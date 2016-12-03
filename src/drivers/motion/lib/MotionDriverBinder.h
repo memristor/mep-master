@@ -31,7 +31,6 @@ public:
 private:
     static void New(const Nan::FunctionCallbackInfo<Value> &args);
     MotionDriverBinder(Point2D initPosition = Point2D(),
-                           MotionDriver::RobotType robotType = MotionDriver::VELIKI,
                            int initOrientation=0,
                            int initSpeed=100);
     static void moveToPosition(const Nan::FunctionCallbackInfo<Value> &args);
@@ -40,6 +39,7 @@ private:
 	static void setSpeed(const Nan::FunctionCallbackInfo<Value> &args);
 	static void getPosition(const Nan::FunctionCallbackInfo<Value> &args);
 	static void refreshData(const Nan::FunctionCallbackInfo<Value> &args);
+	static void getState(const Nan::FunctionCallbackInfo<Value> &args);
 
     MotionDriver *motionDriver;
 };

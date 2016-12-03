@@ -20,11 +20,10 @@ private:
 };
 
 MotionDriverBinder::MotionDriverBinder(Point2D initPosition,
-       MotionDriver::RobotType robotType,
        int initOrientation,
        int initSpeed) {
 
-    motionDriver = new MotionDriver(initPosition, robotType, initOrientation, initSpeed);
+    motionDriver = new MotionDriver(initPosition, initOrientation, initSpeed);
 }
 
 void MotionDriverBinder::Init(Local<Object> exports) {
@@ -39,6 +38,7 @@ void MotionDriverBinder::Init(Local<Object> exports) {
 	Nan::SetPrototypeMethod(tmpl, "moveStraight", moveStraight);
 	Nan::SetPrototypeMethod(tmpl, "setSpeed", setSpeed);
 	Nan::SetPrototypeMethod(tmpl, "getPosition", getPosition);
+	Nan::SetPrototypeMethod(tmpl, "getState", getPosition);
 	Nan::SetPrototypeMethod(tmpl, "refreshData", refreshData);
 
     exports->Set(Nan::New("MotionDriverBinder").ToLocalChecked(), tmpl->GetFunction());
@@ -77,7 +77,6 @@ void MotionDriverBinder::New(const Nan::FunctionCallbackInfo<Value> &args) {
     MotionDriverBinder *motionDriverBinder =
         new MotionDriverBinder(
             initPosition,
-            MotionDriver::VELIKI,
             args[3]->Int32Value(),
             args[4]->Int32Value()
         );
@@ -171,6 +170,15 @@ void MotionDriverBinder::getPosition(const Nan::FunctionCallbackInfo<Value> &arg
     nodes->Set(0, Integer::New(args.GetIsolate(), point.getX()));
     nodes->Set(1, Integer::New(args.GetIsolate(), point.getY()));
     args.GetReturnValue().Set(nodes);
+}
+
+void MotionDriverBinder::getState(const Nan::FunctionCallbackInfo<Value> &args) {
+    Nan::HandleScope scope;
+
+    MotionDriver *motionDriver = ObjectWrap::Unwrap<MotionDriverBinder>(args.Holder())->getMotionDriver();
+    MotionDriver::State state = motionDriver->getState();
+
+    args.GetReturnValue().Set(state);
 }
 
 void MotionDriverBinder::refreshData(const Nan::FunctionCallbackInfo<Value> &args) {
