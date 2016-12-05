@@ -1,6 +1,6 @@
 /** @namespace drivers.laser */
 
-const TerrainDriver = Mep.require('types/TerrainDriver');
+const EventEmitter = require('events');
 const Point = Mep.require('types/Point');
 const Polygon = Mep.require('types/Polygon');
 
@@ -13,7 +13,7 @@ const TAG = 'LaserDriver';
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @fires LaserDriver#terrain
  */
-class LaserDriver extends TerrainDriver {
+class LaserDriver extends EventEmitter {
     /**
      * Make instance of LaserDriver.
      *
@@ -118,6 +118,10 @@ class LaserDriver extends TerrainDriver {
 
     static dependencies() {
         return ['ModbusDriver'];
+    }
+
+    getGroups() {
+        return ['terrain'];
     }
 }
 

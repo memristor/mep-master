@@ -1,10 +1,8 @@
 const MotionDriverBinder = require('bindings')('motion').MotionDriverBinder;
 const Point = Mep.require('types/Point');
-const PositionDriver = Mep.require('types/PositionDriver');
 const Constants = require('./Constants');
 const Util = require('util');
 const EventEmitter = require('events');
-//const mixin = require('es6-mixin').mixin;
 
 Util.inherits(MotionDriverBinder, EventEmitter);
 

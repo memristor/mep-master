@@ -1,4 +1,5 @@
 /** @namespace drivers */
+const DriverChecker = Mep.require('utils/DriverChecker');
 
 const TAG = 'DriverManager';
 
@@ -62,7 +63,7 @@ class DriverManager {
         let load = moduleConfig.load;
         let classPath = moduleConfig.class;
 
-        // Do not initialize if `init field == false`
+        // Do not initialize if `load field == false`
         if (load != false) {
             let ModuleClass = Mep.require(classPath);
 
@@ -72,13 +73,20 @@ class DriverManager {
             }
 
             if (typeof ModuleClass === 'function') {
+                let driverInstance;
+                let loadedWithoutErrors = true;
                 try {
-                    let driverInstance = new ModuleClass(driverIdentifier, moduleConfig);
+                    driverInstance = new ModuleClass(driverIdentifier, moduleConfig);
                     this.drivers[driverIdentifier] = driverInstance;
                     Mep.Log.debug(TAG, 'Driver `' + driverIdentifier + '` loaded');
-
                 } catch (error) {
+                    loadedWithoutErrors = false;
                     this.putDriverOutOfOrder(driverIdentifier, error);
+                }
+
+                // Test if all methods are OK
+                if (loadedWithoutErrors === true) {
+                    DriverChecker.check(driverInstance);
                 }
             }
 

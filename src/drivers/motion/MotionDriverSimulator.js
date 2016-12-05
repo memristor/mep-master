@@ -1,6 +1,6 @@
 const WebSocketClient = Mep.require('utils/WebSocketClient');
 const Point = Mep.require('types/Point');
-const PositionDriver = Mep.require('types/PositionDriver');
+const EventEmitter = require('events');
 
 const TAG = 'MotionDriverSimulator';
 
@@ -32,7 +32,7 @@ const TAG = 'MotionDriverSimulator';
  * }
  * </pre>
  */
-class MotionDriverSimulator extends PositionDriver {
+class MotionDriverSimulator extends EventEmitter {
     constructor(name, config) {
         super();
 
@@ -116,6 +116,10 @@ class MotionDriverSimulator extends PositionDriver {
             command: command,
             params: params
         }));
+    }
+
+    getGroups() {
+        return ['position'];
     }
 }
 
