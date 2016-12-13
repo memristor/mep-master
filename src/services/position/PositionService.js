@@ -100,13 +100,28 @@ class PositionService {
                     points.splice(0, 1);
                     positionService._basicSet(point, direction, tolerance, speed).then(goToNext);
                     return;
-                }
-                resolve();
+                } else {
+                	resolve();
+				}
             }
 
             goToNext();
         });
     }
+
+	_promiseToReachDestionation() {
+		return new Promise((resolve, reject) => {
+            this.motionDriver.on('stateChanged', (state) => {
+                if (state === MotionDriverConstants.STATE_IDLE) {
+                    resolve();
+                }
+                else if (state === MotionDriverConstants.STATE_ERROR ||
+                    state === MotionDriverConstants.STATE_STUCK) {
+                    reject(state);
+                }
+            });
+        });
+	}
 
     _basicSet(point, direction, tolerance, speed) {
         // Set speed
@@ -127,33 +142,13 @@ class PositionService {
         Mep.Log.debug(TAG, 'Robot move command sent.', point);
 
         // Check when robot reached the position
-        return new Promise((resolve, reject) => {
-            this.motionDriver.on('stateChanged', (state) => {
-                if (state === MotionDriverConstants.STATE_IDLE) {
-                    resolve();
-                }
-                else if (state === MotionDriverConstants.STATE_ERROR ||
-                    state === MotionDriverConstants.STATE_STUCK) {
-                    reject(state);
-                }
-            });
-        });
+        return this._promiseToReachDestionation();
     }
 
 	arc(point, angle, direction) {
 		this.motionDriver.moveArc(point.getX(), point.getY(), angle, direction);
 
-		return new Promise((resolve, reject) => {
-		    this.motionDriver.on('stateChanged', (state) => {
-		        if (state === MotionDriverConstants.STATE_IDLE) {
-		            resolve();
-		        }
-		        else if (state === MotionDriverConstants.STATE_ERROR ||
-		            state === MotionDriverConstants.STATE_STUCK) {
-		            reject(state);
-		        }
-		    });
-		});
+		return this._promiseToReachDestionation();
 	}
 
     rotate(tunedAngle, options) {

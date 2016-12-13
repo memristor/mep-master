@@ -34,9 +34,6 @@ class DriverChecker {
         if (typeof driver.getPosition !== 'function') {
             throw TypeError(driverClassName + ' requires method getPosition()');
         }
-        if (driver.getPosition().constructor.name !== 'Point') {
-            throw TypeError('Method '+ driverClassName +'.getPosition() must return Point');
-        }
     }
 
     static _checkTerrain(driver) {
