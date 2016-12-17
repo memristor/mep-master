@@ -1,41 +1,24 @@
-const Path = require('path');
 const Config = require('./Config');
 const Bunyan = require('bunyan');
-const BunyanFormat = require('bunyan-format');
-const BunyanElasticSearch = require('bunyan-elasticsearch');
-
+const _ = require('lodash');
 
 let streams = [];
+let logLevel = Config.get('performance') ? 'info' : 'debug';
+let logConfig = Config.get('Log');
 
-// Add console output
-streams.push({
-    level: Config.get('performance') ? 'info' : 'debug',
-    stream: BunyanFormat({ outputMode: 'short' })
-});
-
-// Add file output
-streams.push({
-    level: Config.get('performance') ? 'info' : 'debug',
-    type: 'rotating-file',
-    path: Path.join(__dirname, '/../logs/javascript.log'),
-    period: '1d',
-    count: 3
-});
-
-// Add ElasticSearch
-if (Config.get('elasticHost') !== '' &&
-    typeof Config.get('elasticHost') !== 'undefined') {
-    streams.push({
-        level: 'debug',
-        stream: new BunyanElasticSearch({
-            indexPattern: '[logstash-]YYYY.MM.DD',
-            type: 'logs',
-            host: Config.get('elasticHost')
-        })
-    });
+if (logConfig === '' || logConfig === undefined) {
+    throw 'Log Configuration missing.';
 }
 
-var logger = Bunyan.createLogger({
+// dynamic logger loader
+_.each(logConfig, function (loggerConfig,loggerClass) {
+    let logger = require('./loggers/' + loggerClass + 'Logger')(loggerConfig, logLevel);
+    if (logger !== undefined) {
+        streams.push(logger);
+    }
+});
+
+let logger = Bunyan.createLogger({
     name: 'mep',
     streams: streams
 });

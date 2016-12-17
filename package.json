@@ -27,6 +27,7 @@
     "bunyan-format": "^0.2.1",
     "es6-mixin": "^0.3.0",
     "latodoc": "github:smeijer/latodoc",
+    "lodash": "^4.17.2",
     "nan": "^2.3.5",
     "nconf": "^0.8.4",
     "openurl": "^1.1.1",
