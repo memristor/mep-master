@@ -7,6 +7,10 @@
 
 #include "Point2D.h"
 #include "math.h"
+#ifndef M_PI
+    // For Visual Studio under windows to use M_PI
+    #define _USE_MATH_DEFINES
+#endif
 
 double PI=3.141592653584;
 
