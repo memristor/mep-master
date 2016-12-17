@@ -2,7 +2,7 @@
  * Elasticsearch Logger
  */
 const _ = require('lodash');
-const BunyanElasticSearch = require('bunyan-elasticsearch');
+const BunyanElasticSearch = require('bunyan-stream-elasticsearch');
 
 function elasticsearchLogger(config, logLevel) {
     let elasticsearchConfig = {

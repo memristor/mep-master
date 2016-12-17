@@ -11,7 +11,8 @@
     "docs": "jsdoc -c jsdoc.json -u docs",
     "start": "node src/Bootstrap.js",
     "simulator": "node tools/simulator/Start.js",
-    "test_simulation": "node --harmony-async-await src/Bootstrap.js -s"
+    "test_simulation": "node --harmony-async-await src/Bootstrap.js -s",
+    "test_simulation_debug": "node %NODE_DEBUG_OPTION% --harmony-async-await src/Bootstrap.js -s"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
     "bindings": "^1.2.1",
     "bunyan": "^1.8.1",
     "bunyan-elasticsearch": "^1.0.0",
+    "bunyan-stream-elasticsearch": "github:bloublou2014/bunyan-stream-elasticsearch",
     "bunyan-format": "^0.2.1",
     "es6-mixin": "^0.3.0",
     "latodoc": "github:smeijer/latodoc",

@@ -26,6 +26,20 @@
       }
     },
 
+    "Telemetry" : {
+      "active" : true,
+      "transmissionRate" : 1000,
+      "stackThreshold" : 1000,
+      "transmission": {
+        "elasticsearch": {
+          "active": true,
+          "host": "http://localhost:9200",
+          "indexPattern": "[mep2_telemetry-]YYYY-MM-DD",
+          "type": "telemetry"
+        }
+      }
+    },
+
     "Drivers": {
         "MotionDriver": {
             "class": "drivers/motion/MotionDriver",
