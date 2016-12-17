@@ -15,6 +15,36 @@ Read more about Memristor at [our website](https://memristor-robotics.github.io/
 git clone https://github.com/Memristor-Robotics/mep2.git --depth 1 && cd mep2 && sudo ./install
 ```
 
+## Windows installation for testing only (simulator)
+
+Install Visual Studio C++ 
+
+```
+git clone https://github.com/Memristor-Robotics/mep2.git 
+npm install
+npm run-script simulator
+```
+
+## Build services manually (Windows)
+
+Build services:
+
+```
+node-gyp configure --directory src/services/path/pathfinding
+node-gyp build --directory src/services/path/pathfinding
+```
+
+Build drivers:
+
+```
+node-gyp configure --directory src/drivers/motion
+node-gyp build --directory src/drivers/motion
+
+node-gyp configure --directory src/drivers/modbus
+node-gyp build --directory src/drivers/modbus
+```
+
+
 ## Execute
 ```
 ./mep
@@ -25,6 +55,7 @@ check for arguments
 ```
 
 ## Simulator
+
 ```
 ./simulator
 ```
