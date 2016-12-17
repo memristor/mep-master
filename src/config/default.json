@@ -12,16 +12,16 @@
         "color": true
       },
       "file" :{
-        "active" : true,
+        "active" : false,
         "file" : "javascript.log",
         "period" : "1d",
         "count" : 3
       },
       "elasticsearch": {
-        "active" : false,
+        "active" : true,
         "level" : "debug",
         "host" : "http://localhost:9200",
-        "indexPattern" : "mep2_logs-[YYYY-MM-DD]",
+        "indexPattern" : "[mep2_logs-]YYYY-MM-DD",
         "type": "log"
       }
     },

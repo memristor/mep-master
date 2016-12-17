@@ -17,16 +17,17 @@ Sample configuration:
     "color": true
   },
   "file" :{
-    "active" : true,
+    "active" : false,
     "file" : "javascript.log",
     "period" : "1d",
     "count" : 3
   },
   "elasticsearch": {
-    "active" : false,
+    "active" : true,
     "level" : "debug",
     "host" : "http://localhost:9200",
-    "indexPattern" : "mep2_logs-[YYYY-MM-DD]"
+    "indexPattern" : "[mep2_logs-]YYYY-MM-DD",
+    "type": "log"
   }
 },
 ```
@@ -59,8 +60,11 @@ By default log level is debug.
 - active (false): true/false : activate elasticsearch logger
 - level (debug): debug/info : debug level
 - host (http://localhost:9200) : elasticsearch server http address
-- indexPattern (mep2_logs-\[YYYY-MM-DD]) : elasticsearch index pattern. Can be a static name or a dynamic with YYYY-MM-DD pattern.
+- index (mep2_logs) : elasticsearch index name. (no pattern allowed here)
+- indexPattern (\[mep2_logs-]YYYY-MM-DD) : elasticsearch index pattern. Can be a static name or a dynamic with YYYY-MM-DD pattern.
 - type (log): elasticsearch type
+
+If index is configured, indexPattern is ignored.
 
 ## Performance Parameter
 
