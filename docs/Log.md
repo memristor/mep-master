@@ -23,7 +23,7 @@ Sample configuration:
     "count" : 3
   },
   "elasticsearch": {
-    "active" : true,
+    "active" : false,
     "level" : "debug",
     "host" : "http://localhost:9200",
     "indexPattern" : "[mep2_logs-]YYYY-MM-DD",
