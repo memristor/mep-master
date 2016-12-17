@@ -15,40 +15,11 @@ Read more about Memristor at [our website](https://memristor-robotics.github.io/
 git clone https://github.com/Memristor-Robotics/mep2.git --depth 1 && cd mep2 && sudo ./install
 ```
 
-## Windows installation for testing only (simulator)
-
-Install Visual Studio C++ 
-
-```
-git clone https://github.com/Memristor-Robotics/mep2.git 
-npm install
-npm run-script simulator
-```
-
-## Build services manually (Windows)
-
-Build services:
-
-```
-node-gyp configure --directory src/services/path/pathfinding
-node-gyp build --directory src/services/path/pathfinding
-```
-
-Build drivers:
-
-```
-node-gyp configure --directory src/drivers/motion
-node-gyp build --directory src/drivers/motion
-
-node-gyp configure --directory src/drivers/modbus
-node-gyp build --directory src/drivers/modbus
-```
-
-
 ## Execute
 ```
 ./mep
 ```
+
 check for arguments
 ```
 ./mep --help
@@ -66,3 +37,51 @@ create a documentation locally
 npm run-script docs
 ```
 or check for [online docs](https://doclets.io/Memristor-Robotics/mep2/master)
+
+
+## For Windows
+
+### Windows installation for simulation only
+
+Install Visual Studio C++
+ 
+Install mep2:
+```
+git clone https://github.com/Memristor-Robotics/mep2.git 
+npm install
+```
+
+### Build services manually
+
+Build services:
+
+```
+node-gyp configure --directory src/services/path/pathfinding
+node-gyp build --directory src/services/path/pathfinding
+```
+
+### Execute 
+```
+npm run-script start
+```
+or
+```
+node --harmony-async-await src/Bootstrap.js [Options]
+```
+
+check for arguments
+```
+node src/Bootstrap.js --help
+```
+
+### Simulator
+
+Start simulator 
+```
+npm run-script simulator
+```
+
+Start simulation
+```
+npm run-script test_simulation
+```
