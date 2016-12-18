@@ -16,6 +16,8 @@ class PositionService {
         this.positionEstimator = new PositionEstimator();
         this.motionDriver = null;
 
+        Mep.TM(TAG, 'init', {config: this.config});
+
         // Prepare methods
         this.startAvoidingStrategy.bind(this);
         this.onPathObstacleDetected.bind(this);
@@ -35,6 +37,8 @@ class PositionService {
     }
 
     onPathObstacleDetected(state, front) {
+        Mep.TM(TAG, 'onPathObstacleDetected', {state: state, front: front});
+
         // If something is detected
         if (state === true) {
 
@@ -82,9 +86,10 @@ class PositionService {
 
         // Apply path finding
         if (pathfinding === true) {
-		
+
             let currentPoint = this.positionEstimator.getPosition();
-		Mep.Log.debug(TAG, 'Start path finding from position', currentPoint);
+            Mep.TM(TAG, 'set', {state: state, front: front});
+            Mep.Log.debug(TAG, 'Start path finding from position', currentPoint);
 
             points = Mep.getPathService().search(currentPoint, destinationPoint);
             Mep.Log.debug(TAG, 'Start path finding', points, 'from point', currentPoint);
@@ -101,16 +106,16 @@ class PositionService {
                     positionService._basicSet(point, direction, tolerance, speed).then(goToNext);
                     return;
                 } else {
-                	resolve();
-				}
+                    resolve();
+                }
             }
 
             goToNext();
         });
     }
 
-	_promiseToReachDestionation() {
-		return new Promise((resolve, reject) => {
+    _promiseToReachDestionation() {
+        return new Promise((resolve, reject) => {
             this.motionDriver.on('stateChanged', (state) => {
                 if (state === MotionDriverConstants.STATE_IDLE) {
                     resolve();
@@ -121,7 +126,7 @@ class PositionService {
                 }
             });
         });
-	}
+    }
 
     _basicSet(point, direction, tolerance, speed) {
         // Set speed
@@ -139,17 +144,18 @@ class PositionService {
                 MotionDriverConstants.DIRECTION_FORWARD
         );
 
-        Mep.Log.debug(TAG, 'Robot move command sent.', point);
+        Mep.TM(TAG, 'move', {point: point});
+        Mep.Log.debug({service: TAG, point: point, action: 'move', status: 'sent'}, 'Robot move command sent.', point);
 
         // Check when robot reached the position
         return this._promiseToReachDestionation();
     }
 
-	arc(point, angle, direction) {
-		this.motionDriver.moveArc(point.getX(), point.getY(), angle, direction);
+    arc(point, angle, direction) {
+        this.motionDriver.moveArc(point.getX(), point.getY(), angle, direction);
 
-		return this._promiseToReachDestionation();
-	}
+        return this._promiseToReachDestionation();
+    }
 
     rotate(tunedAngle, options) {
         // TODO

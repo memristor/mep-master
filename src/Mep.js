@@ -1,5 +1,6 @@
 const Config = require('./Config');
 const Log = require('./Log');
+const Telemetry = require('./Telemetry');
 
 /**
  * Proxy to custom require(), Log & Config
@@ -7,7 +8,7 @@ const Log = require('./Log');
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @namespace Mep
  */
-var Mep = {
+let Mep = {
     /**
      * Global function to require library relative to `src` directory
      * @memberof Mep
@@ -28,7 +29,7 @@ var Mep = {
         }
 
         // Check if dir is allowed
-        var dir = library.split('/')[0];
+        let dir = library.split('/')[0];
         if (allowedDirectories.indexOf(dir) < 0) {
             throw new Error('Directory is not allowed');
         }
@@ -47,6 +48,17 @@ var Mep = {
      * @returns {Log}
      */
     Log: Log,
+
+    /**
+     * Telemetry system
+     * @memberof Mep
+     * @example
+     * Mep.Telemetry('PathFinding', 'finding', {x:0.0, y:0.0});
+     *
+     * @returns {Telemetry}
+     */
+    Telemetry: Telemetry,
+    TM: Telemetry,
 
     /**
      * Access to current configuration
@@ -101,7 +113,7 @@ var Mep = {
         this.positionService =
             new (require('./services/position/PositionService'))(Config.get('Services:PositionService'));
 
-        this.pathService =  new (require('./services/path/PathService'))(Config.get('Services:PathService'));
+        this.pathService = new (require('./services/path/PathService'))(Config.get('Services:PathService'));
     }
 };
 

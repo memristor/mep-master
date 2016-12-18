@@ -17,7 +17,7 @@ class PositionEstimator extends EventEmitter {
 
         // Subscribe on drivers
         this.drivers = driverManager.getDriversByGroup('position');
-        for (var driverName in this.drivers) {
+        for (let driverName in this.drivers) {
             this.drivers[driverName].on('positionChanged', (driverName, point, precision) => {
                 object.processPositionChange(driverName, point, precision);
             });
@@ -28,6 +28,7 @@ class PositionEstimator extends EventEmitter {
         // TODO: Sensor Fusion problem: https://en.wikipedia.org/wiki/Sensor_fusion
         // Implement Kalman filter: https://en.wikipedia.org/wiki/Kalman_filter
 
+        Mep.TM(TAG, 'ReceivedPosition', {driverName: driverName, point: point});
         Mep.Log.debug(TAG, 'Received position from', driverName, point);
 
         this.emit('positionChanged', point);
