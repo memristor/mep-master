@@ -3,26 +3,33 @@ const OpenUrl = require('openurl');
 const Path = require('path');
 
 
-// Start server
-let wss = new WebSocket({ port: 8080 });
-console.log('Server started!');
+// Start servers
 
-// Do duty
-wss.on('connection', (socket) => {
-    console.log('New client is connected!');
+// WebServer web socket to the outside world
+let wsWebServer = new WebSocket({port: 8081});
+console.log('Web Socket Server started!');
+wsWebServer.on('connection', (socket) => {
+    console.log('New client connected!');
+});
+
+// Telemetry server, from the inside
+let wsTelemetryServer = new WebSocket({port: 1234});
+console.log('Telemetry Server started!');
+wsTelemetryServer.on('connection', (socket) => {
+    console.log('New Robot connected!');
 
     socket.on('message', (data) => {
-        console.log('Data:', data);
-        wss.clients.forEach((client) => {
-            if (client !== socket) client.send(data);
+        console.log('Telemetry Data:', data);
+        wsWebServer.clients.forEach((client) => {
+            if (client !== socket) {
+                client.send({type: 'telemetry', data: data});
+            }
         });
     });
 });
-
-// Handle error
-wss.on('error', (err) => {
-    console.log('Error: ', err);
+wsTelemetryServer.on('error', (err) => {
+    console.log('Telemetry Error: ', err);
 });
 
 // Open a simulator
-OpenUrl.open('file://' + Path.join(__dirname, 'index.html'));
+OpenUrl.open('file://' + Path.join(__dirname, 'website', 'index.html'));

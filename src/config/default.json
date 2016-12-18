@@ -32,10 +32,14 @@
       "stackThreshold" : 1000,
       "transmission": {
         "elasticsearch": {
-          "active": true,
+          "active": false,
           "host": "http://localhost:9200",
           "indexPattern": "[mep2_telemetry-]YYYY-MM-DD",
           "type": "telemetry"
+        },
+        "webSocket": {
+          "active": true,
+          "host": "http://localhost:1234"
         }
       }
     },
