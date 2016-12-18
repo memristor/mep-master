@@ -9,7 +9,9 @@
   "scripts": {
     "test": "mocha --slow 0 --require test/Init",
     "docs": "jsdoc -c jsdoc.json -u docs",
-    "start": "node src/Bootstrap.js"
+    "start": "node src/Bootstrap.js",
+    "simulator": "node tools/simulator/Start.js",
+    "test_simulation": "node --harmony-async-await src/Bootstrap.js -s"
   },
   "repository": {
     "type": "git",
