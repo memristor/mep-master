@@ -33,7 +33,7 @@ class UsageDriver {
     }
 
     _logUsage(err, result) {
-        Mep.telemetry(TAG, result);
+        Mep.telemetry(TAG, 'UsageMeasured', result);
     }
 
     getGroups() {
