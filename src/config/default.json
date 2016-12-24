@@ -61,6 +61,12 @@
             "load": true,
             "type": "delay",
             "delayTimer": 400
+        },
+
+        "UsageDriver": {
+            "class": "drivers/usage/UsageDriver",
+            "load": true,
+            "refreshPeriod": 1000
         }
     },
 
