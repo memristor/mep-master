@@ -18,7 +18,7 @@ function elasticsearchTransmitter(config) {
     }
 
     if (config) {
-        elasticsearchConfig = _.defaults(config, elasticsearchConfig)
+        elasticsearchConfig = _.defaults(config, elasticsearchConfig);
     }
 
     function writeFormatter(entry, input) {

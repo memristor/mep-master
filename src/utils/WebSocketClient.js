@@ -18,8 +18,14 @@ class WebSocketClient extends WebSocket {
         let webSocketClient = this;
         this.opened = false;
 
-        this.on('error', () => { Mep.Log.error(TAG, 'Please run simulator\'s server by `./simulator`'); });
-        this.on('open', () => { webSocketClient.opened = true; });
+        this.on('error', (err) => {
+            Mep.Log.error(TAG, 'Websocket Simulator Server Error:', err);
+            Mep.Log.error(TAG, 'Please run simulator\'s server by `./simulator`');
+        });
+
+        this.on('open', () => {
+            webSocketClient.opened = true;
+        });
     }
 
     send(data) {

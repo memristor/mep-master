@@ -28,8 +28,9 @@
 
     "Telemetry" : {
       "active" : true,
-      "transmissionRate" : 1000,
-      "stackThreshold" : 1000,
+      "transmissionRate" : 100,
+      "stackThreshold" : 10000,
+      "heartbeatRate" : 2000,
       "transmission": {
         "elasticsearch": {
           "active": false,
@@ -39,7 +40,8 @@
         },
         "webSocket": {
           "active": true,
-          "host": "http://localhost:1234"
+          "host": "ws://localhost:9999",
+          "retryConnection": true
         }
       }
     },

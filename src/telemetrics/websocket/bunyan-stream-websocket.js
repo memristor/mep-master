@@ -17,27 +17,68 @@ const levels = {
 function WebSocketStream(options) {
     options = options || {};
     this._host = options.host || 'ws://127.0.0.1:1234';
+    this._retryConnection = options.retryConnection || true;
+    this._retryInterval = options.retryInterval || 3000;
 
-    // create webSocket client
-    this._ws = new WebSocket(this._host);
-    this._connected = false;
+    Writable.call(this, options);
+
+    this.connect();
+}
+
+util.inherits(WebSocketStream, Writable);
+
+WebSocketStream.prototype.connect = function () {
     let self = this;
+
+    this._ws = new WebSocket(this._host);
+    // create webSocket client
+    this._connected = false;
 
     this._ws.on('open', function open() {
         console.log('telemetry server connected');
         self._connected = true;
     });
 
-    Writable.call(this, options);
-}
+    this._ws.on('close', function (e) {
+        console.log('Socket is closed. Reconnect will be attempted in ' + self._retryInterval + ' ms.', e.reason);
+        self._connected = false;
+        if (self._retryConnection === true) {
+            setTimeout(function () {
+                self.connect();
+            }, self._retryInterval);
+        }
+    });
 
-util.inherits(WebSocketStream, Writable);
+    this._ws.on('error', function (err) {
+        console.error('Socket encountered error: ', err.message, 'Closing socket');
+        self._ws.close();
+        if (!self._connected) {
+            if (self._retryConnection === true) {
+                setTimeout(function () {
+                    self.connect();
+                }, self._retryInterval);
+            }
+        }
+    });
+};
 
-WebSocketStream.prototype._write = function (entry, encoding, callback) {
-    console.log('telemetry data', self._connected);
+WebSocketStream.prototype.sendMessage = function (message, callback) {
+    let self = this;
+    let jsonMessage = JSON.stringify(message);
+    this._ws.send(jsonMessage, function (err) {
+        if (err) {
+            self.emit('error', err);
+        }
+        if (callback) {
+            callback();
+        }
+    });
+};
+
+WebSocketStream.prototype.write = function (entry, encoding, callback) {
+    let self = this;
     if (!self._connected) {
         // telemetry lost
-        console.log('telemetry data Lost');
         return;
     }
 
@@ -59,21 +100,16 @@ WebSocketStream.prototype._write = function (entry, encoding, callback) {
 
     if (input.err) {
         output.error = input.err;
-        if (!output.message) output.message = output.error.message;
-    }
-
-    if (this._writeCallback) {
-        this._writeCallback(output, input);
-    }
-
-    let self = this;
-    this._ws.send(input, function (err) {
-        if (err) {
-            self.emit('error', err);
+        if (!output.message) {
+            output.message = output.error.message;
         }
-        callback();
-    });
+    }
 
+    try {
+        self.sendMessage(input, callback);
+    } catch (e) {
+        // we do not want to manage an error within a logger
+    }
 };
 
 module.exports = WebSocketStream;

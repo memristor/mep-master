@@ -35,6 +35,8 @@ let flipFlop = false;
 let stackCount = 0;
 let transmitting = false;
 
+let robotNickname = Config.get('robot');
+
 function transmit(measure) {
     let stack = (flipFlop) ? telemetryStackFlip : telemetryStackFlop;
     if (stackCount > telemetryStackThreshold) {
@@ -73,13 +75,9 @@ function transmission() {
     }
 }
 
-setInterval(function () {
-    transmission();
-}, telemetryConfig.transmissionRate || 1000);
-
-
 let telemetryFunction = function (tag, metric, value) {
     let telemetryMeasure = {
+        robot: robotNickname,
         date: Date.now(),
         tag: tag,
         metric: metric,
@@ -87,5 +85,26 @@ let telemetryFunction = function (tag, metric, value) {
     };
     transmit(telemetryMeasure);
 };
+
+setInterval(function () {
+    transmission();
+}, telemetryConfig.transmissionRate || 1000);
+
+
+function heartbeat() {
+    let heartbeatInfo = {
+        date: new Date(),
+        robot: robotNickname,
+        table: Config.get('table'),
+        simulation: Config.get('simulation'),
+        scheduler: Config.get('scheduler')
+    };
+    telemetryFunction('heartbeat', 'heartbeat', heartbeatInfo);
+}
+
+setInterval(function () {
+    heartbeat();
+}, telemetryConfig.heartbeatRate || 1000);
+
 
 module.exports = telemetryFunction;
