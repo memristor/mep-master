@@ -1,12 +1,11 @@
 /**
  * Elasticsearch Telemetry Transmitter
  */
-const _ = require('lodash');
 const BunyanElasticSearch = require('bunyan-stream-elasticsearch');
+const Config = require('../../Config');
 
 function elasticsearchTransmitter(config) {
     let elasticsearchConfig = {
-        active: false,
         level: "debug",
         host: "http://localhost:9200",
         indexPattern: "[mep2_telemetry-]YYYY-MM-DD",
@@ -18,28 +17,30 @@ function elasticsearchTransmitter(config) {
     }
 
     if (config) {
-        elasticsearchConfig = _.defaults(config, elasticsearchConfig)
+        elasticsearchConfig = Object.assign(elasticsearchConfig, config);
     }
 
     function writeFormatter(entry, input) {
-        // change all properties to avoid any elasticsearch type collision between modules
+        // Change all properties to avoid any elasticsearch type collision between modules
         let values = {};
         let prefix = (entry.tag + '_' + entry.metric).toLowerCase();
-        _.each(entry.value, function (v, k) {
-            values[prefix + '_' + k] = v;
-        });
-        // change values
+
+        for (let key in entry.value) {
+            values[prefix + '_' + key] = entry.value[key];
+        }
+
+        // Change values
         entry.value = values;
     }
 
-    if (elasticsearchConfig.active === true) {
+    if (Config.get('elasticHost') !== '') {
         return {
             level: 'debug',
             stream: new BunyanElasticSearch({
                 index: elasticsearchConfig.index,
                 indexPattern: elasticsearchConfig.indexPattern,
                 type: elasticsearchConfig.type,
-                host: elasticsearchConfig.host,
+                host: Config.get('elasticHost'),
                 writeCallback: writeFormatter
             })
         };

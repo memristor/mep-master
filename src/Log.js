@@ -17,7 +17,6 @@ for (let key in logConfig) {
     }
 }
 
-
 let logger = Bunyan.createLogger({
     name: 'mep',
     streams: streams

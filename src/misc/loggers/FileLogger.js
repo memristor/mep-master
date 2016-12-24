@@ -1,7 +1,6 @@
 /**
  * File Logger
  */
-const _ = require('lodash');
 const Path = require('path');
 
 function filleLogger(config, logLevel) {
@@ -12,14 +11,13 @@ function filleLogger(config, logLevel) {
     };
 
     if (config) {
-        fileConfig = _.defaults(config, fileConfig)
+        fileConfig = Object.assign(fileConfig, config);
     }
 
     if (fileConfig.active === true) {
-
         let filePath = Path.isAbsolute(fileConfig.file)
             ? fileConfig.file
-            : Path.join(__dirname, '/../../logs', fileConfig.file);
+            : Path.join(__dirname, '/../../../logs', fileConfig.file);
 
         return {
             level: logLevel,

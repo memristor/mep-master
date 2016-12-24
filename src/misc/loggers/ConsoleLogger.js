@@ -1,7 +1,6 @@
 /**
  * Console Logger
  */
-const _ = require('lodash');
 const BunyanFormat = require('bunyan-format');
 
 function consoleLogger(config, logLevel) {
@@ -12,7 +11,7 @@ function consoleLogger(config, logLevel) {
     };
 
     if (config) {
-        consoleConfig = _.defaults(config, consoleConfig)
+        consoleConfig = Object.assign(consoleConfig, config);
     }
 
     if (consoleConfig.active === true) {

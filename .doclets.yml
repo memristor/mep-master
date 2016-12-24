@@ -10,5 +10,5 @@ articles:
   - Setting up ElastiSearch: docs/Setting_Up_ElasticSearch.md
   - Simulator: docs/Simulator.md
   - Logging System: docs/Log.md
-  - Telementry: docs/Telementry.md
+  - Telementry: docs/Telemetry.md
   - Source Roadmap: docs/Source_Roadmap.md

@@ -4,6 +4,7 @@
     "performance": false,
     "robot": "",
     "scheduler": "",
+    "elasticHost": "",
 
     "Log": {
       "Console" :{
@@ -20,7 +21,6 @@
       "Elasticsearch": {
         "active" : false,
         "level" : "debug",
-        "host" : "http://localhost:9200",
         "indexPattern" : "[mep2_logs-]YYYY-MM-DD",
         "type": "log"
       }
@@ -33,7 +33,6 @@
       "Transmission": {
         "Elasticsearch": {
           "active": true,
-          "host": "http://localhost:9200",
           "indexPattern": "[mep2_telemetry-]YYYY-MM-DD",
           "type": "telemetry"
         }
