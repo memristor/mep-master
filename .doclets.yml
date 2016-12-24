@@ -9,3 +9,6 @@ articles:
   - Services vs Drivers: docs/Services_vs_Drivers.md
   - Setting up ElastiSearch: docs/Setting_Up_ElasticSearch.md
   - Simulator: docs/Simulator.md
+  - Logging System: docs/Log.md
+  - Telementry: docs/Telementry.md
+  - Source Roadmap: docs/Source_Roadmap.md

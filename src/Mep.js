@@ -20,7 +20,7 @@ let Mep = {
      * @returns {Object} - Required library
      */
     require(library) {
-        let allowedDirectories = ['types', 'utils', 'drivers', 'services'];
+        let allowedDirectories = ['types', 'utils', 'drivers', 'services', 'misc'];
         let allowedLibraries = ['services/ServiceManager'];
 
         // Check if it is allowed
@@ -53,12 +53,11 @@ let Mep = {
      * Telemetry system
      * @memberof Mep
      * @example
-     * Mep.Telemetry('PathFinding', 'finding', {x:0.0, y:0.0});
+     * Mep.telemetry('PathFinding', 'finding', {x:0.0, y:0.0});
      *
      * @returns {Telemetry}
      */
-    Telemetry: Telemetry,
-    TM: Telemetry,
+    telemetry: Telemetry,
 
     /**
      * Access to current configuration
@@ -85,6 +84,12 @@ let Mep = {
         return this.positionService;
     },
 
+    /**
+     * Provides an instance of the PathService
+     * @memberof Mep
+     * @see {@link services.PathService}
+     * @returns {PathService}
+     */
     getPathService() {
         return this.pathService;
     },

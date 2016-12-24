@@ -1,5 +1,4 @@
 const Config = require('./Config');
-const _ = require('lodash');
 const Bunyan = require('bunyan');
 
 let telemetryConfig = Config.get('Telemetry');
@@ -9,26 +8,28 @@ if (telemetryConfig === '' || telemetryConfig === undefined) {
 }
 
 let streams = [];
-let transmissionConfig = telemetryConfig.transmission;
-// dynamic logger loader
-_.each(transmissionConfig, function (transmissionConfig, transmissionClass) {
-    let logger = require('./telemetrics/' + transmissionClass + 'Transmiter')(transmissionConfig);
+let transmissionConfig = telemetryConfig.Transmission;
+
+// Dynamic logger loader
+for (let key in transmissionConfig) {
+    let logger = require('./misc/telemetrics/' + key + 'Transmiter')(transmissionConfig[key]);
     if (logger !== undefined) {
         streams.push(logger);
     }
-});
+}
 
 let simpleTelemetricLogger = Bunyan.createLogger({
     name: 'mep_telemetric',
     streams: streams
 });
 
-// init telemetry information system
+// Init telemetry information system
 let telemetryTransmissionModule = undefined;
-// maximum messages stack in, over this limit older messages are lost
+
+// Maximum messages stack in, over this limit older messages are lost
 let telemetryStackThreshold = telemetryConfig.stackThreshold || 1000;
 
-// in a multi threaded environment input stack should be separated from transmission stack to avoid resource lock.
+// In a multi threaded environment input stack should be separated from transmission stack to avoid resource lock.
 let telemetryStackFlip = [];
 let telemetryStackFlop = [];
 let flipFlop = false;
@@ -54,11 +55,12 @@ function transmission() {
         stackCount = 0;
 
         if (telemetryConfig.active === true) {
-            // now we ve time to process transmission
+            // Now we ve time to process transmission
             let stack = (!flipFlop) ? telemetryStackFlip : telemetryStackFlop;
-            _.each(stack, function (measure) {
+
+            for (let measure of stack) {
                 simpleTelemetricLogger.info(measure);
-            });
+            }
         }
 
         if (!flipFlop) {

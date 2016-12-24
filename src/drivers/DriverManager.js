@@ -1,5 +1,5 @@
 /** @namespace drivers */
-const DriverChecker = Mep.require('utils/DriverChecker');
+const DriverChecker = require('./DriverChecker');
 
 const TAG = 'DriverManager';
 

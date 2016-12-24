@@ -2,6 +2,9 @@
   "simulation": true,
   "performance": true,
 
+  "Log": { },
+  "Telemetry": { },
+
   "Drivers": {
     "MotionDriver": {
       "class": "drivers/motion/MotionDriverSimulator",

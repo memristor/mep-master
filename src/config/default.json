@@ -6,18 +6,18 @@
     "scheduler": "",
 
     "Log": {
-      "console" :{
+      "Console" :{
         "active" : true,
         "outputMode" : "short",
         "color": true
       },
-      "file" :{
+      "File" :{
         "active" : false,
         "file" : "javascript.log",
         "period" : "1d",
         "count" : 3
       },
-      "elasticsearch": {
+      "Elasticsearch": {
         "active" : false,
         "level" : "debug",
         "host" : "http://localhost:9200",
@@ -30,8 +30,8 @@
       "active" : true,
       "transmissionRate" : 1000,
       "stackThreshold" : 1000,
-      "transmission": {
-        "elasticsearch": {
+      "Transmission": {
+        "Elasticsearch": {
           "active": true,
           "host": "http://localhost:9200",
           "indexPattern": "[mep2_telemetry-]YYYY-MM-DD",
