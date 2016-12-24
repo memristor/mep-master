@@ -8,10 +8,6 @@
       "class": "drivers/modbus/ModbusDriverSimulator"
     },
 
-    "StarterDriver": {
-      "class": "drivers/starter/StarterDriverSimulator"
-    },
-
     "LaserFrontLeft": {
       "class": "drivers/laser/LaserDriver",
       "load": true,

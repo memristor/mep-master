@@ -57,8 +57,10 @@
         },
 
         "StarterDriver": {
-            "class": "driver/starter/StarterDriver",
-            "load": true
+            "class": "drivers/starter/StarterDriver",
+            "load": true,
+            "type": "delay",
+            "delayTimer": 400
         }
     },
 

@@ -8,7 +8,6 @@ const starter = Mep.getDriverManager().getDriver('StarterDriver');
 class InitTask extends Task {
     async onRun() {
         await starter.waitStartSignal();
-        console.log('asdasdsjad hasjkdh asdhj ');
 
         // Let's move around
         await position.set(new TunedPoint(1100, 0), {speed: 130});
