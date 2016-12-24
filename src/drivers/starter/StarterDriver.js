@@ -11,7 +11,11 @@ class StarterDriver extends EventEmitter {
 
     }
 
-    getTimeMicro() {
+    getTimeMills() {
+
+    }
+
+    waitStartSignal() {
 
     }
 }

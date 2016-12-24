@@ -54,6 +54,11 @@
         "ModbusDriver": {
             "class": "drivers/modbus/ModbusDriver",
             "load": true
+        },
+
+        "StarterDriver": {
+            "class": "driver/starter/StarterDriver",
+            "load": true
         }
     },
 

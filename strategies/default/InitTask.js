@@ -3,11 +3,12 @@ const TunedPoint = Mep.require('types/TunedPoint');
 const Point = Mep.require('types/Point');
 const Delay = Mep.require('utils/Delay');
 const position = Mep.getPositionService();
+const starter = Mep.getDriverManager().getDriver('StarterDriver');
 
 class InitTask extends Task {
     async onRun() {
-        // Wait WebSocketClient to connect to WebSocketServer
-        await Delay(200);
+        await starter.waitStartSignal();
+        console.log('asdasdsjad hasjkdh asdhj ');
 
         // Let's move around
         await position.set(new TunedPoint(1100, 0), {speed: 130});
