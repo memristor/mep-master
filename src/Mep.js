@@ -108,6 +108,19 @@ let Mep = {
     },
 
     /**
+     * Provides an instance of the SchedulerService
+     * @memberOf Mep
+     * @see {@link services.SchedulerService}
+     * @example
+     * let scheduler = Mep.getSchedulerService();
+     *
+     * @returns {SchedulerService}
+     */
+    getSchedulerService() {
+        return this.schedulerService;
+    },
+
+    /**
      * Initialize necessary modules. Should be called only once during an application bootstrapping
      * @memberof Mep
      */
@@ -117,8 +130,8 @@ let Mep = {
 
         this.positionService =
             new (require('./services/position/PositionService'))(Config.get('Services:PositionService'));
-
         this.pathService = new (require('./services/path/PathService'))(Config.get('Services:PathService'));
+        this.schedulerService = new (require('./services/scheduler/SchedulerService'))(Config.get('Services:SchedulerService'));
     }
 };
 

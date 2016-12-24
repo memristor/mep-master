@@ -12,7 +12,7 @@ class Bootstrap {
         Mep.Log.info('Use simulation:', Mep.Config.get('simulation'));
         Mep.Log.info('Scheduler path:', Mep.Config.get('scheduler'));
 
-        // Initialize DriverManager & services
+        // Initialize drivers & services
         Mep.init();
 
         // Load strategy
@@ -24,8 +24,7 @@ class Bootstrap {
             Mep.Log.error(TAG, errorMessage);
             throw Error(errorMessage);
         }
-        let scheduler = new Scheduler();
-        scheduler.runTask(scheduler.findBestTask());
+        (new Scheduler());
     }
 }
 

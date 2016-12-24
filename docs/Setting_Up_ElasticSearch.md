@@ -22,7 +22,8 @@ http.cors.allow-origin: "*"
 ```sudo /etc/init.d/elasticsearch restart```
 
 ### 4. Override config in MEP
-Insert your PC's IP address in MEP's config
+Run ./mep with elasticHost parameter  
+```./mep -e=[host_ip_address].9200```
 
 ### 5. Use ElasticSearch GUI
 Find and pick your favorite ElasticSearch GUI and start exploring the logs.
