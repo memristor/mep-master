@@ -3,7 +3,7 @@ const Log = require('./Log');
 const Telemetry = require('./Telemetry');
 
 /**
- * Proxy to custom require(), Log & Config
+ * Proxy to custom require(), Log, Config, DriverManager & services.
  *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @namespace Mep
@@ -40,7 +40,7 @@ let Mep = {
 
     /**
      * Logging system
-     * @see {@link https://github.com/winstonjs/winston|WinstonLogger}
+     * @see {@link https://www.npmjs.com/package/bunyan|bunyan}
      * @memberof Mep
      * @example
      * Mep.Log.debug('Pathfinding', 'Start path finding for (x, y)');
@@ -61,7 +61,7 @@ let Mep = {
 
     /**
      * Access to current configuration
-     * @see {@link https://github.com/lorenwest/node-config|NodeConfig}
+     * @see {@link https://www.npmjs.com/package/nconf|nconf}
      * @memberof Mep
      * @example
      * Mep.Config.get('Drivers.MotionDriver.class');

@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://bitbucket.org/ftn-memristor/mep2.git"
+    "url": "git+https://github.com/Memristor-Robotics/mep2.git"
   },
   "author": "Darko Lukic <lukicdarkoo@gmail.com>",
   "license": "ISC",
@@ -27,17 +27,14 @@
     "bunyan-elasticsearch": "^1.0.0",
     "bunyan-format": "^0.2.1",
     "bunyan-stream-elasticsearch": "github:bloublou2014/bunyan-stream-elasticsearch",
-    "es6-mixin": "^0.3.0",
     "latodoc": "github:smeijer/latodoc",
     "nan": "^2.3.5",
     "nconf": "^0.8.4",
     "openurl": "^1.1.1",
-    "proxymi": "^0.2.2",
     "require-new": "^1.1.0",
     "should": "^11.1.1",
     "sinon": "^1.17.6",
     "usage": "^0.7.1",
-    "ws": "^1.1.1",
-    "xmultiple": "^1.0.0"
+    "ws": "^1.1.1"
   }
 }
