@@ -6,6 +6,7 @@ const Config = require('../../Config');
 
 function elasticsearchTransmitter(config) {
     let elasticsearchConfig = {
+        active: false,
         level: "debug",
         host: "http://localhost:9200",
         indexPattern: "[mep2_telemetry-]YYYY-MM-DD",
@@ -33,14 +34,14 @@ function elasticsearchTransmitter(config) {
         entry.value = values;
     }
 
-    if (Config.get('elasticHost') !== '') {
+    if (elasticsearchConfig.active === true) {
         return {
             level: 'debug',
             stream: new BunyanElasticSearch({
                 index: elasticsearchConfig.index,
                 indexPattern: elasticsearchConfig.indexPattern,
                 type: elasticsearchConfig.type,
-                host: Config.get('elasticHost'),
+                host: elasticsearchConfig.host,
                 writeCallback: writeFormatter
             })
         };

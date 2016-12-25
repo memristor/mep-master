@@ -16,7 +16,7 @@ class PositionService {
         this.positionEstimator = new PositionEstimator();
         this.motionDriver = null;
 
-        Mep.telemetry(TAG, 'init', {config: this.config});
+        Mep.Telemetry(TAG, 'init', {config: this.config});
 
         // Prepare methods
         this.startAvoidingStrategy.bind(this);
@@ -37,7 +37,7 @@ class PositionService {
     }
 
     onPathObstacleDetected(state, front) {
-        Mep.telemetry(TAG, 'onPathObstacleDetected', {state: state, front: front});
+        Mep.Telemetry(TAG, 'onPathObstacleDetected', {state: state, front: front});
 
         // If something is detected
         if (state === true) {
@@ -88,7 +88,7 @@ class PositionService {
         if (pathfinding === true) {
 
             let currentPoint = this.positionEstimator.getPosition();
-            Mep.telemetry(TAG, 'set', {state: state, front: front});
+            Mep.Telemetry(TAG, 'set', {state: state, front: front});
             Mep.Log.debug(TAG, 'Start path finding from position', currentPoint);
 
             points = Mep.getPathService().search(currentPoint, destinationPoint);
@@ -144,7 +144,7 @@ class PositionService {
                 MotionDriverConstants.DIRECTION_FORWARD
         );
 
-        Mep.telemetry(TAG, 'move', {point: point});
+        Mep.Telemetry(TAG, 'move', {point: point});
         Mep.Log.debug({service: TAG, point: point, action: 'move', status: 'sent'}, 'Robot move command sent.', point);
 
         // Check when robot reached the position

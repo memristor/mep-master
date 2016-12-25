@@ -12,7 +12,7 @@ let transmissionConfig = telemetryConfig.Transmission;
 
 // Dynamic logger loader
 for (let key in transmissionConfig) {
-    let logger = require('./misc/telemetrics/' + key + 'Transmiter')(transmissionConfig[key]);
+    let logger = require('./misc/telemetrics/' + key + 'Transmitter')(transmissionConfig[key]);
     if (logger !== undefined) {
         streams.push(logger);
     }
@@ -23,9 +23,6 @@ let simpleTelemetricLogger = Bunyan.createLogger({
     streams: streams
 });
 
-// Init telemetry information system
-let telemetryTransmissionModule = undefined;
-
 // Maximum messages stack in, over this limit older messages are lost
 let telemetryStackThreshold = telemetryConfig.stackThreshold || 1000;
 
@@ -35,6 +32,8 @@ let telemetryStackFlop = [];
 let flipFlop = false;
 let stackCount = 0;
 let transmitting = false;
+
+let robotNickname = Config.get('robot');
 
 function transmit(measure) {
     let stack = (flipFlop) ? telemetryStackFlip : telemetryStackFlop;
@@ -75,13 +74,9 @@ function transmission() {
     }
 }
 
-setInterval(function () {
-    transmission();
-}, telemetryConfig.transmissionRate || 1000);
-
-
 let telemetryFunction = function (tag, metric, value) {
     let telemetryMeasure = {
+        robot: robotNickname,
         date: Date.now(),
         tag: tag,
         metric: metric,
@@ -89,5 +84,24 @@ let telemetryFunction = function (tag, metric, value) {
     };
     transmit(telemetryMeasure);
 };
+
+setInterval(function () {
+    transmission();
+}, telemetryConfig.transmissionRate || 1000);
+
+function heartbeat() {
+    let heartbeatInfo = {
+        date: new Date(),
+        robot: robotNickname,
+        table: Config.get('table'),
+        simulation: Config.get('simulation'),
+        scheduler: Config.get('scheduler')
+    };
+    telemetryFunction('heartbeat', 'heartbeat', heartbeatInfo);
+}
+
+setInterval(function () {
+    heartbeat();
+}, telemetryConfig.heartbeatRate || 1000);
 
 module.exports = telemetryFunction;

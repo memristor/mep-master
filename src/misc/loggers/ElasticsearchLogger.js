@@ -6,6 +6,7 @@ const Config = require('../../Config');
 
 function elasticsearchLogger(config, logLevel) {
     let elasticsearchConfig = {
+        active: false,
         level: "debug",
         host: "http://localhost:9200",
         indexPattern: "[mep2_logs-]YYYY-MM-DD",
@@ -20,14 +21,14 @@ function elasticsearchLogger(config, logLevel) {
         elasticsearchConfig = Object.assign(elasticsearchConfig, config);
     }
 
-    if (Config.get('elasticHost') !== '') {
+    if (elasticsearchConfig.active === true) {
         return {
             level: logLevel,
             stream: new BunyanElasticSearch({
                 index: elasticsearchConfig.index,
                 indexPattern: elasticsearchConfig.indexPattern,
                 type: elasticsearchConfig.type,
-                host: Config.get('elasticHost')
+                host: elasticsearchConfig.host
             })
         };
     }

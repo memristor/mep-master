@@ -53,11 +53,11 @@ let Mep = {
      * Telemetry system
      * @memberof Mep
      * @example
-     * Mep.telemetry('PathFinding', 'finding', {x:0.0, y:0.0});
+     * Mep.Telemetry('PathFinding', 'finding', {x:0.0, y:0.0});
      *
      * @returns {Telemetry}
      */
-    telemetry: Telemetry,
+    Telemetry: Telemetry,
 
     /**
      * Access to current configuration
