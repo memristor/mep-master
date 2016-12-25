@@ -1,4 +1,4 @@
-const WebSocketClient = Mep.require('utils/WebSocketClient');
+const WebSocketClient = Mep.require('misc/WebSocketClient');
 const Point = Mep.require('types/Point');
 const EventEmitter = require('events');
 

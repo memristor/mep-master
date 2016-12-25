@@ -3,7 +3,7 @@ const Log = require('./Log');
 const Telemetry = require('./Telemetry');
 
 /**
- * Proxy to custom require(), Log & Config
+ * Proxy to custom require(), Log, Config, DriverManager & services.
  *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @namespace Mep
@@ -20,7 +20,7 @@ let Mep = {
      * @returns {Object} - Required library
      */
     require(library) {
-        let allowedDirectories = ['types', 'utils', 'drivers', 'services'];
+        let allowedDirectories = ['types', 'utils', 'drivers', 'services', 'misc'];
         let allowedLibraries = ['services/ServiceManager'];
 
         // Check if it is allowed
@@ -40,7 +40,7 @@ let Mep = {
 
     /**
      * Logging system
-     * @see {@link https://github.com/winstonjs/winston|WinstonLogger}
+     * @see {@link https://www.npmjs.com/package/bunyan|bunyan}
      * @memberof Mep
      * @example
      * Mep.Log.debug('Pathfinding', 'Start path finding for (x, y)');
@@ -58,11 +58,10 @@ let Mep = {
      * @returns {Telemetry}
      */
     Telemetry: Telemetry,
-    TM: Telemetry,
 
     /**
      * Access to current configuration
-     * @see {@link https://github.com/lorenwest/node-config|NodeConfig}
+     * @see {@link https://www.npmjs.com/package/nconf|nconf}
      * @memberof Mep
      * @example
      * Mep.Config.get('Drivers.MotionDriver.class');
@@ -85,6 +84,12 @@ let Mep = {
         return this.positionService;
     },
 
+    /**
+     * Provides an instance of the PathService
+     * @memberof Mep
+     * @see {@link services.PathService}
+     * @returns {PathService}
+     */
     getPathService() {
         return this.pathService;
     },
@@ -103,6 +108,19 @@ let Mep = {
     },
 
     /**
+     * Provides an instance of the SchedulerService
+     * @memberOf Mep
+     * @see {@link services.SchedulerService}
+     * @example
+     * let scheduler = Mep.getSchedulerService();
+     *
+     * @returns {SchedulerService}
+     */
+    getSchedulerService() {
+        return this.schedulerService;
+    },
+
+    /**
      * Initialize necessary modules. Should be called only once during an application bootstrapping
      * @memberof Mep
      */
@@ -112,8 +130,8 @@ let Mep = {
 
         this.positionService =
             new (require('./services/position/PositionService'))(Config.get('Services:PositionService'));
-
         this.pathService = new (require('./services/path/PathService'))(Config.get('Services:PathService'));
+        this.schedulerService = new (require('./services/scheduler/SchedulerService'))(Config.get('Services:SchedulerService'));
     }
 };
 

@@ -1,7 +1,6 @@
 const Writable = require('stream').Writable;
 const util = require('util');
 const moment = require('moment');
-const _ = require('lodash');
 const WebSocket = require('ws');
 
 const levels = {
@@ -92,7 +91,7 @@ WebSocketStream.prototype.write = function (entry, encoding, callback) {
     };
 
     // merge
-    output = _.defaults(output, input);
+    output = Object.assign(output, input);
 
     delete output.msg;
     delete output.v;

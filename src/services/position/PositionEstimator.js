@@ -28,7 +28,7 @@ class PositionEstimator extends EventEmitter {
         // TODO: Sensor Fusion problem: https://en.wikipedia.org/wiki/Sensor_fusion
         // Implement Kalman filter: https://en.wikipedia.org/wiki/Kalman_filter
 
-        Mep.TM(TAG, 'ReceivedPosition', {driverName: driverName, point: point});
+        Mep.Telemetry(TAG, 'ReceivedPosition', {driverName: driverName, point: point});
         Mep.Log.debug(TAG, 'Received position from', driverName, point);
 
         this.emit('positionChanged', point);

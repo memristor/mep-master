@@ -17,11 +17,22 @@ class Task {
         return 4;
     }
 
-    constructor(weight, time, location) {
+    constructor(scheduler, weight, time, location) {
         this.state = Task.READY;
         this.weight = weight;
         this.time = time;
         this.location = location;
+        this.scheduler = scheduler;
+    }
+
+    finish() {
+        this.state = Task.FINISHED;
+        this.scheduler.runNextTask();
+    }
+
+    suspend() {
+        this.state = Task.SUSPENDED;
+        this.scheduler.runNextTask();
     }
 
     getLocation() {

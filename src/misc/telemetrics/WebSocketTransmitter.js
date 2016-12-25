@@ -1,7 +1,6 @@
 /**
  * WebSocket Telemetry Transmitter
  */
-const _ = require('lodash');
 const BunyanWebSocket = require('./websocket/bunyan-stream-websocket');
 
 
@@ -12,7 +11,7 @@ function webSocketTransmitter(config) {
     };
 
     if (config) {
-        webSocketConfig = _.defaults(config, webSocketConfig)
+        webSocketConfig = Object.assign(webSocketConfig, config);
     }
 
     if (webSocketConfig.active === true) {

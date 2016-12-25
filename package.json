@@ -12,12 +12,11 @@
     "start": "node src/Bootstrap.js",
     "simulator": "node tools/simulator/Start.js",
     "test_simulation": "node --harmony-async-await src/Bootstrap.js -s",
-    "test_simulation_debug": "node %NODE_DEBUG_OPTION% --harmony-async-await src/Bootstrap.js -s",
-    "telemetry_server": "node tools/telemetry/server.js"
+    "test_simulation_debug": "node %NODE_DEBUG_OPTION% --harmony-async-await src/Bootstrap.js -s"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://bitbucket.org/ftn-memristor/mep2.git"
+    "url": "git+https://github.com/Memristor-Robotics/mep2.git"
   },
   "author": "Darko Lukic <lukicdarkoo@gmail.com>",
   "license": "ISC",
@@ -26,19 +25,16 @@
     "bindings": "^1.2.1",
     "bunyan": "^1.8.1",
     "bunyan-elasticsearch": "^1.0.0",
-    "bunyan-stream-elasticsearch": "github:bloublou2014/bunyan-stream-elasticsearch",
     "bunyan-format": "^0.2.1",
-    "es6-mixin": "^0.3.0",
+    "bunyan-stream-elasticsearch": "github:bloublou2014/bunyan-stream-elasticsearch",
     "latodoc": "github:smeijer/latodoc",
-    "lodash": "^4.17.2",
     "nan": "^2.3.5",
     "nconf": "^0.8.4",
     "openurl": "^1.1.1",
-    "proxymi": "^0.2.2",
     "require-new": "^1.1.0",
     "should": "^11.1.1",
     "sinon": "^1.17.6",
-    "ws": "^1.1.1",
-    "xmultiple": "^1.0.0"
+    "usage": "^0.7.1",
+    "ws": "^1.1.1"
   }
 }
