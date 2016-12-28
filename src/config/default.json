@@ -39,7 +39,7 @@
           "type": "telemetry"
         },
         "WebSocket": {
-          "active": true,
+          "active": false,
           "host": "ws://localhost:9999",
           "retryConnection": true
         }
