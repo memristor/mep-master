@@ -2,12 +2,12 @@ const EventEmitter = require('events').EventEmitter;
 const Config = require('./Config');
 const net = require('net');
 
-const TAG = 'RobotServer';
+const TAG = 'CoreServer';
 
-class RobotServer extends EventEmitter {
+class CoreServer extends EventEmitter {
     constructor() {
         super();
-        let brainServer = this;
+        let coreServer = this;
 
         this.sockets = [];
         this.server = net.createServer((socket) => {
@@ -15,14 +15,18 @@ class RobotServer extends EventEmitter {
             console.log('Client connected');
 
             socket.on('data', (data) => {
-                let parsedData = JSON.parse(data);
+                let dataSets = data.toString().replace('}{', '}|||{').split('|||');
 
-                // Initial message
-                if (parsedData.tag === 'Handshake' && parsedData.action === 'init') {
-                    brainServer.sockets[parsedData.from] = socket;
-                    console.log(TAG, parsedData.from, 'initialized');
-                } else {
-                    brainServer.emit('packet', parsedData);
+                for (let dataSet of dataSets) {
+                    let parsedData = JSON.parse(dataSet);
+
+                    // Initial message
+                    if (parsedData.tag === 'Handshake' && parsedData.action === 'init') {
+                        coreServer.sockets[parsedData.from] = socket;
+                        console.log(TAG, parsedData.from, 'initialized');
+                    } else {
+                        coreServer.emit('packet', parsedData);
+                    }
                 }
             });
 
@@ -31,7 +35,7 @@ class RobotServer extends EventEmitter {
             });
         });
 
-        this.server.listen(Config.BrainServer.port, 'localhost');
+        this.server.listen(Config.CoreServer.port, 'localhost');
     }
 
     send(packet) {
@@ -43,4 +47,4 @@ class RobotServer extends EventEmitter {
     }
 }
 
-module.exports = RobotServer;
+module.exports = CoreServer;

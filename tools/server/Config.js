@@ -1,8 +1,8 @@
 module.exports = {
-    BrainServer: {
+    CoreServer: {
         port: 1117,
     },
-    DashboardServer: {
+    DashServer: {
         port: 1116,
     }
 };

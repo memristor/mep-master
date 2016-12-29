@@ -4,13 +4,13 @@ const Config = require('./Config');
 const Elasticsearch = require('elasticsearch');
 
 
-const TAG = 'DashboardServer';
+const TAG = 'DashServer';
 
-class DashboardServer extends EventEmitter {
+class DashServer extends EventEmitter {
     constructor() {
         super();
 
-        let dashboardServer = this;
+        let dashServer = this;
 
         // Elasticsearch
         this.esClient = new Elasticsearch.Client({
@@ -20,7 +20,7 @@ class DashboardServer extends EventEmitter {
 
         // Live communication
         this.sockets = [];
-        this.server = new WebSocket({ port: Config.DashboardServer.port });
+        this.server = new WebSocket({ port: Config.DashServer.port });
         this.server.on('connection', (socket) => {
             console.log(TAG, 'New client is connected!');
 
@@ -29,10 +29,10 @@ class DashboardServer extends EventEmitter {
 
                 // Initial message
                 if (parsedData.tag === 'Handshake' && parsedData.action === 'init') {
-                    dashboardServer.sockets[parsedData.from] = socket;
+                    dashServer.sockets[parsedData.from] = socket;
                     console.log(TAG, parsedData.from, 'initialized');
                 } else {
-                    dashboardServer.emit('packet', parsedData);
+                    dashServer.emit('packet', parsedData);
                 }
             });
         });
@@ -56,4 +56,4 @@ class DashboardServer extends EventEmitter {
     }
 }
 
-module.exports = DashboardServer;
+module.exports = DashServer;

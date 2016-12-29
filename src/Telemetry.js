@@ -1,6 +1,6 @@
 const Config = require('./Config');
 const Log = require('./Log');
-const net = require('net');
+const dgram = require('dgram');
 const EventEmitter = require('events').EventEmitter;
 
 const TAG = 'Telemetry';
@@ -10,19 +10,19 @@ class Telemetry extends EventEmitter {
         super();
         let telemetry = this;
 
-        this.client = net.connect({port: 1117}, () => {
-            Log.info(TAG, 'Connected to server');
+        this.client = dgram.createSocket('udp4');
+        this.client.bind(1430, 'localhost');
 
-            telemetry.send('Handshake', 'init', '');
-        });
-
-        this.client.on('data', (data) => {
+        this.client.on('message', (data) => {
             let parsedData = JSON.parse(data);
             telemetry.emit(
                 telemetry.genOn(parsedData.tag, parsedData.action),
                 parsedData
             );
         });
+
+        Log.info(TAG, 'Connected to server');
+        telemetry.send('Handshake', 'init', '');
     }
 
     send(tag, action, params) {
@@ -30,10 +30,12 @@ class Telemetry extends EventEmitter {
             from: 'core:big',
             to: 'dash:big',
             tag: tag,
+            date: new Date(),
             action: action,
             params: params
         };
-        this.client.write(JSON.stringify(packet));
+        let msg = JSON.stringify(packet);
+        this.client.send(msg, 0, msg.length, 1117, 'localhost');
     }
 
     genOn(tag, action) {
