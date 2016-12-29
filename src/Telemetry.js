@@ -6,36 +6,47 @@ const EventEmitter = require('events').EventEmitter;
 const TAG = 'Telemetry';
 
 class Telemetry extends EventEmitter {
-    constructor() {
+    constructor(config) {
         super();
         let telemetry = this;
+        this.active = Config.get('host') !== '';
+
+        if (this.active === false) return;
+
+        this.serverInfo = Config.get('host').split(':');
 
         this.client = dgram.createSocket('udp4');
-        this.client.bind(1430, 'localhost');
+        this.client.bind(config.port, 'localhost');
 
         this.client.on('message', (data) => {
-            let parsedData = JSON.parse(data);
-            telemetry.emit(
-                telemetry.genOn(parsedData.tag, parsedData.action),
-                parsedData
-            );
+            try {
+                let parsedData = JSON.parse(data);
+                telemetry.emit(
+                    telemetry.genOn(parsedData.tag, parsedData.action),
+                    parsedData
+                );
+            } catch (e) {
+                Log.warn(TAG, 'Error parsing packet:', data);
+            }
         });
 
         Log.info(TAG, 'Connected to server');
-        telemetry.send('Handshake', 'init', '');
+        telemetry.send('Handshake', 'init');
     }
 
     send(tag, action, params) {
+        if (this.active === false) return;
+
         let packet = {
-            from: 'core:big',
-            to: 'dash:big',
+            from: 'core:' + Config.get('robot'),
+            to: 'dash:' + Config.get('robot'),
             tag: tag,
             date: new Date(),
             action: action,
             params: params
         };
         let msg = JSON.stringify(packet);
-        this.client.send(msg, 0, msg.length, 1117, 'localhost');
+        this.client.send(msg, 0, msg.length, this.serverInfo[1], this.serverInfo[0]);
     }
 
     genOn(tag, action) {

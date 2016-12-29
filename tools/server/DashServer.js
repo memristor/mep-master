@@ -14,7 +14,7 @@ class DashServer extends EventEmitter {
 
         // Elasticsearch
         this.esClient = new Elasticsearch.Client({
-            host: 'localhost:9200',
+            host: Config.DashServer.ElasticSearch.host,
             log: 'error'
         });
 
@@ -25,14 +25,18 @@ class DashServer extends EventEmitter {
             console.log(TAG, 'New client is connected!');
 
             socket.on('message', (data) => {
-                let parsedData = JSON.parse(data);
+                try {
+                    let parsedData = JSON.parse(data);
 
-                // Initial message
-                if (parsedData.tag === 'Handshake' && parsedData.action === 'init') {
-                    dashServer.sockets[parsedData.from] = socket;
-                    console.log(TAG, parsedData.from, 'initialized');
-                } else {
-                    dashServer.emit('packet', parsedData);
+                    // Initial message
+                    if (parsedData.tag === 'Handshake' && parsedData.action === 'init') {
+                        dashServer.sockets[parsedData.from] = socket;
+                        console.log(TAG, parsedData.from, 'initialized');
+                    } else {
+                        dashServer.emit('packet', parsedData);
+                    }
+                } catch (e) {
+                    console.warn(TAG, 'Error parsing packet:', data);
                 }
             });
         });
@@ -41,15 +45,19 @@ class DashServer extends EventEmitter {
     send(packet) {
         // Sent to live
         if (typeof this.sockets[packet.to] !== 'undefined') {
-            this.sockets[packet.to].send(JSON.stringify(packet));
+            try {
+                this.sockets[packet.to].send(JSON.stringify(packet));
+            } catch (e) {
+                console.error(TAG, 'Error sending packet', e);
+            }
         } else {
-            console.error(TAG, 'No client to received message');
+            console.error(TAG, 'No client to receive message');
         }
 
         // Send to Elasticsearch
         packet['@timestamp'] = Date.now();
         this.esClient.index({
-            index: 'mep2_telemetric-2016-12-28',
+            index: 'mep2_telemetric-' + (new Date().toJSON().slice(0,10)),
             type: 'telemetric',
             body: packet
         });

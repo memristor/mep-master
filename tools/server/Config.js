@@ -4,5 +4,8 @@ module.exports = {
     },
     DashServer: {
         port: 1116,
+        ElasticSearch: {
+            host: 'localhost:9200'
+        }
     }
 };

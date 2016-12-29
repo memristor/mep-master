@@ -58,7 +58,7 @@ let Mep = {
      *
      * @returns {Telemetry}
      */
-    Telemetry: (new Telemetry()),
+    Telemetry: (new Telemetry(Config.get('Telemetry'))),
 
     /**
      * Access to current configuration

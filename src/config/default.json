@@ -4,6 +4,7 @@
     "performance": false,
     "robot": "",
     "scheduler": "",
+    "host": "",
 
     "Log": {
       "Console" :{
@@ -16,34 +17,11 @@
         "file" : "javascript.log",
         "period" : "1d",
         "count" : 3
-      },
-      "Elasticsearch": {
-        "active" : false,
-        "level" : "debug",
-        "host" : "http://localhost:9200",
-        "indexPattern" : "[mep2_logs-]YYYY-MM-DD",
-        "type": "log"
       }
     },
 
-    "Telemetry" : {
-      "active" : true,
-      "transmissionRate" : 100,
-      "stackThreshold" : 10000,
-      "heartbeatRate" : 2000,
-      "Transmission": {
-        "Elasticsearch": {
-          "active": false,
-          "host" : "http://localhost:9200",
-          "indexPattern": "[mep2_telemetry-]YYYY-MM-DD",
-          "type": "telemetry"
-        },
-        "WebSocket": {
-          "active": false,
-          "host": "ws://localhost:9999",
-          "retryConnection": true
-        }
-      }
+    "Telemetry": {
+      "port": 1200
     },
 
     "Drivers": {

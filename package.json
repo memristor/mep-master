@@ -9,7 +9,7 @@
   "scripts": {
     "test": "mocha --slow 0 --require test/Init",
     "docs": "jsdoc -c jsdoc.json -u docs",
-    "start": "node src/Bootstrap.js",
+    "start": "node src/Bootstrap.js --harmony-async-await",
     "simulator": "node tools/simulator/Start.js",
     "test_simulation": "node --harmony-async-await src/Bootstrap.js -s",
     "test_simulation_debug": "node %NODE_DEBUG_OPTION% --harmony-async-await src/Bootstrap.js -s"
@@ -20,21 +20,20 @@
   },
   "author": "Darko Lukic <lukicdarkoo@gmail.com>",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/LukicDarkoo/mep2#readme",
+  "homepage": "https://memristor-robotics.github.io/",
   "dependencies": {
     "bindings": "^1.2.1",
     "bunyan": "^1.8.1",
-    "bunyan-elasticsearch": "^1.0.0",
     "bunyan-format": "^0.2.1",
-    "bunyan-stream-elasticsearch": "github:bloublou2014/bunyan-stream-elasticsearch",
-    "latodoc": "github:smeijer/latodoc",
     "nan": "^2.3.5",
     "nconf": "^0.8.4",
-    "openurl": "^1.1.1",
     "require-new": "^1.1.0",
     "should": "^11.1.1",
     "sinon": "^1.17.6",
-    "usage": "^0.7.1",
+    "usage": "^0.7.1"
+  },
+  "devDependencies": {
+    "elasticsearch": "^12.1.3",
     "ws": "^1.1.1"
   }
 }

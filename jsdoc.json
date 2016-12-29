@@ -9,7 +9,6 @@
     "encoding": "utf8",
     "destination": "web/docs",
     "recurse": true,
-    "readme": "README.md",
-    "template": "node_modules/latodoc"
+    "readme": "README.md"
   }
 }
