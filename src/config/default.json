@@ -51,7 +51,7 @@
         "UsageDriver": {
             "class": "drivers/usage/UsageDriver",
             "load": true,
-            "refreshPeriod": 1000
+            "refreshPeriod": 600
         }
     },
 

@@ -56,11 +56,19 @@ class DashServer extends EventEmitter {
         }
 
         // Send to Elasticsearch
-        packet['@timestamp'] = Date.now();
+        let body = {
+            from: packet.from,
+            to: packet.to,
+            tag: packet.tag,
+            date: packet.date,
+            action: packet.action,
+        };
+        body[packet.from + '_' + packet.tag + '_' + packet.action] = packet.params;
+
         this.esClient.index({
-            index: 'mep2_telemetric-' + (new Date().toJSON().slice(0,10)),
+            index: 'mep2_telemetric-' + (new Date().toJSON().slice(0, 10)),
             type: 'telemetric',
-            body: packet
+            body: body
         });
     }
 }
