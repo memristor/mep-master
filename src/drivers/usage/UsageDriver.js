@@ -33,7 +33,10 @@ class UsageDriver {
     }
 
     _logUsage(err, result) {
-        Mep.Telemetry(TAG, 'UsageMeasured', result);
+        Mep.Telemetry.send(TAG, 'UsageMeasured', {
+            memory: result.memory,
+            cpu: result.cpu
+        });
     }
 
     getGroups() {

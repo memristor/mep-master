@@ -1,107 +1,44 @@
 const Config = require('./Config');
-const Bunyan = require('bunyan');
+const Log = require('./Log');
+const net = require('net');
+const EventEmitter = require('events').EventEmitter;
 
-let telemetryConfig = Config.get('Telemetry');
+const TAG = 'Telemetry';
 
-if (telemetryConfig === '' || telemetryConfig === undefined) {
-    throw 'Telemetry Configuration missing.';
-}
+class Telemetry extends EventEmitter {
+    constructor() {
+        super();
+        let telemetry = this;
 
-let streams = [];
-let transmissionConfig = telemetryConfig.Transmission;
+        this.client = net.connect({port: 1117}, () => {
+            Log.info(TAG, 'Connected to server');
 
-// Dynamic logger loader
-for (let key in transmissionConfig) {
-    let logger = require('./misc/telemetrics/' + key + 'Transmitter')(transmissionConfig[key]);
-    if (logger !== undefined) {
-        streams.push(logger);
+            telemetry.send('Handshake', 'init', '');
+        });
+
+        this.client.on('data', (data) => {
+            let parsedData = JSON.parse(data);
+            telemetry.emit(
+                telemetry.genOn(parsedData.tag, parsedData.action),
+                parsedData
+            );
+        });
+    }
+
+    send(tag, action, params) {
+        let packet = {
+            from: 'core:big',
+            to: 'dash:big',
+            tag: tag,
+            action: action,
+            params: params
+        };
+        this.client.write(JSON.stringify(packet));
+    }
+
+    genOn(tag, action) {
+        return 'data_' + 'dash:big' + '_' + tag + '_' + action;
     }
 }
 
-let simpleTelemetricLogger = Bunyan.createLogger({
-    name: 'mep_telemetric',
-    streams: streams
-});
-
-// Maximum messages stack in, over this limit older messages are lost
-let telemetryStackThreshold = telemetryConfig.stackThreshold || 1000;
-
-// In a multi threaded environment input stack should be separated from transmission stack to avoid resource lock.
-let telemetryStackFlip = [];
-let telemetryStackFlop = [];
-let flipFlop = false;
-let stackCount = 0;
-let transmitting = false;
-
-let robotNickname = Config.get('robot');
-
-function transmit(measure) {
-    let stack = (flipFlop) ? telemetryStackFlip : telemetryStackFlop;
-    if (stackCount > telemetryStackThreshold) {
-        stack.shift();
-    }
-    stack.push(measure);
-}
-
-function transmission() {
-    if (transmitting) {
-        return;
-    }
-
-    transmitting = true;
-    try {
-        flipFlop = !flipFlop;
-        stackCount = 0;
-
-        if (telemetryConfig.active === true) {
-            // Now we ve time to process transmission
-            let stack = (!flipFlop) ? telemetryStackFlip : telemetryStackFlop;
-
-            for (let measure of stack) {
-                simpleTelemetricLogger.info(measure);
-            }
-        }
-
-        if (!flipFlop) {
-            telemetryStackFlip = [];
-        } else {
-            telemetryStackFlop = [];
-        }
-    } catch (e) {
-
-    } finally {
-        transmitting = false;
-    }
-}
-
-let telemetryFunction = function (tag, metric, value) {
-    let telemetryMeasure = {
-        robot: robotNickname,
-        date: Date.now(),
-        tag: tag,
-        metric: metric,
-        value: value
-    };
-    transmit(telemetryMeasure);
-};
-
-setInterval(function () {
-    transmission();
-}, telemetryConfig.transmissionRate || 1000);
-
-function heartbeat() {
-    let heartbeatInfo = {
-        date: new Date(),
-        robot: robotNickname,
-        table: Config.get('table'),
-        simulation: Config.get('simulation'),
-        scheduler: Config.get('scheduler')
-    };
-    telemetryFunction('heartbeat', 'heartbeat', heartbeatInfo);
-}
-
-setInterval(function () {
-    heartbeat();
-}, telemetryConfig.heartbeatRate || 1000);
-
-module.exports = telemetryFunction;
+module.exports = Telemetry;
