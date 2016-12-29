@@ -29,6 +29,7 @@ class CoreServer extends EventEmitter {
         });
 
         this.server.bind(Config.CoreServer.port, 'localhost');
+        console.log(TAG, 'Initialized');
     }
 
     send(packet) {

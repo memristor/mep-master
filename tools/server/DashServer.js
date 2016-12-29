@@ -40,6 +40,7 @@ class DashServer extends EventEmitter {
                 }
             });
         });
+        console.log(TAG, 'Initialized');
     }
 
     send(packet) {
