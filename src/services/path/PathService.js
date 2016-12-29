@@ -82,6 +82,7 @@ class PathService {
                 // Try to remove from path finding algorithm
                 this.pf.removeObstacle(id);
                 Mep.Log.debug(TAG, 'Obstacle Removed', id);
+                Mep.Telemetry.send(TAG, 'ObstacleRemoved', polygon);
                 return true;
             }
         }

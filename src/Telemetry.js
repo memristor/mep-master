@@ -9,7 +9,7 @@ class Telemetry extends EventEmitter {
     constructor(config) {
         super();
         let telemetry = this;
-        this.active = Config.get('host') !== '';
+        this.active = typeof Config.get('host') !== 'undefined' && Config.get('host') !== '';
 
         if (this.active === false) return;
 
