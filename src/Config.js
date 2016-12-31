@@ -43,9 +43,9 @@ if (process.env.MEP_TEST) {
             type: 'path',
             default: Path.join(__dirname, '/../strategies/default/Scheduler.js')
         },
-        'h': {
-            alias: 'host',
-            describe: 'Host for MEP server, eg. 127.0.0.1:1117',
+        'v': {
+            alias: 'server',
+            describe: 'MEP Server IP and port, eg. 127.0.0.1:1117',
             type: 'string',
             default: ''
         }

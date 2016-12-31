@@ -1,6 +1,7 @@
 const EventEmitter = require('events').EventEmitter;
 const Config = require('./Config');
 const dgram = require('dgram');
+const clc = require('cli-color');
 
 const TAG = 'CoreServer';
 
@@ -29,7 +30,7 @@ class CoreServer extends EventEmitter {
         });
 
         this.server.bind(Config.CoreServer.port, 'localhost');
-        console.log(TAG, 'Initialized');
+        console.log(TAG + ':', clc.green.bgWhite('localhost:' + Config.CoreServer.port));
     }
 
     send(packet) {

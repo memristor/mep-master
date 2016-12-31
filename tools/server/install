@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# ElasticSearch: https://www.elastic.co/downloads/past-releases/elasticsearch-2-4-3
+wget https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.4.3/elasticsearch-2.4.3.tar.gz -O es/elasticsearch.tar.gz
+sha1sum es/elasticsearch.tar.gz
+tar -xzf es/elasticsearch.tar.gz -C es/
+mv es/elasticsearch-2.4.3 es/elasticsearch
+rm es/elasticsearch.tar.gz
+
+./es/elasticsearch/bin/plugin -install mobz/elasticsearch-head
+
+
+
+# Kibana: https://www.elastic.co/downloads/past-releases/kibana-4-6-3
+wget https://download.elastic.co/kibana/kibana/kibana-4.6.3-linux-x86_64.tar.gz es/kibana-4.6.3-linux-x86_64.tar.gz -O es/kibana.tar.gz
+sha1sum es/kibana.tar.gz
+tar -xzf es/kibana.tar.gz -C es/
+mv es/kibana-4.6.3-linux-x86_64 es/kibana
+rm es/kibana.tar.gz
+
+git clone https://github.com/Memristor-Robotics/mep-kibana-plugins.git es/kibana/installedPlugins --depth=1

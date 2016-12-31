@@ -37,8 +37,6 @@ class PositionService {
     }
 
     onPathObstacleDetected(state, front) {
-        Mep.Telemetry.send(TAG, 'onPathObstacleDetected', {state: state, front: front});
-
         // If something is detected
         if (state === true) {
 
@@ -143,9 +141,6 @@ class PositionService {
                 MotionDriverConstants.DIRECTION_BACKWARD :
                 MotionDriverConstants.DIRECTION_FORWARD
         );
-
-        //Mep.Telemetry(TAG, 'move', {point: point});
-        Mep.Log.debug({service: TAG, point: point, action: 'move', status: 'sent'}, 'Robot move command sent.', point);
 
         // Check when robot reached the position
         return this._promiseToReachDestionation();

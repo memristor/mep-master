@@ -5,7 +5,7 @@ const position = Mep.getPositionService();
 class SecondTask extends Task {
     async onRun() {
         await position.set(new TunedPoint(0, -800), {speed: 70});
-        await position.set(new TunedPoint(100, 800));
+        await position.set(new TunedPoint(0, 800));
     }
 
 }

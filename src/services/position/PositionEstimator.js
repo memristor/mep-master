@@ -29,7 +29,6 @@ class PositionEstimator extends EventEmitter {
         // Implement Kalman filter: https://en.wikipedia.org/wiki/Kalman_filter
 
         Mep.Telemetry.send(TAG, 'ReceivedPosition', {driverName: driverName, point: point});
-        Mep.Log.debug(TAG, 'Received position from', driverName, point);
 
         this.emit('positionChanged', point);
         this.point = point;

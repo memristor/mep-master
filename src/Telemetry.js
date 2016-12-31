@@ -9,11 +9,11 @@ class Telemetry extends EventEmitter {
     constructor(config) {
         super();
         let telemetry = this;
-        this.active = typeof Config.get('host') !== 'undefined' && Config.get('host') !== '';
+        this.active = typeof Config.get('host') !== 'undefined' && Config.get('server') !== '';
 
         if (this.active === false) return;
 
-        this.serverInfo = Config.get('host').split(':');
+        this.serverInfo = Config.get('server').split(':');
 
         this.client = dgram.createSocket('udp4');
         this.client.bind(config.port, 'localhost');

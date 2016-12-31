@@ -2,7 +2,7 @@ const WebSocket = require('ws').Server;
 const EventEmitter = require('events').EventEmitter;
 const Config = require('./Config');
 const Elasticsearch = require('elasticsearch');
-
+const clc = require('cli-color');
 
 const TAG = 'DashServer';
 
@@ -40,10 +40,16 @@ class DashServer extends EventEmitter {
                 }
             });
         });
-        console.log(TAG, 'Initialized');
+        console.log(TAG + ':', clc.green.bgWhite('localhost:' + Config.DashServer.port));
     }
 
     send(packet) {
+        if (typeof this.sockets['dash:*'] !== 'undefined') {
+            try {
+                this.sockets['dash:*'].send(JSON.stringify(packet));
+            } catch(e) {}
+        }
+
         // Sent to live
         if (typeof this.sockets[packet.to] !== 'undefined') {
             try {

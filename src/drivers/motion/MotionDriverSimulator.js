@@ -55,8 +55,8 @@ class MotionDriverSimulator extends EventEmitter {
 
         // StateChanged
         Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'stateChanged'), (packet) => {
-            Mep.Log.debug(TAG, 'New state', motionDriverSimulator.state);
             motionDriverSimulator.state = packet.params.state;
+            Mep.Log.debug(TAG, 'New state', motionDriverSimulator.state);
             motionDriverSimulator.emit('stateChanged', motionDriverSimulator.getState());
         });
 
