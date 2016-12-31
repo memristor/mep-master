@@ -10,9 +10,9 @@
     "test": "mocha --slow 0 --require test/Init",
     "docs": "jsdoc -c jsdoc.json -u docs",
     "start": "node src/Bootstrap.js --harmony-async-await",
-    "simulator": "node tools/simulator/Start.js",
-    "test_simulation": "node --harmony-async-await src/Bootstrap.js -s",
-    "test_simulation_debug": "node %NODE_DEBUG_OPTION% --harmony-async-await src/Bootstrap.js -s"
+    "server": "node tools/server/Server.js",
+    "simulation": "node --harmony-async-await src/Bootstrap.js -s -v 127.0.0.1:1117",
+    "simulation-debug": "node %NODE_DEBUG_OPTION% --harmony-async-await src/Bootstrap.js -s"
   },
   "repository": {
     "type": "git",

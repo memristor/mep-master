@@ -1,14 +1,5 @@
 #!/bin/bash
 
-FULL_NODE_VERSION=$(node -v)
-NODE_VERSION=${FULL_NODE_VERSION:1:1}
-
-# Install Node.js & npm
-if [ $NODE_VERSION -lt 6 ]; then
-    curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
-    apt-get install -y nodejs
-fi
-
 # Install npm global dependencies
 npm install -g jsdoc mocha node-gyp
 
@@ -24,7 +15,6 @@ node-gyp build --directory src/drivers/motion
 
 node-gyp configure --directory src/services/path/pathfinding
 node-gyp build --directory src/services/path/pathfinding
-
 
 # Run tests to check of everything is OK
 npm test

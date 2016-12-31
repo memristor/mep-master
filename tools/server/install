@@ -7,7 +7,7 @@ tar -xzf es/elasticsearch.tar.gz -C es/
 mv es/elasticsearch-2.4.3 es/elasticsearch
 rm es/elasticsearch.tar.gz
 
-./es/elasticsearch/bin/plugin -install mobz/elasticsearch-head
+./es/elasticsearch/bin/plugin install mobz/elasticsearch-head
 
 
 
