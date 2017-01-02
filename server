@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ ${1} != "--server-only" ]; then
+if [ "$1" != "--server-only" ]; then
     ./tools/server/es/elasticsearch/bin/elasticsearch &
     ./tools/server/es/kibana/bin/kibana &
 fi
