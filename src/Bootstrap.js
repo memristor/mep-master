@@ -9,7 +9,7 @@ class Bootstrap {
         Mep.Log.info('Active robot:', Mep.Config.get('robot'));
         Mep.Log.info('Active table:', Mep.Config.get('table'));
         Mep.Log.info('Use simulation:', Mep.Config.get('simulation'));
-        Mep.Log.info('Scheduler path:', Mep.Config.get('scheduler'));
+        Mep.Log.info('Scheduler terrain:', Mep.Config.get('scheduler'));
 
         // Initialize drivers & services
         Mep.init();
@@ -19,7 +19,7 @@ class Bootstrap {
         try {
             Scheduler = require(Mep.Config.get('scheduler'));
         } catch (e) {
-            let errorMessage = 'Scheduler at path ' + Mep.Config.get('scheduler') + ' cannot be found';
+            let errorMessage = 'Scheduler at terrain ' + Mep.Config.get('scheduler') + ' cannot be found';
             Mep.Log.error(TAG, errorMessage);
             throw Error(errorMessage);
         }

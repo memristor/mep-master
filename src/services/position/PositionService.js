@@ -16,8 +16,6 @@ class PositionService {
         this.positionEstimator = new PositionEstimator();
         this.motionDriver = null;
 
-        //Mep.Telemetry(TAG, 'init', {config: this.config});
-
         // Prepare methods
         this.startAvoidingStrategy.bind(this);
         this.onPathObstacleDetected.bind(this);
@@ -29,7 +27,7 @@ class PositionService {
             Mep.Log.warn(TAG, 'No motion driver available');
         }
 
-        // Subscribe on sensors that can provide obstacles on the robot's path
+        // Subscribe on sensors that can provide obstacles on the robot's terrain
         this.drivers = driverManager.getDriversByGroup('terrain');
         for (let driverName in this.drivers) {
             this.drivers[driverName].on('pathObstacleDetected', this.onPathObstacleDetected);
@@ -44,6 +42,7 @@ class PositionService {
             if ((front === true && this.motionDriver.getDirection() === MotionDriverConstants.DIRECTION_FORWARD) ||
                 (front === false && this.motionDriver.getDirection() === MotionDriverConstants.DIRECTION_BACKWARD)) {
 
+                // TODO: Check if it is not a static obstacle
                 this.startAvoidingStrategy();
             }
         }
@@ -57,7 +56,7 @@ class PositionService {
      * Move the robot, set new position of the robot
      *
      * @param {TunedPoint} tunedPoint - Point that should be reached
-     * @param {Boolean} pathfinding - Use path finding algorithm
+     * @param {Boolean} pathfinding - Use terrain finding algorithm
      * @param {String} direction - Direction of robot movement
      * @param {Boolean} relative - Use relative to previous position
      * @param {Number} tolerance - Position will consider as reached if Euclid's distance between current
@@ -82,20 +81,22 @@ class PositionService {
             destinationPoint.setY(destinationPoint.getY() + this.positionEstimator.getPosition().getY());
         }
 
-        // Apply path finding
+        // Apply terrain finding
         if (pathfinding === true) {
 
             let currentPoint = this.positionEstimator.getPosition();
             Mep.Telemetry.send(TAG, 'set', {state: state, front: front});
-            Mep.Log.debug(TAG, 'Start path finding from position', currentPoint);
+            Mep.Log.debug(TAG, 'Start terrain finding from position', currentPoint);
 
-            points = Mep.getPathService().search(currentPoint, destinationPoint);
-            Mep.Log.debug(TAG, 'Start path finding', points, 'from point', currentPoint);
+            points = Mep.getTerrainService().findPath(currentPoint, destinationPoint);
+            Mep.Log.debug(TAG, 'Start terrain finding', points, 'from point', currentPoint);
         } else {
             points = [destinationPoint];
         }
 
         return new Promise((resolve, reject) => {
+            // TODO: Call reject() if there is no terrain found by pathfidning
+
             function goToNext() {
                 let point;
                 if (points.length > 0) {

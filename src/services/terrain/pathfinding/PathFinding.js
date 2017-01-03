@@ -23,7 +23,7 @@ class PathFinding extends PathFindingBinder {
      */
 
     /**
-     * Creates path finding algorithm for an area
+     * Creates terrain finding algorithm for an area
      * @param maxX {Number} - Maximal value of X coordinate
      * @param minX {Number} - Minimal value of X coordinate
      * @param maxY {Number} - Maximal value of Y coordinate

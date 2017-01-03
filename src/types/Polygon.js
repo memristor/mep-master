@@ -1,17 +1,24 @@
 class Polygon {
-    constructor(source, duration, points) {
+    constructor(tag, duration, points) {
         // Check points
         if (points.length < 3) {
-            let msg = 'Polygon require at least 3 points';
+            let msg = 'Polygon requires at least 3 points';
             Mep.Log.error(TAG, msg);
             throw Error(msg);
         }
 
         // Store values
         this.duration = duration;
-        this.source = source;
+        this.tag = tag;
         this.points = points;
         this.id = null;
+    }
+
+    translate(x, y) {
+        for (let point of this.points) {
+            point.setX(point.getX() + x);
+            point.setY(point.getY() + y);
+        }
     }
 
     getId() {
@@ -31,8 +38,8 @@ class Polygon {
         return this.duration;
     }
 
-    getSource() {
-        return this.source;
+    getTag() {
+        return this.tag;
     }
 }
 

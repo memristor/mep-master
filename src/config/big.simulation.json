@@ -1,22 +1,23 @@
 {
   "Drivers": {
     "MotionDriver": {
-      "class": "drivers/motion/MotionDriverSimulator"
+      "@class": "drivers/motion/MotionDriverSimulator"
     },
 
-    "ModbusDriver": {
-      "class": "drivers/modbus/ModbusDriverSimulator"
+    "CanDriver": {
+      "@class": "drivers/can/CanDriverSimulator"
     },
 
     "LaserFrontLeft": {
-      "class": "drivers/laser/LaserDriver",
-      "load": true,
-      "laserMaxDistance": 100,
-      "laserAngle": 90,
-      "laserX": 0,
-      "laserY": 0,
-      "functionAddress": 1,
-      "slaveAddress": 5,
+      "@class": "drivers/infrared/InfraredDriver",
+      "@load": true,
+      "@dependencies": { "communicator": "CanDriver" },
+
+      "infraredMaxDistance": 100,
+      "sensorAngle": 90,
+      "sensorX": 0,
+      "sensorY": 0,
+      "deviceId": 1,
       "objectSize": 100
     }
   }

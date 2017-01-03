@@ -26,8 +26,9 @@
 
     "Drivers": {
         "MotionDriver": {
-            "class": "drivers/motion/MotionDriver",
-            "load": true,
+            "@class": "drivers/motion/MotionDriver",
+            "@load": true,
+
             "startX": -1300,
             "startY": 0,
             "startOrientation": 0,
@@ -36,21 +37,21 @@
             "precision": 2
         },
 
-        "ModbusDriver": {
-            "class": "drivers/modbus/ModbusDriver",
-            "load": true
+        "CanDriver": {
+            "@class": "drivers/can/CanDriver",
+            "@load": true
         },
 
         "StarterDriver": {
-            "class": "drivers/starter/StarterDriver",
-            "load": true,
+            "@class": "drivers/starter/StarterDriver",
+            "@load": true,
             "type": "delay",
             "delayTimer": 400
         },
 
         "UsageDriver": {
-            "class": "drivers/usage/UsageDriver",
-            "load": true,
+            "@class": "drivers/usage/UsageDriver",
+            "@load": true,
             "refreshPeriod": 600
         }
     },
@@ -69,7 +70,7 @@
             }
         },
 
-        "PathService": {
+        "TerrainService": {
             "staticObstacles": [
                 [{ "x": -550, "y": -1001 },
                   { "x": -705, "y": -450 },

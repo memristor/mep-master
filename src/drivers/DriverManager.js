@@ -16,7 +16,7 @@ const TAG = 'DriverManager';
  *  <li>put driver out of order or recover driver if it is possible.</li>
  * </ul>
  *
- * Each driver can be part of one or more of following groups: control, path & position.
+ * Each driver can be part of one or more of following groups: control, terrain & position.
  *
  * @memberof drivers
  * @author Darko Lukic <lukicdarkoo@gmail.com>
@@ -55,21 +55,25 @@ class DriverManager {
     _initDriver(config, driverIdentifier) {
         let moduleConfig = config[driverIdentifier];
 
+        if (moduleConfig === undefined) {
+            throw Error('Driver ' + driverIdentifier + ' is missing in configuration. Some driver probably depends on ' + driverIdentifier + ' driver');
+        }
+
         if (this.isDriverAvailable(driverIdentifier) || this.isDriverOutOfOrder(driverIdentifier)) {
             return;
         }
 
         // Load driver
-        let load = moduleConfig.load;
-        let classPath = moduleConfig.class;
+        let load = moduleConfig['@load'];
+        let classPath = moduleConfig['@class'];
 
         // Do not initialize if `load field == false`
         if (load != false) {
             let ModuleClass = Mep.require(classPath);
 
             // Resolve dependencies
-            if (typeof ModuleClass.dependencies === 'function') {
-                this._resolveDependencies(config, ModuleClass.dependencies());
+            if (moduleConfig['@dependencies'] !== undefined) {
+                this._resolveDependencies(config, moduleConfig['@dependencies']);
             }
 
             if (typeof ModuleClass === 'function') {
@@ -91,13 +95,15 @@ class DriverManager {
             }
 
             else {
-                Mep.Log.error(TAG, 'There is no module on path', modulePath);
+                Mep.Log.error(TAG, 'There is no module on terrain', modulePath);
             }
         }
     }
 
     _resolveDependencies(config, dependecies) {
-        for (let dependentDriverIdentifier of dependecies) {
+        for (let key in dependecies) {
+            let dependentDriverIdentifier = dependecies[key];
+
             if (this.isDriverAvailable(dependentDriverIdentifier) === true) {
                 continue;
             }

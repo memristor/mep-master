@@ -17,10 +17,6 @@ describe('Mep', function () {
 
     describe('Config', function () {
         describe('#get', function () {
-            it('should have Drivers.ModbusDriver property', function () {
-                Mep.Config.get('Drivers').should.have.property('ModbusDriver');
-            });
-
             it('should have Drivers.MotionDriver property', function () {
                 Mep.Config.get('Drivers').should.have.property('MotionDriver');
             });

@@ -1,7 +1,5 @@
 {
   "Drivers": {
-    "ModbusDriver": {
-      "class": "drivers/modbus/ModbusDriverSimulator"
-    }
+
   }
 }

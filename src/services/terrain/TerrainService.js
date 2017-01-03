@@ -3,14 +3,13 @@ const Polygon = Mep.require('types/Polygon');
 const PathFinding = require('./pathfinding/PathFinding');
 const driverManager = Mep.getDriverManager();
 
-const TAG = 'PathService';
+const TAG = 'TerrainService';
 
 /**
- * Class represent obstacles on the path and mechanism to search path between objects.
- *
+ * Class represent obstacles on the terrain and mechanism to search terrain between objects.
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
-class PathService {
+class TerrainService {
     constructor(config) {
         this.obstacles = [];
         this.pf = new PathFinding(1500, -1500, 1000, -1000);
@@ -44,7 +43,7 @@ class PathService {
         }
     }
 
-    search(start, goal) {
+    findPath(start, goal) {
         let points = [];
         let pointPairs = this.pf.search(start, goal);
 
@@ -79,7 +78,7 @@ class PathService {
                 // Remove from local list
                 this.obstacles.splice(i, 1);
 
-                // Try to remove from path finding algorithm
+                // Try to remove from terrain finding algorithm
                 this.pf.removeObstacle(id);
                 Mep.Log.debug(TAG, 'Obstacle Removed', id);
                 Mep.Telemetry.send(TAG, 'ObstacleRemoved', id);
@@ -90,4 +89,4 @@ class PathService {
     }
 }
 
-module.exports = PathService;
+module.exports = TerrainService;

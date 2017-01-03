@@ -43,7 +43,7 @@ let Mep = {
      * @see {@link https://www.npmjs.com/package/bunyan|bunyan}
      * @memberof Mep
      * @example
-     * Mep.Log.debug('Pathfinding', 'Start path finding for (x, y)');
+     * Mep.Log.debug('Pathfinding', 'Start terrain finding for (x, y)');
      *
      * @returns {Log}
      */
@@ -91,8 +91,8 @@ let Mep = {
      * @see {@link services.PathService}
      * @returns {PathService}
      */
-    getPathService() {
-        return this.pathService;
+    getTerrainService() {
+        return this.terrainService;
     },
 
     /**
@@ -131,7 +131,7 @@ let Mep = {
 
         this.positionService =
             new (require('./services/position/PositionService'))(Config.get('Services:PositionService'));
-        this.pathService = new (require('./services/path/PathService'))(Config.get('Services:PathService'));
+        this.terrainService = new (require('./services/terrain/TerrainService'))(Config.get('Services:TerrainService'));
         this.schedulerService = new (require('./services/scheduler/SchedulerService'))(Config.get('Services:SchedulerService'));
     }
 };

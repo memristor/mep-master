@@ -63,7 +63,7 @@ if (process.env.MEP_TEST) {
     let simulationSuffix = NConf.get('simulation') ? '.simulation' : '';
     let configFilePath = CONFIG_DIR + '/' + NConf.get('robot') + simulationSuffix + '.json';
     if (fs.existsSync(configFilePath) === false) {
-        throw Error('There is no config file at path: ' + configFilePath);
+        throw Error('There is no config file at terrain: ' + configFilePath);
     }
     NConf.file(configFilePath);
 

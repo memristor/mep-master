@@ -7,23 +7,24 @@
 
   "Drivers": {
     "MotionDriver": {
-      "class": "drivers/motion/MotionDriverSimulator",
-      "load": true
+      "@class": "drivers/motion/MotionDriverSimulator",
+      "@load": true
     },
 
-    "ModbusDriver": {
-      "class": "drivers/modbus/ModbusDriverSimulator",
-      "load": true
+    "CanDriver": {
+      "@class": "drivers/can/CanDriverSimulator",
+      "@load": true
     },
 
-    "LaserDriver": {
-      "class": "drivers/laser/LaserDriver",
-      "load": true
+    "InfraredDriver": {
+      "@class": "drivers/infrared/InfraredDriver",
+      "@load": true,
+      "@dependencies": { "communicator": "CanDriver" }
     }
   },
 
   "Services": {
-    "PathService": {
+    "TerrainService": {
       "staticObstacles": []
     }
   }
