@@ -13,8 +13,8 @@ node-gyp build --directory src/drivers/modbus
 node-gyp configure --directory src/drivers/motion
 node-gyp build --directory src/drivers/motion
 
-node-gyp configure --directory src/services/path/pathfinding
-node-gyp build --directory src/services/path/pathfinding
+node-gyp configure --directory src/services/terrain/pathfinding
+node-gyp build --directory src/services/terrain/pathfinding
 
 # Run tests to check of everything is OK
 npm test
