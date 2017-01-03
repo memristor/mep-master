@@ -1,6 +1,7 @@
 /** @namespace drivers.starter */
 
 const EventEmitter = require('events');
+const readline = require('readline');
 
 /**
  * Detects when rope is pulled out of the robot and starts counting game time.
@@ -9,6 +10,10 @@ const EventEmitter = require('events');
 class StarterDriver extends EventEmitter {
     constructor(name, config) {
         super();
+
+        if (['delay', 'rope', 'keyboard'].indexOf(config.type) == -1) {
+            throw '`config.type` must be delay, rope or keyboard';
+        }
 
         this.started = false;
         this.startTime;
@@ -33,19 +38,29 @@ class StarterDriver extends EventEmitter {
 
         return new Promise((resolve, reject) => {
             switch (starterDriver.config.type) {
+                // Delay mode
                 case 'delay':
                     setTimeout(() => {
                         resolve();
                         starterDriver.startTime = process.hrtime();
-                    }, 1000);
+                    }, starterDriver.config.delayTimer);
                     break;
 
                 case 'rope':
                     throw Error('Rope detector is not implemented');
                     break;
 
+                // Keyboard mode
                 case 'keyboard':
-                    throw Error('Keyboard starter is not implemented');
+                    const rl = readline.createInterface({
+                        input: process.stdin,
+                        output: process.stdout
+                    });
+
+                    rl.question('Application is ready, press [ENTER] to start robot... ', (answer) => {
+                        resolve();
+                        rl.close();
+                    });
                     break;
 
                 default:
