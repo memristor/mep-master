@@ -2,6 +2,7 @@ dir: src
 packageJson: package.json
 articles:
   - Overview: README.md
+  - About: docs/About.md
   - Creating a Driver: docs/Creating_Driver.md
   - Goals: docs/Goals.md
   - Inspiration: docs/Inspiration.md
