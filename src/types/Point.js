@@ -41,11 +41,9 @@ class Point {
 
     /**
      * Clone the point
-     * @param point {Point} - Values from point will applied to object
      */
-    clone(point) {
-        this.setX(point.getX());
-        this.setY(point.getY());
+    clone() {
+        return new Point(this.x, this.y);
     }
 
     /**

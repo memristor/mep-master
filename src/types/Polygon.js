@@ -41,6 +41,14 @@ class Polygon {
     getTag() {
         return this.tag;
     }
+
+    clone() {
+        let points = [];
+        for (let point of this.points) {
+            points.push(point.clone());
+        }
+        return new Polygon(this.tag, this.duration, points);
+    }
 }
 
 module.exports = Polygon;

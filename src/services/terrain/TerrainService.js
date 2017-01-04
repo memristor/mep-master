@@ -34,9 +34,9 @@ class TerrainService {
         }
     }
 
-    processObstacleDetection(centerPoint, polygon, state) {
+    processObstacleDetection(centerPoint, relativePolygon, state) {
         let position = Mep.getPositionService().getPosition();
-        console.log(position);
+        let polygon = relativePolygon.clone();
         polygon.translate(position.getX(), position.getY());
 
         if (state === 1) {
@@ -87,7 +87,7 @@ class TerrainService {
                 // Try to remove from terrain finding algorithm
                 this.pf.removeObstacle(id);
                 Mep.Log.debug(TAG, 'Obstacle Removed', id);
-                Mep.Telemetry.send(TAG, 'ObstacleRemoved', id);
+                Mep.Telemetry.send(TAG, 'ObstacleRemoved', { id: id });
                 return true;
             }
         }
