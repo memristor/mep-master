@@ -1,5 +1,5 @@
 {
-  "name": "mep2",
+  "name": "mep-core",
   "version": "2017.0.0",
   "description": "Memristor's Eurobot Platform",
   "main": "src/Bootstrap.js",

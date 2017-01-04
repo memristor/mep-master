@@ -32,12 +32,8 @@ check for arguments
 ./mep --help
 ```
 
-## Server
-for simulation, collecting & analyzing logs 
-- start the server `./server`,
-- and start MEP in simulation mode `./mep -s -v 127.0.0.1:1117`  
-  
-Now you will be able to access to dashboard at [http://127.0.0.1:5601/](http://127.0.0.1:5601/)
+## Dashboard (simulator & other tools)
+[Check here for more details](https://github.com/Memristor-Robotics/mep-dash)
 
 ## Documentation
 create a documentation locally
@@ -77,10 +73,3 @@ check for arguments
 ```
 node src/Bootstrap.js --help
 ```
-
-### Server
-- start the server first ```npm run-script server```
-- start MEP in simulation mode ```npm run-script simulation```
-  
-Now you will be able to access to dashboard at [http://127.0.0.1:5601/](http://127.0.0.1:5601/)
-

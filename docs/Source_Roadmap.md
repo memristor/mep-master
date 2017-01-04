@@ -8,7 +8,6 @@
     - **services** Abstraction layer on to of drivers, algorithms, logic etc.
     - **types** Custom data types, classes, important for platform
     - **utils** General purpose libraries, functions and classes
-    - **misc** Functions, libraries and classes specific to platform
 - **strategies** Source code for strategies (to be replaced in separated repo)
 - **test** Unit tests
 - **tools** Tools that can help us to develop software easily
