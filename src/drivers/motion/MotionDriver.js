@@ -69,6 +69,7 @@ class MotionDriver extends MotionDriverBinder  {
         this.positon = new Point(config.startX, config.startY);
         this.direction = Constants.DIRECTION_FORWARD;
         this.state = Constants.STATE_IDLE;
+        this.orientation = config.startOrientation;
 
         this.refreshDataLoop.bind(this);
         this.refreshDataLoop();
@@ -78,7 +79,6 @@ class MotionDriver extends MotionDriverBinder  {
         let motionDriver = this;
 
         this.refreshData(() => {
-		
             let data = motionDriver.getData();
 
             // If position is changed fire an event
@@ -113,6 +113,22 @@ class MotionDriver extends MotionDriverBinder  {
                 motionDriver.emit('stateChanged', motionDriver.getState());
             }
 
+            if (data.orientation !== motionDriver.orientation) {
+                motionDriver.orientation = data.orientation;
+
+                /**
+                 * Orientation change event.
+                 * @event MotionDriver#orientationChanged
+                 * @property {String} driverName - Unique name of a driver
+                 * @property {Number} orientation - New orientation
+                 */
+                motionDriver.emit('orientationChanged',
+                    motionDriver.name,
+                    motionDriver.getOrientation(),
+                    motionDriver.config.precision
+                );
+            }
+
             // If direction changed
             if (data.direction !== motionDriver.direction) {
                 motionDriver.direction = data.direction;
@@ -142,6 +158,10 @@ class MotionDriver extends MotionDriverBinder  {
 	getGroups() {
 		return ['position'];
 	}
+
+	getOrientation() {
+        return this.orientation;
+    }
 }
 
 module.exports = MotionDriver;

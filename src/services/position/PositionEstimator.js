@@ -12,15 +12,23 @@ class PositionEstimator extends EventEmitter {
 
         // Set default position
         this.point = new Point(0, 0);
+        this.orientation = 0;
 
         this.processPositionChange.bind(this);
 
         // Subscribe on drivers
         this.drivers = driverManager.getDriversByGroup('position');
         for (let driverName in this.drivers) {
+            // Position
             this.point = this.drivers[driverName].getPosition();
             this.drivers[driverName].on('positionChanged', (driverName, point, precision) => {
                 positionEstimator.processPositionChange(driverName, point, precision);
+            });
+
+            // Orientation
+            this.orientation = this.drivers[driverName].getOrientation();
+            this.drivers[driverName].on('orientationChanged', (driverName, orientation, precision) => {
+                positionEstimator.processOrientationChange(driverName, orientation, precision);
             });
         }
     }
@@ -35,8 +43,19 @@ class PositionEstimator extends EventEmitter {
         this.point = point;
     }
 
+    processOrientationChange(driverName, orientation, precision) {
+        Mep.Telemetry.send(TAG, 'ReceivedOrientation', {driverName: driverName, orientation: orientation});
+
+        this.emit('orientationChanged', orientation);
+        this.orientation = orientation;
+    }
+
     getPosition() {
         return this.point;
+    }
+
+    getOrientation() {
+        return this.orientation;
     }
 }
 

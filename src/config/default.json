@@ -45,7 +45,7 @@
         "StarterDriver": {
             "@class": "drivers/starter/StarterDriver",
             "@load": true,
-            "type": "delay",
+            "type": "keyboard",
             "delayTimer": 400
         },
 

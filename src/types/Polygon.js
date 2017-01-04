@@ -14,10 +14,19 @@ class Polygon {
         this.id = null;
     }
 
-    translate(x, y) {
+    translate(translatePoint) {
         for (let point of this.points) {
-            point.setX(point.getX() + x);
-            point.setY(point.getY() + y);
+            point.setX(point.getX() + translatePoint.getX());
+            point.setY(point.getY() + translatePoint.getY());
+        }
+    }
+
+    rotate(originPoint, angle) {
+        for (let point of this.points) {
+            let x = Math.cos(angle) * (point.getX() - originPoint.getX()) - Math.sin(angle) * (point.getY() - originPoint.getY()) + originPoint.getX();
+            let y = Math.sin(angle) * (point.getX() - originPoint.getX()) + Math.cos(angle) * (point.getY() - originPoint.getY()) + originPoint.getY();
+            point.setX(x);
+            point.setY(y);
         }
     }
 

@@ -38,6 +38,10 @@ class PositionService {
         return this.positionEstimator.getPosition();
     }
 
+    getOrientation() {
+        return this.positionEstimator.getOrientation();
+    }
+
     onPathObstacleDetected(state, front) {
         // If something is detected
         if (state === true) {

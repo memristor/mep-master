@@ -7,29 +7,6 @@ const TAG = 'MotionDriverSimulator';
  * MotionDriverSimulator simulation module. Has same methods as MotionDriver but
  * this module send all commands to simulator.
  * @see MotionDriver
- *
- * <pre>
- * Protocol
- * This application (Brain) -> Simulator (Robot):
- * {
- *  to: 'robot:big',
- *  command: 'moveToPosition',
- *  params: {
- *      x: 10,
- *      y: 20
- *  }
- * }
- *
- * Simulator (Robot) -> This application (Brain):
- * {
- *  to: 'brain:big',
- *  event: 'positionChanged',
- *  params: {
- *      x: 10,
- *      y: 20
- *  }
- * }
- * </pre>
  */
 class MotionDriverSimulator extends EventEmitter {
     constructor(name, config) {
@@ -40,7 +17,9 @@ class MotionDriverSimulator extends EventEmitter {
         this.config = config;
 
         this.position = new Point(this.config.startX, this.config.startY);
+        this.orientation = this.config.startOrientation;
 
+        // Position changed
         Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'positionChanged'), (packet) => {
             motionDriverSimulator.position.setX(packet.params.x);
             motionDriverSimulator.position.setY(packet.params.y);
@@ -52,11 +31,18 @@ class MotionDriverSimulator extends EventEmitter {
             );
         });
 
-        // StateChanged
+        // State changed
         Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'stateChanged'), (packet) => {
             motionDriverSimulator.state = packet.params.state;
             Mep.Log.debug(TAG, 'New state', motionDriverSimulator.state);
             motionDriverSimulator.emit('stateChanged', motionDriverSimulator.getState());
+        });
+
+        // Orientation changed
+        Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'orientationChanged'), (packet) => {
+            motionDriverSimulator.state = packet.params.state;
+            Mep.Log.debug(TAG, 'New state', motionDriverSimulator.state);
+            motionDriverSimulator.emit('orientationChanged', motionDriverSimulator.getOrientation());
         });
 
         Mep.Log.debug(TAG, 'Driver with name', name, 'initialized');
@@ -70,12 +56,6 @@ class MotionDriverSimulator extends EventEmitter {
         return this.position;
     }
 
-    /**
-     * Move to absolute position
-     * @param {Int32} x - X coordinate
-     * @param {Int32} y - Y coordinate
-     * @param {MotionDirection} direction - MotionDirection.FORWARD or MotionDirection.BACKWARD
-     */
     moveToPosition(x, y, direction) {
         Mep.Telemetry.send(TAG, 'moveToPosition', {
             x: x,
@@ -86,6 +66,10 @@ class MotionDriverSimulator extends EventEmitter {
 
     setSpeed(speed) {
         Mep.Log.warn(TAG, 'setSpeed() not implemented');
+    }
+
+    getOrientation() {
+        return this.orientation;
     }
 
     getGroups() {

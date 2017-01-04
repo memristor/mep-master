@@ -35,9 +35,9 @@ class TerrainService {
     }
 
     processObstacleDetection(centerPoint, relativePolygon, state) {
-        let position = Mep.getPositionService().getPosition();
         let polygon = relativePolygon.clone();
-        polygon.translate(position.getX(), position.getY());
+        polygon.rotate(new Point(0, 0), Mep.getPositionService().getOrientation());
+        polygon.translate(Mep.getPositionService().getPosition());
 
         if (state === 1) {
             this.addObstacle(polygon);
