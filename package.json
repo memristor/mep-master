@@ -10,13 +10,12 @@
     "test": "mocha --slow 0 --require test/Init",
     "docs": "jsdoc -c jsdoc.json -u docs",
     "start": "node src/Bootstrap.js --harmony-async-await",
-    "server": "node tools/server/Server.js",
     "simulation": "node --harmony-async-await src/Bootstrap.js -s -v 127.0.0.1:1117",
     "simulation-debug": "node %NODE_DEBUG_OPTION% --harmony-async-await src/Bootstrap.js -s"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Memristor-Robotics/mep2.git"
+    "url": "git+https://github.com/Memristor-Robotics/mep-core.git"
   },
   "author": "Darko Lukic <lukicdarkoo@gmail.com>",
   "license": "ISC",
@@ -32,10 +31,5 @@
     "sinon": "^1.17.6",
     "socketcan": "^2.1.3",
     "usage": "^0.7.1"
-  },
-  "devDependencies": {
-    "cli-color": "^1.1.0",
-    "elasticsearch": "^12.1.3",
-    "ws": "^1.1.1"
   }
 }
