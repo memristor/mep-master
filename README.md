@@ -19,7 +19,7 @@ sudo apt-get install -y nodejs
 - Install git `sudo apt-get install git`
 - Install MEP
 ```
-git clone https://github.com/Memristor-Robotics/mep-core.git --depth 1 && cd mep2 && sudo ./install
+git clone https://github.com/Memristor-Robotics/mep-core.git --depth 1 && cd mep-core && sudo ./install
 ```
 
 ## Execute
