@@ -39,8 +39,7 @@ class MotionDriverSimulator extends EventEmitter {
         this.name = name;
         this.config = config;
 
-        this.position = new Point(0, 0);
-
+        this.position = new Point(this.config.startX, this.config.startY);
 
         Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'positionChanged'), (packet) => {
             motionDriverSimulator.position.setX(packet.params.x);

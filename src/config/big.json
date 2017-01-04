@@ -1,5 +1,20 @@
 {
   "Drivers": {
+    "MotionDriver": {
+      "@class": "drivers/motion/MotionDriverSimulator"
+    },
 
+    "InfraredFront": {
+      "@class": "drivers/infrared/InfraredDriver",
+      "@load": true,
+      "@dependencies": { "communicator": "CanDriver" },
+
+      "infraredMaxDistance": 100,
+      "sensorAngle": 90,
+      "sensorX": 0,
+      "sensorY": 0,
+      "deviceId": 8,
+      "objectSize": 100
+    }
   }
 }

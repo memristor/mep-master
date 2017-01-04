@@ -1,6 +1,7 @@
 const EventEmitter = require('events').EventEmitter;
 const CAN = require('socketcan');
 const exec = require('child_process').exec;
+const Buffer = require('buffer').Buffer;
 
 const TAG = 'CanDriver';
 
@@ -43,7 +44,10 @@ class CanDriver extends EventEmitter {
              * @property {Buffer} data - Data received from CAN
              */
             canDriver.emit('data', message.id, message.data);
+
+            Mep.Log.debug(TAG, 'Message received', message);
         });
+        this.channel.start();
 
         Mep.Log.debug(TAG, 'Driver with name', name, 'initialized');
     }
@@ -67,13 +71,12 @@ class CanDriver extends EventEmitter {
     }
 
     _startCAN(device, bitrate) {
+        exec('sudo ip link set ' + device + ' down type can');
         exec('sudo ip link set ' + device + ' up type can bitrate ' + bitrate, (error, stdout, stderr) => {
             if (error) {
-                console.error(`exec error: ${error}`);
+                Mep.Log.error(TAG, "Cannot set up CAN. Error:", error);
                 return;
             }
-            console.log(`stdout: ${stdout}`);
-            console.log(`stderr: ${stderr}`);
         });
     }
 

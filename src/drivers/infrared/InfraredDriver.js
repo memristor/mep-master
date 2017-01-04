@@ -60,7 +60,7 @@ class InfraredDriver extends EventEmitter {
 
         // Subscribe on ModbusDriver
         this.canDriver = Mep.getDriverManager().getDriver(config['@dependencies'].communicator);
-        this.canDriver.on('data_' + config.deviceId, this.processDetection);
+        this.canDriver.on('data_' + config.deviceId, this.processDetection.bind(this));
 
 
         // Pre-calculate coordinates relative to robot

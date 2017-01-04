@@ -30,11 +30,15 @@ class TerrainService {
         // Subscribe on drivers
         this.drivers = driverManager.getDriversByGroup('terrain');
         for (var driverName in this.drivers) {
-            this.drivers[driverName].on('obstacleDetected', this.processObstacleDetection);
+            this.drivers[driverName].on('obstacleDetected', this.processObstacleDetection.bind(this));
         }
     }
 
     processObstacleDetection(centerPoint, polygon, state) {
+        let position = Mep.getPositionService().getPosition();
+        console.log(position);
+        polygon.translate(position.getX(), position.getY());
+
         if (state === 1) {
             this.addObstacle(polygon);
 
@@ -65,9 +69,11 @@ class TerrainService {
         Mep.Log.debug(TAG, 'Obstacle Added', polygon);
         Mep.Telemetry.send(TAG, 'ObstacleAdded', polygon);
 
-        setTimeout(() => {
-            //pathService.removeObstacle(id);
-        }, polygon.getDuration());
+        if (polygon.getDuration() !== Infinity) {
+            setTimeout(() => {
+                pathService.removeObstacle(id);
+            }, polygon.getDuration());
+        }
 
         return id;
     }

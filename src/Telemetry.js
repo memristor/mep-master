@@ -16,7 +16,7 @@ class Telemetry extends EventEmitter {
         this.serverInfo = Config.get('server').split(':');
 
         this.client = dgram.createSocket('udp4');
-        this.client.bind(config.port, 'localhost');
+        this.client.bind(config.port, '0.0.0.0');
 
         this.client.on('message', (data) => {
             try {

@@ -34,6 +34,10 @@ class PositionService {
         }
     }
 
+    getPosition() {
+        return this.positionEstimator.getPosition();
+    }
+
     onPathObstacleDetected(state, front) {
         // If something is detected
         if (state === true) {
@@ -77,14 +81,14 @@ class PositionService {
 
         // Apply relative
         if (relative === true) {
-            destinationPoint.setX(destinationPoint.getX() + this.positionEstimator.getPosition().getX());
-            destinationPoint.setY(destinationPoint.getY() + this.positionEstimator.getPosition().getY());
+            destinationPoint.setX(destinationPoint.getX() + this.getPosition().getX());
+            destinationPoint.setY(destinationPoint.getY() + this.getPosition().getY());
         }
 
         // Apply terrain finding
         if (pathfinding === true) {
 
-            let currentPoint = this.positionEstimator.getPosition();
+            let currentPoint = this.getPosition();
             Mep.Telemetry.send(TAG, 'set', {state: state, front: front});
             Mep.Log.debug(TAG, 'Start terrain finding from position', currentPoint);
 
