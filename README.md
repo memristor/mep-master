@@ -1,7 +1,7 @@
-[![Build Status](https://semaphoreci.com/api/v1/lukicdarkoo/mep2/branches/master/shields_badge.svg)](https://semaphoreci.com/lukicdarkoo/mep2)
-[![API Doc](https://doclets.io/Memristor-Robotics/mep2/master.svg)](https://doclets.io/Memristor-Robotics/mep2/master)
-[![Code Climate](https://codeclimate.com/github/Memristor-Robotics/mep2/badges/gpa.svg)](https://codeclimate.com/github/Memristor-Robotics/mep2)
-[![Dependencies](https://david-dm.org/Memristor-Robotics/mep2.svg)](https://david-dm.org/Memristor-Robotics/mep2)
+[![Build Status](https://semaphoreci.com/api/v1/lukicdarkoo/mep-core/branches/master/shields_badge.svg)](https://semaphoreci.com/lukicdarkoo/mep-core)
+[![API Doc](https://doclets.io/Memristor-Robotics/mep2/master.svg)](https://doclets.io/Memristor-Robotics/mep-core/master)
+[![Code Climate](https://codeclimate.com/github/Memristor-Robotics/mep-core//badges/gpa.svg)](https://codeclimate.com/github/Memristor-Robotics/mep2)
+[![Dependencies](https://david-dm.org/Memristor-Robotics/mep2.svg)](https://david-dm.org/Memristor-Robotics/mep-core/)
 
 # MEP (Memristor's Eurobot Platform)
 MEP is a development platform for easy building and prototyping software for robots. It allows developing drivers for hardware modules, implementation of control algorithms and testing new strategies.
@@ -19,7 +19,7 @@ sudo apt-get install -y nodejs
 - Install git `sudo apt-get install git`
 - Install MEP
 ```
-git clone https://github.com/Memristor-Robotics/mep2.git --depth 1 && cd mep2 && sudo ./install
+git clone https://github.com/Memristor-Robotics/mep-core.git --depth 1 && cd mep2 && sudo ./install
 ```
 
 ## Execute
