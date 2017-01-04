@@ -41,7 +41,7 @@ class Telemetry extends EventEmitter {
             from: 'core:' + Config.get('robot'),
             to: 'dash:' + Config.get('robot'),
             tag: tag,
-            date: new Date(),
+            //date: new Date(),
             action: action,
             params: params
         };

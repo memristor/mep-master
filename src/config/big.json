@@ -9,12 +9,13 @@
       "@load": true,
       "@dependencies": { "communicator": "CanDriver" },
 
-      "infraredMaxDistance": 100,
-      "sensorAngle": 90,
-      "sensorX": 0,
+      "infraredMaxDistance": 400,
+      "sensorAngle": 0,
+      "sensorX": 150,
       "sensorY": 0,
       "deviceId": 8,
-      "objectSize": 100
+      "objectSize": 200,
+      "duration": 2000
     }
   }
 }

@@ -1,6 +1,6 @@
 const driverManager = Mep.getDriverManager();
-const MotionDriverConstants = Mep.require('drivers/motion/Constants');
 const PositionEstimator = require('./PositionEstimator');
+const MotionDriver = Mep.require('drivers/motion/MotionDriver');
 
 const TAG = 'PositionService';
 
@@ -30,7 +30,7 @@ class PositionService {
         // Subscribe on sensors that can provide obstacles on the robot's terrain
         this.drivers = driverManager.getDriversByGroup('terrain');
         for (let driverName in this.drivers) {
-            this.drivers[driverName].on('pathObstacleDetected', this.onPathObstacleDetected);
+            this.drivers[driverName].on('pathObstacleDetected', this.onPathObstacleDetected.bind(this));
         }
     }
 
@@ -47,8 +47,8 @@ class PositionService {
         if (state === true) {
 
             // If in front of robot
-            if ((front === true && this.motionDriver.getDirection() === MotionDriverConstants.DIRECTION_FORWARD) ||
-                (front === false && this.motionDriver.getDirection() === MotionDriverConstants.DIRECTION_BACKWARD)) {
+            if ((front === true && this.motionDriver.getDirection() === MotionDriver.DIRECTION_FORWARD) ||
+                (front === false && this.motionDriver.getDirection() === MotionDriver.DIRECTION_BACKWARD)) {
 
                 // TODO: Check if it is not a static obstacle
                 this.startAvoidingStrategy();
@@ -124,11 +124,11 @@ class PositionService {
     _promiseToReachDestionation() {
         return new Promise((resolve, reject) => {
             this.motionDriver.on('stateChanged', (state) => {
-                if (state === MotionDriverConstants.STATE_IDLE) {
+                if (state === MotionDriver.STATE_IDLE) {
                     resolve();
                 }
-                else if (state === MotionDriverConstants.STATE_ERROR ||
-                    state === MotionDriverConstants.STATE_STUCK) {
+                else if (state === MotionDriver.STATE_ERROR ||
+                    state === MotionDriver.STATE_STUCK) {
                     reject(state);
                 }
             });
@@ -147,8 +147,8 @@ class PositionService {
             point.getX(),
             point.getY(),
             (direction === 'backward') ?
-                MotionDriverConstants.DIRECTION_BACKWARD :
-                MotionDriverConstants.DIRECTION_FORWARD
+                MotionDriver.DIRECTION_BACKWARD :
+                MotionDriver.DIRECTION_FORWARD
         );
 
         // Check when robot reached the position

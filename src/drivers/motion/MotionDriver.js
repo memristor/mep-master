@@ -1,6 +1,5 @@
 const MotionDriverBinder = require('bindings')('motion').MotionDriverBinder;
 const Point = Mep.require('types/Point');
-const Constants = require('./Constants');
 const Util = require('util');
 const EventEmitter = require('events');
 
@@ -14,6 +13,14 @@ Util.inherits(MotionDriverBinder, EventEmitter);
  * @fires MotionDriver#positionChanged
  */
 class MotionDriver extends MotionDriverBinder  {
+    static get DIRECTION_FORWARD() { return 1; }
+    static get DIRECTION_BACKWARD() { return -1; }
+    static get STATE_IDLE() { return 1; }
+    static get STATE_STUCK() { return 2; }
+    static get STATE_MOVING() { return 3; }
+    static get STATE_ROTATING() { return 4; }
+    static get STATE_ERROR() { return 5; }
+
     /**
      * Read data from motion driver (as the electronic component)
      * @method refreshData
@@ -67,8 +74,8 @@ class MotionDriver extends MotionDriverBinder  {
         this.config = config;
 
         this.positon = new Point(config.startX, config.startY);
-        this.direction = Constants.DIRECTION_FORWARD;
-        this.state = Constants.STATE_IDLE;
+        this.direction = MotionDriver.DIRECTION_FORWARD;
+        this.state = MotionDriver.STATE_IDLE;
         this.orientation = config.startOrientation;
 
         this.refreshDataLoop.bind(this);

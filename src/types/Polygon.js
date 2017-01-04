@@ -21,7 +21,9 @@ class Polygon {
         }
     }
 
-    rotate(originPoint, angle) {
+    rotate(originPoint, angleDegrees) {
+        let angle = angleDegrees * (Math.PI / 180);
+
         for (let point of this.points) {
             let x = Math.cos(angle) * (point.getX() - originPoint.getX()) - Math.sin(angle) * (point.getY() - originPoint.getY()) + originPoint.getX();
             let y = Math.sin(angle) * (point.getX() - originPoint.getX()) + Math.cos(angle) * (point.getY() - originPoint.getY()) + originPoint.getY();

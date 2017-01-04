@@ -57,6 +57,11 @@ class InfraredDriver extends EventEmitter {
         if (typeof config['@dependencies'].communicator === 'undefined') {
             throw 'Infrared driver requires driver which enables communication with electronics board (eg. CanDriver)';
         }
+        this.config = Object.assign({
+            duration: 2000
+        }, config);
+        this.detected = false;
+        this.timeoutHandle = null;
 
         // Subscribe on ModbusDriver
         this.canDriver = Mep.getDriverManager().getDriver(config['@dependencies'].communicator);
@@ -80,7 +85,7 @@ class InfraredDriver extends EventEmitter {
             new Point(this.x + config.objectSize, this.y + config.objectSize),
             new Point(this.x - config.objectSize, this.y + config.objectSize)
         ];
-        this.polygon = new Polygon(name, 2000, points);
+        this.polygon = new Polygon(name, this.config.duration, points);
 
         // Additional information
         this.front = (config.sensorAngle > 0 && config.sensorAngle < 180);
@@ -95,25 +100,37 @@ class InfraredDriver extends EventEmitter {
      * @param state {boolean} - Object is detected or not
      */
     processDetection(buffer) {
-        let state = buffer.readInt8(0);
+        console.log(buffer);
+        this.detected = !!(buffer.readInt8(0));
 
         /**
          * Obstacle detected on the robot's terrain event. We need to stop robot as fast as possible.
          * @event InfraredDriver#pathObstacleDetected
          * @property {Boolean} - Obstacle is detected
          */
-        this.emit('pathObstacleDetected', state, this.front);
+        this.emit('pathObstacleDetected', this.detected, this.front);
 
         /**
          * Obstacle detected event.
-         *
          * @event InfraredDriver#obstacleDetected
          * @property {Point} - Center of detected obstacle
          * @property {Polygon} - Obstacle is approximated with a polygon
          * @property {Boolean} - Is objected detected or not
          * @property {Object} - Additional information about detected object
          */
-        this.emit('obstacleDetected', this.pointOfInterest, this.polygon, state);
+        this.emit('obstacleDetected', this.pointOfInterest, this.polygon, this.detected);
+
+
+        // After `duration` publish obstacle detection again if object is still there
+        if (this.timeoutHandle !== null) {
+            clearTimeout(this.timeoutHandle);
+        }
+        if (this.detected === true) {
+            let infraredDriver = this;
+            this.timeoutHandle = setTimeout(() => {
+                infraredDriver.processDetection(buffer);
+            }, this.config.duration);
+        }
 
         Mep.Log.debug(TAG, 'Detected at', this.x, this.y);
     }

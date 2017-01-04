@@ -34,12 +34,12 @@ class TerrainService {
         }
     }
 
-    processObstacleDetection(centerPoint, relativePolygon, state) {
+    processObstacleDetection(centerPoint, relativePolygon, detected) {
         let polygon = relativePolygon.clone();
         polygon.rotate(new Point(0, 0), Mep.getPositionService().getOrientation());
         polygon.translate(Mep.getPositionService().getPosition());
 
-        if (state === 1) {
+        if (detected === true) {
             this.addObstacle(polygon);
 
         } else {

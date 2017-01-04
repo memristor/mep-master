@@ -9,6 +9,14 @@ const TAG = 'MotionDriverSimulator';
  * @see MotionDriver
  */
 class MotionDriverSimulator extends EventEmitter {
+    static get DIRECTION_FORWARD() { return 1; }
+    static get DIRECTION_BACKWARD() { return -1; }
+    static get STATE_IDLE() { return 1; }
+    static get STATE_STUCK() { return 2; }
+    static get STATE_MOVING() { return 3; }
+    static get STATE_ROTATING() { return 4; }
+    static get STATE_ERROR() { return 5; }
+
     constructor(name, config) {
         super();
 
@@ -18,6 +26,7 @@ class MotionDriverSimulator extends EventEmitter {
 
         this.position = new Point(this.config.startX, this.config.startY);
         this.orientation = this.config.startOrientation;
+        this.direction = MotionDriverSimulator.DIRECTION_FORWARD;
 
         // Position changed
         Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'positionChanged'), (packet) => {
@@ -54,6 +63,10 @@ class MotionDriverSimulator extends EventEmitter {
 
     getPosition() {
         return this.position;
+    }
+
+    getDirection() {
+        return this.direction;
     }
 
     moveToPosition(x, y, direction) {
