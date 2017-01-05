@@ -12,7 +12,7 @@ describe('Point', function () {
     it('should be equal after clone', () => {
         anotherPoint.setX(10);
         anotherPoint.setY(20);
-        point.clone(anotherPoint);
+        anotherPoint = point.clone();
 
         point.equals(anotherPoint).should.equal(true);
     });
