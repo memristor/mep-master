@@ -1,7 +1,9 @@
 const EventEmitter = require('events').EventEmitter;
 const CAN = require('socketcan');
-const exec = require('child_process').exec;
+const exec = require('child_process').execSync;
 const Buffer = require('buffer').Buffer;
+const spawn = require('child_process').spawn;
+
 
 const TAG = 'CanDriver';
 
@@ -21,6 +23,7 @@ class CanDriver extends EventEmitter {
         super();
         let canDriver = this;
 
+        this.name = name;
         this.config = Object.assign({
             device: 'can0',
             bitrate: 125000
@@ -71,13 +74,15 @@ class CanDriver extends EventEmitter {
     }
 
     _startCAN(device, bitrate) {
+        let result;
+
         exec('sudo ip link set ' + device + ' down type can');
-        exec('sudo ip link set ' + device + ' up type can bitrate ' + bitrate, (error, stdout, stderr) => {
-            if (error) {
-                Mep.Log.error(TAG, "Cannot set up CAN. Error:", error);
-                return;
-            }
-        });
+
+        result = exec('sudo ip link set ' + device + ' up type can bitrate ' + bitrate);
+        if (result.toString()) {
+            Mep.Log.error(TAG, result.toString());
+            Mep.driverManager.putDriverOutOfOrder(this.name);
+        }
     }
 
     getGroups() {
