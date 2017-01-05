@@ -16,4 +16,13 @@ describe('Point', function () {
 
         point.equals(anotherPoint).should.equal(true);
     });
+
+    it('should be 4*sqrt(2) for rotation -45 degrees', () => {
+        point.setX(4);
+        point.setY(4);
+        point.rotate(new Point(0, 0), -45);
+
+        (+point.getY().toFixed(2)).should.equal(0);
+        (+point.getX().toFixed(2)).should.equal((+(4 * Math.sqrt(2)).toFixed(2)));
+    });
 });

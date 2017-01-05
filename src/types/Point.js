@@ -40,7 +40,28 @@ class Point {
     }
 
     /**
+     * Translate point
+     * @param translatePoint - x and y parameters for translation
+     */
+    translate(translatePoint) {
+        this.x += translatePoint.getX();
+        this.y += translatePoint.getY();
+    }
+
+    /**
+     * Rotate point around origin point
+     * @param originPoint - Origin point
+     * @param angle - Rotation angle
+     */
+    rotate(originPoint, angleDegrees) {
+        let angle = angleDegrees * (Math.PI / 180);
+        this.x = Math.cos(angle) * (this.x - originPoint.getX()) - Math.sin(angle) * (this.y - originPoint.getY()) + originPoint.getX();
+        this.y = Math.sin(angle) * (this.y - originPoint.getX()) + Math.cos(angle) * (this.y - originPoint.getY()) + originPoint.getY();
+    }
+
+    /**
      * Clone the point
+     * @return {Point} - Cloned point
      */
     clone() {
         return new Point(this.x, this.y);

@@ -109,7 +109,7 @@ class DriverManager {
             }
 
             if (this.isDriverOutOfOrder(dependentDriverIdentifier) === true) {
-                this.putDriverOutOfOrder(driverIdentifier,
+                this.putDriverOutOfOrder(dependentDriverIdentifier,
                     'Cannot resolve dependency: ' + dependentDriverIdentifier);
             }
 
@@ -191,9 +191,16 @@ class DriverManager {
      * @param message {String} - Describe more why the fault happened
      */
     putDriverOutOfOrder(name, message) {
+        // Check if it is already out of order
+        if (this.isDriverOutOfOrder(name) === true) {
+            return;
+        }
+
         // Move to outOfOther pool
         if (this.isDriverAvailable(name) === true) {
             delete this.drivers[name];
+        } else {
+            Mep.Log.error(TAG, 'Cannot put', name, 'out of order, driver doesn\'t exist');
         }
         this.driversOutOfOrder[name] = true;
 
