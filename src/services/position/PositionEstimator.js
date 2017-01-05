@@ -31,13 +31,17 @@ class PositionEstimator extends EventEmitter {
                 positionEstimator.processOrientationChange(driverName, orientation, precision);
             });
         }
+
+        // Initial publish
+        Mep.Telemetry.send(TAG, 'PositionChanged', this.point);
+        Mep.Telemetry.send(TAG, 'OrientationChanged', { orientation: this.orientation });
     }
 
     processPositionChange(driverName, point, precision) {
         // TODO: Sensor Fusion problem: https://en.wikipedia.org/wiki/Sensor_fusion
         // Implement Kalman filter: https://en.wikipedia.org/wiki/Kalman_filter
 
-        Mep.Telemetry.send(TAG, 'PositionChanged', { point: point });
+        Mep.Telemetry.send(TAG, 'PositionChanged', point);
 
         this.emit('positionChanged', point);
         this.point = point;

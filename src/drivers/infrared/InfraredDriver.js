@@ -100,7 +100,6 @@ class InfraredDriver extends EventEmitter {
      * @param state {boolean} - Object is detected or not
      */
     processDetection(buffer) {
-        console.log(buffer);
         this.detected = !!(buffer.readInt8(0));
 
         /**
