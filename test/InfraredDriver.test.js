@@ -20,10 +20,10 @@ describe('InfraredDriverTest', function() {
 
         infraredDriver.processDetection(Buffer.from([0x01]));
 
-        it('should callback with params(90, 183)', function() {
+        it('should callback with params(163, 110)', function() {
             let point = terrainSpy.args[0][0];
-            (Math.round(point.getX())).should.be.eql(100 - 10);
-            (Math.round(point.getY())).should.be.eql(173 + 10);
+            (Math.round(point.getX())).should.be.eql(163);
+            (Math.round(point.getY())).should.be.eql(110);
         });
     });
 

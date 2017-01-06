@@ -25,9 +25,9 @@ class InfraredDriver extends EventEmitter {
      *  |  Robot  |
      *  |_________|
      *
-     *  Sensor s1 params: sensorAngle~=60, sensorX~=-10, sensorY~=10
-     *  Sensor s2 params: sensorAngle~=90, sensorX~=0, sensorY~=10
-     *  Sensor s3 params: sensorAngle~=110, sensorX~=10, sensorY~=10
+     *  Sensor s1 params: sensorAngle~=60, sensorY~-10, sensorX~=10
+     *  Sensor s2 params: sensorAngle~=90, sensorY~=0, sensorX~=10
+     *  Sensor s3 params: sensorAngle~=110, sensorY~=10, sensorX~=10
      *  </pre>
      *
      * @param name {String} - Unique driver name
@@ -36,7 +36,8 @@ class InfraredDriver extends EventEmitter {
      * @param config.sensorX {Number} - Sensor translated on x coordinate
      * @param config.sensorY {Number} - Sensor translated on y coordinate
      * @param config.deviceId {Number} - Function ID for CAN driver
-     * @param config.objectSize {Number} - Approximation coefficient for obstacle size. Distance between edges and point of interest.
+     * @param config.objectSize {Number} - Approximation coefficient for obstacle size. Distance between edges and point of interest,
+     * @param config['@dependencies'] {String} - ID of Driver can provide communication between core and electronics
      */
     constructor(name, config) {
         super();
@@ -58,29 +59,32 @@ class InfraredDriver extends EventEmitter {
             throw 'Infrared driver requires driver which enables communication with electronics board (eg. CanDriver)';
         }
         this.config = Object.assign({
-            duration: 2000
+            duration: 2000,
+            objectSize: 150,
         }, config);
         this.detected = false;
         this.timeoutHandle = null;
 
-        // Subscribe on ModbusDriver
-        this.canDriver = Mep.getDriverManager().getDriver(config['@dependencies'].communicator);
-        this.canDriver.on('data_' + config.deviceId, this.processDetection.bind(this));
+        // Subscribe on communicator
+        this.canDriver = Mep.getDriverManager().getDriver(this.config['@dependencies'].communicator);
+        this.canDriver.on('data_' + this.config.deviceId, this.processDetection.bind(this));
 
 
         // Approximation of detected object
-        this.poi = new Point(config.sensorX, config.sensorY + config.infraredMaxDistance);
+        this.poi = new Point(this.config.sensorX, this.config.sensorY + this.config.infraredMaxDistance);
         this.polygon = new Polygon(name, this.config.duration, [
             new Point(this.poi.getX() - this.config.objectSize, this.poi.getY() - this.config.objectSize),
             new Point(this.poi.getX() + this.config.objectSize, this.poi.getY() - this.config.objectSize),
             new Point(this.poi.getX() + this.config.objectSize, this.poi.getY() + this.config.objectSize),
             new Point(this.poi.getX() - this.config.objectSize, this.poi.getY() + this.config.objectSize)
         ]);
-        this.poi.rotate(new Point(config.sensorX, config.sensorY), this.config.sensorAngle - 90);
-        this.polygon.rotate(new Point(config.sensorX, config.sensorY), this.config.sensorAngle - 90);
+
+        // We are using inverted (`-`) angle because X and Y coordinate are replaced
+        this.poi.rotate(new Point(this.config.sensorX, this.config.sensorY), - this.config.sensorAngle);
+        this.polygon.rotate(new Point(this.config.sensorX, this.config.sensorY), - this.config.sensorAngle);
 
         // Additional information
-        this.front = (config.sensorAngle > 0 && config.sensorAngle < 180);
+        this.front = (this.config.sensorAngle > 0 && this.config.sensorAngle < 180);
 
         Mep.Log.debug(TAG, name, 'Detects at', '(' + this.x + ', ' + this.y + ')');
     }

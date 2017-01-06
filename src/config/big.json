@@ -10,7 +10,7 @@
       "@dependencies": { "communicator": "CanDriver" },
 
       "infraredMaxDistance": 400,
-      "sensorAngle": 0,
+      "sensorAngle": 80,
       "sensorX": 0,
       "sensorY": 0,
       "deviceId": 8,
