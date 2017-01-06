@@ -4,7 +4,7 @@ const InfraredDriver = require('../src/drivers/infrared/InfraredDriver');
 const Point = Mep.require('types/Point');
 const Buffer = require('buffer').Buffer;
 
-describe('LaserDriverTest', function() {
+describe('InfraredDriverTest', function() {
     var infraredDriver = new InfraredDriver('InfraredDriver', {
         sensorAngle: 60,
         infraredMaxDistance: 200,
@@ -21,7 +21,9 @@ describe('LaserDriverTest', function() {
         infraredDriver.processDetection(Buffer.from([0x01]));
 
         it('should callback with params(90, 183)', function() {
-            terrainSpy.calledWith(new Point(100 - 10, 173 + 10)).should.be.ok();
+            let point = terrainSpy.args[0][0];
+            (Math.round(point.getX())).should.be.eql(100 - 10);
+            (Math.round(point.getY())).should.be.eql(173 + 10);
         });
     });
 

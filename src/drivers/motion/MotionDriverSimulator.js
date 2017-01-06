@@ -81,6 +81,10 @@ class MotionDriverSimulator extends EventEmitter {
         Mep.Log.warn(TAG, 'setSpeed() not implemented');
     }
 
+    stop() {
+        Mep.Log.warn(TAG, 'stop() not implemented');
+    }
+
     getOrientation() {
         return this.orientation;
     }

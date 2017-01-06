@@ -45,8 +45,8 @@ class InfraredDriver extends EventEmitter {
         if (typeof config.infraredMaxDistance === 'undefined') {
             throw '`config.infraredMaxDistance` is not defined';
         }
-        if (typeof config.sensorAngle === 'undefined' || config.sensorAngle < 0 || config.sensorAngle > 360) {
-            throw '`config.sensorAngle` is not defined or angle is out of the range (0 - 360)';
+        if (typeof config.sensorAngle === 'undefined') {
+            throw '`config.sensorAngle` is not defined';
         }
         if (typeof config.sensorX === 'undefined' || typeof config.sensorY === 'undefined') {
             throw '`config.sensorX` or `config.sensorY` is not defined';
@@ -68,24 +68,16 @@ class InfraredDriver extends EventEmitter {
         this.canDriver.on('data_' + config.deviceId, this.processDetection.bind(this));
 
 
-        // Pre-calculate coordinates relative to robot
-        this.x = Math.round(config.infraredMaxDistance * Math.cos(config.sensorAngle * Math.PI / 180));
-        this.y = Math.round(config.infraredMaxDistance * Math.sin(config.sensorAngle * Math.PI / 180));
-
-
-        // Translate
-        this.x += config.sensorX;
-        this.y += config.sensorY;
-
         // Approximation of detected object
-        this.pointOfInterest = new Point(this.x, this.y);
-        let points = [
-            new Point(this.x - config.objectSize, this.y - config.objectSize),
-            new Point(this.x + config.objectSize, this.y - config.objectSize),
-            new Point(this.x + config.objectSize, this.y + config.objectSize),
-            new Point(this.x - config.objectSize, this.y + config.objectSize)
-        ];
-        this.polygon = new Polygon(name, this.config.duration, points);
+        this.poi = new Point(config.sensorX, config.sensorY + config.infraredMaxDistance);
+        this.polygon = new Polygon(name, this.config.duration, [
+            new Point(this.poi.getX() - this.config.objectSize, this.poi.getY() - this.config.objectSize),
+            new Point(this.poi.getX() + this.config.objectSize, this.poi.getY() - this.config.objectSize),
+            new Point(this.poi.getX() + this.config.objectSize, this.poi.getY() + this.config.objectSize),
+            new Point(this.poi.getX() - this.config.objectSize, this.poi.getY() + this.config.objectSize)
+        ]);
+        this.poi.rotate(new Point(config.sensorX, config.sensorY), this.config.sensorAngle - 90);
+        this.polygon.rotate(new Point(config.sensorX, config.sensorY), this.config.sensorAngle - 90);
 
         // Additional information
         this.front = (config.sensorAngle > 0 && config.sensorAngle < 180);
@@ -117,7 +109,7 @@ class InfraredDriver extends EventEmitter {
          * @property {Boolean} - Is objected detected or not
          * @property {Object} - Additional information about detected object
          */
-        this.emit('obstacleDetected', this.pointOfInterest, this.polygon, this.detected);
+        this.emit('obstacleDetected', this.poi, this.polygon, this.detected);
 
 
         // After `duration` publish obstacle detection again if object is still there

@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# Install npm global dependencies
-npm install -g jsdoc mocha node-gyp
+if [ "$1" != "--only-native" ]; then
+    # Install npm global dependencies
+    npm install -g jsdoc mocha node-gyp
 
-# Install npm dependencies
-npm install
+    # Install npm dependencies
+    npm install
+fi
 
 # Install native add-ons
 node-gyp configure --directory src/drivers/modbus

@@ -11,7 +11,7 @@
 
       "infraredMaxDistance": 400,
       "sensorAngle": 0,
-      "sensorX": 150,
+      "sensorX": 0,
       "sensorY": 0,
       "deviceId": 8,
       "objectSize": 200,
