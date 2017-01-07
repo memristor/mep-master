@@ -1,8 +1,8 @@
 const InitTask = require('./InitTask');
 const SecondTask = require('./SecondTask');
-const BaseScheduler = Mep.require('types/BaseScheduler');
+const Scheduler = Mep.require('types/Scheduler');
 
-class Scheduler extends BaseScheduler {
+class DefaultScheduler extends Scheduler {
     constructor() {
         super();
 
@@ -15,4 +15,4 @@ class Scheduler extends BaseScheduler {
     }
 }
 
-module.exports = Scheduler;
+module.exports = DefaultScheduler;

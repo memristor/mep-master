@@ -67,15 +67,6 @@ class Task {
     onRun() {
         Mep.Log.warn(TAG, 'Override onRun() please.');
     }
-
-    onEnemyDetected(status) {
-        // Default action on enemy detected
-    }
-
-    onStacked(status) {
-        //status.action = '';
-        // Default action on stacked
-    }
 }
 
 module.exports = Task;

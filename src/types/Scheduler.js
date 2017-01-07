@@ -1,12 +1,12 @@
-const scheduler = Mep.getSchedulerService();
+const schedulerService = Mep.getSchedulerService();
 
-class BaseScheduler {
+class Scheduler {
     getTasks() {
         return this.tasks;
     }
 
     runNextTask() {
-        let nextTask = scheduler.recommendNextTask(this.tasks);
+        let nextTask = schedulerService.recommendNextTask(this.tasks);
         if (nextTask !== null) {
             this.runTask(nextTask);
         }
@@ -17,4 +17,4 @@ class BaseScheduler {
     }
 }
 
-module.exports = BaseScheduler;
+module.exports = Scheduler;

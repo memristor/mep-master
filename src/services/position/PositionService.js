@@ -1,6 +1,7 @@
 const driverManager = Mep.getDriverManager();
 const PositionEstimator = require('./PositionEstimator');
 const MotionDriver = Mep.require('drivers/motion/MotionDriver');
+const TaskError = Mep.require('types/TaskError');
 
 const TAG = 'PositionService';
 
@@ -126,10 +127,10 @@ class PositionService {
             this.motionDriver.on('stateChanged', (state) => {
                 if (state === MotionDriver.STATE_IDLE) {
                     resolve();
-                }
-                else if (state === MotionDriver.STATE_ERROR ||
-                    state === MotionDriver.STATE_STUCK) {
-                    reject(state);
+                } else if (state === MotionDriver.STATE_STUCK) {
+                    reject(new TaskError(TAG, 'stuck', 'Robot is stucked'));
+                } else if (state === MotionDriver.STATE_ERROR) {
+                    reject(new TaskError(TAG, 'error', 'Unknown moving error'));
                 }
             });
         });
