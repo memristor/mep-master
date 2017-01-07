@@ -37,6 +37,12 @@
             "precision": 2
         },
 
+        "MotionDriverController": {
+          "@class": "drivers/motion/MotionDriverController",
+          "@load": true,
+          "@dependencies": { "motionDriver": "MotionDriver" }
+        },
+
         "CanDriver": {
             "@class": "drivers/can/CanDriver",
             "@load": true
