@@ -5,6 +5,7 @@ const readline = require('readline');
 
 /**
  * Detects when rope is pulled out of the robot and starts counting game time.
+ * @fires StarterDriver#tick
  * @memberof drivers.starter
  */
 class StarterDriver extends EventEmitter {
@@ -15,15 +16,40 @@ class StarterDriver extends EventEmitter {
             throw '`config.type` must be delay, rope or keyboard';
         }
 
+        this.name = name;
+        this.config = config;
+
         this.started = false;
         this.startTime;
-        this.config = config;
     }
 
+    _tick() {
+        /**
+         * Tick event
+         * @event MotionDriver#tick
+         * @property {Number} time - Time in seconds since match is started
+         */
+        this.emit('tick', this.getTime());
+        setTimeout(this._tick.bind(this), 1000);
+    }
+
+    _initMatchStart() {
+        this.startTime = process.hrtime();
+        this._tick();
+    }
+
+    /**
+     * Get time in seconds since match is started
+     * @return {number} - Seconds since match is started
+     */
     getTime() {
         return this.getTimeMills() / 1e3;
     }
 
+    /**
+     * Get time in milliseconds since match is started
+     * @return {number} - Milliseconds since match is started
+     */
     getTimeMills() {
         if (this.started === false) {
             return 0;
@@ -33,6 +59,10 @@ class StarterDriver extends EventEmitter {
         return (diffTime[0] * 1e3 + diffTime[1] / 1e6);
     }
 
+    /**
+     * Wait a start match signal (pulled rope, pressed key or delay)
+     * @return {Promise}
+     */
     waitStartSignal() {
         let starterDriver = this;
 
@@ -42,7 +72,7 @@ class StarterDriver extends EventEmitter {
                 case 'delay':
                     setTimeout(() => {
                         resolve();
-                        starterDriver.startTime = process.hrtime();
+                        starterDriver._initMatchStart();
                     }, starterDriver.config.delayTimer);
                     break;
 
@@ -59,6 +89,7 @@ class StarterDriver extends EventEmitter {
 
                     rl.question('Application is ready, press [ENTER] to start robot... ', (answer) => {
                         resolve();
+                        starterDriver._initMatchStart();
                         rl.close();
                     });
                     break;
