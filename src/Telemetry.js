@@ -5,6 +5,11 @@ const EventEmitter = require('events').EventEmitter;
 
 const TAG = 'Telemetry';
 
+/**
+ * Enables communication between `mep-core` and `mep-dash`.
+ *
+ * @fires Telemetry#data_[from]_[tag]_[action]
+ */
 class Telemetry extends EventEmitter {
     constructor(config) {
         super();
@@ -21,6 +26,12 @@ class Telemetry extends EventEmitter {
         this.client.on('message', (data) => {
             try {
                 let parsedData = JSON.parse(data);
+
+                /**
+                 * Packet arrived
+                 * @event Telemetry#data_[from]_[tag]_[action]
+                 * @property parsedData {Object} - Received packet
+                 */
                 telemetry.emit(
                     telemetry.genOn(parsedData.tag, parsedData.action),
                     parsedData
@@ -34,6 +45,12 @@ class Telemetry extends EventEmitter {
         telemetry.send('Handshake', 'init');
     }
 
+    /**
+     * Send log or command to mep-dash.
+     * @param tag {String} - Message tag
+     * @param action {String} - Message action
+     * @param params {Object} - Additional parameters of interest to action
+     */
     send(tag, action, params) {
         if (this.active === false) return;
 
@@ -49,6 +66,12 @@ class Telemetry extends EventEmitter {
         this.client.send(msg, 0, msg.length, this.serverInfo[1], this.serverInfo[0]);
     }
 
+    /**
+     * Helper that generates query string for .on()
+     * @param tag {String} - Message tag
+     * @param action {String} - Message action
+     * @return {string} - Generated query string for .on()
+     */
     genOn(tag, action) {
         return 'data_' + 'dash:big' + '_' + tag + '_' + action;
     }
