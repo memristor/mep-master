@@ -3,7 +3,7 @@ const Task = Mep.require('types/Task');
 const TAG = 'SchedulerService';
 
 class SchedulerService {
-    constructor(config) {
+    init(config) {
 
     }
 

@@ -1,12 +1,14 @@
 const driverManager = Mep.getDriverManager();
 const Point = Mep.require('types/Point');
-const EventEmitter = require('events');
 
 const TAG = 'PositionEstimator';
 
-class PositionEstimator extends EventEmitter {
-    constructor() {
-        super();
+class PositionEstimator {
+    constructor(config) {
+        this.config = Object.assign({
+            positionChangedCallback: (() => {}),
+            orientationChangedCallback: (() => {}),
+        }, config);
 
         let positionEstimator = this;
 
@@ -14,23 +16,9 @@ class PositionEstimator extends EventEmitter {
         this.point = new Point(0, 0);
         this.orientation = 0;
 
-        this.processPositionChange.bind(this);
-
         // Subscribe on drivers
-        this.drivers = driverManager.getDriversByGroup('position');
-        for (let driverName in this.drivers) {
-            // Position
-            this.point = this.drivers[driverName].getPosition();
-            this.drivers[driverName].on('positionChanged', (driverName, point, precision) => {
-                positionEstimator.processPositionChange(driverName, point, precision);
-            });
-
-            // Orientation
-            this.orientation = this.drivers[driverName].getOrientation();
-            this.drivers[driverName].on('orientationChanged', (driverName, orientation, precision) => {
-                positionEstimator.processOrientationChange(driverName, orientation, precision);
-            });
-        }
+        driverManager.callMethodByGroup('position', 'on', ['positionChanged', this.processPositionChange.bind(this)]);
+        driverManager.callMethodByGroup('position', 'on', ['orientationChanged', this.processOrientationChange.bind(this)]);
 
         // Initial publish
         Mep.Telemetry.send(TAG, 'PositionChanged', this.point);
@@ -40,18 +28,17 @@ class PositionEstimator extends EventEmitter {
     processPositionChange(driverName, point, precision) {
         // TODO: Sensor Fusion problem: https://en.wikipedia.org/wiki/Sensor_fusion
         // Implement Kalman filter: https://en.wikipedia.org/wiki/Kalman_filter
+        this.point = point;
+        this.config.positionChangedCallback(point);
 
         Mep.Telemetry.send(TAG, 'PositionChanged', point);
-
-        this.emit('positionChanged', point);
-        this.point = point;
     }
 
     processOrientationChange(driverName, orientation, precision) {
-        Mep.Telemetry.send(TAG, 'OrientationChanged', { orientation: orientation });
-
-        this.emit('orientationChanged', orientation);
         this.orientation = orientation;
+        this.config.orientationChangedCallback(orientation);
+
+        Mep.Telemetry.send(TAG, 'OrientationChanged', { orientation: orientation });
     }
 
     getPosition() {

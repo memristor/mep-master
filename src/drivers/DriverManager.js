@@ -186,6 +186,28 @@ class DriverManager {
     }
 
     /**
+     * <p>Get all drivers that can provide specific type of data (or execute specific command) and call method.</p>
+     *
+     * <p>Eg. imagine you have laptop and monitor. If a monitor is not available then your laptop is it totally ok with it,
+     * image will be sent only to laptop's monitor. However, if there is a monitor connected to the laptop then laptop
+     * will be aware of monitor and it will send an image to monitor too. Your laptop don't really recognize difference
+     * between displays, and it communicates between them in very similar way. To sum up, the same is for this method,
+     * method will be called to all drivers that are the part of the group.</p>
+     *
+     * @param type {String} - Data type which driver can provide. Can be: position & terrain.
+     * @param method {String} - Method to be called.
+     * @param params {Array} - Params to be passed to method.
+     *
+     * @see DriverManager.getDriversByGroup
+     */
+    callMethodByGroup(type, method, params) {
+        let drivers = this.getDriversByGroup(type);
+        for (let key in drivers) {
+            drivers[key][method](...params);
+        }
+    }
+
+    /**
      * Put driver out of order
      * @param name {String} - Unique name of a driver
      * @param message {String} - Describe more why the fault happened

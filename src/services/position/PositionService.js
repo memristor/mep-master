@@ -11,7 +11,7 @@ const TAG = 'PositionService';
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
 class PositionService {
-    constructor(config) {
+    init(config) {
         this.config = config;
         this.currentSpeed = 0;
         this.positionEstimator = new PositionEstimator();

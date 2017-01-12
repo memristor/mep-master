@@ -4,7 +4,8 @@ const Point = Mep.require('types/Point');
 const Polygon = Mep.require('types/Polygon');
 
 describe('PathService', () => {
-    let terrainService = new TerrainService({ staticObstacles: [] });
+    let terrainService = new TerrainService();
+    terrainService.init({ staticObstacles: [] });
     let points = [
         new Point(1, 1),
         new Point(100, 1),

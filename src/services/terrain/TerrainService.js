@@ -10,7 +10,7 @@ const TAG = 'TerrainService';
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
 class TerrainService {
-    constructor(config) {
+    init(config) {
         this.obstacles = [];
         this.pf = new PathFinding(1500, -1500, 1000, -1000);
 
@@ -28,10 +28,7 @@ class TerrainService {
         }
 
         // Subscribe on drivers
-        this.drivers = driverManager.getDriversByGroup('terrain');
-        for (var driverName in this.drivers) {
-            this.drivers[driverName].on('obstacleDetected', this.processObstacleDetection.bind(this));
-        }
+        driverManager.callMethodByGroup('terrain', 'on', ['obstacleDetected', this.processObstacleDetection.bind(this)]);
     }
 
     processObstacleDetection(centerPoint, relativePolygon, detected) {
