@@ -1,6 +1,9 @@
 #!/bin/bash
 
 SHOW_LOGO=false
+PERFORMANCE=false
+
+PERFORMANCE_PREFIX=
 
 # Generated with `figlet`
 if [ $SHOW_LOGO = true ]; then
@@ -12,4 +15,9 @@ if [ $SHOW_LOGO = true ]; then
     echo ""
 fi
 
-node --harmony-async-await src/Bootstrap.js "$@"
+# Apply performance
+if [ $PERFORMANCE = true ]; then
+   PERFORMANCE_PREFIX="nice -n -20"
+fi
+
+${PERFORMANCE_PREFIX} node --harmony-async-await src/Bootstrap.js "$@"

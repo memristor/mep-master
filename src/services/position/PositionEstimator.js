@@ -10,11 +10,9 @@ class PositionEstimator {
             orientationChangedCallback: (() => {}),
         }, config);
 
-        let positionEstimator = this;
-
         // Set default position
-        this.point = new Point(0, 0);
-        this.orientation = 0;
+        this.point = driverManager.getDriver('MotionDriver').getPosition();
+        this.orientation = driverManager.getDriver('MotionDriver').getOrientation();
 
         // Subscribe on drivers
         driverManager.callMethodByGroup('position', 'on', ['positionChanged', this.processPositionChange.bind(this)]);

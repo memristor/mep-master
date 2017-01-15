@@ -2,24 +2,28 @@ const driverManager = Mep.getDriverManager();
 const PositionEstimator = require('./PositionEstimator');
 const MotionDriver = Mep.require('drivers/motion/MotionDriver');
 const TaskError = Mep.require('types/TaskError');
+const EventEmitter = require('events').EventEmitter;
 
 const TAG = 'PositionService';
 
 /**
  * Provides a very abstract way to control and estimate robot position
+ * @fires PositionService#pathObstacleDetected
  *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
-class PositionService {
+class PositionService extends EventEmitter {
     init(config) {
         this.config = config;
         this.currentSpeed = 0;
         this.positionEstimator = new PositionEstimator();
         this.motionDriver = null;
 
-        // Prepare methods
-        this.startAvoidingStrategy.bind(this);
-        this.onPathObstacleDetected.bind(this);
+        this.required = {
+            points: [],
+            params: {}
+        };
+        this.detectedPathObstaclesSources = [];
 
         // Check if driver is active
         if (driverManager.isDriverAvailable('MotionDriver') === true) {
@@ -29,10 +33,7 @@ class PositionService {
         }
 
         // Subscribe on sensors that can provide obstacles on the robot's terrain
-        this.drivers = driverManager.getDriversByGroup('terrain');
-        for (let driverName in this.drivers) {
-            this.drivers[driverName].on('pathObstacleDetected', this.onPathObstacleDetected.bind(this));
-        }
+        driverManager.callMethodByGroup('terrain', 'on', ['pathObstacleDetected', this._onPathObstacleDetected.bind(this)]);
     }
 
     getPosition() {
@@ -43,75 +44,91 @@ class PositionService {
         return this.positionEstimator.getOrientation();
     }
 
-    onPathObstacleDetected(state, front) {
+    _onPathObstacleDetected(source, poi, state, front) {
         // If something is detected
         if (state === true) {
-
             // If in front of robot
             if ((front === true && this.motionDriver.getDirection() === MotionDriver.DIRECTION_FORWARD) ||
                 (front === false && this.motionDriver.getDirection() === MotionDriver.DIRECTION_BACKWARD)) {
 
                 // TODO: Check if it is not a static obstacle
-                this.startAvoidingStrategy();
+
+                // Fire the event if only one sensor detected a path obstacle
+                // Required behaviour is single event if obstacle is detected (not multiple events from multiple sensors)
+                if (this.detectedPathObstaclesSources.length === 0) {
+                    this.emit('pathObstacleDetected', true);
+                }
+
+                // Add source
+                if (this.detectedPathObstaclesSources.indexOf(source) < 0) {
+                    this.detectedPathObstaclesSources.push(source);
+                }
+            }
+        } else {
+            // Delete the source which previously detected a path obstacle
+            this.detectedPathObstaclesSources.splice(this.detectedPathObstaclesSources.indexOf(source), 1);
+
+            if (this.detectedPathObstaclesSources.length === 0) {
+                this.emit('pathObstacleDetected', false);
             }
         }
-    }
-
-    startAvoidingStrategy() {
-        this.motionDriver.stop();
     }
 
     /**
      * Move the robot, set new position of the robot
      *
      * @param {TunedPoint} tunedPoint - Point that should be reached
-     * @param {Boolean} pathfinding - Use terrain finding algorithm
-     * @param {String} direction - Direction of robot movement
-     * @param {Boolean} relative - Use relative to previous position
-     * @param {Number} tolerance - Position will consider as reached if Euclid's distance between current
+     * @param {Boolean} params.pathfinding - Use terrain finding algorithm
+     * @param {String} params.direction - Direction of robot movement
+     * @param {Boolean} params.relative - Use relative to previous position
+     * @param {Number} params.tolerance - Position will consider as reached if Euclid's distance between current
      * and required position is less than tolerance
-     * @param {Number} speed - Speed of the robot movement in range (0, 255)
+     * @param {Number} params.speed - Speed of the robot movement in range (0, 255)
      * @returns {Promise}
      */
-    set(tunedPoint, {
-        pathfinding = this.config.moveOptions.pathfinding,
-        direction = this.config.moveOptions.direction,
-        relative = this.config.moveOptions.relative,
-        tolerance = this.config.moveOptions.tolerance,
-        speed = undefined
-    } = {}) {
+    set(tunedPoint, params) {
         let positionService = this;
         let destinationPoint = tunedPoint.getPoint();
-        let points = [];
+
+        this.required = {
+            params: Object.assign(this.config.moveOptions, params),
+            points: []
+        };
 
         // Apply relative
-        if (relative === true) {
+        if (this.required.params.relative === true) {
             destinationPoint.setX(destinationPoint.getX() + this.getPosition().getX());
             destinationPoint.setY(destinationPoint.getY() + this.getPosition().getY());
         }
 
         // Apply terrain finding
-        if (pathfinding === true) {
-
+        if (this.required.params.pathfinding === true) {
             let currentPoint = this.getPosition();
             Mep.Telemetry.send(TAG, 'set', {state: state, front: front});
             Mep.Log.debug(TAG, 'Start terrain finding from position', currentPoint);
 
-            points = Mep.getTerrainService().findPath(currentPoint, destinationPoint);
+            this.required.points = Mep.getTerrainService().findPath(currentPoint, destinationPoint);
             Mep.Log.debug(TAG, 'Start terrain finding', points, 'from point', currentPoint);
         } else {
-            points = [destinationPoint];
+            this.required.points = [destinationPoint];
         }
 
         return new Promise((resolve, reject) => {
-            // TODO: Call reject() if there is no terrain found by pathfidning
+            if (positionService.required.points.length === 0) {
+                reject(new TaskError(TAG, 'FindPath', 'Cannot go to required position, no path found'));
+            }
 
             function goToNext() {
                 let point;
-                if (points.length > 0) {
-                    point = points[0];
-                    points.splice(0, 1);
-                    positionService._basicSet(point, direction, tolerance, speed).then(goToNext);
+                if (positionService.required.points.length > 0) {
+                    point = positionService.required.points[0];
+                    positionService.required.points.splice(0, 1);
+                    positionService._basicSet(
+                        point,
+                        positionService.required.params.direction,
+                        positionService.required.params.tolerance,
+                        positionService.required.params.speed
+                    ).then(goToNext);
                     return;
                 } else {
                     resolve();
@@ -163,7 +180,7 @@ class PositionService {
     }
 
     rotate(tunedAngle, options) {
-        // TODO
+        this.motionDriver.rotateTo(tunedAngle.getAngle());
     }
 }
 

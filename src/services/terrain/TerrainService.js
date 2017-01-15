@@ -14,8 +14,6 @@ class TerrainService {
         this.obstacles = [];
         this.pf = new PathFinding(1500, -1500, 1000, -1000);
 
-        this.processObstacleDetection.bind(this);
-
         // Add static obstacles
         for (let pointsArray of config.staticObstacles) {
             let points = [];
@@ -28,17 +26,16 @@ class TerrainService {
         }
 
         // Subscribe on drivers
-        driverManager.callMethodByGroup('terrain', 'on', ['obstacleDetected', this.processObstacleDetection.bind(this)]);
+        driverManager.callMethodByGroup('terrain', 'on', ['obstacleDetected', this._processObstacleDetection.bind(this)]);
     }
 
-    processObstacleDetection(centerPoint, relativePolygon, detected) {
+    _processObstacleDetection(centerPoint, relativePolygon, detected) {
         let polygon = relativePolygon.clone();
         polygon.rotate(new Point(0, 0), Mep.getPositionService().getOrientation());
         polygon.translate(Mep.getPositionService().getPosition());
 
         if (detected === true) {
             this.addObstacle(polygon);
-
         } else {
             // TODO: Remove an obstacle
         }
