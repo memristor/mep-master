@@ -34,7 +34,7 @@ class TunedPoint {
                 typeof arguments[i][1] === 'undefined' ||
                 typeof arguments[i][2] === 'undefined') {
 
-                Mep.Log.warn(TAG, 'Invalid arguments');
+                Mep.Log.error(TAG, 'Invalid arguments');
                 continue;
             }
 

@@ -104,9 +104,11 @@ class PositionService extends EventEmitter {
         let destinationPoint = tunedPoint.getPoint();
 
         this.required = {
-            params: Object.assign(this.config.moveOptions, params),
+            params: {},
             points: []
         };
+        Object.assign(this.required.params, this.config.moveOptions, params);
+
 
         // Apply relative
         if (this.required.params.relative === true) {
@@ -117,10 +119,9 @@ class PositionService extends EventEmitter {
         // Apply terrain finding
         if (this.required.params.pathfinding === true) {
             let currentPoint = this.getPosition();
-            Mep.Log.debug(TAG, 'Start terrain finding from position', currentPoint);
-
             this.required.points = Mep.getTerrainService().findPath(currentPoint, destinationPoint);
-            Mep.Log.debug(TAG, 'Start terrain finding', this.required.points, 'from point', currentPoint);
+
+            Mep.Log.debug(TAG, 'Start path finding from', currentPoint, 'to', this.required.points);
         } else {
             this.required.points = [destinationPoint];
         }
@@ -130,27 +131,32 @@ class PositionService extends EventEmitter {
                 reject(new TaskError(TAG, 'FindPath', 'Cannot go to required position, no path found'));
             }
 
-            function goToNext() {
-                let point;
-                if (positionService.required.points.length > 0) {
-                    point = positionService.required.points[0];
-                    positionService.required.points.splice(0, 1);
-                    positionService._basicSet(
-                        point,
-                        positionService.required.params.direction,
-                        positionService.required.params.tolerance,
-                        positionService.required.params.speed
-                    ).then(goToNext);
-                    return;
-                } else {
-                    resolve();
-                }
-            }
-            goToNext();
+            this._goToNextQueuedPoint(resolve, reject);
         });
     }
 
-    _promiseToReachDestionation() {
+    _goToNextQueuedPoint(resolve, reject) {
+        let positionService = this;
+        let point;
+        if (this.required.points.length > 0) {
+            point = this.required.points[0];
+            this.required.points.splice(0, 1);
+            this._basicSet(
+                point,
+                this.required.params.direction,
+                this.required.params.tolerance,
+                this.required.params.speed
+            ).then(() => {
+                this._goToNextQueuedPoint.bind(positionService);
+                this._goToNextQueuedPoint(resolve, reject);
+            });
+            return;
+        } else {
+            resolve();
+        }
+    }
+
+    _promiseToReachDestination() {
         return new Promise((resolve, reject) => {
             this.motionDriver.on('stateChanged', (state) => {
                 if (state === MotionDriver.STATE_IDLE) {
@@ -165,6 +171,8 @@ class PositionService extends EventEmitter {
     }
 
     _basicSet(point, direction, tolerance, speed) {
+        Mep.Log.debug(TAG, 'Basic set',  point);
+
         // Set speed
         if (speed !== undefined && this.currentSpeed !== speed) {
             this.currentSpeed = speed;
@@ -181,7 +189,7 @@ class PositionService extends EventEmitter {
         );
 
         // Check when robot reached the position
-        return this._promiseToReachDestionation();
+        return this._promiseToReachDestination();
     }
 
     /**
@@ -193,7 +201,7 @@ class PositionService extends EventEmitter {
      */
     arc(point, angle, direction) {
         this.motionDriver.moveArc(point.getX(), point.getY(), angle, direction);
-        return this._promiseToReachDestionation();
+        return this._promiseToReachDestination();
     }
 
     stop(softStop = false) {

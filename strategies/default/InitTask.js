@@ -11,8 +11,8 @@ class InitTask extends Task {
 
         // Let's move around
         try {
-            await position.set(new TunedPoint(700, -800), { speed: 130 });
-            await position.set(new TunedPoint(-1300, 0));
+            await position.set(new TunedPoint(770, -800), { speed: 130, pathfinding: true });
+            await position.set(new TunedPoint(-750, -850), { pathfinding: true });
         } catch (e) {
             this.onErrorForwardBack(e);
         }

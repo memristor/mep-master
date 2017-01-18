@@ -30,7 +30,7 @@ class TunedAngle {
             if (typeof arguments[i][0] === 'undefined' ||
                 typeof arguments[i][1] === 'undefined') {
 
-                Mep.Log.warn(TAG, 'Invalid arguments');
+                Mep.Log.error(TAG, 'Invalid arguments');
                 continue;
             }
 
