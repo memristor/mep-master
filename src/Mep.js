@@ -82,7 +82,7 @@ let Mep = {
      * @returns {PositionService}
      */
     getPositionService() {
-        return this.positionService;
+        return this.Position;
     },
 
     /**
@@ -92,7 +92,7 @@ let Mep = {
      * @returns {PathService}
      */
     getTerrainService() {
-        return this.terrainService;
+        return this.Terrain;
     },
 
     /**
@@ -105,7 +105,7 @@ let Mep = {
      * @returns {DriverManager}
      */
     getDriverManager() {
-        return this.driverManager;
+        return this.DriverManager;
     },
 
     /**
@@ -118,7 +118,7 @@ let Mep = {
      * @returns {SchedulerService}
      */
     getSchedulerService() {
-        return this.schedulerService;
+        return this.Scheduler;
     },
 
     /**
@@ -126,18 +126,18 @@ let Mep = {
      * @memberof Mep
      */
     init() {
-        this.driverManager = new (require('./drivers/DriverManager'))();
+        this.DriverManager = new (require('./drivers/DriverManager'))();
 
-        this.positionService =
+        this.Position =
             new (require('./services/position/PositionService'))();
-        this.terrainService = new (require('./services/terrain/TerrainService'))();
-        this.schedulerService = new (require('./services/scheduler/SchedulerService'))();
+        this.Terrain = new (require('./services/terrain/TerrainService'))();
+        this.Scheduler = new (require('./services/scheduler/SchedulerService'))();
 
 
-        this.driverManager.init();
-        this.positionService.init(Config.get('Services:PositionService'));
-        this.terrainService.init(Config.get('Services:TerrainService'));
-        this.schedulerService.init(Config.get('Services:SchedulerService'));
+        this.DriverManager.init();
+        this.Position.init(Config.get('Services:PositionService'));
+        this.Terrain.init(Config.get('Services:TerrainService'));
+        this.Scheduler.init(Config.get('Services:SchedulerService'));
     }
 };
 

@@ -35,6 +35,12 @@ class MotionDriver extends MotionDriverBinder  {
      */
 
     /**
+     * Stop robot by turning off motors.
+     * @method softStop
+     * @memberof MotionDriver#
+     */
+
+    /**
      * Move robot straight
      * @method moveStraight
      * @memberof MotionDriver#

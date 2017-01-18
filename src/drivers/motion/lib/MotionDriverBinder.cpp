@@ -35,6 +35,7 @@ void MotionDriverBinder::Init(Local<Object> exports) {
 
     Nan::SetPrototypeMethod(tmpl, "moveToPosition", moveToPosition);
     Nan::SetPrototypeMethod(tmpl, "stop", stop);
+    Nan::SetPrototypeMethod(tmpl, "softStop", softStop);
 	Nan::SetPrototypeMethod(tmpl, "moveStraight", moveStraight);
 	Nan::SetPrototypeMethod(tmpl, "setSpeed", setSpeed);
 	Nan::SetPrototypeMethod(tmpl, "getPosition", getPosition);
@@ -119,16 +120,18 @@ void MotionDriverBinder::moveToPosition(const Nan::FunctionCallbackInfo<Value> &
     motionDriver->moveToPosition(position, direction);
 }
 
-/*
-    Original: MotionDriver::stop();
-*/
 void MotionDriverBinder::stop(const Nan::FunctionCallbackInfo<Value> &args) {
     Nan::HandleScope scope;
 
     MotionDriver *motionDriver = ObjectWrap::Unwrap<MotionDriverBinder>(args.Holder())->getMotionDriver();
-    
-	LOG(INFO) << TAG << "Stop command is sending";
-	motionDriver->stop();
+    motionDriver->stop();
+}
+
+void MotionDriverBinder::softStop(const Nan::FunctionCallbackInfo<Value> &args) {
+    Nan::HandleScope scope;
+
+    MotionDriver *motionDriver = ObjectWrap::Unwrap<MotionDriverBinder>(args.Holder())->getMotionDriver();
+    motionDriver->softStop();
 }
 
 void MotionDriverBinder::moveStraight(const Nan::FunctionCallbackInfo<Value> &args) {

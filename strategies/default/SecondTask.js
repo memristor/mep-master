@@ -8,6 +8,7 @@ class SecondTask extends Task {
         await position.set(new TunedPoint(0, 800));
     }
 
+
 }
 
 module.exports = SecondTask;

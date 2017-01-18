@@ -29,7 +29,7 @@ class TerrainService {
         driverManager.callMethodByGroup('terrain', 'on', ['obstacleDetected', this._processObstacleDetection.bind(this)]);
     }
 
-    _processObstacleDetection(centerPoint, relativePolygon, detected) {
+    _processObstacleDetection(source, centerPoint, relativePolygon, detected) {
         let polygon = relativePolygon.clone();
         polygon.rotate(new Point(0, 0), Mep.getPositionService().getOrientation());
         polygon.translate(Mep.getPositionService().getPosition());

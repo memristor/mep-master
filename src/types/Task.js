@@ -23,6 +23,9 @@ class Task {
         this.time = time;
         this.location = location;
         this.scheduler = scheduler;
+
+        this.pathObstacleDetected = false;
+        Mep.Position.on('pathObstacleDetected', this.onPathObstacle.bind(this));
     }
 
     finish() {
@@ -55,10 +58,6 @@ class Task {
         this.weight = weight;
     }
 
-    setState(state) {
-        this.state = state;
-    }
-
     run() {
         this.state = Task.ACTIVE;
         this.onRun();
@@ -66,6 +65,15 @@ class Task {
 
     onRun() {
         Mep.Log.warn(TAG, 'Override onRun() please.');
+    }
+
+    onPathObstacle(detected) {
+        this.pathObstacleDetected = detected;
+        if (this.pathObstacleDetected === true) {
+            Mep.Position.stop();
+        } else {
+            Mep.Position.continue();
+        }
     }
 }
 

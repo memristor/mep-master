@@ -109,12 +109,13 @@ class InfraredDriver extends EventEmitter {
         /**
          * Obstacle detected event.
          * @event InfraredDriver#obstacleDetected
+         * @property {String} - Source name
          * @property {Point} - Center of detected obstacle
          * @property {Polygon} - Obstacle is approximated with a polygon
          * @property {Boolean} - Is objected detected or not
          * @property {Object} - Additional information about detected object
          */
-        this.emit('obstacleDetected', this.poi, this.polygon, this.detected);
+        this.emit('obstacleDetected', this.name, this.poi, this.polygon, this.detected);
 
         // After `duration` publish obstacle detection again if object is still there
         if (this.timeoutHandle !== null) {

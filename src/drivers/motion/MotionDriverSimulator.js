@@ -22,7 +22,11 @@ class MotionDriverSimulator extends EventEmitter {
 
         let motionDriverSimulator = this;
         this.name = name;
-        this.config = config;
+        this.config = Object.assign({
+            startX: -1300,
+            startY: 0,
+            startOrientation: 0
+        }, config);
 
         this.position = new Point(this.config.startX, this.config.startY);
         this.orientation = this.config.startOrientation;

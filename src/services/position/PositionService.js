@@ -1,8 +1,8 @@
-const driverManager = Mep.getDriverManager();
 const PositionEstimator = require('./PositionEstimator');
-const MotionDriver = Mep.require('drivers/motion/MotionDriver');
 const TaskError = Mep.require('types/TaskError');
 const EventEmitter = require('events').EventEmitter;
+const Point = Mep.require('types/Point');
+const MotionDriver = Mep.require('drivers/motion/MotionDriver');
 
 const TAG = 'PositionService';
 
@@ -17,58 +17,71 @@ class PositionService extends EventEmitter {
         this.config = config;
         this.currentSpeed = 0;
         this.positionEstimator = new PositionEstimator();
-        this.motionDriver = null;
+        this.motionDriver = Mep.DriverManager.getDriver('MotionDriver');
 
         this.required = {
             points: [],
             params: {}
         };
-        this.detectedPathObstaclesSources = [];
-
-        // Check if driver is active
-        if (driverManager.isDriverAvailable('MotionDriver') === true) {
-            this.motionDriver = driverManager.getDriver('MotionDriver');
-        } else {
-            Mep.Log.warn(TAG, 'No motion driver available');
-        }
+        this.pathObstacleSources = [[], []];
 
         // Subscribe on sensors that can provide obstacles on the robot's terrain
-        driverManager.callMethodByGroup('terrain', 'on', ['pathObstacleDetected', this._onPathObstacleDetected.bind(this)]);
+        Mep.DriverManager.callMethodByGroup('terrain', 'on', ['pathObstacleDetected', this._onPathObstacleDetected.bind(this)]);
     }
 
+    /**
+     * Get current robot's position
+     * @returns {Point} Current position
+     */
     getPosition() {
         return this.positionEstimator.getPosition();
     }
 
+    /**
+     * Get current robot's orientation
+     * @returns {Number} Orientation in degrees
+     */
     getOrientation() {
         return this.positionEstimator.getOrientation();
     }
 
-    _onPathObstacleDetected(source, poi, state, front) {
-        // If something is detected
-        if (state === true) {
-            // If in front of robot
-            if ((front === true && this.motionDriver.getDirection() === MotionDriver.DIRECTION_FORWARD) ||
-                (front === false && this.motionDriver.getDirection() === MotionDriver.DIRECTION_BACKWARD)) {
-
-                // TODO: Check if it is not a static obstacle
-
-                // Fire the event if only one sensor detected a path obstacle
-                // Required behaviour is single event if obstacle is detected (not multiple events from multiple sensors)
-                if (this.detectedPathObstaclesSources.length === 0) {
-                    this.emit('pathObstacleDetected', true);
-                }
-
-                // Add source
-                if (this.detectedPathObstaclesSources.indexOf(source) < 0) {
-                    this.detectedPathObstaclesSources.push(source);
-                }
+    _onPathObstacleDetected(source, relativePOI, detected, front) {
+        // Add source or remove source
+        // `pathObstacleSources[0]` is array of obstacle source detected on a back of robot
+        // `pathObstacleSources[1]` is array of obstacle source detected on a front of robot
+        if (detected === true) {
+            if (this.pathObstacleSources[+front].indexOf(source) < 0) {
+                this.pathObstacleSources[+front].push(source);
             }
         } else {
             // Delete the source which previously detected a path obstacle
-            this.detectedPathObstaclesSources.splice(this.detectedPathObstaclesSources.indexOf(source), 1);
+            this.pathObstacleSources[+front].splice(this.pathObstacleSources[+front].indexOf(source), 1);
+        }
 
-            if (this.detectedPathObstaclesSources.length === 0) {
+        // If something is detected
+        if (detected === true) {
+
+            // Fire the event if only one sensor detected a path obstacle
+            // Required behaviour is single event if obstacle is detected (not multiple events from multiple sensors)
+            if (this.pathObstacleSources[this.motionDriver.getDirection()].length > 0) {
+                // Check if the obstacle is on the path
+                if ((front === true && this.motionDriver.getDirection() === MotionDriver.DIRECTION_FORWARD) ||
+                    (front === false && this.motionDriver.getDirection() === MotionDriver.DIRECTION_BACKWARD)) {
+                    // Check if it is outside of terrain
+                    let poi = relativePOI.clone();
+                    poi.rotate(new Point(0, 0), this.getOrientation());
+                    poi.translate(this.getPosition());
+
+                    if (poi.getX() < 1500 && poi.getX() > -1500 &&
+                        poi.getY() < 1000 && poi.getY() > -1000) {
+                        // TODO: Check if it is not a static obstacle
+
+                        this.emit('pathObstacleDetected', true);
+                    }
+                }
+            }
+        } else {
+            if (this.pathObstacleSources[this.motionDriver.getDirection()].length === 0) {
                 this.emit('pathObstacleDetected', false);
             }
         }
@@ -104,11 +117,10 @@ class PositionService extends EventEmitter {
         // Apply terrain finding
         if (this.required.params.pathfinding === true) {
             let currentPoint = this.getPosition();
-            Mep.Telemetry.send(TAG, 'set', {state: state, front: front});
             Mep.Log.debug(TAG, 'Start terrain finding from position', currentPoint);
 
             this.required.points = Mep.getTerrainService().findPath(currentPoint, destinationPoint);
-            Mep.Log.debug(TAG, 'Start terrain finding', points, 'from point', currentPoint);
+            Mep.Log.debug(TAG, 'Start terrain finding', this.required.points, 'from point', currentPoint);
         } else {
             this.required.points = [destinationPoint];
         }
@@ -134,7 +146,6 @@ class PositionService extends EventEmitter {
                     resolve();
                 }
             }
-
             goToNext();
         });
     }
@@ -173,12 +184,35 @@ class PositionService extends EventEmitter {
         return this._promiseToReachDestionation();
     }
 
+    /**
+     * Make a curve
+     * @param point {Number} - Center of circle
+     * @param angle {Number} - Angle
+     * @param direction {Number} - Direction
+     * @returns {Promise}
+     */
     arc(point, angle, direction) {
         this.motionDriver.moveArc(point.getX(), point.getY(), angle, direction);
-
         return this._promiseToReachDestionation();
     }
 
+    stop(softStop = false) {
+        if (softStop === true) {
+            this.motionDriver.softStop();
+        } else {
+            this.motionDriver.stop();
+        }
+    }
+
+    continue() {
+
+    }
+
+    /**
+     * Rotate robot for an angle
+     * @param tunedAngle {TunedAngle} - Angle to rotate
+     * @param options {Object} - Additional options
+     */
     rotate(tunedAngle, options) {
         this.motionDriver.rotateTo(tunedAngle.getAngle());
     }
