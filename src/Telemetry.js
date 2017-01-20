@@ -25,7 +25,7 @@ class Telemetry extends EventEmitter {
 
         this.client.on('message', (data) => {
             try {
-                let parsedData = JSON.parse(data);
+                let parsedData = JSON.parse(data.toString());
 
                 /**
                  * Packet arrived
@@ -37,7 +37,7 @@ class Telemetry extends EventEmitter {
                     parsedData
                 );
             } catch (e) {
-                Log.warn(TAG, 'Error parsing packet:', data);
+                Log.warn(TAG, 'Error parsing packet:', data.toString());
             }
         });
 

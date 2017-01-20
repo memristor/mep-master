@@ -82,7 +82,7 @@ void MotionDriver::moveToPosition(geometry::Point2D position, MovingDirection di
 	lock_guard<mutex> lock(*io_mutex);
 	
 	char message[] = {
-			'G',
+			'G', // G or N
 			(char)(position.getX()>>8),
 			(char)(position.getX()),
 			(char)(position.getY()>>8),

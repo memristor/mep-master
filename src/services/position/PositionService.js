@@ -156,13 +156,25 @@ class PositionService extends EventEmitter {
         }
     }
 
-    _promiseToReachDestination() {
+    _promiseToReachDestination(point, tolerance) {
         return new Promise((resolve, reject) => {
+            // If tolerance is set use Euclid's distance to determine if robot can execute next command
+            // It is useful if you want to continue
+            if (tolerance >= 0) {
+                let motionDriver = this.motionDriver;
+                motionDriver.on('positionChanged', (name, currentPosition) => {
+                    if (currentPosition.getDistance(point) <= tolerance) {
+                        motionDriver.finishCommand(resolve);
+                    }
+                });
+            }
+
+            // In every case wait new state of motion driver
             this.motionDriver.on('stateChanged', (state) => {
                 if (state === MotionDriver.STATE_IDLE) {
                     resolve();
                 } else if (state === MotionDriver.STATE_STUCK) {
-                    reject(new TaskError(TAG, 'stuck', 'Robot is stucked'));
+                    reject(new TaskError(TAG, 'stuck', 'Robot is stacked'));
                 } else if (state === MotionDriver.STATE_ERROR) {
                     reject(new TaskError(TAG, 'error', 'Unknown moving error'));
                 }
@@ -189,7 +201,7 @@ class PositionService extends EventEmitter {
         );
 
         // Check when robot reached the position
-        return this._promiseToReachDestination();
+        return this._promiseToReachDestination(point, tolerance);
     }
 
     /**

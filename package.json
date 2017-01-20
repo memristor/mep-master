@@ -27,6 +27,7 @@
     "nan": "^2.3.5",
     "nconf": "^0.8.4",
     "require-new": "^1.1.0",
+    "serialport": "^4.0.7",
     "should": "^11.1.1",
     "sinon": "^1.17.6",
     "socketcan": "^2.1.3",

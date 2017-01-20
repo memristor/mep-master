@@ -26,6 +26,8 @@ class PositionEstimator {
     processPositionChange(driverName, point, precision) {
         // TODO: Sensor Fusion problem: https://en.wikipedia.org/wiki/Sensor_fusion
         // Implement Kalman filter: https://en.wikipedia.org/wiki/Kalman_filter
+        Mep.Log.debug(TAG, point);
+
         this.point = point;
         this.config.positionChangedCallback(point);
 

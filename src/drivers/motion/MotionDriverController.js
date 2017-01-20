@@ -6,13 +6,13 @@ class MotionDriverController {
 
         // Set X
         Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'moveToPositionX'), (packet) => {
-            let currentPosition = motionDriver.getPosition();
+            let currentPosition = Mep.Position.getPosition();
             motionDriver.moveToPosition(currentPosition.getX() + packet.params.value, currentPosition.getY());
         });
 
         // Set Y
         Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'moveToPositionY'), (packet) => {
-            let currentPosition = motionDriver.getPosition();
+            let currentPosition = Mep.Position.getPosition();
             motionDriver.moveToPosition(currentPosition.getX(), currentPosition.getY() + packet.params.value);
         });
     }

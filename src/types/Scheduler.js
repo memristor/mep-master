@@ -10,13 +10,14 @@ class Scheduler {
     /**
      * Run default action if there is the exception in task is not caught with `try {} catch(e) {}`.
      * @param {TaskError} reason - Describes more about an exception
-     * @param p
      */
-    onUnhandledTaskError(taskError, p) {
-        Mep.Log.warn(TAG, taskError);
-        Mep.Log.warn(TAG, 'Promise:', p);
-
-        this.runNextTask();
+    onUnhandledTaskError(reason) {
+        if (reason !== undefined && reason.constructor !== undefined) {
+            if (reason.constructor.name === 'TaskError') {
+                Mep.Log.warn(TAG, reason);
+                this.runNextTask();
+            }
+        }
     }
 
     getTasks() {
