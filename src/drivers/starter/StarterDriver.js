@@ -26,7 +26,7 @@ class StarterDriver extends EventEmitter {
     _tick() {
         /**
          * Tick event
-         * @event MotionDriver#tick
+         * @event StarterDriver#tick
          * @property {Number} time - Time in seconds since match is started
          */
         this.emit('tick', this.getTime());
@@ -87,7 +87,7 @@ class StarterDriver extends EventEmitter {
                         output: process.stdout
                     });
 
-                    rl.question('Application is ready, press [ENTER] to start robot... ', (answer) => {
+                    rl.question('Application is ready, press [ENTER] to start robot...\n', (answer) => {
                         resolve();
                         starterDriver._initMatchStart();
                         rl.close();
