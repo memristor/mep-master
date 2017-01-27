@@ -125,7 +125,9 @@ let Mep = {
      * Initialize necessary modules. Should be called only once during an application bootstrapping
      * @memberof Mep
      */
-    init() {
+    init(finishedCallback) {
+        let mep = this;
+
         this.DriverManager = new (require('./drivers/DriverManager'))();
 
         this.Position =
@@ -133,11 +135,13 @@ let Mep = {
         this.Terrain = new (require('./services/terrain/TerrainService'))();
         this.Scheduler = new (require('./services/scheduler/SchedulerService'))();
 
+        this.DriverManager.init(() => {
+            mep.Position.init(Config.get('Services:PositionService'));
+            mep.Terrain.init(Config.get('Services:TerrainService'));
+            mep.Scheduler.init(Config.get('Services:SchedulerService'));
 
-        this.DriverManager.init();
-        this.Position.init(Config.get('Services:PositionService'));
-        this.Terrain.init(Config.get('Services:TerrainService'));
-        this.Scheduler.init(Config.get('Services:SchedulerService'));
+            finishedCallback();
+        });
     }
 };
 

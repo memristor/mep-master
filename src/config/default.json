@@ -25,9 +25,15 @@
     },
 
     "Drivers": {
+        "Uart": {
+          "@class": "drivers/uart/Uart",
+          "@load": true
+        },
+
         "MotionDriver": {
             "@class": "drivers/motion/MotionDriverJS",
             "@load": true,
+            "@dependencies": { "communicator": "Uart" },
 
             "startX": -1300,
             "startY": 0,

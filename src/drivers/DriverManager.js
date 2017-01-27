@@ -26,95 +26,35 @@ class DriverManager {
         this.drivers = {};
         this.driversOutOfOrder = {};
         this.initialized = false;
+        this.config = Mep.Config.get('Drivers');
     }
 
 
     /**
      * Initialize all drivers
      */
-    init() {
+    init(finishedCallback) {
         // Protect from multiple initialization
         if (this.initialized === true) {
             return;
         }
         this.initialized = true;
 
-        // Drivers initialization
-        let config = Mep.Config.get('Drivers');
-
-        for (let driverIdentifier in config) {
-            if (config.hasOwnProperty(driverIdentifier) === false) {
-                continue;
+        // Iterate through all drivers in config and initialize them
+        let driverManager = this;
+        let getNextDriverIdentifier = function* () {
+            yield* Object.keys(driverManager.config);
+        };
+        let nextDriverGenerator = getNextDriverIdentifier();
+        let loadNextDriver = () => {
+            let yieldDriverIdentifier = nextDriverGenerator.next();
+            if (yieldDriverIdentifier.done === true) {
+                finishedCallback();
+                return;
             }
-
-            // Initialize driver
-            this._initDriver(config, driverIdentifier);
-        }
-    }
-
-    _initDriver(config, driverIdentifier) {
-        let moduleConfig = config[driverIdentifier];
-
-        if (moduleConfig === undefined) {
-            throw Error('Driver ' + driverIdentifier + ' is missing in configuration. Some driver probably depends on ' + driverIdentifier + ' driver');
-        }
-
-        if (this.isDriverAvailable(driverIdentifier) || this.isDriverOutOfOrder(driverIdentifier)) {
-            return;
-        }
-
-        // Load driver
-        let load = moduleConfig['@load'];
-        let classPath = moduleConfig['@class'];
-
-        // Do not initialize if `load field == false`
-        if (load != false) {
-            let ModuleClass = Mep.require(classPath);
-
-            // Resolve dependencies
-            if (moduleConfig['@dependencies'] !== undefined) {
-                this._resolveDependencies(config, moduleConfig['@dependencies']);
-            }
-
-            if (typeof ModuleClass === 'function') {
-                let driverInstance;
-                let loadedWithoutErrors = true;
-                try {
-                    driverInstance = new ModuleClass(driverIdentifier, moduleConfig);
-                    this.drivers[driverIdentifier] = driverInstance;
-                    Mep.Log.debug(TAG, 'Driver `' + driverIdentifier + '` loaded');
-                } catch (error) {
-                    loadedWithoutErrors = false;
-                    this.putDriverOutOfOrder(driverIdentifier, error);
-                }
-
-                // Test if all methods are OK
-                if (loadedWithoutErrors === true) {
-                    DriverChecker.check(driverInstance);
-                }
-            }
-
-            else {
-                Mep.Log.error(TAG, 'There is no module on terrain', modulePath);
-            }
-        }
-    }
-
-    _resolveDependencies(config, dependecies) {
-        for (let key in dependecies) {
-            let dependentDriverIdentifier = dependecies[key];
-
-            if (this.isDriverAvailable(dependentDriverIdentifier) === true) {
-                continue;
-            }
-
-            if (this.isDriverOutOfOrder(dependentDriverIdentifier) === true) {
-                this.putDriverOutOfOrder(dependentDriverIdentifier,
-                    'Cannot resolve dependency: ' + dependentDriverIdentifier);
-            }
-
-            this._initDriver(config, dependentDriverIdentifier);
-        }
+            driverManager._initDriver(yieldDriverIdentifier.value, loadNextDriver);
+        };
+        loadNextDriver();
     }
 
     /**
@@ -164,7 +104,7 @@ class DriverManager {
      * @returns {Object} - List of filtered drivers
      */
     getDriversByGroup(type) {
-        var filteredDrivers = {};
+        let filteredDrivers = {};
 
         for (let driverKey in this.drivers) {
             if (this.drivers.hasOwnProperty(driverKey) == false) {
@@ -229,6 +169,93 @@ class DriverManager {
         // Notify user
         Mep.Log.error(TAG, name, message);
         Mep.Log.error(TAG, name, 'is out of the order');
+    }
+
+    _initDriver(driverIdentifier, finishedCallback) {
+        let moduleConfig = this.config[driverIdentifier];
+
+        if (moduleConfig === undefined) {
+            throw Error('Driver ' + driverIdentifier + ' is missing in configuration. Some driver probably depends on ' + driverIdentifier + ' driver');
+        }
+
+        if (this.isDriverAvailable(driverIdentifier) || this.isDriverOutOfOrder(driverIdentifier)) {
+            finishedCallback();
+            return;
+        }
+
+        // Load driver
+        let load = moduleConfig['@load'];
+        let classPath = moduleConfig['@class'];
+        // Do not initialize if `load field == false`
+        if (load != false) {
+            let ModuleClass = Mep.require(classPath);
+
+            // Resolve dependencies
+            if (moduleConfig['@dependencies'] !== undefined) {
+                this._resolveDependencies(moduleConfig['@dependencies'], () => {
+                    this._loadDriverBasic(ModuleClass, moduleConfig, driverIdentifier, classPath, finishedCallback);
+                });
+            } else {
+                this._loadDriverBasic(ModuleClass, moduleConfig, driverIdentifier, classPath, finishedCallback);
+            }
+        }
+    }
+
+    _loadDriverBasic(ModuleClass, moduleConfig, driverIdentifier, classPath, finishedCallback) {
+        if (typeof ModuleClass === 'function') {
+            let driverInstance;
+            let loadedWithoutErrors = true;
+            try {
+                driverInstance = new ModuleClass(driverIdentifier, moduleConfig);
+                this.drivers[driverIdentifier] = driverInstance;
+
+                if (typeof driverInstance.init === 'function') {
+                    driverInstance.init(finishedCallback);
+                } else {
+                    finishedCallback();
+                }
+                Mep.Log.debug(TAG, 'Driver `' + driverIdentifier + '` loaded');
+            } catch (error) {
+                loadedWithoutErrors = false;
+                this.putDriverOutOfOrder(driverIdentifier, error);
+                finishedCallback();
+            }
+
+            // Test if all methods are OK
+            if (loadedWithoutErrors === true) {
+                DriverChecker.check(driverInstance);
+            }
+        } else {
+            Mep.Log.error(TAG, 'There is no driver', classPath);
+        }
+    }
+
+    _resolveDependencies(dependencies, finishedCallback) {
+        let driverManager = this;
+        let getDependencyDriver = function* () {
+            for (let key in dependencies) {
+                let dependentDriverIdentifier = dependencies[key];
+                if (driverManager.isDriverAvailable(dependentDriverIdentifier) === true) {
+                    continue;
+                }
+                if (driverManager.isDriverOutOfOrder(dependentDriverIdentifier) === true) {
+                    driverManager.putDriverOutOfOrder(dependentDriverIdentifier,
+                        'Cannot resolve dependency: ' + dependentDriverIdentifier);
+                }
+                yield dependentDriverIdentifier;
+            }
+        };
+        let dependencyDriverGenerator = getDependencyDriver();
+        let loadDependencyDriver = () => {
+            let yieldDriverIdentifier = dependencyDriverGenerator.next();
+            if (yieldDriverIdentifier.done === true) {
+                finishedCallback();
+                return;
+            }
+            driverManager._initDriver(yieldDriverIdentifier.value, loadDependencyDriver);
+        };
+
+        loadDependencyDriver();
     }
 }
 

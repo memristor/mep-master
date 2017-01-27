@@ -12,18 +12,18 @@ class Bootstrap {
         Mep.Log.info('Scheduler terrain:', Mep.Config.get('scheduler'));
 
         // Initialize drivers & services
-        Mep.init();
-
-        // Load strategy
-        let Scheduler = null;
-        try {
-            Scheduler = require(Mep.Config.get('scheduler'));
-        } catch (e) {
-            let errorMessage = 'Scheduler at terrain ' + Mep.Config.get('scheduler') + ' cannot be found';
-            Mep.Log.error(TAG, errorMessage);
-            throw Error(errorMessage);
-        }
-        (new Scheduler());
+        Mep.init(() => {
+            // Load strategy
+            let Scheduler = null;
+            try {
+                Scheduler = require(Mep.Config.get('scheduler'));
+            } catch (e) {
+                let errorMessage = 'Scheduler at terrain ' + Mep.Config.get('scheduler') + ' cannot be found';
+                Mep.Log.error(TAG, errorMessage);
+                throw Error(errorMessage);
+            }
+            (new Scheduler());
+        });
     }
 }
 

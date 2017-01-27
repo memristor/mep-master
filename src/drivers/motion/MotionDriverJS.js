@@ -1,14 +1,8 @@
 const Point = Mep.require('types/Point');
 const EventEmitter = require('events');
-const SerialPort = require('serialport');
 const Buffer = require('buffer').Buffer;
 
 const TAG = 'MotionDriver';
-
-
-let enableSend = true;
-let queueSend = [];
-
 
 /**
  * Driver enables communication with Memristor's motion driver.
@@ -50,75 +44,41 @@ class MotionDriver extends EventEmitter  {
         this.stateChar = 'U';
         this.orientation = config.startOrientation;
 
-        this.serial = new SerialPort('/dev/ttyAMA0', {
-            baudRate: 57600
-        }, this._onSerialOpen.bind(this));
-
-        this.serial.on('data', this._onDataReceived.bind(this));
-        this.serial.on('error', this._onCommunicationError.bind(this));
+        this.communicator = Mep.DriverManager.getDriver(config['@dependencies'].communicator);
+        this.communicator.on('data', this._onDataReceived.bind(this));
     }
 
-    send(buffer, callback) {
-        let port = this.serial;
+    init(finishedCallback) {
         let motionDriver = this;
 
-        if (enableSend == false) {
-            queueSend.push(buffer);
-            return;
-        }
+        this.setPositionAndOrientation(
+            this.config.startX,
+            this.config.startY,
+            this.config.startOrientation
+        );
+        this.requestRefreshData();
 
-        enableSend = false;
-        port.write(buffer, () => {
-            port.drain(() => {
-                setTimeout(() => {
-                    enableSend = true;
 
-                    if (queueSend.length > 0) {
-                        let nextBuffer = queueSend.splice(0, 1)[0];
-                        motionDriver.send(nextBuffer, callback);
-                    }
-                }, 5);
-            });
-        });
-    }
-
-    _onCommunicationError(err) {
-        throw Error(TAG, 'Error in UART', err);
+        setTimeout(() => {
+            if (motionDriver.getState() === MotionDriver.STATE_UNDEFINED) {
+                throw Error(TAG, 'No response from motion driver');
+            } else {
+                Mep.Log.info(TAG, 'Communication is validated');
+            }
+            finishedCallback();
+        }, this.config.connectionTimeout);
     }
 
     finishCommand(callback) {
-        this.send(Buffer.from(['i'.charCodeAt(0)]), callback);
+        this.communicator.send(Buffer.from(['i'.charCodeAt(0)]), callback);
         Mep.Log.debug(TAG, 'Finish command sent');
-    }
-
-    _onSerialOpen(err) {
-        let motionDriver = this;
-
-        if (err) {
-            throw Error(TAG, 'Cannot open UART');
-        } else {
-            this.setPositionAndOrientation(
-                this.config.startX,
-                this.config.startY,
-                this.config.startOrientation
-            );
-            this.requestRefreshData();
-
-            setTimeout(() => {
-                if (motionDriver.getState() === MotionDriver.STATE_UNDEFINED) {
-                    throw Error(TAG, 'No response from motion driver');
-                } else {
-                    Mep.Log.info(TAG, 'Communication is validated');
-                }
-            }, this.config.connectionTimeout);
-        }
     }
 
     /**
      * Request state, position and orientation from motion driver
      */
     requestRefreshData() {
-        this.send('P');
+        this.communicator.send('P');
     }
 
     /**
@@ -137,7 +97,7 @@ class MotionDriver extends EventEmitter  {
             orientation >> 8,
             orientation & 0xFF
         ]);
-        this.send(data);
+        this.communicator.send(data);
     }
 
     /**
@@ -146,7 +106,7 @@ class MotionDriver extends EventEmitter  {
      * @memberof MotionDriver#
      */
     stop() {
-        this.send('S');
+        this.communicator.send('S');
     }
 
     /**
@@ -155,7 +115,7 @@ class MotionDriver extends EventEmitter  {
      * @memberof MotionDriver#
      */
     softStop() {
-        this.send('s');
+        this.communicator.send('s');
     }
 
 
@@ -166,12 +126,10 @@ class MotionDriver extends EventEmitter  {
      * @param speed {Number} - Speed (0 - 255)
      */
     setSpeed(speed) {
-        Mep.Log.debug(TAG, 'Set speed', speed, 'sending');
-        this.send(Buffer.from([
+        this.communicator.send(Buffer.from([
             'V'.charCodeAt(0),
             speed
         ]));
-        Mep.Log.debug(TAG, 'New speed', speed, 'set');
     }
 
     /**
@@ -183,8 +141,7 @@ class MotionDriver extends EventEmitter  {
      * @param direction {Number} - Direction, can be MotionDriver.DIRECTION_FORWARD or MotionDriver.DIRECTION_BACKWARD
      */
     moveToPosition(x, y, direction) {
-        Mep.Log.debug(TAG, 'Move to position command sending...');
-        this.send(Buffer.from([
+        this.communicator.send(Buffer.from([
             'N'.charCodeAt(0),
             x >> 8,
             x & 0xff,
@@ -192,7 +149,6 @@ class MotionDriver extends EventEmitter  {
             y & 0xff,
             direction
         ]));
-        Mep.Log.debug(TAG, 'Move to position command sent');
     }
 
     _charToState(char) {
