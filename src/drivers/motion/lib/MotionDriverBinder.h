@@ -44,6 +44,7 @@ private:
 	static void rotateTo(const Nan::FunctionCallbackInfo<Value> &args);
 	static void moveArc(const Nan::FunctionCallbackInfo<Value> &args);
     static void softStop(const Nan::FunctionCallbackInfo<Value> &args);
+    static void finishCommand(const Nan::FunctionCallbackInfo<Value> &args);
 
 
     MotionDriver *motionDriver;

@@ -157,16 +157,22 @@ class PositionService extends EventEmitter {
     }
 
     _promiseToReachDestination(point, tolerance) {
+        let motionDriver = this.motionDriver;
+        let res = null;
+        let ss = (name, currentPosition) => {
+            if (currentPosition.getDistance(point) <= tolerance) {
+                motionDriver.finishCommand();
+                res();
+                motionDriver.removeListener('positionChanged', ss);
+            }
+        };
+
         return new Promise((resolve, reject) => {
-            // If tolerance is set use Euclid's distance to determine if robot can execute next command
+            res = resolve;
+            // If tolerance is set to use Euclid's distance to determine if robot can execute next command
             // It is useful if you want to continue
             if (tolerance >= 0) {
-                let motionDriver = this.motionDriver;
-                motionDriver.on('positionChanged', (name, currentPosition) => {
-                    if (currentPosition.getDistance(point) <= tolerance) {
-                        motionDriver.finishCommand(resolve);
-                    }
-                });
+                motionDriver.on('positionChanged', ss);
             }
 
             // In every case wait new state of motion driver

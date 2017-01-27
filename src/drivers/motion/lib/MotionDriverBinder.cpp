@@ -44,6 +44,7 @@ void MotionDriverBinder::Init(Local<Object> exports) {
 	Nan::SetPrototypeMethod(tmpl, "getData", getData);
 	Nan::SetPrototypeMethod(tmpl, "moveArc", moveArc);
 	Nan::SetPrototypeMethod(tmpl, "rotateTo", rotateTo);
+	Nan::SetPrototypeMethod(tmpl, "finishCommand", finishCommand);
 
     exports->Set(Nan::New("MotionDriverBinder").ToLocalChecked(), tmpl->GetFunction());
 }
@@ -118,6 +119,13 @@ void MotionDriverBinder::moveToPosition(const Nan::FunctionCallbackInfo<Value> &
     MotionDriver::MovingDirection direction = (args[2]->Int32Value() == 1) ? MotionDriver::FORWARD : MotionDriver::BACKWARD;
 
     motionDriver->moveToPosition(position, direction);
+}
+
+void MotionDriverBinder::finishCommand(const Nan::FunctionCallbackInfo<Value> &args) {
+    Nan::HandleScope scope;
+
+    MotionDriver *motionDriver = ObjectWrap::Unwrap<MotionDriverBinder>(args.Holder())->getMotionDriver();
+    motionDriver->finishCommand();
 }
 
 void MotionDriverBinder::stop(const Nan::FunctionCallbackInfo<Value> &args) {

@@ -27,6 +27,18 @@ MotionDriver::~MotionDriver()
 	delete io_mutex;
 }
 
+void MotionDriver::finishCommand() {
+    LOG(INFO) << TAG << "finishCommand()";
+
+    lock_guard<mutex> lock(*io_mutex);
+
+    char message[] = {
+            'i'
+    };
+
+    uart.writeUart(message, 1);
+}
+
 void MotionDriver::moveStraight(int distance)
 {
     LOG(INFO) << TAG << "moveStraight(" << distance << ")";
@@ -82,16 +94,16 @@ void MotionDriver::moveToPosition(geometry::Point2D position, MovingDirection di
 	lock_guard<mutex> lock(*io_mutex);
 	
 	char message[] = {
-			'G', // G or N
+			'N', // G or N
 			(char)(position.getX()>>8),
 			(char)(position.getX()),
 			(char)(position.getY()>>8),
 			(char)(position.getY()),
-			0, // krajnja brzina (za sada fiksirana na 0)
+			//0, // krajnja brzina (za sada fiksirana na 0)
 			direction
 	};
 
-	uart.writeUart(message, 7);
+	uart.writeUart(message, 6);
 	this->direction = direction;
 }
 

@@ -50,6 +50,7 @@ public:
 	void moveArc(geometry::Point2D center, int angle, MovingDirection direction);
 	void stop();
     void softStop();
+    void finishCommand();
 
 	char getSpeed();
 	geometry::Point2D getPosition();

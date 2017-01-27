@@ -5,6 +5,11 @@ const Buffer = require('buffer').Buffer;
 
 const TAG = 'MotionDriver';
 
+
+let enableSend = true;
+let queueSend = [];
+
+
 /**
  * Driver enables communication with Memristor's motion driver.
  * @author Darko Lukic <lukicdarkoo@gmail.com>
@@ -53,12 +58,37 @@ class MotionDriver extends EventEmitter  {
         this.serial.on('error', this._onCommunicationError.bind(this));
     }
 
+    send(buffer, callback) {
+        let port = this.serial;
+        let motionDriver = this;
+
+        if (enableSend == false) {
+            queueSend.push(buffer);
+            return;
+        }
+
+        enableSend = false;
+        port.write(buffer, () => {
+            port.drain(() => {
+                setTimeout(() => {
+                    enableSend = true;
+
+                    if (queueSend.length > 0) {
+                        let nextBuffer = queueSend.splice(0, 1)[0];
+                        motionDriver.send(nextBuffer, callback);
+                    }
+                }, 5);
+            });
+        });
+    }
+
     _onCommunicationError(err) {
         throw Error(TAG, 'Error in UART', err);
     }
 
     finishCommand(callback) {
-        this.serial.write(Buffer.from(['i'.charCodeAt(0)]), callback);
+        this.send(Buffer.from(['i'.charCodeAt(0)]), callback);
+        Mep.Log.debug(TAG, 'Finish command sent');
     }
 
     _onSerialOpen(err) {
@@ -88,7 +118,7 @@ class MotionDriver extends EventEmitter  {
      * Request state, position and orientation from motion driver
      */
     requestRefreshData() {
-        this.serial.write('P');
+        this.send('P');
     }
 
     /**
@@ -107,7 +137,7 @@ class MotionDriver extends EventEmitter  {
             orientation >> 8,
             orientation & 0xFF
         ]);
-        this.serial.write(data);
+        this.send(data);
     }
 
     /**
@@ -116,7 +146,7 @@ class MotionDriver extends EventEmitter  {
      * @memberof MotionDriver#
      */
     stop() {
-        this.serial.write('S');
+        this.send('S');
     }
 
     /**
@@ -125,7 +155,7 @@ class MotionDriver extends EventEmitter  {
      * @memberof MotionDriver#
      */
     softStop() {
-        this.serial.write('s');
+        this.send('s');
     }
 
 
@@ -136,10 +166,12 @@ class MotionDriver extends EventEmitter  {
      * @param speed {Number} - Speed (0 - 255)
      */
     setSpeed(speed) {
-        this.serial.write(Buffer.from([
+        Mep.Log.debug(TAG, 'Set speed', speed, 'sending');
+        this.send(Buffer.from([
             'V'.charCodeAt(0),
             speed
         ]));
+        Mep.Log.debug(TAG, 'New speed', speed, 'set');
     }
 
     /**
@@ -151,15 +183,16 @@ class MotionDriver extends EventEmitter  {
      * @param direction {Number} - Direction, can be MotionDriver.DIRECTION_FORWARD or MotionDriver.DIRECTION_BACKWARD
      */
     moveToPosition(x, y, direction) {
-        this.serial.write(Buffer.from([
-            'G'.charCodeAt(0),
+        Mep.Log.debug(TAG, 'Move to position command sending...');
+        this.send(Buffer.from([
+            'N'.charCodeAt(0),
             x >> 8,
             x & 0xff,
             y >> 8,
             y & 0xff,
-            0,
             direction
         ]));
+        Mep.Log.debug(TAG, 'Move to position command sent');
     }
 
     _charToState(char) {
