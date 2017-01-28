@@ -100,6 +100,15 @@ class MotionDriver extends EventEmitter  {
         this.communicator.send(data);
     }
 
+    rotateTo(angle) {
+        let data = Buffer.from([
+            'A'.charCodeAt(0),
+            angle >> 8,
+            angle & 0xFF
+        ]);
+        this.communicator.send(data);
+    }
+
     /**
      * Stop the robot.
      * @method stop
@@ -142,6 +151,18 @@ class MotionDriver extends EventEmitter  {
      */
     moveToPosition(x, y, direction) {
         this.communicator.send(Buffer.from([
+            'G'.charCodeAt(0),
+            x >> 8,
+            x & 0xff,
+            y >> 8,
+            y & 0xff,
+            0,
+            direction
+        ]));
+    }
+
+    moveToCurvilinear(x, y, direction) {
+        this.communicator.send(Buffer.from([
             'N'.charCodeAt(0),
             x >> 8,
             x & 0xff,
@@ -150,6 +171,7 @@ class MotionDriver extends EventEmitter  {
             direction
         ]));
     }
+
 
     _charToState(char) {
         let states = {

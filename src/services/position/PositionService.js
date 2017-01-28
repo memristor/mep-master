@@ -206,13 +206,23 @@ class PositionService extends EventEmitter {
         }
 
         // Move the robot
-        this.motionDriver.moveToPosition(
-            point.getX(),
-            point.getY(),
-            (direction === 'backward') ?
-                MotionDriver.DIRECTION_BACKWARD :
-                MotionDriver.DIRECTION_FORWARD
-        );
+        if (tolerance < 0) {
+            this.motionDriver.moveToPosition(
+                point.getX(),
+                point.getY(),
+                (direction === 'backward') ?
+                    MotionDriver.DIRECTION_BACKWARD :
+                    MotionDriver.DIRECTION_FORWARD
+            );
+        } else {
+            this.motionDriver.moveToCurvilinear(
+                point.getX(),
+                point.getY(),
+                (direction === 'backward') ?
+                    MotionDriver.DIRECTION_BACKWARD :
+                    MotionDriver.DIRECTION_FORWARD
+            );
+        }
 
         // Check when robot reached the position
         return this._promiseToReachDestination(point, tolerance);
@@ -249,6 +259,8 @@ class PositionService extends EventEmitter {
      */
     rotate(tunedAngle, options) {
         this.motionDriver.rotateTo(tunedAngle.getAngle());
+
+        return this._promiseToReachDestination(new Point(0, 0), 0);
     }
 }
 
