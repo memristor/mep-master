@@ -1,18 +1,17 @@
-const MotionDriverBinder = require('bindings')('motion').MotionDriverBinder;
 const Point = Mep.require('types/Point');
-const Util = require('util');
 const EventEmitter = require('events');
+const Buffer = require('buffer').Buffer;
 
-Util.inherits(MotionDriverBinder, EventEmitter);
-
+const TAG = 'MotionDriver';
 
 /**
  * Driver enables communication with Memristor's motion driver.
- *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @fires MotionDriver#positionChanged
+ * @fires MotionDriver#orientationChanged
+ * @fires MotionDriver#stateChanged
  */
-class MotionDriver extends MotionDriverBinder  {
+class MotionDriver extends EventEmitter  {
     static get DIRECTION_FORWARD() { return 1; }
     static get DIRECTION_BACKWARD() { return -1; }
     static get STATE_IDLE() { return 1; }
@@ -20,32 +19,114 @@ class MotionDriver extends MotionDriverBinder  {
     static get STATE_MOVING() { return 3; }
     static get STATE_ROTATING() { return 4; }
     static get STATE_ERROR() { return 5; }
+    static get STATE_UNDEFINED() { return 6; }
 
     /**
-     * Read data from motion driver (as the electronic component)
-     * @method refreshData
-     * @memberof MotionDriver#
-     * @param callback {Function} - Callback function will be called after data is refreshed
+     * @param name {String} - Unique driver name
+     * @param config {Object} - Configuration presented as an associative array
      */
+    constructor(name, config) {
+        super();
+
+        this.name = name;
+        this.config = Object.assign({
+            startX: -1300,
+            startY: 0,
+            startOrientation: 0,
+            startSpeed: 100,
+            refreshDataPeriod: 100,
+            connectionTimeout: 500
+        }, config);
+
+        this.positon = new Point(config.startX, config.startY);
+        this.direction = MotionDriver.DIRECTION_FORWARD;
+        this.state = MotionDriver.STATE_UNDEFINED;
+        this.stateChar = 'U';
+        this.orientation = config.startOrientation;
+
+        this.communicator = Mep.DriverManager.getDriver(config['@dependencies'].communicator);
+        this.communicator.on('data', this._onDataReceived.bind(this));
+    }
+
+    init(finishedCallback) {
+        let motionDriver = this;
+
+        this.setPositionAndOrientation(
+            this.config.startX,
+            this.config.startY,
+            this.config.startOrientation
+        );
+        this.requestRefreshData();
+
+
+        setTimeout(() => {
+            if (motionDriver.getState() === MotionDriver.STATE_UNDEFINED) {
+                throw Error(TAG, 'No response from motion driver');
+            } else {
+                Mep.Log.info(TAG, 'Communication is validated');
+            }
+            finishedCallback();
+        }, this.config.connectionTimeout);
+    }
+
+    finishCommand(callback) {
+        this.communicator.send(Buffer.from(['i'.charCodeAt(0)]), callback);
+        Mep.Log.debug(TAG, 'Finish command sent');
+    }
+
+    /**
+     * Request state, position and orientation from motion driver
+     */
+    requestRefreshData() {
+        this.communicator.send('P');
+    }
+
+    /**
+     * Reset position and orientation
+     * @param x {Number} - New X coordinate relative to start position of the robot
+     * @param y {Number} - New Y coordinate relative to start position of the robot
+     * @param orientation {Number} - New robot's orientation
+     */
+    setPositionAndOrientation(x, y, orientation) {
+        let data = Buffer.from([
+            'I'.charCodeAt(0),
+            x >> 8,
+            x & 0xFF,
+            y >> 8,
+            y & 0xFF,
+            orientation >> 8,
+            orientation & 0xFF
+        ]);
+        this.communicator.send(data);
+    }
+
+    rotateTo(angle) {
+        let data = Buffer.from([
+            'A'.charCodeAt(0),
+            angle >> 8,
+            angle & 0xFF
+        ]);
+        this.communicator.send(data);
+    }
 
     /**
      * Stop the robot.
      * @method stop
      * @memberof MotionDriver#
      */
+    stop() {
+        this.communicator.send('S');
+    }
 
     /**
      * Stop robot by turning off motors.
      * @method softStop
      * @memberof MotionDriver#
      */
+    softStop() {
+        this.communicator.send('s');
+    }
 
-    /**
-     * Move robot straight
-     * @method moveStraight
-     * @memberof MotionDriver#
-     * @param distance {Number} - Distance in mm
-     */
 
     /**
      * Set default speed of the robot
@@ -53,6 +134,12 @@ class MotionDriver extends MotionDriverBinder  {
      * @memberof MotionDriver#
      * @param speed {Number} - Speed (0 - 255)
      */
+    setSpeed(speed) {
+        this.communicator.send(Buffer.from([
+            'V'.charCodeAt(0),
+            speed
+        ]));
+    }
 
     /**
      * Move robot to the absolute position
@@ -60,96 +147,104 @@ class MotionDriver extends MotionDriverBinder  {
      * @memberof MotionDriver#
      * @param positionX {Number} - X coordinate relative to start position of the robot
      * @param positionY {Number} - Y coordinate relative to start position of the robot
-     * @param direction {Number} - Direction, can be Constants.DIRECTION_FORWARD or Constants.DIRECTION_BACKWARD
+     * @param direction {Number} - Direction, can be MotionDriver.DIRECTION_FORWARD or MotionDriver.DIRECTION_BACKWARD
      */
-
-    /**
-     * @param name {String} - Unique driver name
-     * @param config {Object} - Configuration presented as an associative array
-     */
-    constructor(name, config) {
-        super(
-            true,
-            config.startX,
-            config.startY,
-            config.startOrientation,
-            config.startSpeed
-        );
-
-        this.name = name;
-        this.config = config;
-
-        this.positon = new Point(config.startX, config.startY);
-        this.direction = MotionDriver.DIRECTION_FORWARD;
-        this.state = MotionDriver.STATE_IDLE;
-        this.orientation = config.startOrientation;
-
-        this.refreshDataLoop.bind(this);
-        this.refreshDataLoop();
+    moveToPosition(x, y, direction) {
+        this.communicator.send(Buffer.from([
+            'G'.charCodeAt(0),
+            x >> 8,
+            x & 0xff,
+            y >> 8,
+            y & 0xff,
+            0,
+            direction
+        ]));
     }
 
-    refreshDataLoop() {
-        let motionDriver = this;
+    moveToCurvilinear(x, y, direction) {
+        this.communicator.send(Buffer.from([
+            'N'.charCodeAt(0),
+            x >> 8,
+            x & 0xff,
+            y >> 8,
+            y & 0xff,
+            direction
+        ]));
+    }
 
-        this.refreshData(() => {
-            let data = motionDriver.getData();
 
-            // If position is changed fire an event
-            if (data.position.x !== motionDriver.positon.getX() ||
-                data.position.y !== motionDriver.positon.getY()) {
+    _charToState(char) {
+        let states = {
+            'I': MotionDriver.STATE_IDLE,
+            'M': MotionDriver.STATE_MOVING,
+            'R': MotionDriver.STATE_ROTATING,
+            'S': MotionDriver.STATE_STUCK,
+            'E': MotionDriver.STATE_ERROR
+        };
+        if (states[char] !== undefined) {
+            return states[char];
+        }
+        return MotionDriver.STATE_UNDEFINED;
+    }
 
-                motionDriver.positon.setX(data.position.x);
-                motionDriver.positon.setY(data.position.y);
+    _onDataReceived(buffer) {
+        // Ignore garbage
+        if (buffer.length < 7) return;
 
-                /**
-                 * Position changed event.
-                 * @event MotionDriver#positionChanged
-                 * @property {String} driverName - Unique name of a driver
-                 * @property {Point} point - Position of the robot
-                 */
-                motionDriver.emit('positionChanged',
-                    motionDriver.name,
-                    motionDriver.positon,
-                    motionDriver.config.precision
-                );
-            }
+        let stateChar = String.fromCharCode(buffer.readInt8(0));
+        let position = new Point(
+            (buffer.readInt8(1) << 8) | (buffer.readInt8(2) & 0xFF),
+            (buffer.readInt8(3) << 8) | (buffer.readInt8(4) & 0xFF)
+        );
+        let orientation = (buffer.readInt8(5) << 8) | (buffer.readInt8(6) & 0xFF);
 
-            // If state is changed
-            if (data.state !== motionDriver.state) {
-                motionDriver.state = data.state;
+        if (this.positon.equals(position) === false) {
+            this.positon = position;
 
-                /**
-                 * State change event.
-                 * @event MotionDriver#stateChanged
-                 * @property {Number} state - New state
-                 */
-                motionDriver.emit('stateChanged', motionDriver.getState());
-            }
+            /**
+             * Position changed event.
+             * @event MotionDriver#positionChanged
+             * @property {String} driverName - Unique name of a driver
+             * @property {Point} point - Position of the robot
+             */
+            this.emit('positionChanged',
+                this.name,
+                this.positon,
+                this.config.precision
+            );
+        }
 
-            if (data.orientation !== motionDriver.orientation) {
-                motionDriver.orientation = data.orientation;
+        // If state is changed
+        if (stateChar !== this.stateChar) {
+            this.stateChar = stateChar;
+            this.state = this._charToState(stateChar);
 
-                /**
-                 * Orientation change event.
-                 * @event MotionDriver#orientationChanged
-                 * @property {String} driverName - Unique name of a driver
-                 * @property {Number} orientation - New orientation
-                 */
-                motionDriver.emit('orientationChanged',
-                    motionDriver.name,
-                    motionDriver.getOrientation(),
-                    motionDriver.config.precision
-                );
-            }
+            /**
+             * State change event.
+             * @event MotionDriver#stateChanged
+             * @property {Number} state - New state
+             */
+            this.emit('stateChanged', this.name, this.state);
+        }
 
-            // If direction changed
-            if (data.direction !== motionDriver.direction) {
-                motionDriver.direction = data.direction;
-            }
-        });
+        if (orientation !== this.orientation) {
+            this.orientation = orientation;
 
-        // Call refreshDataLoop() again with a delay
-        setTimeout(this.refreshDataLoop.bind(this), this.config.refreshDataPeriod);
+            /**
+             * Orientation change event.
+             * @event MotionDriver#orientationChanged
+             * @property {String} driverName - Unique name of a driver
+             * @property {Number} orientation - New orientation
+             */
+            this.emit('orientationChanged',
+                this.name,
+                orientation,
+                this.config.precision
+            );
+        }
+
+        // Read data again
+        setTimeout(this.requestRefreshData.bind(this), this.config.refreshDataPeriod);
     }
 
     /**
@@ -157,7 +252,7 @@ class MotionDriver extends MotionDriverBinder  {
      * @return {Point} - Position of the robot
      */
     getPosition() {
-        return this.position;
+        return this.positon;
     }
 
     getDirection() {
@@ -168,11 +263,11 @@ class MotionDriver extends MotionDriverBinder  {
         return this.state;
     }
 
-	getGroups() {
-		return ['position'];
-	}
+    getGroups() {
+        return ['position'];
+    }
 
-	getOrientation() {
+    getOrientation() {
         return this.orientation;
     }
 }

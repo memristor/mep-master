@@ -1,5 +1,5 @@
 global.Mep = require('../../Mep');
-const MotionDriver = require('./MotionDriver');
+const MotionDriver = require('./MotionDriverNative');
 
 let motionDriver = new MotionDriver('MotionDriver', {
     startX: 0,
