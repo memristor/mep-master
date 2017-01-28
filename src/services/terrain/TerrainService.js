@@ -43,6 +43,7 @@ class TerrainService {
 
     findPath(start, goal) {
         let points = [];
+        console.log(start, goal);
         let pointPairs = this.pf.search(start, goal);
 
         // Convert to `Array<Point>`

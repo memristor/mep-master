@@ -2,6 +2,7 @@ const Task = Mep.require('types/Task');
 const TunedPoint = Mep.require('types/TunedPoint');
 const position = Mep.getPositionService();
 const starter = Mep.getDriverManager().getDriver('StarterDriver');
+const motionDriver = Mep.DriverManager.getDriver('MotionDriver');
 
 const TAG = 'InitTask';
 
@@ -11,10 +12,13 @@ class InitTask extends Task {
 
         // Let's move around
         try {
-            let speed = 150;
-            await position.set(new TunedPoint(-1000, 0), { speed: speed, tolerance: 100 });
-            await position.set(new TunedPoint(-750, -850), { speed: speed, tolerance: 100 });
-            await position.set(new TunedPoint(-1000, 0), { speed: speed, tolerance: 100 });
+            let config = { speed: 100, tolerance: 150 };
+
+            await position.set(new TunedPoint(-1000, -600), config);
+            await position.set(new TunedPoint(-200, 530), config);
+            await position.set(new TunedPoint(79, -6), config);
+            await position.set(new TunedPoint(800, -300), config);
+            await position.set(new TunedPoint(-400, -575), config);
         } catch (e) {
             this.onErrorForwardBack(e);
         }

@@ -33,19 +33,24 @@
         "MotionDriver": {
             "@class": "drivers/motion/MotionDriverJS",
             "@load": true,
-            "@dependencies": { "communicator": "Uart" },
+            "@dependencies": {
+              "communicator": "Uart"
+            },
 
             "startX": -1300,
             "startY": 0,
             "startOrientation": 0,
             "startSpeed": 100,
-            "precision": 2
+            "precision": 2,
+            "refreshDataPeriod": 50
         },
 
         "MotionDriverController": {
           "@class": "drivers/motion/MotionDriverController",
           "@load": true,
-          "@dependencies": { "motionDriver": "MotionDriver" }
+          "@dependencies": {
+            "motionDriver": "MotionDriver"
+          }
         },
 
         "CanDriver": {

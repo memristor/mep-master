@@ -202,7 +202,7 @@ class MotionDriver extends EventEmitter  {
              * @event MotionDriver#stateChanged
              * @property {Number} state - New state
              */
-            this.emit('stateChanged', this.state);
+            this.emit('stateChanged', this.name, this.state);
         }
 
         if (orientation !== this.orientation) {
@@ -230,7 +230,7 @@ class MotionDriver extends EventEmitter  {
      * @return {Point} - Position of the robot
      */
     getPosition() {
-        return this.position;
+        return this.positon;
     }
 
     getDirection() {

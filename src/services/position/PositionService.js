@@ -158,33 +158,41 @@ class PositionService extends EventEmitter {
 
     _promiseToReachDestination(point, tolerance) {
         let motionDriver = this.motionDriver;
-        let res = null;
-        let ss = (name, currentPosition) => {
-            if (currentPosition.getDistance(point) <= tolerance) {
-                motionDriver.finishCommand();
-                res();
-                motionDriver.removeListener('positionChanged', ss);
-            }
-        };
 
         return new Promise((resolve, reject) => {
-            res = resolve;
+            let onPositionChanged = (name, currentPosition) => {
+                if (currentPosition.getDistance(point) <= tolerance) {
+                    motionDriver.finishCommand();
+                    resolve();
+                    motionDriver.removeListener('positionChanged', onPositionChanged);
+                }
+            };
+
+            let onStateChanged = (name, state) => {
+                switch (state) {
+                    case MotionDriver.STATE_IDLE:
+                        resolve();
+                        motionDriver.removeListener('stateChanged', onStateChanged);
+                        break;
+                    case MotionDriver.STATE_STUCK:
+                        reject(new TaskError(TAG, 'stuck', 'Robot is stacked'));
+                        motionDriver.removeListener('stateChanged', onStateChanged);
+                        break;
+                    case MotionDriver.STATE_ERROR:
+                        reject(new TaskError(TAG, 'error', 'Unknown moving error'));
+                        motionDriver.removeListener('stateChanged', onStateChanged);
+                        break;
+                }
+            };
+
             // If tolerance is set to use Euclid's distance to determine if robot can execute next command
             // It is useful if you want to continue
             if (tolerance >= 0) {
-                motionDriver.on('positionChanged', ss);
+                motionDriver.on('positionChanged', onPositionChanged);
             }
 
             // In every case wait new state of motion driver
-            this.motionDriver.on('stateChanged', (state) => {
-                if (state === MotionDriver.STATE_IDLE) {
-                    resolve();
-                } else if (state === MotionDriver.STATE_STUCK) {
-                    reject(new TaskError(TAG, 'stuck', 'Robot is stacked'));
-                } else if (state === MotionDriver.STATE_ERROR) {
-                    reject(new TaskError(TAG, 'error', 'Unknown moving error'));
-                }
-            });
+            this.motionDriver.on('stateChanged', onStateChanged);
         });
     }
 
