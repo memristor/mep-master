@@ -31,7 +31,7 @@
         },
 
         "MotionDriver": {
-            "@class": "drivers/motion/MotionDriverJS",
+            "@class": "drivers/motion/MotionDriver",
             "@load": true,
             "@dependencies": {
               "communicator": "Uart"

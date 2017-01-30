@@ -13,7 +13,7 @@ class InitTask extends Task {
 
         // Let's move around
         try {
-            let config = { speed: 100 };
+            let config = { speed: 40, tolerance: 100, direction: 'backward' };
 
             await position.set(new TunedPoint(-1000, 400), config);
             await position.set(new TunedPoint(-1300, 0), config);

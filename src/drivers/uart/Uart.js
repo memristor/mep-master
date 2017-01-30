@@ -1,8 +1,10 @@
-const Buffer = require('buffer').Buffer;
-const SerialPort = require('serialport');
+const fs = require('fs');
+const tty = require('tty');
 const EventEmitter = require('events');
 
 const TAG = 'Uart';
+
+
 
 class Uart extends EventEmitter {
     constructor(name, config) {
@@ -17,18 +19,21 @@ class Uart extends EventEmitter {
 
         this.enableSend = true;
         this.queueSend = [];
+
+        this.in = new tty.ReadStream(fs.openSync(this.config.device, 'r'));
+        this.out = new tty.WriteStream(fs.openSync(this.config.device, 'w'));
+        this.in.setRawMode(true);
+        this.in.on('data', this._onDataReceived.bind(this));
     }
 
-    init(finishedCallback) {
-        this.port = new SerialPort(this.config.device, {
-            baudRate: this.config.baudRate
-        }, finishedCallback);
-
-        this.port.on('data', this._onDataReceived.bind(this));
-        this.port.on('error', this._onCommunicationError.bind(this));
+    _onDataReceived(data) {
+        this.emit('data', data);
     }
 
     send(buffer, callback) {
+        this.out.write(buffer, callback);
+
+        /*
         let uart = this;
 
         if (uart.enableSend == false) {
@@ -48,14 +53,7 @@ class Uart extends EventEmitter {
                 }, 5);
             });
         });
-    }
-
-    _onDataReceived(buffer) {
-        this.emit('data', buffer);
-    }
-
-    _onCommunicationError(e) {
-        throw Error(TAG, 'Error in UART', e);
+        */
     }
 
     getGroups() {
