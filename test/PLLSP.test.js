@@ -3,13 +3,13 @@ const PLLSP = require('../src/drivers/pllsp/PLLSP');
 const Buffer = require('buffer').Buffer;
 const assert = require('assert');
 
-describe('PLLSPTest', () => {
+describe('PLLSP', () => {
     let pllsp = new PLLSP('PLLSP', {
         bufferSize: 150
     });
 
     describe('#push', () => {
-        describe('should fire only packet type', () => {
+        it('should fire only packet type', () => {
             // Generate single packet
             let buffer = Buffer.from(['P'.charCodeAt(0)]);
             let packet = pllsp.generate(buffer);
@@ -22,7 +22,7 @@ describe('PLLSPTest', () => {
             assert(spy.args[0][0].compare(Buffer.from(['P'.charCodeAt(0)])) === 0);
         });
 
-        describe('should concatenate two data chunks', () => {
+        it('should concatenate two data chunks', () => {
             let buffer = Buffer.from([
                 'G'.charCodeAt(0),
                 100 >> 8,
@@ -43,7 +43,31 @@ describe('PLLSPTest', () => {
             assert(buffer.compare(spy.args[0][0]) === 0);
         });
 
-        describe('should separate two packets from single data chunk', () => {
+        it('should concatenate two data chunks with junk', () => {
+            let buffer = Buffer.from([
+                'G'.charCodeAt(0),
+                100 >> 8,
+                100 & 0xff,
+                0 >> 8,
+                0 & 0xff,
+                0,
+                1
+            ]);
+            let packet = pllsp.generate(buffer);
+
+            // Spy on event
+            let spy = sinon.spy();
+            pllsp.on('data', spy);
+            pllsp.push(packet.slice(Buffer.from('ju'))); // Junk
+            pllsp.push(packet.slice(0, 5));
+            pllsp.push(packet.slice(5, packet.length));
+            pllsp.push(packet.slice(Buffer.from('nk'))); // Junk
+
+
+            assert(buffer.compare(spy.args[0][0]) === 0);
+        });
+
+        it('should separate two packets from single data chunk', () => {
             let singleBuffer = Buffer.from([
                 'G'.charCodeAt(0),
                 100 >> 8,
@@ -67,7 +91,7 @@ describe('PLLSPTest', () => {
             assert(singleBuffer.compare(spy.args[1][0]) === 0);
         });
 
-        describe('should find multiple packets inside chunk with junk', () => {
+        it('should find multiple packets inside chunk with junk', () => {
             let singleBuffer = Buffer.from([
                 'G'.charCodeAt(0),
                 100 >> 8,

@@ -2,24 +2,27 @@ const EventEmitter = require('events');
 
 /**
  * Packetized Low-Level Secured Protocol
+ *
+ * <pre>
+ * 0                   1                   2                   3
+ * 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ * +--------------+-------+-------+---------------+----------------+
+ * |  Start Byte  | Header|Footer |  Packet type  | Payload length |
+ * |    (0x3C)    |    Checksum   |               |                |
+ * +-------------------------------- - - - - - - - - - - - - - - - +
+ * :                     Payload Data continued ...                :
+ * + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+ * |                     Payload Data continued ...                |
+ * +---------------------------------------------------------------+
+ * </pre>
  */
 
-/*
-0                   1                   2                   3
-0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+--------------+-------+-------+---------------+----------------+
-|  Start Byte  | Header|Footer |  Packet type  | Payload length |
-|    (0x3C)    |    Checksum   |               |                |
-+-------------------------------- - - - - - - - - - - - - - - - +
-:                     Payload Data continued ...                :
-+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
-|                     Payload Data continued ...                |
-+---------------------------------------------------------------+
-*/
+
+
 class PLLSP extends EventEmitter {
-    static get READING_STATE_READ_HEADER() { return 0; }
-    static get READING_STATE_READ_PAYLOAD() { return 1; }
-    static get READING_STATE_WAIT_START() { return 2; }
+    static get STATE_READ_HEADER() { return 0; }
+    static get STATE_READ_PAYLOAD() { return 1; }
+    static get STATE_WAIT_START() { return 2; }
 
     constructor(name, config) {
         super();
@@ -31,7 +34,7 @@ class PLLSP extends EventEmitter {
 
         this._buffer = Buffer.alloc(this.config.bufferSize);
         this._bufferSize = 0;
-        this._state = PLLSP.READING_STATE_WAIT_START;
+        this._state = PLLSP.STATE_WAIT_START;
 
         this._headerChecksum = 0;
         this._payloadChecksum = 0;
@@ -69,21 +72,27 @@ class PLLSP extends EventEmitter {
     push(chunkBuffer) {
         // Append `tempBuffer` to `buffer`
         if (chunkBuffer !== null) {
-            chunkBuffer.copy(this._buffer, this._bufferSize);
-            this._bufferSize += chunkBuffer.length;
+            if (chunkBuffer.length + this._bufferSize < this._buffer.length) {
+                chunkBuffer.copy(this._buffer, this._bufferSize);
+                this._bufferSize += chunkBuffer.length;
+            } else {
+                // To much junk, delete whole buffer
+                chunkBuffer.copy(this._buffer, 0);
+                this._bufferSize = chunkBuffer.length;
+            }
         }
 
         // Try to find start byte and start pumping a packet with data
-        if (this._state === PLLSP.READING_STATE_WAIT_START) {
-            this._startByteIndex = this._buffer.indexOf(0x3C, this._startByteIndex);
+        if (this._state === PLLSP.STATE_WAIT_START) {
+            this._startByteIndex = this._buffer.indexOf(0x3C);
             if (this._startByteIndex >= 0 && this._startByteIndex < this._bufferSize) {
-                this._state = PLLSP.READING_STATE_READ_HEADER;
+                this._state = PLLSP.STATE_READ_HEADER;
             }
         }
 
         // Try to read a header
-        if (this._state === PLLSP.READING_STATE_READ_HEADER) {
-            if (this._bufferSize >= 4) {
+        if (this._state === PLLSP.STATE_READ_HEADER) {
+            if (this._bufferSize - this._startByteIndex >= 4) {
                 // Extract header from packet
                 this._headerChecksum = (this._buffer.readUInt8(this._startByteIndex + 1) & 0xF0) >> 4;
                 this._payloadChecksum = this._buffer.readUInt8(this._startByteIndex + 1) & 0x0F;
@@ -93,35 +102,42 @@ class PLLSP extends EventEmitter {
                 // Check header checksum
                 if (((this._payloadLength + this._packetType) & 0x0F) !== this._headerChecksum) {
                     this._bufferSize -= 1;
-                    this._buffer.copy(this._buffer, 0, this._startByteIndex + 1, this._bufferSize);
-                    this._state = PLLSP.READING_STATE_WAIT_START;
+                    this._buffer.copy(this._buffer, 0, this._startByteIndex + 1, this._bufferSize + this._startByteIndex + 1);
+                    this._state = PLLSP.STATE_WAIT_START;
                 } else {
-                    this._state = PLLSP.READING_STATE_READ_PAYLOAD;
+                    this._state = PLLSP.STATE_READ_PAYLOAD;
                 }
             }
         }
 
         // Read the payload
-        if (this._state === PLLSP.READING_STATE_READ_PAYLOAD) {
-            if (this._bufferSize >= this._payloadLength + 3) {
+        if (this._state === PLLSP.STATE_READ_PAYLOAD) {
+            if (this._bufferSize - this._startByteIndex >= this._payloadLength + 4) {
                 // Check payload checksum and if it is OK send event
                 let generatedPayloadChecksum = 0;
                 for (let i = 0; i < this._payloadLength; i++) {
-                    generatedPayloadChecksum += this._buffer[i + 4 + this._startByteIndex];
+                    generatedPayloadChecksum += this._buffer.readUInt8(i + 4 + this._startByteIndex);
                 }
                 if ((generatedPayloadChecksum & 0x0F) === this._payloadChecksum) {
-                    let packetType = this._buffer.readUInt8(this._startByteIndex + 2);
                     let packetPayload = Buffer.allocUnsafe(this._payloadLength + 1);
                     this._buffer.copy(packetPayload, 1, this._startByteIndex + 4, this._startByteIndex + this._payloadLength + 4);
-                    packetPayload.writeUInt8(packetType, 0);
+                    packetPayload.writeUInt8(this._packetType, 0);
 
                     this.emit('data', packetPayload);
+
+                    // Prepare for next packet
+                    this._bufferSize -= (this._payloadLength + 4);
+                    this._buffer.copy(
+                        this._buffer,
+                        0,
+                        this._startByteIndex + this._payloadLength + 4,
+                        this._payloadLength + 4 + this._bufferSize);
+                } else {
+                    this._bufferSize -= 1;
+                    this._buffer.copy(this._buffer, 0, this._startByteIndex + 1, this._bufferSize + this._startByteIndex + 1);
                 }
 
-                // Prepare for next packet
-                this._bufferSize -= (this._payloadLength + 4);
-                this._buffer.copy(this._buffer, 0, this._startByteIndex + this._payloadLength + 4, this._bufferSize);
-                this._state = PLLSP.READING_STATE_WAIT_START;
+                this._state = PLLSP.STATE_WAIT_START;
 
                 // If there is two packets in single chunk try to export it
                 this.push(null);

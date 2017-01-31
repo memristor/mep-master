@@ -25,9 +25,17 @@
     },
 
     "Drivers": {
+        "PLLSP": {
+          "@class": "drivers/pllsp/PLLSP",
+          "@load": true
+        },
+
         "Uart": {
           "@class": "drivers/uart/Uart",
-          "@load": true
+          "@load": true,
+          "@dependencies": {
+            "protocol": "PLLSP"
+          }
         },
 
         "MotionDriver": {
