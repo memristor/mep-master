@@ -7,7 +7,7 @@ const EventEmitter = require('events');
  * 0                   1                   2                   3
  * 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
  * +--------------+-------+-------+---------------+----------------+
- * |  Start Byte  | Header|Footer |  Packet type  | Payload length |
+ * |  Start Byte  | Header|Payload|  Packet type  | Payload length |
  * |    (0x3C)    |    Checksum   |               |                |
  * +-------------------------------- - - - - - - - - - - - - - - - +
  * :                     Payload Data continued ...                :
@@ -43,28 +43,32 @@ class PLLSP extends EventEmitter {
         this._startByteIndex = 0;
     }
 
-    generate(buffer) {
-        let packet = Buffer.allocUnsafe(buffer.length + 3);
+    generate(buffer, type) {
+        if (type === undefined || type === null) {
+            type = 'U'.charCodeAt(0);
+        }
+
+        let packet = Buffer.allocUnsafe(buffer.length + 4);
 
         // Copy payload
-        buffer.copy(packet, 4, 1);
+        buffer.copy(packet, 4);
 
         // Set start byte
         packet.writeUInt8(0x3C, 0);
 
         // Set checksum
-        let headerChecksum = buffer.length - 1 + buffer.readUInt8(0);
+        let headerChecksum = buffer.length + type;
         let payloadChecksum = 0;
-        for (let i = 1; i < buffer.length; i++) {
+        for (let i = 0; i < buffer.length; i++) {
             payloadChecksum += buffer.readUInt8(i);
         }
         packet.writeUInt8(((headerChecksum & 0x0F) << 4) | (payloadChecksum & 0x0F), 1);
 
         // Set packet type
-        packet.writeUInt8(buffer.readUInt8(0), 2);
+        packet.writeUInt8(type, 2);
 
         // Set length
-        packet.writeUInt8(buffer.length - 1, 3);
+        packet.writeUInt8(buffer.length, 3);
 
         return packet;
     }
@@ -79,6 +83,7 @@ class PLLSP extends EventEmitter {
                 // To much junk, delete whole buffer
                 chunkBuffer.copy(this._buffer, 0);
                 this._bufferSize = chunkBuffer.length;
+                this._state = PLLSP.STATE_WAIT_START
             }
         }
 
@@ -100,7 +105,8 @@ class PLLSP extends EventEmitter {
                 this._payloadLength = this._buffer.readUInt8(this._startByteIndex + 3);
 
                 // Check header checksum
-                if (((this._payloadLength + this._packetType) & 0x0F) !== this._headerChecksum) {
+                if (((this._payloadLength + this._packetType) & 0x0F) !== this._headerChecksum ||
+                    this._payloadLength + 4 + this._startByteIndex >= this._buffer.length) {
                     this._bufferSize -= 1;
                     this._buffer.copy(this._buffer, 0, this._startByteIndex + 1, this._bufferSize + this._startByteIndex + 1);
                     this._state = PLLSP.STATE_WAIT_START;
@@ -119,11 +125,10 @@ class PLLSP extends EventEmitter {
                     generatedPayloadChecksum += this._buffer.readUInt8(i + 4 + this._startByteIndex);
                 }
                 if ((generatedPayloadChecksum & 0x0F) === this._payloadChecksum) {
-                    let packetPayload = Buffer.allocUnsafe(this._payloadLength + 1);
-                    this._buffer.copy(packetPayload, 1, this._startByteIndex + 4, this._startByteIndex + this._payloadLength + 4);
-                    packetPayload.writeUInt8(this._packetType, 0);
+                    let packetPayload = Buffer.allocUnsafe(this._payloadLength);
+                    this._buffer.copy(packetPayload, 0, this._startByteIndex + 4, this._startByteIndex + this._payloadLength + 4);
 
-                    this.emit('data', packetPayload);
+                    this.emit('data', packetPayload, this._packetType);
 
                     // Prepare for next packet
                     this._bufferSize -= (this._payloadLength + 4);
@@ -143,6 +148,10 @@ class PLLSP extends EventEmitter {
                 this.push(null);
             }
         }
+    }
+
+    getGroups() {
+        return ['protocol'];
     }
 }
 

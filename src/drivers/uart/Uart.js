@@ -53,12 +53,14 @@ class Uart extends EventEmitter {
      * @param packet - Parsed packet
      * @private
      */
-    _onPacketReceived(packet) {
-        this.emit('data', packet);
+    _onPacketReceived(packet, type) {
+        this.emit('data', packet, type);
     }
 
     _onDataReceived(chunkBuffer) {
         this.in.pause();
+
+        //console.log(chunkBuffer);
 
         if (this.protocol === null) {
             this.emit('data', chunkBuffer);
@@ -69,7 +71,7 @@ class Uart extends EventEmitter {
         this.in.resume();
     }
 
-    send(buffer, callback) {
+    send(buffer, callback, type) {
         let uart = this;
 
         if (buffer.length === 0) {
@@ -84,7 +86,7 @@ class Uart extends EventEmitter {
         }
 
         this.out.write(
-            (this.protocol === null) ? buffer : this.protocol.generate(buffer),
+            (this.protocol === null) ? buffer : this.protocol.generate(buffer, type),
             null,
             callback
         );

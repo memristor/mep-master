@@ -1,6 +1,7 @@
 class CircularBuffer {
     constructor(size) {
-        this._buffer = Buffer.allocUnsafe(size);
+        // TODO: Change to allocUnsafe
+        this._buffer = Buffer.alloc(size);
         this._start = 0;
         this._end = 0;
     }
@@ -23,8 +24,11 @@ class CircularBuffer {
         if (target.length - targetStart > sourceEnd - sourceStart) {
             source.copy(
                 target,
-                targetStart
+                targetStart,
+                sourceStart,
+                sourceEnd
             );
+
         } else {
             source.copy(
                 target,

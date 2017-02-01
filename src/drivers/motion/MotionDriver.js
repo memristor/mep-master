@@ -98,10 +98,7 @@ class MotionDriver extends EventEmitter  {
             orientation & 0xFF
         ]);
 
-        this.communicator.send(Buffer.from([
-            'd'.charCodeAt(0),
-            0
-        ]));
+        this.communicator.send(data);
     }
 
     rotateTo(angle) {
@@ -191,19 +188,19 @@ class MotionDriver extends EventEmitter  {
         return MotionDriver.STATE_UNDEFINED;
     }
 
-    _onDataReceived(data) {
-        console.log(data);
+    _onDataReceived(buffer, type) {
+        if (buffer.length < 9) return;
 
         // Ignore garbage
-        let buffer = data;
         let stateChar = String.fromCharCode(buffer.readInt8(0));
         let position = new Point(
             (buffer.readInt8(1) << 8) | (buffer.readInt8(2) & 0xFF),
             (buffer.readInt8(3) << 8) | (buffer.readInt8(4) & 0xFF)
         );
         let orientation = (buffer.readInt8(5) << 8) | (buffer.readInt8(6) & 0xFF);
+        let speed = (buffer.readInt8(6) << 8) | (buffer.readInt8(7) & 0xFF);
 
-        Mep.Telemetry.send(TAG, 'Speed', {speed: buffer.readInt8(8)});
+        Mep.Telemetry.send(TAG, 'Speed', {speed: speed});
 
         if (this.positon.equals(position) === false) {
             this.positon = position;
@@ -251,7 +248,6 @@ class MotionDriver extends EventEmitter  {
         }
 
         // Read data again
-        console.log('refresh position');
         setInterval(this.requestRefreshData.bind(this), this.config.refreshDataPeriod);
     }
 

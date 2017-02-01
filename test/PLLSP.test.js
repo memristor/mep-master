@@ -63,7 +63,6 @@ describe('PLLSP', () => {
             pllsp.push(packet.slice(5, packet.length));
             pllsp.push(packet.slice(Buffer.from('nk'))); // Junk
 
-
             assert(buffer.compare(spy.args[0][0]) === 0);
         });
 

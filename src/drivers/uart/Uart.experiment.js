@@ -7,8 +7,11 @@ let uart = new Uart('uart', {
     _protocol: pllsp
 });
 
-uart.on('data', (buffer) => {
-    console.log(buffer.length);
+let j = 0;
+uart.on('data', (buffer, type) => {
+    if (j++ % 10 === 0) {
+        console.log(new Date(), String.fromCharCode(type));
+    }
 });
 
 
@@ -21,7 +24,7 @@ function send() {
 
     let slicedBuffer = buffer.slice(0, i);
     uart.send(slicedBuffer, () => {
-        setTimeout(send, 100);
+        setTimeout(send, 10);
     });
 
 
