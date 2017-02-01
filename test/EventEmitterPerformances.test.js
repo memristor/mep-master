@@ -1,4 +1,5 @@
 const EventEmitter = require('events');
+const assert = require('assert');
 
 const N = 50;
 
@@ -14,14 +15,14 @@ class TestClass extends EventEmitter {
     }
 }
 
-describe('EventEmitterPerformances', function() {
-    var testObject = new TestClass();
+describe('EventEmitterPerformances', () => {
+    let testObject = new TestClass();
 
     for (let i = 0; i < N; i++) {
-        testObject.on('default', function () { });
+        testObject.on('default', () => { });
     }
 
-    it('should calculate publish time for ' + N + ' subscriptions', function() {
-        testObject.publish().should.equal(true);
+    it('should calculate publish time for ' + N + ' subscriptions', () => {
+        assert(testObject.publish() === true);
     });
 });

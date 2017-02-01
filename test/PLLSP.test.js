@@ -1,11 +1,13 @@
 const sinon = require('sinon');
-const PLLSP = require('../src/drivers/pllsp/PLLSP');
+const PLLSP = Mep.require('misc/protocols/PLLSP');
 const Buffer = require('buffer').Buffer;
 const assert = require('assert');
 
 describe('PLLSP', () => {
-    let pllsp = new PLLSP('PLLSP', {
-        bufferSize: 150
+    let spy = sinon.spy();
+    let pllsp = new PLLSP({
+        bufferSize: 150,
+        onDataCallback: spy
     });
 
     describe('#push', () => {
@@ -15,8 +17,6 @@ describe('PLLSP', () => {
             let packet = pllsp.generate(buffer);
 
             // Spy on event
-            let spy = sinon.spy();
-            pllsp.on('data', spy);
             pllsp.push(packet);
 
             assert(spy.args[0][0].compare(Buffer.from(['P'.charCodeAt(0)])) === 0);
@@ -35,12 +35,10 @@ describe('PLLSP', () => {
             let packet = pllsp.generate(buffer);
 
             // Spy on event
-            let spy = sinon.spy();
-            pllsp.on('data', spy);
             pllsp.push(packet.slice(0, 5));
             pllsp.push(packet.slice(5, packet.length));
 
-            assert(buffer.compare(spy.args[0][0]) === 0);
+            assert(buffer.compare(spy.args[1][0]) === 0);
         });
 
         it('should concatenate two data chunks with junk', () => {
@@ -56,14 +54,12 @@ describe('PLLSP', () => {
             let packet = pllsp.generate(buffer);
 
             // Spy on event
-            let spy = sinon.spy();
-            pllsp.on('data', spy);
             pllsp.push(packet.slice(Buffer.from('ju'))); // Junk
             pllsp.push(packet.slice(0, 5));
             pllsp.push(packet.slice(5, packet.length));
             pllsp.push(packet.slice(Buffer.from('nk'))); // Junk
 
-            assert(buffer.compare(spy.args[0][0]) === 0);
+            assert(buffer.compare(spy.args[2][0]) === 0);
         });
 
         it('should separate two packets from single data chunk', () => {
@@ -82,12 +78,10 @@ describe('PLLSP', () => {
             ]);
 
             // Spy on event
-            let spy = sinon.spy();
-            pllsp.on('data', spy);
             pllsp.push(twoPackets);
 
-            assert(singleBuffer.compare(spy.args[0][0]) === 0);
-            assert(singleBuffer.compare(spy.args[1][0]) === 0);
+            assert(singleBuffer.compare(spy.args[3][0]) === 0);
+            assert(singleBuffer.compare(spy.args[4][0]) === 0);
         });
 
         it('should find multiple packets inside chunk with junk', () => {
@@ -110,13 +104,11 @@ describe('PLLSP', () => {
             ]);
 
             // Spy on event
-            let spy = sinon.spy();
-            pllsp.on('data', spy);
             pllsp.push(multiplePackets);
 
-            assert(singleBuffer.compare(spy.args[0][0]) === 0);
-            assert(singleBuffer.compare(spy.args[1][0]) === 0);
-            assert(singleBuffer.compare(spy.args[2][0]) === 0);
+            assert(singleBuffer.compare(spy.args[5][0]) === 0);
+            assert(singleBuffer.compare(spy.args[6][0]) === 0);
+            assert(singleBuffer.compare(spy.args[7][0]) === 0);
         });
     });
 });

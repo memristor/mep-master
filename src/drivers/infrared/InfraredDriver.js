@@ -1,8 +1,8 @@
 /** @namespace drivers.infrared */
 
 const EventEmitter = require('events').EventEmitter;
-const Point = Mep.require('types/Point');
-const Polygon = Mep.require('types/Polygon');
+const Point = Mep.require('misc/Point');
+const Polygon = Mep.require('misc/Polygon');
 
 const TAG = 'InfraredDriver';
 

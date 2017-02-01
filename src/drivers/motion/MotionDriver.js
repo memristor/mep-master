@@ -1,4 +1,6 @@
-const Point = Mep.require('types/Point');
+/** @namespace drivers.motion */
+
+const Point = Mep.require('misc/Point');
 const EventEmitter = require('events');
 const Buffer = require('buffer').Buffer;
 
@@ -6,6 +8,7 @@ const TAG = 'MotionDriver';
 
 /**
  * Driver enables communication with Memristor's motion driver.
+ * @memberof drivers.motion
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @fires MotionDriver#positionChanged
  * @fires MotionDriver#orientationChanged

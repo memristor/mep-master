@@ -2,7 +2,7 @@ const Path = require('path');
 const NConf = require('nconf');
 const Yargs = require('yargs');
 const fs = require('fs');
-const CONFIG_DIR = Path.join(__dirname, '/config');
+const CONFIG_DIR = Path.join(__dirname, '../config');
 
 NConf.use('memory');
 

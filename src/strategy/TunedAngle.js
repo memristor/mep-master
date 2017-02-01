@@ -1,14 +1,12 @@
 /** @namespace types */
 
-const Point = require('./Point');
-
-const TAG = 'TunedPoint';
+const TAG = 'TunedAngle';
 
 /**
- * Tunable Point. Point coordinates are choose depends on table name in configuration.
+ * Tunable angle. Angle is chosen depends on table name in configuration.
  *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
- * @memberof types
+ * @memberof misc
  * @example
  * new TunePoint(
  *      150, 129,
@@ -16,48 +14,46 @@ const TAG = 'TunedPoint';
  *      [148, 128, 'table_2']
  * );
  */
-class TunedPoint {
+class TunedAngle {
     /**
      * Add multiple Points, add Points for each table. It must has
      * at least one Point which will be used as default. Other Points
      * must have tag!
      *
      * @param defaultX {integer} - Default point X coordinate
-     * @param defaultY {integer} - Default point Y coordinate
      */
-    constructor(defaultX, defaultY) {
+    constructor(defaultAngle) {
         // If there are table dependent points
-        for (let i = 2; i < arguments.length; i++) {
+        for (let i = 1; i < arguments.length; i++) {
 
             // Check if the argument is valid
             if (typeof arguments[i][0] === 'undefined' ||
-                typeof arguments[i][1] === 'undefined' ||
-                typeof arguments[i][2] === 'undefined') {
+                typeof arguments[i][1] === 'undefined') {
 
                 Mep.Log.error(TAG, 'Invalid arguments');
                 continue;
             }
 
             // Check if table name matches
-            if (Mep.Config.get('table') == arguments[i][2]) {
-                this.point = new Point(arguments[i][0], arguments[i][1]);
+            if (Mep.Config.get('table') == arguments[i][1]) {
+                this.point = arguments[i][0];
             }
         }
 
         // Otherwise use default point
         if (typeof this.point === 'undefined') {
-            this.point = new Point(defaultX, defaultY);
+            this.angle = defaultAngle;
         }
     }
 
     /**
-     * Get point depending on the chosen table in configuration.
+     * Get angle depending on the chosen table in configuration.
      *
-     * @returns {Point} - Point
+     * @returns {number} - Point
      */
-    getPoint() {
-        return this.point;
+    getAngle() {
+        return this.angle;
     }
 }
 
-module.exports = TunedPoint;
+module.exports = TunedAngle;

@@ -18,15 +18,11 @@ class Uart extends EventEmitter {
 
         // Set up protocol
         this.protocol = null;
-        if (config._protocol !== undefined) {
-            this.protocol = config._protocol;
-        }
-        if (config['@dependencies'] !== undefined &&
-            config['@dependencies']['protocol'] !== undefined) {
-            this.protocol = Mep.DriverManager.getDriver(config['@dependencies']['protocol']);
-        }
-        if (this.protocol !== null) {
-            this.protocol.on('data', this._onPacketReceived.bind(this));
+        if (this.config.protocol !== undefined) {
+            const Protocol = Mep.require('misc/protocols/' + this.config.protocol);
+            this.protocol = new Protocol({
+                onDataCallback: this._onPacketReceived.bind(this)
+            });
         }
 
         // Initialize sending queue

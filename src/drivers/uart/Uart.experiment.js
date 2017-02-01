@@ -1,5 +1,5 @@
 const Uart = require('./Uart');
-const PLLSP = require('../pllsp/PLLSP');
+const PLLSP = require('../../misc/protocols/PLLSP');
 
 
 let pllsp = new PLLSP('PLLSP', {});

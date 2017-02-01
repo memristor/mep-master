@@ -1,3 +1,5 @@
+'use strict';
+
 const schedulerService = Mep.getSchedulerService();
 
 const TAG = 'Scheduler';
@@ -17,6 +19,8 @@ class Scheduler {
                 Mep.Log.warn(TAG, reason);
                 this.runNextTask();
             }
+        } else {
+            throw Error(reason);
         }
     }
 

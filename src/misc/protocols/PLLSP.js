@@ -1,8 +1,8 @@
-const EventEmitter = require('events');
+/** @namespace misc.protocols */
 
 /**
  * Packetized Low-Level Secured Protocol
- *
+ * @memberof misc.protocols
  * <pre>
  * 0                   1                   2                   3
  * 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -16,20 +16,15 @@ const EventEmitter = require('events');
  * +---------------------------------------------------------------+
  * </pre>
  */
-
-
-
-class PLLSP extends EventEmitter {
+class PLLSP {
     static get STATE_READ_HEADER() { return 0; }
     static get STATE_READ_PAYLOAD() { return 1; }
     static get STATE_WAIT_START() { return 2; }
 
-    constructor(name, config) {
-        super();
-
-        this.name = name;
+    constructor(config) {
         this.config = Object.assign({
             bufferSize: 150,
+            onDataCallback: () => { }
         }, config);
 
         this._buffer = Buffer.alloc(this.config.bufferSize);
@@ -128,7 +123,7 @@ class PLLSP extends EventEmitter {
                     let packetPayload = Buffer.allocUnsafe(this._payloadLength);
                     this._buffer.copy(packetPayload, 0, this._startByteIndex + 4, this._startByteIndex + this._payloadLength + 4);
 
-                    this.emit('data', packetPayload, this._packetType);
+                    this.config.onDataCallback(packetPayload, this._packetType);
 
                     // Prepare for next packet
                     this._bufferSize -= (this._payloadLength + 4);
@@ -148,10 +143,6 @@ class PLLSP extends EventEmitter {
                 this.push(null);
             }
         }
-    }
-
-    getGroups() {
-        return ['protocol'];
     }
 }
 

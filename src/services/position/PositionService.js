@@ -1,7 +1,7 @@
 const PositionEstimator = require('./PositionEstimator');
-const TaskError = Mep.require('types/TaskError');
+const TaskError = Mep.require('strategy/TaskError');
 const EventEmitter = require('events').EventEmitter;
-const Point = Mep.require('types/Point');
+const Point = Mep.require('misc/Point');
 const MotionDriver = Mep.require('drivers/motion/MotionDriver');
 
 const TAG = 'PositionService';

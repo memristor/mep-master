@@ -1,6 +1,5 @@
-const should = require('should');
 const sinon = require('sinon');
-const Point = Mep.require('types/Point');
+const Point = Mep.require('misc/Point');
 const assert = require('assert');
 
 describe('PositionServiceTest', () => {
@@ -10,12 +9,12 @@ describe('PositionServiceTest', () => {
 
         Mep.getPositionService()._onPathObstacleDetected('Infrared', new Point(300, 0), true, true);
         it('should fire an event `pathObstacleDetected`', () => {
-            spy.args[0][0].should.be.equal(true);
+            assert(spy.args[0][0] === true);
         });
 
         Mep.getPositionService()._onPathObstacleDetected('Infrared', new Point(300, 0), false, true);
         it('should delete detected obstacle', () => {
-            spy.args[1][0].should.be.equal(false);
+            assert(spy.args[1][0] === false);
         });
 
 

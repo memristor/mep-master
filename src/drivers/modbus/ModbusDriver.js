@@ -1,5 +1,5 @@
 const ModbusDriverBinder = require('bindings')('modbus').ModbusDriverBinder;
-const BaseDriver = Mep.require('types/BaseDriver');
+const BaseDriver = Mep.require('misc/BaseDriver');
 
 const TAG = 'ModbusDriver';
 const DEBUG = true;

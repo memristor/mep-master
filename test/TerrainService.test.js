@@ -1,9 +1,9 @@
-const should = require('should');
 const TerrainService = Mep.require('services/terrain/TerrainService');
-const Point = Mep.require('types/Point');
-const Polygon = Mep.require('types/Polygon');
+const Point = Mep.require('misc/Point');
+const Polygon = Mep.require('misc/Polygon');
+const assert = require('assert');
 
-describe('PathService', () => {
+describe('TerrainService', () => {
     let terrainService = new TerrainService();
     terrainService.init({ staticObstacles: [] });
     let points = [
@@ -20,19 +20,19 @@ describe('PathService', () => {
 
     describe('#removeObstacle', () => {
         it('should return `true` if obstacle exists', () => {
-            terrainService.removeObstacle(firstPolygonId).should.equal(true);
+            assert(terrainService.removeObstacle(firstPolygonId) === true);
         });
 
         it('should return `false` if obstacle doesn\'t exist', () => {
-            terrainService.removeObstacle(firstPolygonId).should.equal(false);
+            assert(terrainService.removeObstacle(firstPolygonId) === false);
         });
     });
 
     describe('#findPath', () => {
         it('should return correct terrain', () => {
             let pathPoints = terrainService.findPath(new Point(0, 0), new Point(101, 101));
-            pathPoints[0].getX().should.equal(100);
-            pathPoints[0].getY().should.equal(1);
+            assert(pathPoints[0].getX() === 100);
+            assert(pathPoints[0].getY() === 1);
         });
     });
 });

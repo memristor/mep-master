@@ -1,5 +1,5 @@
 const driverManager = Mep.getDriverManager();
-const Point = Mep.require('types/Point');
+const Point = Mep.require('misc/Point');
 
 const TAG = 'PositionEstimator';
 

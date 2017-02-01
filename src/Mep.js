@@ -1,3 +1,5 @@
+'use strict';
+
 const Config = require('./Config');
 const Log = require('./Log');
 const Telemetry = require('./Telemetry');
@@ -20,7 +22,7 @@ let Mep = {
      * @returns {Object} - Required library
      */
     require(library) {
-        let allowedDirectories = ['types', 'utils', 'drivers', 'services', 'misc'];
+        let allowedDirectories = ['drivers', 'services', 'misc', 'strategy'];
         let allowedLibraries = ['services/ServiceManager'];
 
         // Check if it is allowed

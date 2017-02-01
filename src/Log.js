@@ -1,3 +1,5 @@
+'use strict';
+
 const Config = require('./Config');
 const Bunyan = require('bunyan');
 const BunyanFormat = require('bunyan-format');

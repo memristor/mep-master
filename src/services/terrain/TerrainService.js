@@ -1,5 +1,5 @@
-const Point = Mep.require('types/Point');
-const Polygon = Mep.require('types/Polygon');
+const Point = Mep.require('misc/Point');
+const Polygon = Mep.require('misc/Polygon');
 const PathFinding = require('./pathfinding/PathFinding');
 const driverManager = Mep.getDriverManager();
 

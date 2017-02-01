@@ -1,9 +1,9 @@
-const should = require('should');
-const CallbackQueue = require('../src/utils/CallbackQueue');
+const CallbackQueue = Mep.require('misc/CallbackQueue');
+const assert = require('assert');
 
-describe('CallbackQueue', function () {
-    var cq = new CallbackQueue();
-    var ret, ret2;
+describe('CallbackQueue', () => {
+    let cq = new CallbackQueue();
+    let ret, ret2;
 
     cq.add(function (a, b) {
         ret = a + b
@@ -12,15 +12,15 @@ describe('CallbackQueue', function () {
         ret2 = a + b
     });
 
-    describe('#notifyAll(2, 3)', function () {
+    describe('#notifyAll(2, 3)', () => {
         cq.notifyAll([2, 3]);
 
-        it('should return set `ret` value to `5`', function () {
-            ret.should.equal(5);
+        it('should return set `ret` value to `5`', () => {
+            assert(ret === 5);
         });
 
-        it('should return set `ret2` value to `5`', function () {
-            ret2.should.equal(5);
+        it('should return set `ret2` value to `5`', () => {
+            assert(ret2 === 5);
         });
     });
 });

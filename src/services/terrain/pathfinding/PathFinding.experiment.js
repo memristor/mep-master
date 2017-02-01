@@ -1,5 +1,5 @@
 global.Mep = require('../../../Mep');
-const Point = Mep.require('types/Point');
+const Point = Mep.require('misc/Point');
 const PathFinding = require('./PathFinding');
 
 var pf = new PathFinding(2000, 0, 3000, 0);

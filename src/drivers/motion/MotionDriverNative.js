@@ -1,5 +1,5 @@
 const MotionDriverBinder = require('bindings')('motion').MotionDriverBinder;
-const Point = Mep.require('types/Point');
+const Point = Mep.require('misc/Point');
 const Util = require('util');
 const EventEmitter = require('events');
 

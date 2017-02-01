@@ -1,4 +1,4 @@
-const Task = Mep.require('types/Task');
+const Task = Mep.require('strategy/Task');
 
 const TAG = 'SchedulerService';
 

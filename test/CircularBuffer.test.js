@@ -1,4 +1,4 @@
-const CircularBuffer = require('../src/utils/CircularBuffer');
+const CircularBuffer = require('../src/misc/CircularBuffer');
 const Buffer = require('buffer').Buffer;
 const assert = require('assert');
 

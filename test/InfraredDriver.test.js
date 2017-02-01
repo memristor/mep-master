@@ -1,11 +1,11 @@
-const should = require('should');
 const sinon = require('sinon');
 const InfraredDriver = require('../src/drivers/infrared/InfraredDriver');
-const Point = Mep.require('types/Point');
+const Point = Mep.require('misc/Point');
 const Buffer = require('buffer').Buffer;
+const assert = require('assert');
 
-describe('InfraredDriverTest', function() {
-    var infraredDriver = new InfraredDriver('InfraredDriver', {
+describe('InfraredDriverTest', () => {
+    let infraredDriver = new InfraredDriver('InfraredDriver', {
         sensorAngle: 60,
         infraredMaxDistance: 200,
         sensorX: -10,
@@ -14,7 +14,7 @@ describe('InfraredDriverTest', function() {
         '@dependencies': { communicator: 'CanDriver' }
     });
 
-    describe('#processDetection(true)', function () {
+    describe('#processDetection(true)', () => {
         let terrainSpy = sinon.spy();
         infraredDriver.on('obstacleDetected', terrainSpy);
 
@@ -22,13 +22,13 @@ describe('InfraredDriverTest', function() {
 
         it('should callback with params(163, 110)', () => {
             let point = terrainSpy.args[0][1];
-            (Math.round(point.getX())).should.be.eql(163);
-            (Math.round(point.getY())).should.be.eql(110);
+            assert(Math.round(point.getX()) === 163);
+            assert(Math.round(point.getY()) === 110);
         });
     });
 
-    describe('Out Of Order', function() {
-        it('should put driver out of order & throw an exception', function() {
+    describe('Out Of Order', () => {
+        it('should put driver out of order & throw an exception', () => {
             /*
             (new LaserDriver).bind(null, 'LaserDriverOutOfOrderTest', {
                 laserAngle: 400,

@@ -1,6 +1,6 @@
 const InitTask = require('./InitTask');
 const SecondTask = require('./SecondTask');
-const Scheduler = Mep.require('types/Scheduler');
+const Scheduler = Mep.require('strategy/Scheduler');
 
 class DefaultScheduler extends Scheduler {
     constructor() {
