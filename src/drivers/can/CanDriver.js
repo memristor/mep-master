@@ -12,7 +12,7 @@ const TAG = 'CanDriver';
 /**
  * Driver for CAN bus (Controller Area Network)
  * @fires drivers.can.CanDriver#data
- * @fires drivers.can.CanDriver#data_[id]
+ * @fires drivers.can.CanDriver#datuarta_[id]
  * @memberOf drivers.can
  */
 class CanDriver extends EventEmitter {
@@ -38,14 +38,14 @@ class CanDriver extends EventEmitter {
         this.channel.addListener('onMessage', (message) => {
             /**
              * Data arrived for specific ID.
-             * @event CanDriver#data_[id]
+             * @event drivers.can.CanDriver#data_[id]
              * @property {Buffer} data - Data received from CAN
              */
             canDriver.emit('data_' + message.id, message.data);
 
             /**
              * Data arrived.
-             * @event CanDriver#data
+             * @event drivers.can.CanDriver#data
              * @property {Number} id - ID of the function
              * @property {Buffer} data - Data received from CAN
              */
