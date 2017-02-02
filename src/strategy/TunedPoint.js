@@ -1,4 +1,4 @@
-/** @namespace types */
+/** @namespace strategy */
 
 const Point = Mep.require('misc/Point');
 
@@ -8,7 +8,7 @@ const TAG = 'TunedPoint';
  * Tunable Point. Point coordinates are choose depends on table name in configuration.
  *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
- * @memberof misc
+ * @memberof strategy
  * @example
  * new TunePoint(
  *      150, 129,
@@ -22,8 +22,8 @@ class TunedPoint {
      * at least one Point which will be used as default. Other Points
      * must have tag!
      *
-     * @param defaultX {integer} - Default point X coordinate
-     * @param defaultY {integer} - Default point Y coordinate
+     * @param defaultX {Number} - Default point X coordinate
+     * @param defaultY {Number} - Default point Y coordinate
      */
     constructor(defaultX, defaultY) {
         // If there are table dependent points

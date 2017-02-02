@@ -1,11 +1,29 @@
 'use strict';
+/** @namespace strategy */
 
 const schedulerService = Mep.getSchedulerService();
 
 const TAG = 'Scheduler';
 
+/**
+ * Default scheduler class describes general task scheduling and robot behaviour
+ * @memberOf strategy
+ * @example
+ * class MyScheduler extends Scheduler {
+ *  constructor() {
+ *      this.tasks = [
+ *          new InitTask(this, 10000, 10, 1)
+ *      ];
+ *  }
+ *  runNextTask() {
+ *      // Here you can override default scheduler
+ *  }
+ * }
+ */
 class Scheduler {
     constructor() {
+        this.tasks = [];
+
         process.on('unhandledRejection', this.onUnhandledTaskError.bind(this));
     }
 
@@ -24,6 +42,10 @@ class Scheduler {
         }
     }
 
+    /**
+     * Get all registered task
+     * @returns {Array} Array of tasks type Task
+     */
     getTasks() {
         return this.tasks;
     }

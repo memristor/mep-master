@@ -1,4 +1,4 @@
-/** @namespace types */
+/** @namespace strategy */
 
 const TAG = 'TunedAngle';
 
@@ -6,12 +6,12 @@ const TAG = 'TunedAngle';
  * Tunable angle. Angle is chosen depends on table name in configuration.
  *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
- * @memberof misc
+ * @memberof strategy
  * @example
- * new TunePoint(
- *      150, 129,
- *      [151, 129, 'table_1'],
- *      [148, 128, 'table_2']
+ * new TuneAngle(
+ *      150,
+ *      [151, 'table_1'],
+ *      [148, 'table_2']
  * );
  */
 class TunedAngle {
