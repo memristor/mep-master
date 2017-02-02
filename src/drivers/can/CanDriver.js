@@ -11,8 +11,8 @@ const TAG = 'CanDriver';
 
 /**
  * Driver for CAN bus (Controller Area Network)
- * @fires CanDriver#data
- * @fires CanDriver#data_[id]
+ * @fires drivers.can.CanDriver#data
+ * @fires drivers.can.CanDriver#data_[id]
  * @memberOf drivers.can
  */
 class CanDriver extends EventEmitter {
