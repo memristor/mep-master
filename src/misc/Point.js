@@ -1,4 +1,5 @@
-/** @namespace types */
+'use strict';
+/** @namespace misc */
 
 /**
  * Point in 2D space

@@ -1,8 +1,8 @@
+'use strict';
 /** @namespace misc.protocols */
 
 /**
  * Packetized Low-Level Secured Protocol
- * @memberof misc.protocols
  * <pre>
  * 0                   1                   2                   3
  * 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -15,12 +15,18 @@
  * |                     Payload Data continued ...                |
  * +---------------------------------------------------------------+
  * </pre>
+ *
+ * @memberof misc.protocols
  */
 class PLLSP {
     static get STATE_READ_HEADER() { return 0; }
     static get STATE_READ_PAYLOAD() { return 1; }
     static get STATE_WAIT_START() { return 2; }
 
+    /**
+     * @param config.bufferSize {Number} - Length of receive buffer
+     * @param config.onDataCallback {Function(data, type)} - Pointer on callback which be called when data is ready
+     */
     constructor(config) {
         this.config = Object.assign({
             bufferSize: 150,
@@ -38,6 +44,12 @@ class PLLSP {
         this._startByteIndex = 0;
     }
 
+    /**
+     * Generate packet
+     * @param buffer {Buffer} - Payload for packet
+     * @param type {Number} - Type for packet, if it is not defined int('U') will be used
+     * @returns {Buffer} - Packet as buffer of bytes
+     */
     generate(buffer, type) {
         if (type === undefined || type === null) {
             type = 'U'.charCodeAt(0);
@@ -68,6 +80,10 @@ class PLLSP {
         return packet;
     }
 
+    /**
+     * Push received data to receive buffer
+     * @param chunkBuffer {Buffer} - Chunk buffer
+     */
     push(chunkBuffer) {
         // Append `tempBuffer` to `buffer`
         if (chunkBuffer !== null) {

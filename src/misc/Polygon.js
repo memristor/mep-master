@@ -1,4 +1,18 @@
+'use strict';
+
+/** @namespace misc */
+
+/**
+ * Describes an polygon
+ * @see https://en.wikipedia.org/wiki/Polygon
+ * @memberOf misc
+ */
 class Polygon {
+    /**
+     * @param tag {String} - Additional information about polygon to describe it
+     * @param duration {Number} - Polygon will be destroyed after given number of milliseconds
+     * @param points {Array<misc.Point>} - Array of points which can describe an polygon
+     */
     constructor(tag, duration, points) {
         // Check points
         if (points.length < 3) {
@@ -14,39 +28,52 @@ class Polygon {
         this.id = null;
     }
 
+    /**
+     * Translate all points of polygon
+     * @param translatePoint {misc.Point} Point which represents x and y value of translation
+     */
     translate(translatePoint) {
         for (let point of this.points) {
             point.translate(translatePoint);
         }
     }
 
+    /**
+     * Rotate all points of polygon around an origin point
+     * @param originPoint {misc.Point} Center point of rotation
+     * @param angleDegrees {Number} Required angle of rotation
+     */
     rotate(originPoint, angleDegrees) {
         for (let point of this.points) {
             point.rotate(originPoint, angleDegrees)
         }
     }
 
-    getId() {
-        return this.id;
-    }
-
-    setId(id) {
-        this.id = id;
-    }
-
+    /**
+     * @returns {Array<misc.Point>} Get an array of points which describe a polygon
+     */
     getPoints() {
         return this.points;
     }
 
-
+    /**
+     * @returns {Number} Get duration of milliseconds after the polygon will be destroyed
+     */
     getDuration() {
         return this.duration;
     }
 
+    /**
+     * @returns {String} Get unique identifier of polygon
+     */
     getTag() {
         return this.tag;
     }
 
+    /**
+     * Clone a polygon
+     * @returns {misc.Polygon} Cloned polygon
+     */
     clone() {
         let points = [];
         for (let point of this.points) {

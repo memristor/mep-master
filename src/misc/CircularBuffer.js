@@ -1,7 +1,15 @@
+'use strict';
+
+/** @namespace misc */
+
+/**
+ * Implementation of circular buffer using Node.js's Buffer
+ * @todo
+ * @memberOf misc
+ */
 class CircularBuffer {
     constructor(size) {
-        // TODO: Change to allocUnsafe
-        this._buffer = Buffer.alloc(size);
+        this._buffer = Buffer.allocUnsafe(size);
         this._start = 0;
         this._end = 0;
     }

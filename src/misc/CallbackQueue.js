@@ -1,10 +1,15 @@
-var TAG = 'CallbackQueue';
+'use strict';
+
+/** @namespace misc */
+
+const TAG = 'CallbackQueue';
 
 /**
  * Queue of callback functions. It used when you want to allow other modules to subscribe to your events.
  *
  * @deprecated
  * @author Darko Lukic <lukicdarkoo@gmail.com>
+ * @memberOf misc
  */
 class CallbackQueue {
     constructor() {
