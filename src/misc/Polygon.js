@@ -28,6 +28,14 @@ class Polygon {
         this.id = null;
     }
 
+    setId(id) {
+        this.id = id;
+    }
+
+    getId() {
+        return this.id;
+    }
+
     /**
      * Translate all points of polygon
      * @param translatePoint {misc.Point} Point which represents x and y value of translation
