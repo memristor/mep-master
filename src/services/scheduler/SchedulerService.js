@@ -1,7 +1,14 @@
+'use strict';
+/** @namespace services.scheduler */
+
 const Task = Mep.require('strategy/Task');
 
 const TAG = 'SchedulerService';
 
+/**
+ * Implements algorithms to schedule task execution
+ * @memberOf services.scheduler
+ */
 class SchedulerService {
     init(config) {
 

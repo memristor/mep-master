@@ -1,3 +1,6 @@
+'use strict';
+/** @namespace services.position */
+
 const PositionEstimator = require('./PositionEstimator');
 const TaskError = Mep.require('strategy/TaskError');
 const EventEmitter = require('events').EventEmitter;
@@ -8,8 +11,8 @@ const TAG = 'PositionService';
 
 /**
  * Provides a very abstract way to control and estimate robot position
- * @fires PositionService#pathObstacleDetected
- *
+ * @fires services.position.PositionService#pathObstacleDetected
+ * @memberOf services.position
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
 class PositionService extends EventEmitter {
@@ -31,7 +34,7 @@ class PositionService extends EventEmitter {
 
     /**
      * Get current robot's position
-     * @returns {Point} Current position
+     * @returns {misc.Point} Current position
      */
     getPosition() {
         return this.positionEstimator.getPosition();

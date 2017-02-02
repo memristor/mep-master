@@ -1,3 +1,6 @@
+'use strict';
+/** @namespace services.terrain */
+
 const Point = Mep.require('misc/Point');
 const Polygon = Mep.require('misc/Polygon');
 const PathFinding = require('./pathfinding/PathFinding');
@@ -7,6 +10,7 @@ const TAG = 'TerrainService';
 
 /**
  * Class represent obstacles on the terrain and mechanism to search terrain between objects.
+ * @memberOf services.terrain
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
 class TerrainService {

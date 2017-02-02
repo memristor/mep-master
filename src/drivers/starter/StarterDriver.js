@@ -6,7 +6,7 @@ const readline = require('readline');
 
 /**
  * Detects when rope is pulled out of the robot and starts counting game time.
- * @fires StarterDriver#tick
+ * @fires drivers.starter.StarterDriver#tick
  * @memberof drivers.starter
  */
 class StarterDriver extends EventEmitter {
@@ -27,7 +27,7 @@ class StarterDriver extends EventEmitter {
     _tick() {
         /**
          * Tick event
-         * @event StarterDriver#tick
+         * @event drivers.starter.StarterDriver#tick
          * @property {Number} time - Time in seconds since match is started
          */
         this.emit('tick', this.getTime());

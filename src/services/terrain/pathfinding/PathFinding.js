@@ -1,25 +1,28 @@
+'use strict';
+/** @namespace services.terrain.pathfinding */
+
 const PathFindingBinder = require('bindings')('pathfinding').PathFindingBinder;
 
 class PathFinding extends PathFindingBinder {
     /**
      * @method addObstacle
-     * @memberof PathFinding#
-     * @param {Array} points - Array of points that represent polygon
+     * @memberof services.terrain.pathfinding.PathFinding#
+     * @param {Array<misc.Point>} points - Array of points that represent polygon
      * @return {Number} - ID of the obstacle
      */
 
     /**
      * @method removeObstacle
-     * @memberof PathFinding#
+     * @memberof services.terrain.pathfinding.PathFinding#
      * @param {Number} id - ID of the obstacle
      */
 
     /**
      * @method search
-     * @memberof PathFinding#
-     * @param {Point} start - Start point
-     * @param {Point} goal - Goal point
-     * @return {Array} - Array of pairs (x, y)
+     * @memberof services.terrain.pathfinding.PathFinding#
+     * @param {misc.Point} start - Start point
+     * @param {misc.Point} goal - Goal point
+     * @return {Array<misc.Point>} - Array of pairs (x, y)
      */
 
     /**

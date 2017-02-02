@@ -10,8 +10,8 @@ const DEBUG = true;
 /**
  * Driver for Modbus communication protocol.
  * @memberOf drivers.modbus
- * @fires ModbusDriver#coilChanged
- * @fires ModbusDriver#coilChanged_[slaveAddress]_[functionAddress]
+ * @fires drivers.modbus.ModbusDriver#coilChanged
+ * @fires drivers.modbus.ModbusDriver#coilChanged_[slaveAddress]_[functionAddress]
  */
 class ModbusDriver extends classes(ModbusDriverBinder, BaseDriver) {
 
@@ -26,7 +26,7 @@ class ModbusDriver extends classes(ModbusDriverBinder, BaseDriver) {
             /**
              * Coil value changed event.
              *
-             * @event ModbusDriver#coilChanged
+             * @event drivers.modbus.ModbusDriver#coilChanged
              * @property {Number} slaveAddress - Slave address
              * @property {Number} functionAddress - Function address
              * @property {Boolean} detected - Value on slave address and function address
@@ -36,7 +36,7 @@ class ModbusDriver extends classes(ModbusDriverBinder, BaseDriver) {
             /**
              * Coil value changed event on single address.
              *
-             * @event ModbusDriver#coilChanged_[slaveAddress]_[functionAddress]
+             * @event drivers.modbus.ModbusDriver#coilChanged_[slaveAddress]_[functionAddress]
              * @property {Boolean} detected - Value on slave address and function address
              */
             super.emit('coilChanged_' + slaveAddress + '_' + functionAddress, detected);

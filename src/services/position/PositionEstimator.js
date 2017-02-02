@@ -1,8 +1,15 @@
+'use strict';
+/** @namespace services.position */
+
 const driverManager = Mep.getDriverManager();
 const Point = Mep.require('misc/Point');
 
 const TAG = 'PositionEstimator';
 
+/**
+ * Implements algorithms to collect data from sensors and determine current robot's location
+ * @memberOf services.position
+ */
 class PositionEstimator {
     constructor(config) {
         this.config = Object.assign({

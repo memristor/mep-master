@@ -13,7 +13,8 @@ const TAG = 'InfraredDriver';
  *
  * @memberof drivers.infrared
  * @author Darko Lukic <lukicdarkoo@gmail.com>
- * @fires InfraredDriver#terrain
+ * @fires drivers.infrared.InfraredDriver#obstacleDetected
+ * @fires drivers.infrared.InfraredDriver#pathObstacleDetected
  */
 class InfraredDriver extends EventEmitter {
     /**
@@ -103,14 +104,14 @@ class InfraredDriver extends EventEmitter {
 
         /**
          * Obstacle detected on the robot's terrain event. We need to stop robot as fast as possible.
-         * @event InfraredDriver#pathObstacleDetected
+         * @event drivers.infrared.InfraredDriver#pathObstacleDetected
          * @property {Boolean} - Obstacle is detected
          */
         this.emit('pathObstacleDetected', this.name, this.poi, this.detected, this.front);
 
         /**
          * Obstacle detected event.
-         * @event InfraredDriver#obstacleDetected
+         * @event drivers.infrared.InfraredDriver#obstacleDetected
          * @property {String} - Source name
          * @property {Point} - Center of detected obstacle
          * @property {Polygon} - Obstacle is approximated with a polygon
