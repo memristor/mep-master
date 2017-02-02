@@ -11,9 +11,9 @@ const TAG = 'MotionDriver';
  * Driver enables communication with Memristor's motion driver.
  * @memberof drivers.motion
  * @author Darko Lukic <lukicdarkoo@gmail.com>
- * @fires MotionDriver#positionChanged
- * @fires MotionDriver#orientationChanged
- * @fires MotionDriver#stateChanged
+ * @fires drivers.motion.MotionDriver#positionChanged
+ * @fires drivers.motion.MotionDriver#orientationChanged
+ * @fires drivers.motion.MotionDriver#stateChanged
  */
 class MotionDriver extends EventEmitter  {
     static get DIRECTION_FORWARD() { return 1; }
@@ -116,8 +116,6 @@ class MotionDriver extends EventEmitter  {
 
     /**
      * Stop the robot.
-     * @method stop
-     * @memberof MotionDriver#
      */
     stop() {
         this.communicator.send('S');
@@ -125,8 +123,6 @@ class MotionDriver extends EventEmitter  {
 
     /**
      * Stop robot by turning off motors.
-     * @method softStop
-     * @memberof MotionDriver#
      */
     softStop() {
         this.communicator.send('s');
@@ -135,8 +131,6 @@ class MotionDriver extends EventEmitter  {
 
     /**
      * Set default speed of the robot
-     * @method setSpeed
-     * @memberof MotionDriver#
      * @param speed {Number} - Speed (0 - 255)
      */
     setSpeed(speed) {
@@ -148,8 +142,6 @@ class MotionDriver extends EventEmitter  {
 
     /**
      * Move robot to the absolute position
-     * @method moveToPosition
-     * @memberof MotionDriver#
      * @param positionX {Number} - X coordinate relative to start position of the robot
      * @param positionY {Number} - Y coordinate relative to start position of the robot
      * @param direction {Number} - Direction, can be MotionDriver.DIRECTION_FORWARD or MotionDriver.DIRECTION_BACKWARD
@@ -211,7 +203,7 @@ class MotionDriver extends EventEmitter  {
 
             /**
              * Position changed event.
-             * @event MotionDriver#positionChanged
+             * @event drivers.motion.MotionDriver#positionChanged
              * @property {String} driverName - Unique name of a driver
              * @property {Point} point - Position of the robot
              */
@@ -229,7 +221,7 @@ class MotionDriver extends EventEmitter  {
 
             /**
              * State change event.
-             * @event MotionDriver#stateChanged
+             * @event drivers.motion.MotionDriver#stateChanged
              * @property {Number} state - New state
              */
             this.emit('stateChanged', this.name, this.state);
@@ -240,7 +232,7 @@ class MotionDriver extends EventEmitter  {
 
             /**
              * Orientation change event.
-             * @event MotionDriver#orientationChanged
+             * @event drivers.motion.MotionDriver#orientationChanged
              * @property {String} driverName - Unique name of a driver
              * @property {Number} orientation - New orientation
              */
