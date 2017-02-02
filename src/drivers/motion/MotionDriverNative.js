@@ -13,7 +13,7 @@ Util.inherits(MotionDriverBinder, EventEmitter);
  * Natively (C++) implemented driver that enables communication with Memristor's motion driver.
  *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
- * @fires MotionDriver#positionChanged
+ * @fires MotionDriverNative#positionChanged
  * @memberOf drivers.motion
  */
 class MotionDriverNative extends MotionDriverBinder  {
@@ -28,40 +28,40 @@ class MotionDriverNative extends MotionDriverBinder  {
     /**
      * Read data from motion driver (as the electronic component)
      * @method refreshData
-     * @memberof MotionDriver#
+     * @memberof drivers.motion.MotionDriverNative#
      * @param callback {Function} - Callback function will be called after data is refreshed
      */
 
     /**
      * Stop the robot.
      * @method stop
-     * @memberof MotionDriver#
+     * @memberof drivers.motion.MotionDriverNative#
      */
 
     /**
      * Stop robot by turning off motors.
      * @method softStop
-     * @memberof MotionDriver#
+     * @memberof drivers.motion.MotionDriverNative#
      */
 
     /**
      * Move robot straight
      * @method moveStraight
-     * @memberof MotionDriver#
+     * @memberof drivers.motion.MotionDriverNative#
      * @param distance {Number} - Distance in mm
      */
 
     /**
      * Set default speed of the robot
      * @method setSpeed
-     * @memberof MotionDriver#
+     * @memberof drivers.motion.MotionDriverNative#
      * @param speed {Number} - Speed (0 - 255)
      */
 
     /**
      * Move robot to the absolute position
      * @method moveToPosition
-     * @memberof MotionDriver#
+     * @memberof drivers.motion.MotionDriverNative#
      * @param positionX {Number} - X coordinate relative to start position of the robot
      * @param positionY {Number} - Y coordinate relative to start position of the robot
      * @param direction {Number} - Direction, can be Constants.DIRECTION_FORWARD or Constants.DIRECTION_BACKWARD
@@ -107,7 +107,7 @@ class MotionDriverNative extends MotionDriverBinder  {
 
                 /**
                  * Position changed event.
-                 * @event MotionDriver#positionChanged
+                 * @event drivers.motion.MotionDriverNative#positionChanged
                  * @property {String} driverName - Unique name of a driver
                  * @property {Point} point - Position of the robot
                  */
@@ -124,7 +124,7 @@ class MotionDriverNative extends MotionDriverBinder  {
 
                 /**
                  * State change event.
-                 * @event MotionDriver#stateChanged
+                 * @event drivers.motion.MotionDriverNative#stateChanged
                  * @property {Number} state - New state
                  */
                 motionDriver.emit('stateChanged', motionDriver.getState());
@@ -135,7 +135,7 @@ class MotionDriverNative extends MotionDriverBinder  {
 
                 /**
                  * Orientation change event.
-                 * @event MotionDriver#orientationChanged
+                 * @event drivers.motion.MotionDriverNative#orientationChanged
                  * @property {String} driverName - Unique name of a driver
                  * @property {Number} orientation - New orientation
                  */
