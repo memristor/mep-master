@@ -1,3 +1,6 @@
+'use strict';
+/** @namespace drivers.modbus */
+
 const ModbusDriverBinder = require('bindings')('modbus').ModbusDriverBinder;
 const BaseDriver = Mep.require('misc/BaseDriver');
 
@@ -6,7 +9,7 @@ const DEBUG = true;
 
 /**
  * Driver for Modbus communication protocol.
- *
+ * @memberOf drivers.modbus
  * @fires ModbusDriver#coilChanged
  * @fires ModbusDriver#coilChanged_[slaveAddress]_[functionAddress]
  */

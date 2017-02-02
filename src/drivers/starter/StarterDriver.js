@@ -1,3 +1,4 @@
+'use strict';
 /** @namespace drivers.starter */
 
 const EventEmitter = require('events');

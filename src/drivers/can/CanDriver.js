@@ -1,9 +1,11 @@
+'use strict';
+
+/** @namespace drivers.can */
+
 const EventEmitter = require('events').EventEmitter;
 const CAN = require('socketcan');
 const exec = require('child_process').execSync;
 const Buffer = require('buffer').Buffer;
-const spawn = require('child_process').spawn;
-
 
 const TAG = 'CanDriver';
 
@@ -11,6 +13,7 @@ const TAG = 'CanDriver';
  * Driver for CAN bus (Controller Area Network)
  * @fires CanDriver#data
  * @fires CanDriver#data_[id]
+ * @memberOf drivers.can
  */
 class CanDriver extends EventEmitter {
 

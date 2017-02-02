@@ -1,7 +1,16 @@
+'use strict';
+/** @namespace drivers.can */
+
 const EventEmitter = require('events').EventEmitter;
 
 const TAG = 'CanDriverSimulator';
 
+/**
+ * Driver that simulates CAN bus
+ * @fires CanDriver#data
+ * @fires CanDriver#data_[id]
+ * @memberOf drivers.can
+ */
 class CanDriverSimulator extends EventEmitter {
     constructor(name, config) {
         super();

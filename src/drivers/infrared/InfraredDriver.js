@@ -1,3 +1,5 @@
+'use strict';
+
 /** @namespace drivers.infrared */
 
 const EventEmitter = require('events').EventEmitter;

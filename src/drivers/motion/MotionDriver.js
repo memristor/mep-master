@@ -1,3 +1,4 @@
+'use strict';
 /** @namespace drivers.motion */
 
 const Point = Mep.require('misc/Point');

@@ -1,3 +1,6 @@
+'use strict';
+/** @namespace drivers.motion */
+
 const MotionDriverBinder = require('bindings')('motion').MotionDriverBinder;
 const Point = Mep.require('misc/Point');
 const Util = require('util');
@@ -7,12 +10,13 @@ Util.inherits(MotionDriverBinder, EventEmitter);
 
 
 /**
- * Driver enables communication with Memristor's motion driver.
+ * Natively (C++) implemented driver that enables communication with Memristor's motion driver.
  *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @fires MotionDriver#positionChanged
+ * @memberOf drivers.motion
  */
-class MotionDriver extends MotionDriverBinder  {
+class MotionDriverNative extends MotionDriverBinder  {
     static get DIRECTION_FORWARD() { return 1; }
     static get DIRECTION_BACKWARD() { return -1; }
     static get STATE_IDLE() { return 1; }
@@ -177,4 +181,4 @@ class MotionDriver extends MotionDriverBinder  {
     }
 }
 
-module.exports = MotionDriver;
+module.exports = MotionDriverNative;

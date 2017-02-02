@@ -1,3 +1,6 @@
+'use strict';
+/** @namespace drivers.motion */
+
 const Point = Mep.require('misc/Point');
 const EventEmitter = require('events');
 
@@ -7,6 +10,7 @@ const TAG = 'MotionDriverSimulator';
  * MotionDriverSimulator simulation module. Has same methods as MotionDriver but
  * this module send all commands to simulator.
  * @see MotionDriver
+ * @memberOf drivers.motion
  */
 class MotionDriverSimulator extends EventEmitter {
     static get DIRECTION_FORWARD() { return 1; }

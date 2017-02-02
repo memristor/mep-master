@@ -1,3 +1,6 @@
+'use strict';
+/** @namespace drivers.usage */
+
 const Usage = require('usage');
 
 const TAG = 'UsageDriver';
@@ -5,6 +8,7 @@ const TAG = 'UsageDriver';
 /**
  * Logs memory and cpu usage
  * @author Darko Lukic <lukicdarkoo@gmail.com>
+ * @memberOf drivers.usage
  * @example
  * ...
  * "UsageDriver": {

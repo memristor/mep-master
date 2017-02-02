@@ -1,3 +1,6 @@
+'use strict';
+/** @namespace drivers.uart */
+
 const fs = require('fs');
 const tty = require('tty');
 const EventEmitter = require('events');
@@ -5,8 +8,19 @@ const termios = require('termios');
 
 const TAG = 'Uart';
 
-
+/**
+ * Driver enables uart communication with electronic boards
+ * @memberOf drivers.uart
+ * @author Darko Lukic <lukicdarkoo@gmail.com>
+ */
 class Uart extends EventEmitter {
+    /**
+     * @param name {String} - Unique name of driver
+     * @param config.device {String} - Linux dev which will be used for serial communication
+     * @param config.baudRate {Number} - Bits per second
+     * @param config.protocol {String} - Name of protocol that will be used under the hood, check
+     * list of available protocols in `misc/protocols`
+     */
     constructor(name, config) {
         super();
 
@@ -24,10 +38,6 @@ class Uart extends EventEmitter {
                 onDataCallback: this._onPacketReceived.bind(this)
             });
         }
-
-        // Initialize sending queue
-        this.enableSend = true;
-        this.queueSend = [];
 
         // Initialize input and output stream
         let fd = fs.openSync(this.config.device, fs.O_NOCTTY | fs.O_RDWR | fs.O_SYNC);
@@ -67,6 +77,12 @@ class Uart extends EventEmitter {
         this.in.resume();
     }
 
+    /**
+     * Send data to Uart
+     * @param buffer {Buffer} - Buffer of data which will be sent to uart
+     * @param callback {Function} - Callback function which will be called after data is sent
+     * @param type {Number} - Type of packet, will be ignored if protocol doesn't support
+     */
     send(buffer, callback, type) {
         let uart = this;
 
@@ -75,30 +91,11 @@ class Uart extends EventEmitter {
             return;
         }
 
-
-        if (uart.enableSend === false) {
-            uart.queueSend.push(buffer);
-            return;
-        }
-
         this.out.write(
             (this.protocol === null) ? buffer : this.protocol.generate(buffer, type),
             null,
             callback
         );
-
-        /*
-        this.enableSend = false;
-        this.out.write(buffer, null, () => {
-            setTimeout(() => {
-                uart.enableSend = true;
-                if (uart.queueSend.length > 0) {
-                    let nextBuffer = uart.queueSend.splice(0, 1)[0];
-                    uart.send(nextBuffer, callback);
-                }
-            }, 5);
-        });
-        */
     }
 
     getGroups() {

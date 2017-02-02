@@ -1,5 +1,12 @@
+'use strict';
+/** @namespace drivers.motion */
+
 const TAG = 'MotionDriverController';
 
+/**
+ * Remote controller for motion driver
+ * @memberOf drivers.motion
+ */
 class MotionDriverController {
     constructor(name, config) {
         let motionDriver = Mep.getDriverManager().getDriver(config['@dependencies'].motionDriver);

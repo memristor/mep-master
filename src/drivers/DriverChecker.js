@@ -1,10 +1,11 @@
+/** @namespace drivers */
+
 /**
  * A goal of the class is to check if drivers are correctly implemented.
  *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
- * @memberOf utils
+ * @memberOf drivers
  */
-
 class DriverChecker {
     static check(driver) {
         let groups;
