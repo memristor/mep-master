@@ -21,25 +21,26 @@ class MotionService extends EventEmitter {
 
     init(config) {
         this.config = config;
-        this.currentSpeed = 0;
-        this.direction = this.DIRECTION_NONE;
 
         this.motionDriver = Mep.DriverManager.getDriver('MotionDriver');
 
-        this.required = {
+        this._currentSpeed = 0;
+        this._direction = this.DIRECTION_NONE;
+        this._required = {
             points: [],
             params: {}
         };
-        this.pathObstacleSources = [[], []];
+        this._pathObstacleSources = [[], []];
 
         this._goToNextQueuedPoint = this._goToNextQueuedPoint.bind(this);
+        this._onPathObstacleDetected = this._onPathObstacleDetected.bind(this);
 
         // Subscribe on sensors that can provide obstacles on the robot's terrain
-        Mep.DriverManager.callMethodByGroup('terrain', 'on', ['pathObstacleDetected', this._onPathObstacleDetected.bind(this)]);
+        Mep.DriverManager.callMethodByGroup('terrain', 'on', ['pathObstacleDetected', this._onPathObstacleDetected]);
     }
 
     getDirection() {
-        return this.direction;
+        return this._direction;
     }
 
     _onPathObstacleDetected(source, relativePOI, detected, front) {
@@ -47,12 +48,12 @@ class MotionService extends EventEmitter {
         // `pathObstacleSources[0]` is array of obstacle source detected on a back of robot
         // `pathObstacleSources[1]` is array of obstacle source detected on a front of robot
         if (detected === true) {
-            if (this.pathObstacleSources[+front].indexOf(source) < 0) {
-                this.pathObstacleSources[+front].push(source);
+            if (this._pathObstacleSources[+front].indexOf(source) < 0) {
+                this._pathObstacleSources[+front].push(source);
             }
         } else {
             // Delete the source which previously detected a path obstacle
-            this.pathObstacleSources[+front].splice(this.pathObstacleSources[+front].indexOf(source), 1);
+            this._pathObstacleSources[+front].splice(this._pathObstacleSources[+front].indexOf(source), 1);
         }
 
         // If something is detected
@@ -60,15 +61,14 @@ class MotionService extends EventEmitter {
 
             // Fire the event if only one sensor detected a path obstacle
             // Required behaviour is single event if obstacle is detected (not multiple events from multiple sensors)
-            if (this.pathObstacleSources[this.motionDriver.getDirection()].length > 0) {
+            if (this._pathObstacleSources[this.getDirection()].length > 0) {
                 // Check if the obstacle is on the path
-                if ((front === true && this.motionDriver.getDirection() === MotionDriver.DIRECTION_FORWARD) ||
-                    (front === false && this.motionDriver.getDirection() === MotionDriver.DIRECTION_BACKWARD)) {
+                if ((front === true && this.getDirection() === this.DIRECTION_FORWARD) ||
+                    (front === false && this.getDirection() === this.DIRECTION_BACKWARD)) {
                     // Check if it is outside of terrain
                     let poi = relativePOI.clone();
-                    poi.rotate(new Point(0, 0), Mep.Position.getPosition());
+                    poi.rotate(new Point(0, 0), Mep.Position.getOrientation());
                     poi.translate(Mep.Position.getPosition());
-
                     if (poi.getX() < 1500 && poi.getX() > -1500 &&
                         poi.getY() < 1000 && poi.getY() > -1000) {
                         // TODO: Check if it is not a static obstacle
@@ -83,7 +83,7 @@ class MotionService extends EventEmitter {
                 }
             }
         } else {
-            if (this.pathObstacleSources[this.motionDriver.getDirection()].length === 0) {
+            if (this._pathObstacleSources[this.getDirection()].length === 0) {
                 this.emit('pathObstacleDetected', false);
             }
         }
@@ -104,31 +104,31 @@ class MotionService extends EventEmitter {
     go(tunedPoint, params) {
         let destinationPoint = tunedPoint.getPoint();
 
-        this.required = {
+        this._required = {
             params: {},
             points: []
         };
-        Object.assign(this.required.params, this.config.moveOptions, params);
+        Object.assign(this._required.params, this.config.moveOptions, params);
 
 
         // Apply relative
-        if (this.required.params.relative === true) {
+        if (this._required.params.relative === true) {
             destinationPoint.setX(destinationPoint.getX() + Mep.Position.getPosition().getX());
             destinationPoint.setY(destinationPoint.getY() + Mep.Position.getPosition().getY());
         }
 
         // Apply terrain finding
-        if (this.required.params.pf === true) {
+        if (this._required.params.pf === true) {
             let currentPoint = Mep.Position.getPosition();
-            this.required.points = Mep.getTerrainService().findPath(currentPoint, destinationPoint);
+            this._required.points = Mep.getTerrainService().findPath(currentPoint, destinationPoint);
 
-            Mep.Log.debug(TAG, 'Start path finding from', currentPoint, 'to', this.required.points);
+            Mep.Log.debug(TAG, 'Start path finding from', currentPoint, 'to', this._required.points);
         } else {
-            this.required.points = [destinationPoint];
+            this._required.points = [destinationPoint];
         }
 
         return new Promise((resolve, reject) => {
-            if (this.required.points.length === 0) {
+            if (this._required.points.length === 0) {
                 reject(new TaskError(TAG, 'FindPath', 'Cannot go to required position, no path found'));
             }
             this._goToNextQueuedPoint(resolve, reject);
@@ -137,14 +137,14 @@ class MotionService extends EventEmitter {
 
     _goToNextQueuedPoint(resolve, reject) {
         let point;
-        if (this.required.points.length > 0) {
-            point = this.required.points[0];
-            this.required.points.splice(0, 1);
+        if (this._required.points.length > 0) {
+            point = this._required.points[0];
+            this._required.points.splice(0, 1);
             this._basicSet(
                 point,
-                this.required.params.direction,
-                this.required.params.tolerance,
-                this.required.params.speed
+                this._required.params.direction,
+                this._required.params.tolerance,
+                this._required.params.speed
             ).then(() => {
                 this._goToNextQueuedPoint(resolve, reject);
             }).catch((e) => {
@@ -205,7 +205,7 @@ class MotionService extends EventEmitter {
         }
 
         // Save direction
-        this.direction = direction;
+        this._direction = direction;
 
         // Move the robot
         if (tolerance < 0) {
@@ -226,7 +226,7 @@ class MotionService extends EventEmitter {
      * @returns {Promise}
      */
     arc(point, angle, direction) {
-        this.direction = direction;
+        this._direction = direction;
         this.motionDriver.moveArc(point, angle, direction);
         return this._promiseToReachDestination();
     }
@@ -253,7 +253,7 @@ class MotionService extends EventEmitter {
      * @returns {Promise}
      */
     straight(millimeters) {
-        this.direction = (millimeters > 0) ? this.DIRECTION_FORWARD : this.DIRECTION_BACKWARD;
+        this._direction = (millimeters > 0) ? this.DIRECTION_FORWARD : this.DIRECTION_BACKWARD;
         this.motionDriver.goForward(millimeters | 0);
         return this._promiseToReachDestination(null, -1);
     }
