@@ -16,8 +16,8 @@ const TAG = 'TunedAngle';
  */
 class TunedAngle {
     /**
-     * Add multiple Points, add Points for each table. It must has
-     * at least one Point which will be used as default. Other Points
+     * Add multiple angles, add angle for each table. It must has
+     * at least one angle which will be used as default. Other angles
      * must have tag!
      *
      * @param defaultX {integer} - Default point X coordinate
@@ -36,12 +36,12 @@ class TunedAngle {
 
             // Check if table name matches
             if (Mep.Config.get('table') == arguments[i][1]) {
-                this.point = arguments[i][0];
+                this.angle = arguments[i][0];
             }
         }
 
         // Otherwise use default point
-        if (typeof this.point === 'undefined') {
+        if (typeof this.angle === 'undefined') {
             this.angle = defaultAngle;
         }
     }
@@ -49,7 +49,7 @@ class TunedAngle {
     /**
      * Get angle depending on the chosen table in configuration.
      *
-     * @returns {number} - Point
+     * @returns {number} - Angle
      */
     getAngle() {
         return this.angle;

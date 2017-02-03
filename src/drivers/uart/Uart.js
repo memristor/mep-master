@@ -66,8 +66,6 @@ class Uart extends EventEmitter {
     _onDataReceived(chunkBuffer) {
         this.in.pause();
 
-        //console.log(chunkBuffer);
-
         if (this.protocol === null) {
             this.emit('data', chunkBuffer);
         } else {
@@ -84,15 +82,23 @@ class Uart extends EventEmitter {
      * @param type {Number} - Type of packet, will be ignored if protocol doesn't support
      */
     send(buffer, callback, type) {
-        let uart = this;
-
         if (buffer.length === 0) {
-            callback('Buffer length cannot be 0');
+            Mep.Log.error('Buffer length cannot be 0');
             return;
         }
 
+        let packetizedBuffer;
+        if (type === undefined && this.protocol !== null) {
+            packetizedBuffer = this.protocol.generate(buffer.slice(1), buffer.readUInt8(0));
+        }
+        else if (type !== undefined && this.protocol !== null) {
+            packetizedBuffer = this.protocol.generate(buffer, type);
+        } else {
+            packetizedBuffer = buffer;
+        }
+
         this.out.write(
-            (this.protocol === null) ? buffer : this.protocol.generate(buffer, type),
+            packetizedBuffer,
             null,
             callback
         );

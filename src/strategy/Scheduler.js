@@ -54,6 +54,8 @@ class Scheduler {
         let nextTask = schedulerService.recommendNextTask(this.tasks);
         if (nextTask !== null) {
             this.runTask(nextTask);
+        } else {
+            Mep.Log.info(TAG, 'No more tasks');
         }
     }
 

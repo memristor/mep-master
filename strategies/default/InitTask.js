@@ -13,25 +13,30 @@ class InitTask extends Task {
 
         // Let's move around
         try {
-            let config = { speed: 40, tolerance: 100, direction: 'backward' };
+            let config = { speed: 80, tolerance: 150 };
 
             await position.set(new TunedPoint(-1000, 400), config);
-            await position.set(new TunedPoint(-1300, 0), config);
+            await position.set(new TunedPoint(-1200, 0), config);
             await position.set(new TunedPoint(79, -6), config);
-            await position.set(new TunedPoint(800, -300), config);
-            await position.set(new TunedPoint(-400, -575), config);
+            await position.set(new TunedPoint(500, 100), config);
+            config.speed += 20;
+            await position.set(new TunedPoint(-1100, 0), config);
+
+            //config.tolerance = -1;
             await position.set(new TunedPoint(-1300, 0), config);
             await position.rotate(new TunedAngle(0));
 
         } catch (e) {
-            this.onErrorForwardBack(e);
+            Mep.Log.error(TAG, e);
+            await this.onErrorForwardBack(e);
         }
 
         this.finish();
     }
 
-    onErrorForwardBack(taskError) {
-        Mep.Log.error(TAG, taskError);
+    async onErrorForwardBack(taskError) {
+        await position.straight(-100);
+        this.finish();
     }
 }
 

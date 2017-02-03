@@ -58,16 +58,22 @@ class Task {
      * Finish this task and run next one
      */
     finish() {
+        let lastState = this.state;
         this.state = Task.FINISHED;
-        this.scheduler.runNextTask();
+        if (lastState !== Task.FINISHED) {
+            this.scheduler.runNextTask();
+        }
     }
 
     /**
      * Suspend this task and run next one
      */
     suspend() {
+        let lastState = this.state;
         this.state = Task.SUSPENDED;
-        this.scheduler.runNextTask();
+        if (lastState !== Task.SUSPENDED) {
+            this.scheduler.runNextTask();
+        }
     }
 
     /**

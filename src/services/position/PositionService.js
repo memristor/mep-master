@@ -16,9 +16,15 @@ const TAG = 'PositionService';
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
 class PositionService extends EventEmitter {
+    get DIRECTION_FORWARD() { return 1; }
+    get DIRECTION_BACKWARD() { return -1; }
+    get DIRECTION_NONE() { return 0; }
+
     init(config) {
         this.config = config;
         this.currentSpeed = 0;
+        this.direction = this.DIRECTION_NONE;
+
         this.positionEstimator = new PositionEstimator();
         this.motionDriver = Mep.DriverManager.getDriver('MotionDriver');
 
@@ -27,6 +33,8 @@ class PositionService extends EventEmitter {
             params: {}
         };
         this.pathObstacleSources = [[], []];
+
+        this._goToNextQueuedPoint = this._goToNextQueuedPoint.bind(this);
 
         // Subscribe on sensors that can provide obstacles on the robot's terrain
         Mep.DriverManager.callMethodByGroup('terrain', 'on', ['pathObstacleDetected', this._onPathObstacleDetected.bind(this)]);
@@ -46,6 +54,10 @@ class PositionService extends EventEmitter {
      */
     getOrientation() {
         return this.positionEstimator.getOrientation();
+    }
+
+    getDirection() {
+        return this.motionDriver.getDirection();
     }
 
     _onPathObstacleDetected(source, relativePOI, detected, front) {
@@ -139,7 +151,6 @@ class PositionService extends EventEmitter {
     }
 
     _goToNextQueuedPoint(resolve, reject) {
-        let positionService = this;
         let point;
         if (this.required.points.length > 0) {
             point = this.required.points[0];
@@ -150,13 +161,14 @@ class PositionService extends EventEmitter {
                 this.required.params.tolerance,
                 this.required.params.speed
             ).then(() => {
-                this._goToNextQueuedPoint.bind(positionService);
                 this._goToNextQueuedPoint(resolve, reject);
+            }).catch((e) => {
+                reject(e);
             });
             return;
-        } else {
-            resolve();
         }
+
+        resolve();
     }
 
     _promiseToReachDestination(point, tolerance) {
@@ -255,6 +267,11 @@ class PositionService extends EventEmitter {
 
     }
 
+    straight(millimeters) {
+        this.motionDriver.goForward(millimeters);
+        return this._promiseToReachDestination(null, -1);
+    }
+
     /**
      * Rotate robot for an angle
      * @param tunedAngle {TunedAngle} - Angle to rotate
@@ -263,7 +280,7 @@ class PositionService extends EventEmitter {
     rotate(tunedAngle, options) {
         this.motionDriver.rotateTo(tunedAngle.getAngle());
 
-        return this._promiseToReachDestination(new Point(0, 0), 0);
+        return this._promiseToReachDestination(null, -1);
     }
 }
 
