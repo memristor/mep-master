@@ -8,6 +8,7 @@ class SecondTask extends Task {
     async onRun() {
         Mep.Log.info(TAG, 'Started execution');
         await Mep.Motion.go(new TunedPoint(-1300, 0));
+
         Mep.Motion.stop(true);
         this.finish();
         //await position.set(new TunedPoint(0, -800));

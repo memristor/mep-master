@@ -191,7 +191,7 @@ class MotionDriver extends EventEmitter  {
         ]), callback);
     }
 
-    _onDataReceived(buffer, type) {
+    _onPReceived(buffer) {
         // Ignore garbage
         let state = buffer.readInt8(0);
         let position = new Point(
@@ -199,7 +199,7 @@ class MotionDriver extends EventEmitter  {
             (buffer.readInt8(3) << 8) | (buffer.readInt8(4) & 0xFF)
         );
         let orientation = (buffer.readInt8(5) << 8) | (buffer.readInt8(6) & 0xFF);
-        let speed = (buffer.readInt8(6) << 8) | (buffer.readInt8(7) & 0xFF);
+        let speed = (buffer.readInt8(7) << 8) | (buffer.readInt8(8) & 0xFF);
 
         Mep.Telemetry.send(TAG, 'Speed', {speed: speed});
 
@@ -245,6 +245,12 @@ class MotionDriver extends EventEmitter  {
                 orientation,
                 this.config.precision
             );
+        }
+    }
+
+    _onDataReceived(buffer, type) {
+        if (type === 'P'.charCodeAt(0) && buffer.length === 9) {
+            this._onPReceived(buffer);
         }
     }
 
