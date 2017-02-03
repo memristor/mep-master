@@ -16,15 +16,12 @@ const TAG = 'MotionDriver';
  * @fires drivers.motion.MotionDriver#stateChanged
  */
 class MotionDriver extends EventEmitter  {
-    static get DIRECTION_FORWARD() { return 1; }
-    static get DIRECTION_BACKWARD() { return -1; }
-
-    static get STATE_IDLE() { return 1; }
-    static get STATE_STUCK() { return 2; }
-    static get STATE_MOVING() { return 3; }
-    static get STATE_ROTATING() { return 4; }
-    static get STATE_ERROR() { return 5; }
-    static get STATE_UNDEFINED() { return 6; }
+    static get STATE_IDLE() { return 'I'.charCodeAt(0); }
+    static get STATE_STUCK() { return 'S'.charCodeAt(0); }
+    static get STATE_MOVING() { return 'M'.charCodeAt(0); }
+    static get STATE_ROTATING() { return 'R'.charCodeAt(0); }
+    static get STATE_ERROR() { return 'E'.charCodeAt(0); }
+    static get STATE_UNDEFINED() { return 'U'.charCodeAt(0); }
 
     /**
      * @param name {String} - Unique driver name
@@ -45,7 +42,6 @@ class MotionDriver extends EventEmitter  {
 
         this.positon = new Point(config.startX, config.startY);
         this.state = MotionDriver.STATE_UNDEFINED;
-        this.stateChar = 'U';
         this.orientation = config.startOrientation;
 
         this.communicator = Mep.DriverManager.getDriver(config['@dependencies'].communicator);
@@ -169,51 +165,35 @@ class MotionDriver extends EventEmitter  {
 
     /**
      * Move robot to the absolute position
-     * @param positionX {Number} - X coordinate relative to start position of the robot
-     * @param positionY {Number} - Y coordinate relative to start position of the robot
+     * @param position {misc.Point} - Coordinate relative to start position of the robot
      * @param direction {Number} - Direction, can be MotionDriver.DIRECTION_FORWARD or MotionDriver.DIRECTION_BACKWARD
      */
-    moveToPosition(x, y, direction, callback) {
+    moveToPosition(position, direction, callback) {
         this.communicator.send(Buffer.from([
             'G'.charCodeAt(0),
-            x >> 8,
-            x & 0xff,
-            y >> 8,
-            y & 0xff,
+            position.getX() >> 8,
+            position.getX() & 0xff,
+            position.getY() >> 8,
+            position.getY() & 0xff,
             0,
             direction
         ]), callback);
     }
 
-    moveToCurvilinear(x, y, direction, callback) {
+    moveToCurvilinear(position, direction, callback) {
         this.communicator.send(Buffer.from([
             'N'.charCodeAt(0),
-            x >> 8,
-            x & 0xff,
-            y >> 8,
-            y & 0xff,
+            position.getX() >> 8,
+            position.getX() & 0xff,
+            position.getY() >> 8,
+            position.getY() & 0xff,
             direction
         ]), callback);
     }
 
-
-    _charToState(char) {
-        let states = {
-            'I': MotionDriver.STATE_IDLE,
-            'M': MotionDriver.STATE_MOVING,
-            'R': MotionDriver.STATE_ROTATING,
-            'S': MotionDriver.STATE_STUCK,
-            'E': MotionDriver.STATE_ERROR
-        };
-        if (states[char] !== undefined) {
-            return states[char];
-        }
-        return MotionDriver.STATE_UNDEFINED;
-    }
-
     _onDataReceived(buffer, type) {
         // Ignore garbage
-        let stateChar = String.fromCharCode(buffer.readInt8(0));
+        let state = buffer.readInt8(0);
         let position = new Point(
             (buffer.readInt8(1) << 8) | (buffer.readInt8(2) & 0xFF),
             (buffer.readInt8(3) << 8) | (buffer.readInt8(4) & 0xFF)
@@ -240,9 +220,8 @@ class MotionDriver extends EventEmitter  {
         }
 
         // If state is changed
-        if (stateChar !== this.stateChar) {
-            this.stateChar = stateChar;
-            this.state = this._charToState(stateChar);
+        if (state !== this.state) {
+            this.state = state;
 
             /**
              * State change event.
@@ -267,9 +246,6 @@ class MotionDriver extends EventEmitter  {
                 this.config.precision
             );
         }
-
-        // Read data again
-        // setInterval(this.requestRefreshData.bind(this), this.config.refreshDataPeriod);
     }
 
     /**

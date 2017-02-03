@@ -132,13 +132,14 @@ let Mep = {
 
         this.DriverManager = new (require('./drivers/DriverManager'))();
 
-        this.Position =
-            new (require('./services/position/PositionService'))();
+        this.Position = new (require('./services/position/PositionService'))();
+        this.Motion = new (require('./services/motion/MotionService'))();
         this.Terrain = new (require('./services/terrain/TerrainService'))();
         this.Scheduler = new (require('./services/scheduler/SchedulerService'))();
 
         this.DriverManager.init(() => {
             mep.Position.init(Config.get('Services:PositionService'));
+            mep.Motion.init(Config.get('Services:MotionService'));
             mep.Terrain.init(Config.get('Services:TerrainService'));
             mep.Scheduler.init(Config.get('Services:SchedulerService'));
 

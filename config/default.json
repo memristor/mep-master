@@ -75,16 +75,20 @@
 
     "Services": {
         "PositionService": {
-            "moveOptions": {
-                "pathfinding": false,
-                "direction": "forward",
-                "relative": false,
-                "tolerance": -1,
-                "speed": 100
-            },
-            "rotateOptions": {
-                "relative": false
-            }
+
+        },
+
+        "MotionService": {
+          "moveOptions": {
+            "pf": false,
+            "direction": 1,
+            "relative": false,
+            "tolerance": -1,
+            "speed": 100
+          },
+          "rotateOptions": {
+            "relative": false
+          }
         },
 
         "TerrainService": {
