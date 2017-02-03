@@ -29,6 +29,7 @@
     "require-new": "^1.1.0",
     "sinon": "^1.17.6",
     "socketcan": "^2.1.3",
+    "termios": "^0.1.3",
     "usage": "^0.7.1"
   }
 }
