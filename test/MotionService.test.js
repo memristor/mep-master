@@ -2,7 +2,7 @@ const sinon = require('sinon');
 const Point = Mep.require('misc/Point');
 const assert = require('assert');
 
-describe('PositionServiceTest', () => {
+describe('MotionServiceTest', () => {
     describe('#pathObstacleDetected', () => {
         let spy = sinon.spy();
         Mep.Motion.on('pathObstacleDetected', spy);

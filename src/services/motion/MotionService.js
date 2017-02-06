@@ -86,8 +86,8 @@ class MotionService extends EventEmitter {
     _onPathObstacleDetected(source, relativePOI, detected, front) {
         // If something is detected
         if (detected === true) {
-            this._pathObstacleDetections[front]++;
-
+            this._pathObstacleDetections[+front]++;
+            console.log(this._pathObstacleDetections);
             // Check if the obstacle is on the path
             if ((front === true && this.getDirection() === this.DIRECTION_FORWARD) ||
                 (front === false && this.getDirection() === this.DIRECTION_BACKWARD)) {
@@ -108,7 +108,7 @@ class MotionService extends EventEmitter {
                 }
             }
         } else {
-            if (--this._pathObstacleDetections[front] === 0) {
+            if (--this._pathObstacleDetections[+front] === 0) {
                 this.emit('pathObstacleDetected', false);
             }
         }

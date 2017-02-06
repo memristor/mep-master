@@ -23,6 +23,6 @@ describe('Point', () => {
         point.rotate(new Point(0, 0), -45);
 
         assert(+point.getY().toFixed(2) === 0);
-        assert(+point.getX().toFixed(2) === +(4 * Math.sqrt(2)).toFixed(2));
+        assert(+point.getX() | 0 === +(4 * Math.sqrt(2)) | 0);
     });
 });
