@@ -43,6 +43,7 @@ class MotionDriver extends EventEmitter  {
         this.positon = new Point(config.startX, config.startY);
         this.state = MotionDriver.STATE_UNDEFINED;
         this.orientation = config.startOrientation;
+        this._activeSpeed = config.startSpeed;
 
         this.communicator = Mep.DriverManager.getDriver(config['@dependencies'].communicator);
         this.communicator.on('data', this._onDataReceived.bind(this));
@@ -69,9 +70,10 @@ class MotionDriver extends EventEmitter  {
         }, 100);
         setTimeout(() => {
             if (motionDriver.getState() === MotionDriver.STATE_UNDEFINED) {
-                throw Error(TAG, 'No response from motion driver');
+                //throw Error(TAG, 'No response from motion driver');
             }
         }, this.config.connectionTimeout);
+        finishedCallback();
     }
 
     finishCommand(callback) {
@@ -157,6 +159,7 @@ class MotionDriver extends EventEmitter  {
      * @param speed {Number} - Speed (0 - 255)
      */
     setSpeed(speed, callback) {
+        this._activeSpeed = speed;
         this.communicator.send(Buffer.from([
             'V'.charCodeAt(0),
             speed
@@ -272,6 +275,10 @@ class MotionDriver extends EventEmitter  {
 
     getOrientation() {
         return this.orientation;
+    }
+
+    getActiveSpeed() {
+        return this._activeSpeed;
     }
 }
 

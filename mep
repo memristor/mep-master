@@ -1,9 +1,15 @@
 #!/bin/bash
 
-SHOW_LOGO=false
+SHOW_LOGO=true
 PERFORMANCE=false
-
 PERFORMANCE_PREFIX=
+
+# Turn on performance if there is `-p` or `--performance` flag
+for arg in $@; do
+    if [ ${arg} = "-p" ] || [ ${arg} = "--performance" ]; then
+        PERFORMANCE=true
+    fi
+done
 
 # Generated with `figlet`
 if [ $SHOW_LOGO = true ]; then
@@ -17,7 +23,13 @@ fi
 
 # Apply performance
 if [ $PERFORMANCE = true ]; then
-   PERFORMANCE_PREFIX="nice -n -20"
-fi
+    export NODE_ENV=production
 
+    if [ "$EUID" -ne 0 ]; then
+        echo "Please run as root to turn on process privileges"
+    else
+        PERFORMANCE_PREFIX="nice -n -20 "
+    fi
+fi
 ${PERFORMANCE_PREFIX} node --harmony-async-await src/Bootstrap.js "$@"
+

@@ -138,12 +138,18 @@ let Mep = {
         this.Scheduler = new (require('./services/scheduler/SchedulerService'))();
 
         this.DriverManager.init(() => {
-            mep.Position.init(Config.get('Services:PositionService'));
-            mep.Motion.init(Config.get('Services:MotionService'));
-            mep.Terrain.init(Config.get('Services:TerrainService'));
-            mep.Scheduler.init(Config.get('Services:SchedulerService'));
+            try {
+                mep.Position.init(Config.get('Services:PositionService'));
+                mep.Motion.init(Config.get('Services:MotionService'));
+                mep.Terrain.init(Config.get('Services:TerrainService'));
+                mep.Scheduler.init(Config.get('Services:SchedulerService'));
 
-            finishedCallback();
+                finishedCallback();
+            } catch (e) {
+                Mep.Log.error('Error during services initialization');
+                console.log(e);
+                return;
+            }
         });
     }
 };

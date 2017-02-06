@@ -3,6 +3,7 @@
 #include <vector>
 #include <deque>
 #include <iostream>
+#include <chrono>
 
 using namespace path_finding;
 
@@ -28,7 +29,10 @@ int main() {
     pf->addObstacle(points);
 
     std::cout << "Go to destination" << std::endl;
-    findPath(pf, 0, 0, 2370, 1130);
+    auto begin = std::chrono::high_resolution_clock::now();
+    //findPath(pf, 0, 0, 2370, 1130);
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count() << "ns" << std::endl;
 
     std::cout << "Let's return now" << std::endl;
     findPath(pf, 2370, 1130, 30, 30);

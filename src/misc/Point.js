@@ -59,8 +59,8 @@ class Point {
 
         let x = Math.cos(angle) * (this.x - originPoint.getX()) - Math.sin(angle) * (this.y - originPoint.getY()) + originPoint.getX();
         let y = Math.sin(angle) * (this.x - originPoint.getX()) + Math.cos(angle) * (this.y - originPoint.getY()) + originPoint.getY();
-        this.x = x;
-        this.y = y;
+        this.x = x | 0;
+        this.y = y | 0;
     }
 
     /**

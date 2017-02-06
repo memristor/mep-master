@@ -45,6 +45,7 @@ void PathFindingBinder::search(const Nan::FunctionCallbackInfo<Value> &args) {
     pathFinding->search(start, goal, ret);
 
 
+
     // Export `ret`
     Local<v8::Array> jsRet = Nan::New<v8::Array>();
     int i = 0;

@@ -2,6 +2,19 @@
   "Drivers": {
     "CanDriver": {
       "@class": "drivers/can/CanDriverSimulator"
+    },
+
+    "InfraredAuto": {
+      "@class": "drivers/infrared/InfraredDriver",
+      "@load": false,
+      "@dependencies": { "communicator": "CanDriver" },
+
+      "infraredMaxDistance": 600,
+      "sensorAngle": 90,
+      "sensorX": 0,
+      "sensorY": 0,
+      "deviceId": 1,
+      "objectSize": 150
     }
   }
 }

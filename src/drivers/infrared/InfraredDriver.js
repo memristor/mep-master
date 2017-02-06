@@ -90,7 +90,20 @@ class InfraredDriver extends EventEmitter {
         // Additional information
         this.front = (this.config.sensorAngle > 0 && this.config.sensorAngle < 180);
 
-        Mep.Log.debug(TAG, name, 'Detects at', '(' + this.x + ', ' + this.y + ')');
+        Mep.Log.debug(TAG, name, 'Detects at', this.poi);
+
+
+        // Let's try to simulate
+        let infraredDriver = this;
+        if (name === 'InfraredAuto') {
+            Mep.Log.info(TAG, 'Is in testing mode');
+            setTimeout(() => {
+                infraredDriver.processDetection(Buffer.from([0x01]));
+            }, 5000);
+            setTimeout(() => {
+                infraredDriver.processDetection(Buffer.from([0x00]));
+            }, 10 * 1000);
+        }
     }
 
     /**
@@ -113,8 +126,8 @@ class InfraredDriver extends EventEmitter {
          * Obstacle detected event.
          * @event drivers.infrared.InfraredDriver#obstacleDetected
          * @property {String} - Source name
-         * @property {Point} - Center of detected obstacle
-         * @property {Polygon} - Obstacle is approximated with a polygon
+         * @property {misc.Point} - Center of detected obstacle
+         * @property {misc.Polygon} - Obstacle is approximated with a polygon
          * @property {Boolean} - Is objected detected or not
          * @property {Object} - Additional information about detected object
          */
@@ -131,7 +144,7 @@ class InfraredDriver extends EventEmitter {
             }, this.config.duration);
         }
 
-        Mep.Log.debug(TAG, 'Detected at', this.x, this.y);
+        Mep.Log.debug(TAG, 'Detected at', this.poi);
     }
 
     getGroups() {

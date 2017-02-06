@@ -79,6 +79,7 @@
         },
 
         "MotionService": {
+          "hazardObstacleDistance": 150,
           "moveOptions": {
             "pf": false,
             "direction": 1,

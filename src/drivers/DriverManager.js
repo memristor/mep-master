@@ -187,7 +187,7 @@ class DriverManager {
         let load = moduleConfig['@load'];
         let classPath = moduleConfig['@class'];
         // Do not initialize if `load field == false`
-        if (load != false) {
+        if (load !== false) {
             let ModuleClass = Mep.require(classPath);
 
             // Resolve dependencies
@@ -198,6 +198,8 @@ class DriverManager {
             } else {
                 this._loadDriverBasic(ModuleClass, moduleConfig, driverIdentifier, classPath, finishedCallback);
             }
+        } else {
+            finishedCallback();
         }
     }
 

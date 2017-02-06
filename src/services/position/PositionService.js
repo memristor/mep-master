@@ -5,7 +5,7 @@ const driverManager = Mep.getDriverManager();
 const Point = Mep.require('misc/Point');
 const EventEmitter = require('events').EventEmitter;
 
-const TAG = 'PositionService';
+const TAG = 'PositionEstimator';
 
 /**
  * Implements algorithms to collect data from sensors and determine current robot's location

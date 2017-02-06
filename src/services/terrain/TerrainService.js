@@ -5,6 +5,7 @@ const Point = Mep.require('misc/Point');
 const Polygon = Mep.require('misc/Polygon');
 const PathFinding = require('./pathfinding/PathFinding');
 const driverManager = Mep.getDriverManager();
+const EventEmitter = require('events').EventEmitter;
 
 const TAG = 'TerrainService';
 
@@ -13,7 +14,7 @@ const TAG = 'TerrainService';
  * @memberOf services.terrain
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
-class TerrainService {
+class TerrainService extends EventEmitter {
     init(config) {
         this.obstacles = [];
         this.pf = new PathFinding(1500, -1500, 1000, -1000);
@@ -40,6 +41,7 @@ class TerrainService {
 
         if (detected === true) {
             this.addObstacle(polygon);
+            this.emit('obstacleDetected', centerPoint, polygon);
         } else {
             // TODO: Remove an obstacle
         }
@@ -47,7 +49,6 @@ class TerrainService {
 
     findPath(start, goal) {
         let points = [];
-        console.log(start, goal);
         let pointPairs = this.pf.search(start, goal);
 
         // Convert to `Array<Point>`
@@ -70,7 +71,7 @@ class TerrainService {
 
         if (polygon.getDuration() !== Infinity) {
             setTimeout(() => {
-                pathService.removeObstacle(id);
+                pathService.removeObstacle(polygon.getId());
             }, polygon.getDuration());
         }
 

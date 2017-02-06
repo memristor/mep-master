@@ -51,7 +51,13 @@ class Task {
         this.scheduler = scheduler;
 
         this.pathObstacleDetected = false;
-        Mep.Position.on('pathObstacleDetected', this.onPathObstacle.bind(this));
+
+        this.onPathObstacle = this.onPathObstacle.bind(this);
+        Mep.Motion.on('pathObstacleDetected', () => {
+            if (this.state === Task.ACTIVE) {
+                this.onPathObstacle();
+            }
+        });
     }
 
     /**
@@ -129,10 +135,14 @@ class Task {
      */
     onPathObstacle(detected) {
         this.pathObstacleDetected = detected;
+
         if (this.pathObstacleDetected === true) {
-            Mep.Position.stop();
+            Mep.Motion.stop();
+            Mep.Motion.pause();
+
+            setTimeout(() => { Mep.Motion.resume(); }, 2000);
         } else {
-            Mep.Position.continue();
+            Mep.Motion.resume();
         }
     }
 }
