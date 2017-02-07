@@ -116,13 +116,6 @@ class InfraredDriver extends EventEmitter {
         this.detected = !!(buffer.readInt8(0));
 
         /**
-         * Obstacle detected on the robot's terrain event. We need to stop robot as fast as possible.
-         * @event drivers.infrared.InfraredDriver#pathObstacleDetected
-         * @property {Boolean} - Obstacle is detected
-         */
-        this.emit('pathObstacleDetected', this.name, this.poi, this.detected, this.front);
-
-        /**
          * Obstacle detected event.
          * @event drivers.infrared.InfraredDriver#obstacleDetected
          * @property {String} - Source name

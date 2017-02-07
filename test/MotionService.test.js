@@ -1,5 +1,6 @@
 const sinon = require('sinon');
 const Point = Mep.require('misc/Point');
+const Polygon = Mep.require('misc/Polygon');
 const assert = require('assert');
 
 describe('MotionServiceTest', () => {

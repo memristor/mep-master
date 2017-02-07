@@ -11,13 +11,14 @@ class InitTask extends Task {
 
         // Let's move around
         try {
-            let config = { speed: 40, tolerance: 150 };
+            let config = { speed: 80, tolerance: 100, pf: true };
 
-            await Mep.Motion.go(new TunedPoint(300, 0), config);
+            await Mep.Motion.go(new TunedPoint(0, 0), config);
 
 
+
+            //await Mep.Motion.go(new TunedPoint(-1200, 0), config);
             /*
-            await Mep.Motion.go(new TunedPoint(-1200, 0), config);
             await Mep.Motion.go(new TunedPoint(79, -6), config);
             await Mep.Motion.go(new TunedPoint(500, 100), config);
             config.speed += 20;
@@ -29,6 +30,7 @@ class InitTask extends Task {
             //Mep.Motion.stop();
             await Mep.Motion.rotate(new TunedAngle(0), { speed: 30 });
             */
+
 
         } catch (e) {
             Mep.Log.error(TAG, e);

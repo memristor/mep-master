@@ -70,10 +70,9 @@ class MotionDriver extends EventEmitter  {
         }, 100);
         setTimeout(() => {
             if (motionDriver.getState() === MotionDriver.STATE_UNDEFINED) {
-                //throw Error(TAG, 'No response from motion driver');
+                throw Error(TAG, 'No response from motion driver');
             }
         }, this.config.connectionTimeout);
-        finishedCallback();
     }
 
     finishCommand(callback) {

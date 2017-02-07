@@ -1,7 +1,7 @@
 {
   "Drivers": {
     "CanDriver": {
-      "@class": "drivers/can/CanDriverSimulator"
+      "@class": "drivers/can/CanDriver"
     },
 
     "InfraredAuto": {
@@ -14,6 +14,32 @@
       "sensorX": 0,
       "sensorY": 0,
       "deviceId": 1,
+      "objectSize": 150
+    },
+
+    "InfraredFront": {
+      "@class": "drivers/infrared/InfraredDriver",
+      "@load": true,
+      "@dependencies": { "communicator": "CanDriver" },
+
+      "infraredMaxDistance": 400,
+      "sensorAngle": 90,
+      "sensorX": 0,
+      "sensorY": 0,
+      "deviceId": 32768,
+      "objectSize": 150
+    },
+
+    "InfraredBack": {
+      "@class": "drivers/infrared/InfraredDriver",
+      "@load": true,
+      "@dependencies": { "communicator": "CanDriver" },
+
+      "infraredMaxDistance": 300,
+      "sensorAngle": 270,
+      "sensorX": 0,
+      "sensorY": 0,
+      "deviceId": 32775,
       "objectSize": 150
     }
   }

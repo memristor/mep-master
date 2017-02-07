@@ -85,7 +85,7 @@
             "direction": 1,
             "relative": false,
             "tolerance": -1,
-            "speed": 100
+            "speed": 40
           },
           "rotateOptions": {
             "relative": false

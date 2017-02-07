@@ -52,10 +52,11 @@ class Task {
 
         this.pathObstacleDetected = false;
 
+        this._obstacleDetectedTimeout = null;
         this.onPathObstacle = this.onPathObstacle.bind(this);
-        Mep.Motion.on('pathObstacleDetected', () => {
+        Mep.Motion.on('pathObstacleDetected', (detected) => {
             if (this.state === Task.ACTIVE) {
-                this.onPathObstacle();
+                this.onPathObstacle(detected);
             }
         });
     }
@@ -136,11 +137,18 @@ class Task {
     onPathObstacle(detected) {
         this.pathObstacleDetected = detected;
 
+        if (this._obstacleDetectedTimeout !== null) {
+            clearTimeout(this._obstacleDetectedTimeout);
+        }
+
         if (this.pathObstacleDetected === true) {
+            console.log('pathObstacleDetected');
             Mep.Motion.stop();
             Mep.Motion.pause();
 
-            setTimeout(() => { Mep.Motion.resume(); }, 2000);
+            this._obstacleDetectedTimeout = setTimeout(() => {
+                Mep.Motion.resume();
+            }, 2000);
         } else {
             Mep.Motion.resume();
         }

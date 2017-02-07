@@ -22,7 +22,9 @@ class MotionService extends EventEmitter {
     get DIRECTION_NONE() { return 0; }
 
     init(config) {
-        this.config = config;
+        this.config = Object.assign({
+            hazardObstacleDistance: 200
+        }, config);
 
         this.motionDriver = Mep.DriverManager.getDriver('MotionDriver');
 
@@ -35,14 +37,12 @@ class MotionService extends EventEmitter {
         this._direction = this.DIRECTION_NONE;
         this._stopped = false;
         this._paused = false;
-        this._pathObstacleDetections = [0, 0];
 
         this._goToNextQueuedTarget = this._goToNextQueuedTarget.bind(this);
-        this._onPathObstacleDetected = this._onPathObstacleDetected.bind(this);
         this._onObstacleDetected = this._onObstacleDetected.bind(this);
 
         // Subscribe on sensors that can provide obstacles on the robot's terrain
-        Mep.DriverManager.callMethodByGroup('terrain', 'on', ['pathObstacleDetected', this._onPathObstacleDetected]);
+        //Mep.DriverManager.callMethodByGroup('terrain', 'on', ['pathObstacleDetected', this._onPathObstacleDetected]);
         Mep.Terrain.on('obstacleDetected', this._onObstacleDetected);
     }
 
@@ -58,58 +58,45 @@ class MotionService extends EventEmitter {
         return this._paused;
     }
 
-    _onObstacleDetected(centerPoint, polygon) {
-        if (centerPoint.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
-            // WARN: This could be slow
-            let line = new Line(Mep.Position.getPosition(), this._targetQueue.getTargetBack().getPoint());
-            if (line.isIntersectWithPolygon(polygon) === true) {
-                this.emit('pathObstacleDetected', true);
+    _onObstacleDetected(poi, polygon) {
+        let startTime = process.hrtime();
+        if (poi.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
+            // WARN: This could be slow!
+            // This algorithm is simple and cover all edge case scenarios.
+            // If it fast enough '_onPathObstacleDetected' can be replaced with this algorithm
+            let target = this._targetQueue.getTargetBack();
+            if (target !== null) {
+                let line = new Line(Mep.Position.getPosition(), target.getPoint());
+                if (line.isIntersectWithPolygon(polygon) === true) {
+                    this.emit('pathObstacleDetected', true);
+                }
             }
         }
+        let diffTime = process.hrtime(startTime);
+        console.log('Diff time', diffTime[0] * 1000 * 1000 + diffTime[1] / 1000, 'microseconds');
 
         let line = this._targetQueue.getPfLine();
         if (line !== null && line.isIntersectWithPolygon(polygon)) {
             // Redesign path
-            let points = Mep.Terrain.findPath(Mep.Position.getPosition(), this._targetQueue.getPfTarget());
+            let points = Mep.Terrain.findPath(Mep.Position.getPosition(), this._targetQueue.getPfTarget().getPoint());
             if (points.length > 0) {
                 let params = this._targetQueue.getPfTarget().getParams();
                 this._targetQueue.empty();
-                this._targetQueue.addPointsFront(points, params);
+                this._targetQueue.addPointsBack(points, params);
+                if (params.tolerance == -1) {
+                    this.stop();
+                    let motionService = this;
+                    setTimeout(() => {
+                        motionService._goToNextQueuedTarget();
+                    }, 100);
+                } else {
+                    this.motionDriver.finishCommand();
+                    this._goToNextQueuedTarget();
+                }
             } else {
                 Mep.Log.warn(TAG, 'Cannot redesign path, possible crash!');
                 // There will be no crash if obstacle move away or
                 // if robot stop thanks to `pathObstacleDetected` sensors
-            }
-        }
-    }
-
-    _onPathObstacleDetected(source, relativePOI, detected, front) {
-        // If something is detected
-        if (detected === true) {
-            this._pathObstacleDetections[+front]++;
-            console.log(this._pathObstacleDetections);
-            // Check if the obstacle is on the path
-            if ((front === true && this.getDirection() === this.DIRECTION_FORWARD) ||
-                (front === false && this.getDirection() === this.DIRECTION_BACKWARD)) {
-                // Check if it is outside of terrain
-                let poi = relativePOI.clone();
-                poi.rotate(new Point(0, 0), Mep.Position.getOrientation());
-                poi.translate(Mep.Position.getPosition());
-                if (poi.getX() < 1500 && poi.getX() > -1500 &&
-                    poi.getY() < 1000 && poi.getY() > -1000) {
-                    // TODO: Check if it is not a static obstacle
-
-                    /**
-                     * Obstacle detected on robot's path
-                     * @event services.motion.MotionService#pathObstacleDetected
-                     * @property {Boolean} detected - True if obstacle is detected
-                     */
-                    this.emit('pathObstacleDetected', true);
-                }
-            }
-        } else {
-            if (--this._pathObstacleDetections[+front] === 0) {
-                this.emit('pathObstacleDetected', false);
             }
         }
     }
@@ -269,6 +256,7 @@ class MotionService extends EventEmitter {
      * @param softStop - If true robot will turn of motors
      */
     stop(softStop = false) {
+        console.log('stopped', softStop);
         this._stopped = true;
         if (softStop === true) {
             this.motionDriver.softStop();
@@ -284,7 +272,7 @@ class MotionService extends EventEmitter {
     resume() {
         if (this._paused === true) {
             this._paused = false;
-            this._goToNextQueuedPoint();
+            this._goToNextQueuedTarget();
         }
     }
 

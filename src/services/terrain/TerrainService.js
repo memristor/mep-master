@@ -39,9 +39,13 @@ class TerrainService extends EventEmitter {
         polygon.rotate(new Point(0, 0), Mep.getPositionService().getOrientation());
         polygon.translate(Mep.getPositionService().getPosition());
 
+        let poi = centerPoint.clone();
+        poi.rotate(new Point(0, 0), Mep.getPositionService().getOrientation());
+        poi.translate(Mep.getPositionService().getPosition());
+
         if (detected === true) {
             this.addObstacle(polygon);
-            this.emit('obstacleDetected', centerPoint, polygon);
+            this.emit('obstacleDetected', poi, polygon);
         } else {
             // TODO: Remove an obstacle
         }

@@ -45,7 +45,7 @@ class MotionTargetQueue {
         if (target !== null) {
             return (new Line(
                 Mep.Position.getPosition(),
-                target
+                target.getPoint()
             ));
         }
         return null;
@@ -57,7 +57,7 @@ class MotionTargetQueue {
      */
     getPfTarget() {
         let target = this.getTargetBack();
-        if (target !== null && target.pf === true) {
+        if (target !== null && target.getParams().pf === true) {
             return target;
         }
         return null;
