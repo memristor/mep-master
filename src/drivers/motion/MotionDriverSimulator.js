@@ -65,9 +65,9 @@ class MotionDriverSimulator extends EventEmitter {
     }
 
     onOrientationChanged(packet) {
-        this.state = packet.params.state;
-        Mep.Log.debug(TAG, 'New state', this.state);
-        this.emit('orientationChanged', this.getOrientation());
+        this.orientation = packet.params.orientation;
+        Mep.Log.debug(TAG, 'New orientation', this.orientation);
+        this.emit('orientationChanged', this.name, this.getOrientation());
     }
 
     getState() {
