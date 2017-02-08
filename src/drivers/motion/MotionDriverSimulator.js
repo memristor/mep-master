@@ -24,7 +24,6 @@ class MotionDriverSimulator extends EventEmitter {
     constructor(name, config) {
         super();
 
-        let motionDriverSimulator = this;
         this.name = name;
         this.config = Object.assign({
             startX: -1300,
@@ -36,33 +35,39 @@ class MotionDriverSimulator extends EventEmitter {
         this.orientation = this.config.startOrientation;
         this.direction = MotionDriverSimulator.DIRECTION_FORWARD;
 
-        // Position changed
-        Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'positionChanged'), (packet) => {
-            motionDriverSimulator.position.setX(packet.params.x);
-            motionDriverSimulator.position.setY(packet.params.y);
-            motionDriverSimulator.emit(
-                'positionChanged',
-                motionDriverSimulator.name,
-                motionDriverSimulator.getPosition(),
-                motionDriverSimulator.config.precision
-            );
-        });
+        this.onPositionChanged = this.onPositionChanged.bind(this);
+        this.onStateChanged = this.onStateChanged.bind(this);
+        this.onOrientationChanged = this.onOrientationChanged.bind(this);
 
-        // State changed
-        Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'stateChanged'), (packet) => {
-            motionDriverSimulator.state = packet.params.state;
-            Mep.Log.debug(TAG, 'New state', motionDriverSimulator.state);
-            motionDriverSimulator.emit('stateChanged', motionDriverSimulator.getState());
-        });
-
-        // Orientation changed
-        Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'orientationChanged'), (packet) => {
-            motionDriverSimulator.state = packet.params.state;
-            Mep.Log.debug(TAG, 'New state', motionDriverSimulator.state);
-            motionDriverSimulator.emit('orientationChanged', motionDriverSimulator.getOrientation());
-        });
+        // Events from simulator
+        Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'positionChanged'), this.onPositionChanged);
+        Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'stateChanged'), this.onStateChanged);
+        Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'orientationChanged'), this.onOrientationChanged);
 
         Mep.Log.debug(TAG, 'Driver with name', name, 'initialized');
+    }
+
+    onPositionChanged(packet) {
+        this.position.setX(packet.params.x);
+        this.position.setY(packet.params.y);
+        this.emit(
+            'positionChanged',
+            this.name,
+            this.getPosition(),
+            this.config.precision
+        );
+    }
+
+    onStateChanged(packet) {
+        this.state = packet.params.state;
+        Mep.Log.debug(TAG, 'New state', this.state);
+        this.emit('stateChanged', this.getState());
+    }
+
+    onOrientationChanged(packet) {
+        this.state = packet.params.state;
+        Mep.Log.debug(TAG, 'New state', this.state);
+        this.emit('orientationChanged', this.getOrientation());
     }
 
     getState() {
@@ -77,12 +82,20 @@ class MotionDriverSimulator extends EventEmitter {
         return this.direction;
     }
 
-    moveToPosition(x, y, direction) {
+    moveToPosition(position, direction, callback) {
         Mep.Telemetry.send(TAG, 'moveToPosition', {
-            x: x,
-            y: y,
+            x: position.getX(),
+            y: position.getY(),
             direction: direction
         });
+    }
+
+    finishCommand(callback) {
+        Mep.Log.warn(TAG, 'finishCommand() not implemented');
+    }
+
+    moveToCurvilinear(position, direction, callback) {
+        this.moveToPosition(position, direction, callback);
     }
 
     setSpeed(speed) {

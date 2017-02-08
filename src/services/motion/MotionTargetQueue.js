@@ -11,8 +11,9 @@ const TAG = 'MotionTargetQueue';
  * @memberOf services.motion
  */
 class MotionTargetQueue {
-    constructor() {
+    constructor(changedCallback) {
         this._targets = [];
+        this._changedCallback = (changedCallback === undefined) ? (() => {}) : changedCallback;
     }
 
     /**
@@ -32,6 +33,7 @@ class MotionTargetQueue {
         for (let point of points) {
             this.addPointBack(point, params)
         }
+        this._changedCallback(this._targets);
     }
 
     /**
@@ -40,6 +42,11 @@ class MotionTargetQueue {
      * @param params {Object} - Params for target
      */
     addPointBack(point, params) {
+        this._addPointBack(point, params);
+        this._changedCallback(this._targets);
+    }
+
+    _addPointBack(point, params) {
         this._targets.push(new MotionTarget(point, params));
     }
 
@@ -52,6 +59,7 @@ class MotionTargetQueue {
         for (let point of points) {
             this.addPointFront(point, params);
         }
+        this._changedCallback(this._targets);
     }
 
     /**
@@ -60,6 +68,11 @@ class MotionTargetQueue {
      * @param params {Object} - Params for target
      */
     addPointFront(point, params) {
+        this._addPointFront(point, params);
+        this._changedCallback(this._targets);
+    }
+
+    _addPointFront(point, params) {
         this._targets.unshift(new MotionTarget(point, params));
     }
 
@@ -138,6 +151,7 @@ class MotionTargetQueue {
      */
     empty() {
         this._targets = [];
+        this._changedCallback();
     }
 }
 

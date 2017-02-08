@@ -29,7 +29,9 @@ class MotionService extends EventEmitter {
 
         this.motionDriver = Mep.DriverManager.getDriver('MotionDriver');
 
-        this._targetQueue = new MotionTargetQueue();
+        this._targetQueue = new MotionTargetQueue((targets) => {
+            Mep.Telemetry.send(TAG, 'TargetQueueChanged', targets);
+        });
 
         // Global resolve and reject used outside (strategies)
         this._resolve = null;

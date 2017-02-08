@@ -17,7 +17,7 @@ class Polygon {
      */
     constructor(tag, duration, points) {
         // Check points
-        if (points.length < 3) {
+        if (points !== undefined && points.length < 3) {
             let msg = 'Polygon requires at least 3 points';
             Mep.Log.error(TAG, msg);
             throw Error(msg);
@@ -37,6 +37,7 @@ class Polygon {
             new Point(centerPoint.getX() + sideSize / 2, centerPoint.getY() + sideSize / 2),
             new Point(centerPoint.getX() - sideSize / 2, centerPoint.getY() + sideSize / 2),
         ];
+        return this;
     }
 
     setId(id) {

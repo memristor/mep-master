@@ -9,16 +9,16 @@ const TAG = 'MotionTarget';
  */
 class MotionTarget {
     constructor(point, params) {
-        this._point = point;
-        this._params = params;
+        this.point = point;
+        this.params = params;
     }
 
     getPoint() {
-        return this._point;
+        return this.point;
     }
 
     getParams() {
-        return this._params;
+        return this.params;
     }
 }
 
