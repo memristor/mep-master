@@ -113,6 +113,10 @@ class MotionDriverSimulator extends EventEmitter {
     getGroups() {
         return ['position'];
     }
+
+    getActiveSpeed() {
+        return 100;
+    }
 }
 
 module.exports = MotionDriverSimulator;

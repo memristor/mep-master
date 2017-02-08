@@ -29,8 +29,12 @@ class MotionService extends EventEmitter {
 
         this.motionDriver = Mep.DriverManager.getDriver('MotionDriver');
 
+        // Important for simulation
         this._targetQueue = new MotionTargetQueue((targets) => {
             Mep.Telemetry.send(TAG, 'TargetQueueChanged', targets);
+        });
+        Mep.Telemetry.send(TAG, 'HazardObstacleDistanceSet', {
+            hazardObstacleDistance: this.config.hazardObstacleDistance
         });
 
         // Global resolve and reject used outside (strategies)
