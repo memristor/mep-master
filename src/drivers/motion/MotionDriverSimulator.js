@@ -15,11 +15,11 @@ const TAG = 'MotionDriverSimulator';
 class MotionDriverSimulator extends EventEmitter {
     static get DIRECTION_FORWARD() { return 1; }
     static get DIRECTION_BACKWARD() { return -1; }
-    static get STATE_IDLE() { return 1; }
-    static get STATE_STUCK() { return 2; }
-    static get STATE_MOVING() { return 3; }
-    static get STATE_ROTATING() { return 4; }
-    static get STATE_ERROR() { return 5; }
+    static get STATE_IDLE() { return 'I'.charCodeAt(0); }
+    static get STATE_STUCK() { return 'S'.charCodeAt(0); }
+    static get STATE_MOVING() { return 'M'.charCodeAt(0); }
+    static get STATE_ROTATING() { return 'R'.charCodeAt(0); }
+    static get STATE_ERROR() { return 'E'.charCodeAt(0); }
 
     constructor(name, config) {
         super();
@@ -59,9 +59,9 @@ class MotionDriverSimulator extends EventEmitter {
     }
 
     onStateChanged(packet) {
-        this.state = packet.params.state;
+        this.state = packet.params.state | 0;
         Mep.Log.debug(TAG, 'New state', this.state);
-        this.emit('stateChanged', this.getState());
+        this.emit('stateChanged', this.name, this.getState());
     }
 
     onOrientationChanged(packet) {

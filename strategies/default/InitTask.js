@@ -11,7 +11,7 @@ class InitTask extends Task {
 
         // Let's move around
         try {
-            let config = { speed: 80, tolerance: 100, pf: true };
+            let config = { speed: 80, pf: true };
 
             await Mep.Motion.go(new TunedPoint(700, -800), config);
             await Mep.Motion.go(new TunedPoint(-750, -850), config);
