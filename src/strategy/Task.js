@@ -142,7 +142,6 @@ class Task {
         }
 
         if (this.pathObstacleDetected === true) {
-            console.log('pathObstacleDetected');
             Mep.Motion.stop();
             Mep.Motion.pause();
 

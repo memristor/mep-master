@@ -8,7 +8,9 @@
   "Drivers": {
     "MotionDriver": {
       "@class": "drivers/motion/MotionDriverSimulator",
-      "@load": true
+      "@load": true,
+      "startX": 0,
+      "startY": 0
     },
 
     "CanDriver": {

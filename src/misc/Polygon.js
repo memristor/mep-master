@@ -2,6 +2,8 @@
 
 /** @namespace misc */
 
+const Point = Mep.require('misc/Point');
+
 /**
  * Describes an polygon
  * @see https://en.wikipedia.org/wiki/Polygon
@@ -26,6 +28,15 @@ class Polygon {
         this.tag = tag;
         this.points = points;
         this.id = null;
+    }
+
+    makeSquareAroundPoint(centerPoint, sideSize) {
+        this.points = [
+            new Point(centerPoint.getX() - sideSize / 2, centerPoint.getY() - sideSize / 2),
+            new Point(centerPoint.getX() + sideSize / 2, centerPoint.getY() - sideSize / 2),
+            new Point(centerPoint.getX() + sideSize / 2, centerPoint.getY() + sideSize / 2),
+            new Point(centerPoint.getX() - sideSize / 2, centerPoint.getY() + sideSize / 2),
+        ];
     }
 
     setId(id) {

@@ -6,23 +6,21 @@ const assert = require('assert');
 describe('MotionServiceTest', () => {
     describe('#pathObstacleDetected', () => {
         let spy = sinon.spy();
-        Mep.Motion.on('pathObstacleDetected', spy);
-        Mep.Motion._direction = Mep.Motion.DIRECTION_FORWARD;
 
-        Mep.Motion._onPathObstacleDetected('Infrared', new Point(300, 0), true, true);
+        Mep.Motion.on('pathObstacleDetected', spy);
+
+        let point = new Point(100, 0);
+        let polygon = new Polygon().makeSquareAroundPoint(point, 100);
+        Mep.Motion._onPathObstacleDetected(point, polygon);
         it('should fire an event `pathObstacleDetected`', () => {
             assert(spy.args[0][0] === true);
         });
 
-        Mep.Motion._onPathObstacleDetected('Infrared', new Point(300, 0), false, true);
-        it('should delete detected obstacle', () => {
-            assert(spy.args[1][0] === false);
-        });
-
-
-        Mep.Motion._onPathObstacleDetected('Infrared', new Point(4000, 0), true, true);
+        point = new Point(500, 0);
+        polygon = new Polygon().makeSquareAroundPoint(point, 100);
+        Mep.Motion._onPathObstacleDetected(point, polygon);
         it('should not fire an event', () => {
-            assert(spy.args[2] === undefined);
+            assert(spy.args[1] === undefined);
         });
     });
 });

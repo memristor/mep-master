@@ -23,7 +23,8 @@ class MotionService extends EventEmitter {
 
     init(config) {
         this.config = Object.assign({
-            hazardObstacleDistance: 200
+            hazardObstacleDistance: 200,
+            timeToStop: 100
         }, config);
 
         this.motionDriver = Mep.DriverManager.getDriver('MotionDriver');
@@ -42,7 +43,6 @@ class MotionService extends EventEmitter {
         this._onObstacleDetected = this._onObstacleDetected.bind(this);
 
         // Subscribe on sensors that can provide obstacles on the robot's terrain
-        //Mep.DriverManager.callMethodByGroup('terrain', 'on', ['pathObstacleDetected', this._onPathObstacleDetected]);
         Mep.Terrain.on('obstacleDetected', this._onObstacleDetected);
     }
 
@@ -59,11 +59,8 @@ class MotionService extends EventEmitter {
     }
 
     _onObstacleDetected(poi, polygon) {
-        let startTime = process.hrtime();
+        // Detect if obstacle is too close
         if (poi.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
-            // WARN: This could be slow!
-            // This algorithm is simple and cover all edge case scenarios.
-            // If it fast enough '_onPathObstacleDetected' can be replaced with this algorithm
             let target = this._targetQueue.getTargetBack();
             if (target !== null) {
                 let line = new Line(Mep.Position.getPosition(), target.getPoint());
@@ -72,9 +69,8 @@ class MotionService extends EventEmitter {
                 }
             }
         }
-        let diffTime = process.hrtime(startTime);
-        console.log('Diff time', diffTime[0] * 1000 * 1000 + diffTime[1] / 1000, 'microseconds');
 
+        // Detect if obstacle intersect path and try to design a new path
         let line = this._targetQueue.getPfLine();
         if (line !== null && line.isIntersectWithPolygon(polygon)) {
             // Redesign path
@@ -84,11 +80,7 @@ class MotionService extends EventEmitter {
                 this._targetQueue.empty();
                 this._targetQueue.addPointsBack(points, params);
                 if (params.tolerance == -1) {
-                    this.stop();
-                    let motionService = this;
-                    setTimeout(() => {
-                        motionService._goToNextQueuedTarget();
-                    }, 100);
+                    this.stop().then(this._goToNextQueuedTarget);
                 } else {
                     this.motionDriver.finishCommand();
                     this._goToNextQueuedTarget();
@@ -256,14 +248,18 @@ class MotionService extends EventEmitter {
      * @param softStop - If true robot will turn of motors
      */
     stop(softStop = false) {
-        console.log('stopped', softStop);
         this._stopped = true;
         if (softStop === true) {
             this.motionDriver.softStop();
         } else {
             this.motionDriver.stop();
         }
+
+        return new Promise((resolve, reject) => {
+            setTimeout(resolve, this.config.timeToStop);
+        });
     }
+
 
     pause() {
         this._paused = true;

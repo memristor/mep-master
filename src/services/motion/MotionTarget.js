@@ -1,5 +1,12 @@
+'use strict';
+/** @namespace services.motion */
+
 const TAG = 'MotionTarget';
 
+/**
+ * Target (point & params) that robot has to reach
+ * @memberOf services.motion
+ */
 class MotionTarget {
     constructor(point, params) {
         this._point = point;

@@ -49,6 +49,10 @@ class MotionDriver extends EventEmitter  {
         this.communicator.on('data', this._onDataReceived.bind(this));
     }
 
+    /**
+     * Check driver by checking checking communication with motion driver board
+     * @param finishedCallback {Function} - Fire callback if driver is loaded successfully
+     */
     init(finishedCallback) {
         let motionDriver = this;
 
@@ -75,17 +79,26 @@ class MotionDriver extends EventEmitter  {
         }, this.config.connectionTimeout);
     }
 
+    /**
+     * Finish `moveToCurvilinear` command and prepare robot for another one
+     * @param callback {Function} - Callback will be called when finish command is sent
+     */
     finishCommand(callback) {
         this.communicator.send(Buffer.from(['i'.charCodeAt(0)]), callback);
         Mep.Log.debug(TAG, 'Finish command sent');
     }
 
+    /**
+     * Reset all settings in motion driver
+     * @param callback {Function} - Callback will be called when command is sent
+     */
     reset(callback) {
         this.communicator.send(Buffer.from(['R'.charCodeAt(0)]), callback);
     }
 
     /**
      * Request state, position and orientation from motion driver
+     * @param callback {Function} - Callback will be called when command is sent
      */
     requestRefreshData(callback) {
         this.communicator.send(Buffer.from(['P'.charCodeAt(0)]), callback);
@@ -96,6 +109,7 @@ class MotionDriver extends EventEmitter  {
      * @param x {Number} - New X coordinate relative to start position of the robot
      * @param y {Number} - New Y coordinate relative to start position of the robot
      * @param orientation {Number} - New robot's orientation
+     * @param callback {Function} - Callback will be called when command is sent
      */
     setPositionAndOrientation(x, y, orientation, callback) {
         let data = Buffer.from([
@@ -111,6 +125,11 @@ class MotionDriver extends EventEmitter  {
         this.communicator.send(data, callback);
     }
 
+    /**
+     * Rotate robot to given angle
+     * @param angle {Number} - Angle
+     * @param callback {Function} - Callback will be called when command is sent
+     */
     rotateTo(angle, callback) {
         let data = Buffer.from([
             'A'.charCodeAt(0),
@@ -120,6 +139,12 @@ class MotionDriver extends EventEmitter  {
         this.communicator.send(data, callback);
     }
 
+    /**
+     * Move robot forward or backward depending on sign
+     * @param millimeters
+     * @param callback
+     * @deprecated
+     */
     goForward(millimeters, callback) {
         let data = Buffer.from([
             'D'.charCodeAt(0),
@@ -132,6 +157,7 @@ class MotionDriver extends EventEmitter  {
 
     /**
      * Stop the robot.
+     * @param callback {Function} - Callback will be called when command is sent
      */
     stop(callback) {
         this.communicator.send(Buffer.from(['S'.charCodeAt(0)]), callback);
@@ -139,23 +165,31 @@ class MotionDriver extends EventEmitter  {
 
     /**
      * Stop robot by turning off motors.
+     * @param callback {Function} - Callback will be called when command is sent
      */
     softStop(callback) {
         this.communicator.send(Buffer.from(['s'.charCodeAt(0)]), callback);
     }
 
-    setRefreshInterval(interval) {
+    /**
+     * Set required refresh interval of robot status. Note that it is required
+     * refresh interval and robot can choose to send or not depending on it's state.
+     * @param interval {Number} - Period in milliseconds
+     * @param callback {Function} - Callback will be called when command is sent
+     */
+    setRefreshInterval(interval, callback) {
         this.communicator.send(Buffer.from([
             'p'.charCodeAt(0),
             interval >> 8,
             interval & 0xff,
-        ]));
+        ]), callback);
     }
 
 
     /**
      * Set default speed of the robot
      * @param speed {Number} - Speed (0 - 255)
+     * @param callback {Function} - Callback will be called when command is sent
      */
     setSpeed(speed, callback) {
         this._activeSpeed = speed;
@@ -166,9 +200,11 @@ class MotionDriver extends EventEmitter  {
     }
 
     /**
-     * Move robot to the absolute position
-     * @param position {misc.Point} - Coordinate relative to start position of the robot
-     * @param direction {Number} - Direction, can be MotionDriver.DIRECTION_FORWARD or MotionDriver.DIRECTION_BACKWARD
+     * Move robot to absolute position
+     * @param position {misc.Point} - Required position of the robot
+     * @param direction {Number} - Direction, can be MotionDriver.DIRECTION_FORWARD or
+     * MotionDriver.DIRECTION_BACKWARD
+     * @param callback {Function} - Callback will be called when command is sent
      */
     moveToPosition(position, direction, callback) {
         this.communicator.send(Buffer.from([
@@ -182,6 +218,14 @@ class MotionDriver extends EventEmitter  {
         ]), callback);
     }
 
+    /**
+     * Move robot to absolute position but robot make curves to speed up motion. This
+     * command requires `finishCommand()` before next motion command.
+     * @param position {misc.Point} - Required position of the robot
+     * @param direction {Number} - Direction, can be MotionDriver.DIRECTION_FORWARD or
+     * MotionDriver.DIRECTION_BACKWARD
+     * @param callback {Function} - Callback will be called when command is sent
+     */
     moveToCurvilinear(position, direction, callback) {
         this.communicator.send(Buffer.from([
             'N'.charCodeAt(0),
@@ -193,6 +237,11 @@ class MotionDriver extends EventEmitter  {
         ]), callback);
     }
 
+    /**
+     * Packet type P is received
+     * @param buffer {Buffer} - Payload
+     * @private
+     */
     _onPReceived(buffer) {
         // Ignore garbage
         let state = buffer.readInt8(0);
@@ -250,6 +299,13 @@ class MotionDriver extends EventEmitter  {
         }
     }
 
+    /**
+     * Callback will be called when new packet is arrived and it will dispatch event to new
+     * callback depending on packet type
+     * @param buffer {Buffer} - Payload
+     * @param type {String} - Packet type
+     * @private
+     */
     _onDataReceived(buffer, type) {
         if (type === 'P'.charCodeAt(0) && buffer.length === 9) {
             this._onPReceived(buffer);
