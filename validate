@@ -1,0 +1,17 @@
+#!/bin/bash
+
+
+# Check syntax
+echo "Syntax validation started"
+echo "-------------------------"
+for file in $(find ./src -name *.js); do
+	echo "Validating: ${file}"
+	node -c --harmony-async-await ${file}
+done
+
+
+# Run tests
+echo ""
+echo "Unit test validation started"
+echo "----------------------------"
+npm test
