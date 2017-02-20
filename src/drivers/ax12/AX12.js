@@ -72,6 +72,7 @@ class AX12 {
     }
 
     _onDataReceived(data) {
+        // Length === 1 means there is an error in communication (UART, Servo <--> AVR)
         if (data.length === 1) {
             switch(data.readInt8(0)) {
                 case 0x03:
@@ -100,7 +101,7 @@ class AX12 {
 
         if (this.uniqueDataReceivedCallback !== null) {
             this.uniqueDataReceivedCallback(data);
-        } else {
+        } else if (this.config.id !== 0xFE) {
             Mep.Log.warn(TAG, this.name, 'Unhandled response', data);
         }
     }

@@ -3,7 +3,7 @@ const AX12 = require('./AX12');
 const CAN = require('../can/CanDriver');
 
 let ax = new AX12('test', {
-    id: 1,
+    id: 0xFE,
     _communicator: new CAN('CANTest', {})
 });
 
@@ -15,11 +15,4 @@ let ax = new AX12('test', {
 
 //ax.getTemperature().then((temperature) => { console.log('Temperature:', temperature); ax.setLED(true); });
 
-ax.setSpeed(400);
-ax.setPosition(200);
-
-setInterval(() => {
-    ax.getStatus().then((status) => { console.log(status); });
-}, 500);
-
-//ax.setLED(true);
+ax.setLED(true);
