@@ -53,10 +53,13 @@ class AX12 {
     constructor(name, config) {
         this.config = Object.assign({
             canId: 2000,
-            id: 1
+            id: 0xFE
         }, config);
+        this.name = name;
 
         this._onDataReceived = this._onDataReceived.bind(this);
+
+        this.uniqueDataReceivedCallback = null;
 
         this.communicator = null;
         if (this.config._communicator !== undefined) {
@@ -69,7 +72,37 @@ class AX12 {
     }
 
     _onDataReceived(data) {
-        console.log(data);
+        if (data.length === 1) {
+            switch(data.readInt8(0)) {
+                case 0x03:
+                    Mep.Log.error(TAG, this.name, 'RX Timeout error');
+                    break;
+
+                case 0x02:
+                    Mep.Log.error(TAG, this.name, 'RX Data corrupted');
+                    break;
+
+                case 0x04:
+                    Mep.Log.error(TAG, this.name, 'TX transfer failed');
+                    break;
+
+                case 0x05:
+                    Mep.Log.error(TAG, this.name, 'TX transfer timeout');
+                    break;
+
+                default:
+                    Mep.Log.error(TAG, this.name, 'Unhandled error', data);
+                    break;
+            }
+            return;
+        }
+
+
+        if (this.uniqueDataReceivedCallback !== null) {
+            this.uniqueDataReceivedCallback(data);
+        } else {
+            Mep.Log.warn(TAG, this.name, 'Unhandled response', data);
+        }
     }
 
     init(callback) {
@@ -78,12 +111,38 @@ class AX12 {
     }
 
     getTemperature() {
-        this._readByte(AX12.AX_PRESENT_TEMPERATURE);
+        return this._readByte(AX12.AX_PRESENT_TEMPERATURE);
+    }
+
+    async getVoltage() {
+        let val = await this._readByte(AX12.AX_PRESENT_VOLTAGE);
+        return val / 10;
+    }
+
+    getLoad() {
+        return this._readByte(AX12.AX_PRESENT_LOAD_L);
+    }
+
+    getTorqueLimit() {
+        return this._readByte(AX12.AX_TORQUE_LIMIT_L);
+    }
+
+    getFirmwareVersion() {
+        return this._readByte(AX12.AX_VERSION);
+    }
+
+    async getStatus() {
+        let status = {};
+        status.temperature = await this.getTemperature();
+        status.voltage = await this.getVoltage();
+        status.load = await this.getLoad();
+        status.firmwareVersion = await this.getFirmwareVersion();
+        return status;
     }
 
     setPosition(position) {
         if (position > 300 || position < 0) {
-            Mep.Log.error(TAG, 'Position out of range!');
+            Mep.Log.error(TAG, this.name, 'Position out of range!');
             return;
         }
 
@@ -92,11 +151,19 @@ class AX12 {
 
     setSpeed(speed) {
         if (speed > 1023 || speed < 0) {
-            Mep.Log.error(TAG, 'Speed out of range!');
+            Mep.Log.error(TAG, this.name, 'Speed out of range!');
             return;
         }
 
         this._writeWord(AX12.AX_GOAL_SPEED_L, speed | 0);
+    }
+
+    setCWAngleLimit(angle) {
+        this._writeWord(AX12.AX_CW_ANGLE_LIMIT_L, (angle * (1023 / 300)) | 0);
+    }
+
+    setCCWAngleLimit(angle) {
+        this._writeWord(AX12.AX_CCW_ANGLE_LIMIT_L, (angle * (1023 / 300)) | 0);
     }
 
     setLED(on) {
@@ -129,15 +196,31 @@ class AX12 {
     }
 
     _readByte(address) {
-        this.communicator.send(
-            this.config.canId,
-            Buffer.from([
-                this.config.id,     // AX12 ID
-                0x04,               // Length
-                0x02,               // Read
-                address,            // Address (function)
-                0x01
-            ]));
+        let ax = this;
+        let buffer = Buffer.from([
+            this.config.id,     // AX12 ID
+            0x04,               // Length
+            0x02,               // Read
+            address,            // Address (function)
+            0x01
+        ]);
+
+        return new Promise((resolve, reject) => {
+            if (ax.config.id === 0xFE) {
+                Mep.Log.error(TAG, this.name, 'Cannot use broadcast ID for reading');
+                reject();
+                return;
+            }
+
+            ax.uniqueDataReceivedCallback = (data) => {
+                resolve(data.readUInt8(3));
+                ax.uniqueDataReceivedCallback = null;
+            };
+            ax.communicator.send(
+                ax.config.canId,
+                buffer
+            );
+        });
     }
 }
 

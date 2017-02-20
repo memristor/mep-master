@@ -51,7 +51,7 @@ class CanDriver extends EventEmitter {
              */
             canDriver.emit('data', message.id, message.data);
 
-            Mep.Log.debug(TAG, 'Message received', message);
+            //Mep.Log.debug(TAG, 'Message received', message);
         });
         this.channel.start();
 
@@ -73,7 +73,7 @@ class CanDriver extends EventEmitter {
             rtr: false,
             data : buffer
         };
-        Mep.Log.debug(TAG, 'Buffer sent', buffer);
+        //Mep.Log.debug(TAG, 'Buffer sent', buffer);
         this.channel.send(canMessage);
     }
 
