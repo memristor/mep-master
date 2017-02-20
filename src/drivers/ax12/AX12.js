@@ -1,3 +1,5 @@
+const TAG = 'AX12';
+
 class AX12 {
     static get AX_MODEL_NUMBER_L() { return 0; }
     static get AX_MODEL_NUMBER_H() { return 1; }
@@ -50,9 +52,24 @@ class AX12 {
 
     constructor(name, config) {
         this.config = Object.assign({
+            canId: 2000,
+            id: 1
+        }, config);
 
-        }, this.config);
-        this.communicator = Mep.DriverManager.getDriver(this.config['@dependencies'].communicator);
+        this._onDataReceived = this._onDataReceived.bind(this);
+
+        this.communicator = null;
+        if (this.config._communicator !== undefined) {
+            // For testing purposes only (experiments)
+            this.communicator = this.config._communicator;
+        } else {
+            this.communicator = Mep.DriverManager.getDriver(this.config['@dependencies'].communicator);
+        }
+        this.communicator.on('data_' + this.config.canId, this._onDataReceived);
+    }
+
+    _onDataReceived(data) {
+        console.log(data);
     }
 
     init(callback) {
@@ -60,27 +77,67 @@ class AX12 {
         // Check status
     }
 
+    getTemperature() {
+        this._readByte(AX12.AX_PRESENT_TEMPERATURE);
+    }
+
     setPosition(position) {
-        this._writeWord(AX12.AX_GOAL_POSITION_H, (position * (1023 / 360)) | 0);
+        if (position > 300 || position < 0) {
+            Mep.Log.error(TAG, 'Position out of range!');
+            return;
+        }
+
+        this._writeWord(AX12.AX_GOAL_POSITION_L, (position * (1023 / 300)) | 0);
+    }
+
+    setSpeed(speed) {
+        if (speed > 1023 || speed < 0) {
+            Mep.Log.error(TAG, 'Speed out of range!');
+            return;
+        }
+
+        this._writeWord(AX12.AX_GOAL_SPEED_L, speed | 0);
+    }
+
+    setLED(on) {
+        this._writeByte(AX12.AX_LED, on | 0);
     }
 
     _writeWord(address, word) {
         this.communicator.send(
-            this.config.id,
+            this.config.canId,
             Buffer.from([
-                'W'.charCodeAt(0),
-                (word >> 8) & 0xFF,
-                word & 0xFF
+                this.config.id,     // AX12 ID
+                0x05,               // Length
+                0x03,               // Write
+                address,            // Address (function)
+                word & 0xFF,
+                (word >> 8) & 0xFF
         ]));
     }
 
     _writeByte(address, byte) {
         this.communicator.send(
-            this.config.id,
+            this.config.canId,
             Buffer.from([
-                'w'.charCodeAt(0),
-                byte & 0xFF
+                this.config.id,     // AX12 ID
+                0x04,               // Length
+                0x03,               // Write
+                address,            // Address (function)
+                byte & 0xFF         // Param
         ]));
+    }
+
+    _readByte(address) {
+        this.communicator.send(
+            this.config.canId,
+            Buffer.from([
+                this.config.id,     // AX12 ID
+                0x04,               // Length
+                0x02,               // Read
+                address,            // Address (function)
+                0x01
+            ]));
     }
 }
 

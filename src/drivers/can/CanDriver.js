@@ -73,6 +73,7 @@ class CanDriver extends EventEmitter {
             rtr: false,
             data : buffer
         };
+        Mep.Log.debug(TAG, 'Buffer sent', buffer);
         this.channel.send(canMessage);
     }
 
