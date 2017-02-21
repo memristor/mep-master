@@ -1,5 +1,17 @@
+'use strict';
+
+/** @namespace drivers.ax12 */
+
 const TAG = 'AX12';
 
+
+/**
+ * Communicates with AX12 servos.
+ * NOTE: This class doesn't send start bytes & checksum, please make custom `communicator`
+ * (`@dependecies.communicator`) if you want these features.
+ * @memberOf drivers.ax12
+ * @author Darko Lukic <lukicdarkoo@gmail.com>
+ */
 class AX12 {
     static get AX_MODEL_NUMBER_L() { return 0; }
     static get AX_MODEL_NUMBER_H() { return 1; }
@@ -49,6 +61,7 @@ class AX12 {
     static get AX_PUNCH_L() { return 48; }
     static get AX_PUNCH_H() { return 49; }
 
+    static get AX_POLL_POSITION() { return 50; }        // Custom, Memristor's implementation
 
     constructor(name, config) {
         this.config = Object.assign({
@@ -98,11 +111,10 @@ class AX12 {
             return;
         }
 
-
-        if (this.uniqueDataReceivedCallback !== null) {
-            this.uniqueDataReceivedCallback(data);
-        } else if (this.config.id !== 0xFE) {
-            Mep.Log.warn(TAG, this.name, 'Unhandled response', data);
+        if (data.readUInt8(0) === (this.config.id | 0)) {
+            if (this.uniqueDataReceivedCallback !== null) {
+                this.uniqueDataReceivedCallback(data);
+            }
         }
     }
 
@@ -112,24 +124,84 @@ class AX12 {
     }
 
     getTemperature() {
-        return this._readByte(AX12.AX_PRESENT_TEMPERATURE);
+        return this._read(AX12.AX_PRESENT_TEMPERATURE);
     }
 
     async getVoltage() {
-        let val = await this._readByte(AX12.AX_PRESENT_VOLTAGE);
+        let val = await this._read(AX12.AX_PRESENT_VOLTAGE);
         return val / 10;
     }
 
     getLoad() {
-        return this._readByte(AX12.AX_PRESENT_LOAD_L);
+        return this._read(AX12.AX_PRESENT_LOAD_L);
     }
 
     getTorqueLimit() {
-        return this._readByte(AX12.AX_TORQUE_LIMIT_L);
+        return this._read(AX12.AX_TORQUE_LIMIT_L);
     }
 
     getFirmwareVersion() {
-        return this._readByte(AX12.AX_VERSION);
+        return this._read(AX12.AX_VERSION);
+    }
+
+    getPosition() {
+        return this._read(AX12.AX_PRESENT_POSITION_L, true);
+    }
+
+    /**
+     * Set servo to required position and get promise when position is reached
+     * @param position {Number} - Required position in degrees
+     * @param config.pollingPeriod {Number} - Polling period for servo's present position in ms
+     * @param config.tolerance {Number} - Tolerated error in degrees
+     * @param config.timeout {Number} - Maximal time servo to reach a position in ms
+     * @param config.firmwareImplementation {Boolean} - Should it use firmware (true) or software (false) implementation.
+     * Firmware implementation is faster, however in that case we have to have a dedicated hardware (our actuator board supports it).
+     */
+    go(position, config) {
+        let c = Object.assign({
+            pollingPeriod: 40,
+            tolerance: 3,
+            timeout: 1000,
+            firmwareImplementation: false
+        }, config);
+
+        let ax = this;
+        let timeout = false;
+        this.setPosition(position);
+
+        return new Promise((resolve, reject) => {
+            // Apply time out
+            setTimeout(() => {
+                timeout = true;
+                reject();
+            }, c.timeout);
+
+            if (c.firmwareImplementation === true) {
+                // Firmware polling implementation
+                throw Error('Firmware implementation is not implemented');
+                this._writeWord(
+                    AX12.AX_POLL_POSITION,
+                    ((c.tolerance << 8) | (c.pollingPeriod & 0xFF))
+                );
+
+            } else {
+                // Software polling implementation
+                let checkPosition = () => {
+                    setTimeout(() => {
+                        ax.getPosition().then((currentPosition) => {
+                            if (Math.abs(currentPosition - position) <= c.tolerance) {
+                                resolve();
+                            } else {
+                                if (timeout === false) {
+                                    checkPosition();
+                                }
+                            }
+                        });
+                    }, c.pollingPeriod);
+                };
+                checkPosition();
+            }
+        });
     }
 
     async getStatus() {
@@ -138,6 +210,7 @@ class AX12 {
         status.voltage = await this.getVoltage();
         status.load = await this.getLoad();
         status.firmwareVersion = await this.getFirmwareVersion();
+        status.position = await this.getPosition();
         return status;
     }
 
@@ -196,14 +269,14 @@ class AX12 {
         ]));
     }
 
-    _readByte(address) {
+    _read(address, word = false) {
         let ax = this;
         let buffer = Buffer.from([
             this.config.id,     // AX12 ID
             0x04,               // Length
             0x02,               // Read
             address,            // Address (function)
-            0x01
+            word ? 0x02 : 0x01
         ]);
 
         return new Promise((resolve, reject) => {
@@ -214,9 +287,24 @@ class AX12 {
             }
 
             ax.uniqueDataReceivedCallback = (data) => {
-                resolve(data.readUInt8(3));
+                // Catch error code
+                if (data.readUInt8(2) !== 0x00) {
+                    Mep.Log.error(TAG, this.name, 'Response error', data.readUInt8(2));
+                    reject(data.readUInt8(2));
+                    return;
+                }
+
+                if (word === true) {
+                    resolve(
+                        (data.readUInt8(4) << 8) |
+                        (data.readUInt8(3) & 0xFF)
+                    );
+                } else {
+                    resolve(data.readUInt8(3));
+                }
                 ax.uniqueDataReceivedCallback = null;
             };
+
             ax.communicator.send(
                 ax.config.canId,
                 buffer
