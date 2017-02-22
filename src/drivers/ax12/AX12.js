@@ -144,8 +144,13 @@ class AX12 {
         return this._read(AX12.AX_VERSION);
     }
 
-    getPosition() {
-        return this._read(AX12.AX_PRESENT_POSITION_L, true);
+    async getPosition() {
+        let position = await this._read(AX12.AX_PRESENT_POSITION_L, true);
+        return ((position * (300 / 1023)) | 0);
+    }
+
+    getSpeed() {
+        return this._read(AX12.AX_PRESENT_SPEED_L, true);
     }
 
     /**
@@ -211,7 +216,38 @@ class AX12 {
         status.load = await this.getLoad();
         status.firmwareVersion = await this.getFirmwareVersion();
         status.position = await this.getPosition();
+        status.speed = await this.getSpeed();
         return status;
+    }
+
+    setPunch(current) {
+        return this._writeWord(AX12.AX_PUNCH_L, current);
+    }
+
+    setId(id) {
+        return this._writeByte(AX12.AX_SERVO_ID, id);
+    }
+
+    setBaudrate(baudrate) {
+        let baudPairs = {
+            1000000: 0x01,
+            500000: 0x03,
+            400000: 0x04,
+            250000: 0x07,
+            200000: 0x09,
+            115200: 0x10,
+            57600: 0x22,
+            19200: 0x67,
+            9600: 0xCF
+        };
+        if (baudPairs.hasOwnProperty(baudrate)) {
+            return this._writeByte(AX12.AX_BAUD_RATE, baudPairs[baudrate]);
+        } else {
+            return new Promise((resolve, reject) => {
+                Mep.Log.error(TAG, this.name, 'Invalid baud rate');
+                reject();
+            });
+        }
     }
 
     setPosition(position) {
