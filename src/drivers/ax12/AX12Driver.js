@@ -347,6 +347,10 @@ class AX12 {
             );
         });
     }
+
+    getGroups() {
+        return ['control'];
+    }
 }
 
 module.exports = AX12;
