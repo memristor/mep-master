@@ -16,6 +16,13 @@ const TAG = 'TerrainService';
  */
 class TerrainService extends EventEmitter {
     init(config) {
+        this.config = Object.assign({
+            minX: -1500,
+            maxX: 1500,
+            minY: -1000,
+            maxY: 1000,
+        }, config);
+
         this.obstacles = [];
         this.pf = new PathFinding(1500, -1500, 1000, -1000);
 
@@ -36,12 +43,12 @@ class TerrainService extends EventEmitter {
 
     _processObstacleDetection(source, centerPoint, relativePolygon, detected) {
         let polygon = relativePolygon.clone();
-        polygon.rotate(new Point(0, 0), Mep.getPositionService().getOrientation());
-        polygon.translate(Mep.getPositionService().getPosition());
+        polygon.rotate(new Point(0, 0), Mep.Position.getOrientation());
+        polygon.translate(Mep.Position.getPosition());
 
         let poi = centerPoint.clone();
-        poi.rotate(new Point(0, 0), Mep.getPositionService().getOrientation());
-        poi.translate(Mep.getPositionService().getPosition());
+        poi.rotate(new Point(0, 0), Mep.Position.getOrientation());
+        poi.translate(Mep.Position.getPosition());
 
         if (detected === true) {
             this.addObstacle(polygon);
