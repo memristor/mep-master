@@ -22,13 +22,28 @@
       "@load": true,
       "@dependencies": { "communicator": "CanDriver" },
 
-      "infraredMaxDistance": 400,
+      "infraredMaxDistance": 250,
       "sensorAngle": 90,
       "sensorX": 0,
       "sensorY": 0,
       "deviceId": 32768,
       "objectSize": 150
     },
+
+    "InfraredFrontPf": {
+      "@class": "drivers/infrared/InfraredDriver",
+      "@load": true,
+      "@dependencies": { "communicator": "CanDriver" },
+
+      "infraredMaxDistance": 900,
+      "sensorAngle": 90,
+      "sensorX": 0,
+      "sensorY": 0,
+      "deviceId": 32771,
+      "objectSize": 280
+    },
+
+
 
     "InfraredBack": {
       "@class": "drivers/infrared/InfraredDriver",

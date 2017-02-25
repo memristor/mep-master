@@ -24,7 +24,8 @@ class MotionService extends EventEmitter {
     init(config) {
         this.config = Object.assign({
             hazardObstacleDistance: 200,
-            timeToStop: 100
+            timeToStop: 100,
+            maxBypassTolerance: 50
         }, config);
 
         this.motionDriver = Mep.DriverManager.getDriver('MotionDriver');
@@ -45,11 +46,32 @@ class MotionService extends EventEmitter {
         this._stopped = false;
         this._paused = false;
 
+        // Event method configuration
         this._goToNextQueuedTarget = this._goToNextQueuedTarget.bind(this);
         this._onObstacleDetected = this._onObstacleDetected.bind(this);
+        this._onPositionChanged = this._onPositionChanged.bind(this);
+        this._onStateChanged = this._onStateChanged.bind(this);
 
         // Subscribe on sensors that can provide obstacles on the robot's terrain
         Mep.Terrain.on('obstacleDetected', this._onObstacleDetected);
+        this.motionDriver.on('positionChanged', this._onPositionChanged);
+        this.motionDriver.on('stateChanged', this._onStateChanged);
+
+        // Single subscriber events
+        this._singleOnPositionChanged = null;
+        this._singleOnStateChanged = null;
+    }
+
+    _onStateChanged(name, state) {
+        if (this._singleOnStateChanged !== null) {
+            this._singleOnStateChanged(name, state);
+        }
+    }
+
+    _onPositionChanged(name, position) {
+        if (this._singleOnPositionChanged !== null) {
+            this._singleOnPositionChanged(name, position);
+        }
     }
 
     getDirection() {
@@ -67,11 +89,12 @@ class MotionService extends EventEmitter {
     _onObstacleDetected(poi, polygon) {
         // Detect if obstacle is too close
         if (poi.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
-            let target = this._targetQueue.getTargetBack();
+            let target = this._targetQueue.getTargetFront();
             if (target !== null) {
                 let line = new Line(Mep.Position.getPosition(), target.getPoint());
                 if (line.isIntersectWithPolygon(polygon) === true) {
                     this.emit('pathObstacleDetected', true);
+                    return;
                 }
             }
         }
@@ -83,11 +106,22 @@ class MotionService extends EventEmitter {
             let points = Mep.Terrain.findPath(Mep.Position.getPosition(), this._targetQueue.getPfTarget().getPoint());
             if (points.length > 0) {
                 let params = this._targetQueue.getPfTarget().getParams();
+
+                // Reduce tolerance to get better to get better bypass
+                params.tolerance = params.tolerance > this.config.maxBypassTolerance ? this.config.maxBypassTolerance : params.tolerance;
+
+                // Redesign a path
                 this._targetQueue.empty();
                 this._targetQueue.addPointsBack(points, params);
+
+                // Start executing a new path
                 if (params.tolerance == -1) {
+                    this._singleOnPositionChanged = null;
+                    this._singleOnStateChanged = null;
                     this.stop().then(this._goToNextQueuedTarget);
                 } else {
+                    this._singleOnPositionChanged = null;
+                    this._singleOnStateChanged = null;
                     this.motionDriver.finishCommand();
                     this._goToNextQueuedTarget();
                 }
@@ -168,25 +202,25 @@ class MotionService extends EventEmitter {
         return new Promise((resolve, reject) => {
             let onPositionChanged = (name, currentPosition) => {
                 if (currentPosition.getDistance(point) <= tolerance) {
+                    this._singleOnPositionChanged = null;
                     motionService.motionDriver.finishCommand();
                     resolve();
-                    motionService.motionDriver.removeListener('positionChanged', onPositionChanged);
                 }
             };
 
             let onStateChanged = (name, state) => {
                 switch (state) {
                     case MotionDriver.STATE_IDLE:
+                        this._singleOnStateChanged = null;
                         resolve();
-                        motionService.motionDriver.removeListener('stateChanged', onStateChanged);
                         break;
                     case MotionDriver.STATE_STUCK:
+                        this._singleOnStateChanged = null;
                         reject(new TaskError(TAG, 'stuck', 'Robot is stacked'));
-                        motionService.motionDriver.removeListener('stateChanged', onStateChanged);
                         break;
                     case MotionDriver.STATE_ERROR:
+                        this._singleOnStateChanged = null;
                         reject(new TaskError(TAG, 'error', 'Unknown moving error'));
-                        motionService.motionDriver.removeListener('stateChanged', onStateChanged);
                         break;
                 }
             };
@@ -194,11 +228,12 @@ class MotionService extends EventEmitter {
             // If tolerance is set to use Euclid's distance to determine if robot can execute next command
             // It is useful if you want to continue
             if (tolerance >= 0) {
-                this.motionDriver.on('positionChanged', onPositionChanged);
+                this._singleOnPositionChanged = onPositionChanged;
+                onPositionChanged('auto', Mep.Position.getPosition());
             }
 
             // In every case wait new state of motion driver
-            this.motionDriver.on('stateChanged', onStateChanged);
+            this._singleOnStateChanged = onStateChanged;
         });
     }
 

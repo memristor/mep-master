@@ -16,14 +16,13 @@ let ax = new AX12('test', {
 //ax.setCWAngleLimit(0);
 //ax.setCCWAngleLimit(0);
 
-ax.setSpeed(500);
-ax.setPosition(100);
+ax.setSpeed(0);
+//ax.setPosition(100);
 setInterval(() => { ax.getStatus().then((status) => { console.log(status); }); }, 500);
 
-//ax.getTemperature().then((temperature) => { console.log('Temperature:', temperature); ax.setLED(true); });
-
+//setInterval(() => { ax.getTemperature().then((temperature) => { console.log('Temperature:', temperature); }) }, 300);
 
 //ax.setId(2);
-ax.setLED(true);
+//ax.setLED(true);
 
 //ax.getFirmwareVersion();

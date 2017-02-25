@@ -43,7 +43,7 @@
             "startOrientation": 0,
             "startSpeed": 100,
             "precision": 2,
-            "refreshDataPeriod": 80
+            "refreshDataPeriod": 50
         },
 
         "MotionDriverController": {
@@ -79,8 +79,8 @@
         },
 
         "MotionService": {
-          "hazardObstacleDistance": 150,
-          "timeToStop": 100,
+          "hazardObstacleDistance": 251,
+          "timeToStop": 300,
           "moveOptions": {
             "pf": false,
             "direction": 1,

@@ -11,10 +11,15 @@ class InitTask extends Task {
 
         // Let's move around
         try {
-            let config = { speed: 80, pf: true };
+            let config = { speed: 120, pf: true, tolerance: 150 };
 
-            await Mep.Motion.go(new TunedPoint(700, -800), config);
-            await Mep.Motion.go(new TunedPoint(-750, -850), config);
+            await Mep.Motion.go(new TunedPoint(900, 0), config);
+            await Mep.Motion.go(new TunedPoint(-1300, 0), config);
+            await Mep.Motion.rotate(new TunedAngle(0), { speed: 30 });
+
+
+            //await Mep.Motion.go(new TunedPoint(700, -800), config);
+            //await Mep.Motion.go(new TunedPoint(-750, -850), config);
 
 
 
@@ -42,9 +47,16 @@ class InitTask extends Task {
     }
 
     async onErrorForwardBack(taskError) {
-        await Mep.Motion.straight(Mep.Motion.getDirection() * (-100));
-        this.finish();
+        try {
+            await Mep.Motion.straight(Mep.Motion.getDirection() * (-100));
+            await Mep.Motion.go(new TunedPoint(-1300, 0), {tolerance: 100, speed: 120, pf: true});
+            await Mep.Motion.rotate(new TunedAngle(0), {speed: 30});
+            this.finish();
+        } catch (e) {
+            this.onErrorForwardBack();
+        }
     }
+
 }
 
 module.exports = InitTask;
