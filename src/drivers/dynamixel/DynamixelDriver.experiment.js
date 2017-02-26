@@ -1,9 +1,9 @@
 console.info('Run experiment using:');
-console.info('node --harmony-async-await AX12Driver.experiment.js');
+console.info('node --harmony-async-await DynamixelDriver.experiment.js');
 console.info('');
 
 global.Mep = require('../../Mep');
-const AX12 = require('./AX12Driver');
+const AX12 = require('./DynamixelDriver');
 const CAN = require('../can/CanDriver');
 
 let ax = new AX12('test', {

@@ -1,18 +1,18 @@
 'use strict';
 
-/** @namespace drivers.ax12 */
+/** @namespace drivers.dynamixel */
 
-const TAG = 'AX12';
+const TAG = 'Dynamixel';
 
 
 /**
- * Communicates with AX12 servos.
+ * Communicates with dynamixel servos (AX12 & RX24).
  * NOTE: This class doesn't send start bytes & checksum, please make custom `communicator`
  * (`@dependecies.communicator`) if you want these features.
- * @memberOf drivers.ax12
+ * @memberOf drivers.dynamixel
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
-class AX12 {
+class DynamixelDriver {
     static get AX_MODEL_NUMBER_L() { return 0; }
     static get AX_MODEL_NUMBER_H() { return 1; }
     static get AX_VERSION() { return 2; }
@@ -65,13 +65,16 @@ class AX12 {
 
     constructor(name, config) {
         this.config = Object.assign({
-            canId: 2000,
-            id: 0xFE
+            id: 0xFE,
+            type: 'AX'  // AX or RX
         }, config);
         this.name = name;
 
-        this._onDataReceived = this._onDataReceived.bind(this);
+        if (this.config.cid === undefined) {
+            throw Error(TAG, this.name, 'You must provide a communication ID');
+        }
 
+        this._onDataReceived = this._onDataReceived.bind(this);
         this.uniqueDataReceivedCallback = null;
 
         this.communicator = null;
@@ -81,7 +84,7 @@ class AX12 {
         } else {
             this.communicator = Mep.DriverManager.getDriver(this.config['@dependencies'].communicator);
         }
-        this.communicator.on('data_' + this.config.canId, this._onDataReceived);
+        this.communicator.on('data_' + this.config.cid, this._onDataReceived);
     }
 
     _onDataReceived(data) {
@@ -282,7 +285,7 @@ class AX12 {
 
     _writeWord(address, word) {
         this.communicator.send(
-            this.config.canId,
+            this.config.cid,
             Buffer.from([
                 this.config.id,     // AX12 ID
                 0x05,               // Length
@@ -295,7 +298,7 @@ class AX12 {
 
     _writeByte(address, byte) {
         this.communicator.send(
-            this.config.canId,
+            this.config.cid,
             Buffer.from([
                 this.config.id,     // AX12 ID
                 0x04,               // Length
@@ -342,7 +345,7 @@ class AX12 {
             };
 
             ax.communicator.send(
-                ax.config.canId,
+                ax.config.cid,
                 buffer
             );
         });
@@ -353,4 +356,4 @@ class AX12 {
     }
 }
 
-module.exports = AX12;
+module.exports = DynamixelDriver;

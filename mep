@@ -3,11 +3,17 @@
 SHOW_LOGO=true
 PERFORMANCE=false
 PERFORMANCE_PREFIX=
+INTERACTIVE=false
 
-# Turn on performance if there is `-p` or `--performance` flag
 for arg in $@; do
+    # Turn on performance if there is `-p` or `--performance` flag
     if [ ${arg} = "-p" ] || [ ${arg} = "--performance" ]; then
         PERFORMANCE=true
+    fi
+
+    # Turn on interactive mode if there is `-i` or `--interactive` flag
+    if [ ${arg} = "-i" ] || [ ${arg} = "--interactive" ]; then
+        INTERACTIVE=true
     fi
 done
 
@@ -21,6 +27,12 @@ if [ $SHOW_LOGO = true ]; then
     echo ""
 fi
 
+# If interactive mode is active just run it
+if [ $INTERACTIVE = true ]; then
+    node --harmony-async-await -i -e 'require("./src/Bootstrap.js"); const TunedPoint = Mep.require("strategy/TunedPoint");'
+    exit
+fi
+
 # Apply performance
 if [ $PERFORMANCE = true ]; then
     export NODE_ENV=production
@@ -31,5 +43,5 @@ if [ $PERFORMANCE = true ]; then
         PERFORMANCE_PREFIX="nice -n -20 "
     fi
 fi
-${PERFORMANCE_PREFIX} node --harmony-async-await src/Bootstrap.js "$@"
+${PERFORMANCE_PREFIX} node --harmony-async-await --nolazy src/Bootstrap.js "$@"
 

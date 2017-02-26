@@ -13,7 +13,7 @@ class StarterDriver extends EventEmitter {
     constructor(name, config) {
         super();
 
-        if (['delay', 'rope', 'keyboard'].indexOf(config.type) == -1) {
+        if (['delay', 'rope', 'keyboard', 'infinity'].indexOf(config.type) == -1) {
             throw '`config.type` must be delay, rope or keyboard';
         }
 
@@ -93,6 +93,9 @@ class StarterDriver extends EventEmitter {
                         starterDriver._initMatchStart();
                         rl.close();
                     });
+                    break;
+
+                case 'infinity':
                     break;
 
                 default:

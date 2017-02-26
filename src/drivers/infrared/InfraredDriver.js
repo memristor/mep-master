@@ -14,7 +14,6 @@ const TAG = 'InfraredDriver';
  * @memberof drivers.infrared
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @fires drivers.infrared.InfraredDriver#obstacleDetected
- * @fires drivers.infrared.InfraredDriver#pathObstacleDetected
  */
 class InfraredDriver extends EventEmitter {
     /**
@@ -49,12 +48,6 @@ class InfraredDriver extends EventEmitter {
         if (typeof config.infraredMaxDistance === 'undefined') {
             throw '`config.infraredMaxDistance` is not defined';
         }
-        if (typeof config.sensorAngle === 'undefined') {
-            throw '`config.sensorAngle` is not defined';
-        }
-        if (typeof config.sensorX === 'undefined' || typeof config.sensorY === 'undefined') {
-            throw '`config.sensorX` or `config.sensorY` is not defined';
-        }
         if (typeof config.deviceId === 'undefined') {
             throw '`config.deviceId` is not defined';
         }
@@ -64,6 +57,9 @@ class InfraredDriver extends EventEmitter {
         this.config = Object.assign({
             duration: 2000,
             objectSize: 150,
+            sensorX: 0,
+            sensorY: 0,
+            sensorAngle: 90
         }, config);
         this.name = name;
         this.detected = false;
