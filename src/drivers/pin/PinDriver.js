@@ -2,6 +2,8 @@
 
 /** @namespace drivers.pin */
 
+const EventEmitter = require('events').EventEmitter;
+
 const TAG = 'PinDriver';
 
 /**
@@ -9,16 +11,18 @@ const TAG = 'PinDriver';
  * @memberOf drivers.pin
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
-class PinDriver {
+class PinDriver extends EventEmitter {
     constructor(name, config) {
+        super();
+
         this.config = Object.assign({
             mode: 'analog',     // `analog` or `digital`
             direction: 'input', // `input` or `output`
         }, config);
         this.name = name;
 
-        if (this.config.id === undefined) {
-            throw Error(TAG, this.name, 'You must provide ID');
+        if (this.config.cid === undefined) {
+            throw Error(TAG, this.name, 'You must provide a communication ID');
         }
 
         this._onDataReceived = this._onDataReceived.bind(this);
@@ -32,27 +36,31 @@ class PinDriver {
         } else {
             this.communicator = Mep.DriverManager.getDriver(this.config['@dependencies'].communicator);
         }
-        this.communicator.on('data_' + this.config.id, this._onDataReceived);
+        this.communicator.on('data_' + this.config.cid, this._onDataReceived);
     }
 
     _onDataReceived(data) {
         if (this.uniqueDataReceivedCallback !== null) {
             this.uniqueDataReceivedCallback(data);
         }
+
+        if (this.config.direction === 'input') {
+            this.emit('changed', data.readUInt8(0));
+        }
     }
 
     read() {
-        if (this.config.direction === 'input') {
-            return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
+            if (this.config.direction === 'input') {
                 this.uniqueDataReceivedCallback = (data) => {
                     resolve(data.readUint8(0));
                     this.uniqueDataReceivedCallback = null;
                 };
-                this.communicator.send(this.config.id, Buffer.from([]));
-            });
-        } else {
-            throw Error('Cannot read output pin');
-        }
+                this.communicator.send(this.config.cid, Buffer.from([]));
+            } else {
+                throw Error('Cannot read output pin');
+            }
+        });
     }
 
     write(value) {
@@ -60,9 +68,11 @@ class PinDriver {
             if (this.config.mode === 'digital' && value != 1 && value != 0) {
                 value = 1;
             }
-            this.communicator.send(this.config.id, Buffer.from([value]));
+            this.communicator.send(this.config.cid, Buffer.from([value]));
         } else {
             throw Error('Cannot write to input pin');
         }
     }
 }
+
+module.exports = PinDriver;

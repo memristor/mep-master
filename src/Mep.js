@@ -123,6 +123,10 @@ let Mep = {
         return this.Scheduler;
     },
 
+    getDriver(driver) {
+        this.DriverManager.getDriver(driver);
+    },
+
     /**
      * Initialize necessary modules. Should be called only once during an application bootstrapping
      * @memberof Mep
