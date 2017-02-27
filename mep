@@ -10,11 +10,6 @@ for arg in $@; do
     if [ ${arg} = "-p" ] || [ ${arg} = "--performance" ]; then
         PERFORMANCE=true
     fi
-
-    # Turn on interactive mode if there is `-i` or `--interactive` flag
-    if [ ${arg} = "-i" ] || [ ${arg} = "--interactive" ]; then
-        INTERACTIVE=true
-    fi
 done
 
 # Generated with `figlet`
@@ -25,12 +20,6 @@ if [ $SHOW_LOGO = true ]; then
     echo "| |  | |  __/ | | | | | |  | \__ \ || (_) | |"
     echo "|_|  |_|\___|_| |_| |_|_|  |_|___/\__\___/|_|"
     echo ""
-fi
-
-# If interactive mode is active just run it
-if [ $INTERACTIVE = true ]; then
-    node --harmony-async-await -i -e 'require("./src/Bootstrap.js"); const TunedPoint = Mep.require("strategy/TunedPoint");'
-    exit
 fi
 
 # Apply performance

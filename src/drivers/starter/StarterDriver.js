@@ -13,7 +13,7 @@ class StarterDriver extends EventEmitter {
     constructor(name, config) {
         super();
 
-        if (['delay', 'rope', 'keyboard', 'infinity'].indexOf(config.type) == -1) {
+        if (['delay', 'rope', 'keyboard'].indexOf(config.type) == -1) {
             throw '`config.type` must be delay, rope or keyboard';
         }
 
@@ -64,7 +64,7 @@ class StarterDriver extends EventEmitter {
      * Wait a start match signal (pulled rope, pressed key or delay)
      * @return {Promise}
      */
-    waitStartSignal() {
+    waitStartSignal(ctx = null) {
         let starterDriver = this;
 
         return new Promise((resolve, reject) => {
@@ -85,17 +85,21 @@ class StarterDriver extends EventEmitter {
                 case 'keyboard':
                     const rl = readline.createInterface({
                         input: process.stdin,
-                        output: process.stdout
+                        output: process.stdout,
+                        prompt: 'mep > '
                     });
 
-                    rl.question('Application is ready, press [ENTER] to start robot...\n', (answer) => {
-                        resolve();
-                        starterDriver._initMatchStart();
-                        rl.close();
+                    rl.write('Application is ready, press [ENTER] to start or enter command...\n');
+                    rl.on('line', (line) => {
+                        if (line.length === 0) {
+                            resolve();
+                            starterDriver._initMatchStart();
+                        } else {
+                            eval(line);
+                        }
+                        rl.prompt();
                     });
-                    break;
-
-                case 'infinity':
+                    rl.prompt();
                     break;
 
                 default:

@@ -6,8 +6,13 @@ const starter = Mep.getDriverManager().getDriver('StarterDriver');
 const TAG = 'InitTask';
 
 class InitTask extends Task {
+    // Simplified functions for prompt
+    go(x, y, config) {
+        Mep.Motion.go(new TunedPoint(x, y), config);
+    }
+
     async onRun() {
-        await starter.waitStartSignal();
+        await starter.waitStartSignal(this);
 
         // Let's move around
         try {
