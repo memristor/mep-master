@@ -117,6 +117,10 @@
 
         "SchedulerService": {
 
+        },
+
+        "ShareService": {
+
         }
     }
 }

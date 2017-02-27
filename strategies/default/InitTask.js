@@ -1,7 +1,7 @@
 const Task = Mep.require('strategy/Task');
 const TunedPoint = Mep.require('strategy/TunedPoint');
 const TunedAngle = Mep.require('strategy/TunedAngle');
-const starter = Mep.getDriverManager().getDriver('StarterDriver');
+const starter = Mep.getDriver('StarterDriver');
 
 const TAG = 'InitTask';
 

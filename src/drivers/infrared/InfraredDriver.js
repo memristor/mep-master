@@ -66,7 +66,7 @@ class InfraredDriver extends EventEmitter {
         this.timeoutHandle = null;
 
         // Subscribe on communicator
-        this.canDriver = Mep.getDriverManager().getDriver(this.config['@dependencies'].communicator);
+        this.canDriver = Mep.getDriver(this.config['@dependencies'].communicator);
         this.canDriver.on('data_' + this.config.deviceId, this.processDetection.bind(this));
 
 

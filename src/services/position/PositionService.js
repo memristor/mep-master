@@ -1,7 +1,6 @@
 'use strict';
 /** @namespace services.position */
 
-const driverManager = Mep.getDriverManager();
 const Point = Mep.require('misc/Point');
 const EventEmitter = require('events').EventEmitter;
 
@@ -16,16 +15,16 @@ class PositionService extends EventEmitter {
         this.config = config;
 
         // Set default position
-        this.point = driverManager.getDriver('MotionDriver').getPosition();
-        this.orientation = driverManager.getDriver('MotionDriver').getOrientation();
+        this.point = Mep.getDriver('MotionDriver').getPosition();
+        this.orientation = Mep.getDriver('MotionDriver').getOrientation();
 
         // Init methods
         this._processPositionChange = this._processPositionChange.bind(this);
         this._processOrientationChange = this._processOrientationChange.bind(this);
 
         // Subscribe on drivers
-        driverManager.callMethodByGroup('position', 'on', ['positionChanged', this._processPositionChange.bind(this)]);
-        driverManager.callMethodByGroup('position', 'on', ['orientationChanged', this._processOrientationChange.bind(this)]);
+        Mep.DriverManager.callMethodByGroup('position', 'on', ['positionChanged', this._processPositionChange.bind(this)]);
+        Mep.DriverManager.callMethodByGroup('position', 'on', ['orientationChanged', this._processOrientationChange.bind(this)]);
 
         // Initial publish
         Mep.Telemetry.send(TAG, 'PositionChanged', this.point);

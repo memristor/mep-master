@@ -9,11 +9,11 @@ if [ "$1" != "--only-native" ]; then
 fi
 
 # Install native add-ons
-node-gyp configure --directory src/drivers/modbus
-node-gyp build --directory src/drivers/modbus
+# node-gyp configure --directory src/drivers/modbus
+# node-gyp build --directory src/drivers/modbus
 
-node-gyp configure --directory src/drivers/motion
-node-gyp build --directory src/drivers/motion
+# node-gyp configure --directory src/drivers/motion
+# node-gyp build --directory src/drivers/motion
 
 node-gyp configure --directory src/services/terrain/pathfinding
 node-gyp build --directory src/services/terrain/pathfinding

@@ -1,8 +1,6 @@
 'use strict';
 /** @namespace strategy */
 
-const schedulerService = Mep.getSchedulerService();
-
 const TAG = 'Scheduler';
 
 /**
@@ -51,7 +49,7 @@ class Scheduler {
     }
 
     runNextTask() {
-        let nextTask = schedulerService.recommendNextTask(this.tasks);
+        let nextTask = Mep.Scheduler.recommendNextTask(this.tasks);
         if (nextTask !== null) {
             this.runTask(nextTask);
         } else {

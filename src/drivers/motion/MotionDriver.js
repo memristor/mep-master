@@ -53,7 +53,7 @@ class MotionDriver extends EventEmitter  {
      * Check driver by checking checking communication with motion driver board
      * @param finishedCallback {Function} - Fire callback if driver is loaded successfully
      */
-    init(finishedCallback) {
+    init() {
         let motionDriver = this;
 
         this.reset();
@@ -65,43 +65,42 @@ class MotionDriver extends EventEmitter  {
         this.setRefreshInterval(this.config.refreshDataPeriod);
         this.requestRefreshData();
 
-        let driverChecker = setInterval(() => {
-            if (motionDriver.getState() !== MotionDriver.STATE_UNDEFINED) {
-                clearInterval(driverChecker);
-                Mep.Log.info(TAG, 'Communication is validated');
-                finishedCallback();
-            }
-        }, 100);
-        setTimeout(() => {
-            if (motionDriver.getState() === MotionDriver.STATE_UNDEFINED) {
-                throw Error(TAG, 'No response from motion driver');
-            }
-        }, this.config.connectionTimeout);
+        return new Promise((resolve) => {
+            let driverChecker = setInterval(() => {
+                if (motionDriver.getState() !== MotionDriver.STATE_UNDEFINED) {
+                    clearInterval(driverChecker);
+                    Mep.Log.info(TAG, 'Communication is validated');
+                    resolve();
+                }
+            }, 100);
+            setTimeout(() => {
+                if (motionDriver.getState() === MotionDriver.STATE_UNDEFINED) {
+                    throw Error(TAG, 'No response from motion driver');
+                }
+            }, this.config.connectionTimeout);
+        })
     }
 
     /**
      * Finish `moveToCurvilinear` command and prepare robot for another one
-     * @param callback {Function} - Callback will be called when finish command is sent
      */
-    finishCommand(callback) {
-        this.communicator.send(Buffer.from(['i'.charCodeAt(0)]), callback);
+    finishCommand() {
+        this.communicator.send(Buffer.from(['i'.charCodeAt(0)]));
         Mep.Log.debug(TAG, 'Finish command sent');
     }
 
     /**
      * Reset all settings in motion driver
-     * @param callback {Function} - Callback will be called when command is sent
      */
-    reset(callback) {
-        this.communicator.send(Buffer.from(['R'.charCodeAt(0)]), callback);
+    reset() {
+        this.communicator.send(Buffer.from(['R'.charCodeAt(0)]));
     }
 
     /**
      * Request state, position and orientation from motion driver
-     * @param callback {Function} - Callback will be called when command is sent
      */
-    requestRefreshData(callback) {
-        this.communicator.send(Buffer.from(['P'.charCodeAt(0)]), callback);
+    requestRefreshData() {
+        this.communicator.send(Buffer.from(['P'.charCodeAt(0)]));
     }
 
     /**
@@ -109,9 +108,8 @@ class MotionDriver extends EventEmitter  {
      * @param x {Number} - New X coordinate relative to start position of the robot
      * @param y {Number} - New Y coordinate relative to start position of the robot
      * @param orientation {Number} - New robot's orientation
-     * @param callback {Function} - Callback will be called when command is sent
      */
-    setPositionAndOrientation(x, y, orientation, callback) {
+    setPositionAndOrientation(x, y, orientation) {
         let data = Buffer.from([
             'I'.charCodeAt(0),
             x >> 8,
@@ -122,81 +120,75 @@ class MotionDriver extends EventEmitter  {
             orientation & 0xFF
         ]);
 
-        this.communicator.send(data, callback);
+        this.communicator.send(data);
     }
 
     /**
      * Rotate robot to given angle
      * @param angle {Number} - Angle
-     * @param callback {Function} - Callback will be called when command is sent
      */
-    rotateTo(angle, callback) {
+    rotateTo(angle) {
         let data = Buffer.from([
             'A'.charCodeAt(0),
             angle >> 8,
             angle & 0xFF
         ]);
-        this.communicator.send(data, callback);
+        this.communicator.send(data);
     }
 
     /**
      * Move robot forward or backward depending on sign
      * @param millimeters
-     * @param callback
      * @deprecated
      */
-    goForward(millimeters, callback) {
+    goForward(millimeters) {
         let data = Buffer.from([
             'D'.charCodeAt(0),
             millimeters >> 8,
             millimeters & 0xFF,
             0
         ]);
-        this.communicator.send(data, callback);
+        this.communicator.send(data);
     }
 
     /**
      * Stop the robot.
-     * @param callback {Function} - Callback will be called when command is sent
      */
     stop(callback) {
-        this.communicator.send(Buffer.from(['S'.charCodeAt(0)]), callback);
+        this.communicator.send(Buffer.from(['S'.charCodeAt(0)]));
     }
 
     /**
      * Stop robot by turning off motors.
-     * @param callback {Function} - Callback will be called when command is sent
      */
     softStop(callback) {
-        this.communicator.send(Buffer.from(['s'.charCodeAt(0)]), callback);
+        this.communicator.send(Buffer.from(['s'.charCodeAt(0)]));
     }
 
     /**
      * Set required refresh interval of robot status. Note that it is required
      * refresh interval and robot can choose to send or not depending on it's state.
      * @param interval {Number} - Period in milliseconds
-     * @param callback {Function} - Callback will be called when command is sent
      */
-    setRefreshInterval(interval, callback) {
+    setRefreshInterval(interval) {
         this.communicator.send(Buffer.from([
             'p'.charCodeAt(0),
             interval >> 8,
             interval & 0xff,
-        ]), callback);
+        ]));
     }
 
 
     /**
      * Set default speed of the robot
      * @param speed {Number} - Speed (0 - 255)
-     * @param callback {Function} - Callback will be called when command is sent
      */
-    setSpeed(speed, callback) {
+    setSpeed(speed) {
         this._activeSpeed = speed;
         this.communicator.send(Buffer.from([
             'V'.charCodeAt(0),
             speed
-        ]), callback);
+        ]));
     }
 
     /**
@@ -204,9 +196,8 @@ class MotionDriver extends EventEmitter  {
      * @param position {misc.Point} - Required position of the robot
      * @param direction {Number} - Direction, can be MotionDriver.DIRECTION_FORWARD or
      * MotionDriver.DIRECTION_BACKWARD
-     * @param callback {Function} - Callback will be called when command is sent
      */
-    moveToPosition(position, direction, callback) {
+    moveToPosition(position, direction) {
         this.communicator.send(Buffer.from([
             'G'.charCodeAt(0),
             position.getX() >> 8,
@@ -215,7 +206,7 @@ class MotionDriver extends EventEmitter  {
             position.getY() & 0xff,
             0,
             direction
-        ]), callback);
+        ]));
     }
 
     /**
@@ -224,9 +215,8 @@ class MotionDriver extends EventEmitter  {
      * @param position {misc.Point} - Required position of the robot
      * @param direction {Number} - Direction, can be MotionDriver.DIRECTION_FORWARD or
      * MotionDriver.DIRECTION_BACKWARD
-     * @param callback {Function} - Callback will be called when command is sent
      */
-    moveToCurvilinear(position, direction, callback) {
+    moveToCurvilinear(position, direction) {
         this.communicator.send(Buffer.from([
             'N'.charCodeAt(0),
             position.getX() >> 8,
@@ -234,7 +224,7 @@ class MotionDriver extends EventEmitter  {
             position.getY() >> 8,
             position.getY() & 0xff,
             direction
-        ]), callback);
+        ]));
     }
 
     /**

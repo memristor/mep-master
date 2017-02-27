@@ -4,24 +4,23 @@ const Config = require('./Config');
 const Log = require('./Log');
 const Telemetry = require('./Telemetry');
 
+let telemetry = new Telemetry(Config.get('Telemetry'));
+
 /**
  * Proxy to custom require(), Log, Config, DriverManager & services.
  *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
- * @namespace Mep
  */
-let Mep = {
+class Mep {
     /**
      * Global function to require library relative to `src` directory
-     * @memberof Mep
-     * @method require
      * @example
      * const Task = Mep.require('utils/Task');
      *
      * @param {String} library - Path to library
      * @returns {Object} - Required library
      */
-    require(library) {
+    static require(library) {
         let allowedDirectories = ['drivers', 'services', 'misc', 'strategy'];
         let allowedLibraries = ['services/ServiceManager'];
 
@@ -38,29 +37,30 @@ let Mep = {
 
         // Require lib
         return require('./' + library);
-    },
+    }
+
 
     /**
      * Logging system
      * @see {@link https://www.npmjs.com/package/bunyan|bunyan}
-     * @memberof Mep
      * @example
      * Mep.Log.debug('Pathfinding', 'Start terrain finding for (x, y)');
      *
      * @returns {Log}
      */
-    Log: Log,
+    static get Log() { return Log; }
+
 
     /**
-     * Telemetry system
-     * @memberof Mep
+     * Telemetry logging system
      * @see {@link Telemetry}
      * @example
      * Mep.Telemetry('PathFinding', 'finding', {x:0.0, y:0.0});
      *
      * @returns {Telemetry}
      */
-    Telemetry: (new Telemetry(Config.get('Telemetry'))),
+    static get Telemetry() { return telemetry; }
+
 
     /**
      * Access to current configuration
@@ -71,91 +71,96 @@ let Mep = {
      *
      * @returns {Config}
      */
-    Config: Config,
+    static get Config() { return Config; }
+
 
     /**
      * Provides an instance of the PositionService.
-     * @memberof Mep
-     * @see {@link services.PositionService}
+     * @see {@link services.position.PositionService}
      * @example
-     * let position = Mep.getPositionService();
-     * position.set(new TunedPoint(100, 100), { speed: 100 });
+     * Mep.Position.set(new TunedPoint(100, 100), { speed: 100 });
      *
-     * @returns {PositionService}
+     * @returns {services.position.PositionService}
      */
-    getPositionService() {
-        return this.Position;
-    },
+    static get Position() { return Mep._position; }
 
-    /**
-     * Provides an instance of the PathService
-     * @memberof Mep
-     * @see {@link services.PathService}
-     * @returns {PathService}
-     */
-    getTerrainService() {
-        return this.Terrain;
-    },
 
     /**
      * Provides an instance of the DriverManager.
-     * @memberof Mep
      * @see {@link drivers.DriverManager}
      * @example
-     * let laserDriver = Mep.getDriverManager().getDriver('LaserDriver');
+     * let laserDriver = Mep.DriverManager.getDriver('LaserDriver');
      *
-     * @returns {DriverManager}
+     * @returns {drivers.DriverManager}
      */
-    getDriverManager() {
-        return this.DriverManager;
-    },
+    static get DriverManager() { return Mep._driverManager; }
+
+    /**
+     * Provides an instance of the Terrain
+     * @memberof Mep
+     * @see {@link services.terrain.TerrainService}
+     * @returns {services.terrain.TerrainService}
+     */
+    static get Terrain() { return Mep._terrain; }
 
     /**
      * Provides an instance of the SchedulerService
-     * @memberOf Mep
-     * @see {@link services.SchedulerService}
+     * @see {@link services.scheduler.SchedulerService}
      * @example
-     * let scheduler = Mep.getSchedulerService();
+     * let nextTask = Mep.Scheduler.recommendNextTask();
      *
-     * @returns {SchedulerService}
+     * @returns {services.scheduler.SchedulerService}
      */
-    getSchedulerService() {
-        return this.Scheduler;
-    },
+    static get Scheduler() { return Mep._scheduler; }
 
-    getDriver(driver) {
-        this.DriverManager.getDriver(driver);
-    },
+
+    /**
+     * Proxy to method `Mep.DriverManager.getDriver(driver)`
+     * @example let servo = Mep.getDriver('ArmFirstAX12');
+     * @param driver {String} - Driver name
+     * @returns {Object} - Instance of required driver
+     */
+    static getDriver(driver) {
+        return this.DriverManager.getDriver(driver);
+    }
+
+
+    /**
+     * Reference to motion service
+     * @see {@link services.motion.MotionService}
+     * @example Mep.Motion.go(new TunedPoint(100, 100));
+     * @returns {services.motion.MotionService} - Reference to motion service
+     */
+    static get Motion() { return Mep._motion; }
+
+
+    /**
+     * Reference to share service
+     * @example Mep.Share.send('DOORS_ARE_CLOSED');
+     * @example Mep.Share.on('message', (msg) => { console.log(msg); });
+     * @see {@link services.share.ShareService}
+     * @returns {services.share.ShareService}
+     */
+    static get Share() { return Mep._share; }
 
     /**
      * Initialize necessary modules. Should be called only once during an application bootstrapping
-     * @memberof Mep
      */
-    init(finishedCallback) {
-        let mep = this;
+    static async init() {
+        Mep._driverManager = new (require('./drivers/DriverManager'))();
+        Mep._position = new (require('./services/position/PositionService'))();
+        Mep._motion = new (require('./services/motion/MotionService'))();
+        Mep._terrain = new (require('./services/terrain/TerrainService'))();
+        Mep._scheduler = new (require('./services/scheduler/SchedulerService'))();
+        Mep._share = new (require('./services/share/ShareService'))();
 
-        this.DriverManager = new (require('./drivers/DriverManager'))();
-
-        this.Position = new (require('./services/position/PositionService'))();
-        this.Motion = new (require('./services/motion/MotionService'))();
-        this.Terrain = new (require('./services/terrain/TerrainService'))();
-        this.Scheduler = new (require('./services/scheduler/SchedulerService'))();
-
-        this.DriverManager.init(() => {
-            try {
-                mep.Position.init(Config.get('Services:PositionService'));
-                mep.Motion.init(Config.get('Services:MotionService'));
-                mep.Terrain.init(Config.get('Services:TerrainService'));
-                mep.Scheduler.init(Config.get('Services:SchedulerService'));
-
-                finishedCallback();
-            } catch (e) {
-                Mep.Log.error('Error during services initialization');
-                console.log(e);
-                return;
-            }
-        });
+        await Mep._driverManager.init();
+        Mep._position.init(Config.get('Services:PositionService'));
+        Mep._motion.init(Config.get('Services:MotionService'));
+        Mep._terrain.init(Config.get('Services:TerrainService'));
+        Mep._scheduler.init(Config.get('Services:SchedulerService'));
+        Mep._share.init(Config.get('Services:ShareService'));
     }
-};
+}
 
 module.exports = Mep;

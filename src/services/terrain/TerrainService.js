@@ -4,7 +4,6 @@
 const Point = Mep.require('misc/Point');
 const Polygon = Mep.require('misc/Polygon');
 const PathFinding = require('./pathfinding/PathFinding');
-const driverManager = Mep.getDriverManager();
 const EventEmitter = require('events').EventEmitter;
 
 const TAG = 'TerrainService';
@@ -38,7 +37,7 @@ class TerrainService extends EventEmitter {
         }
 
         // Subscribe on drivers
-        driverManager.callMethodByGroup('terrain', 'on', ['obstacleDetected', this._processObstacleDetection.bind(this)]);
+        Mep.DriverManager.callMethodByGroup('terrain', 'on', ['obstacleDetected', this._processObstacleDetection.bind(this)]);
     }
 
     _processObstacleDetection(source, centerPoint, relativePolygon, detected) {

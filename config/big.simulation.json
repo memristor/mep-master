@@ -1,7 +1,8 @@
 {
   "Drivers": {
     "MotionDriver": {
-      "@class": "drivers/motion/MotionDriverSimulator"
+      "@class": "drivers/motion/MotionDriverSimulator",
+      "@dependencies": []
     },
 
     "CanDriver": {

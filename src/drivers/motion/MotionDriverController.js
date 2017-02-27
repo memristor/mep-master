@@ -9,7 +9,7 @@ const TAG = 'MotionDriverController';
  */
 class MotionDriverController {
     constructor(name, config) {
-        let motionDriver = Mep.getDriverManager().getDriver(config['@dependencies'].motionDriver);
+        let motionDriver = Mep.getDriver(config['@dependencies'].motionDriver);
 
         // Set X
         Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'moveToPositionX'), (packet) => {
