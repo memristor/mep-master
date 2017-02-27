@@ -7,22 +7,34 @@ const TunedPoint = Mep.require('strategy/TunedPoint');
 describe('MotionServiceTest', () => {
     describe('#pathObstacleDetected', () => {
         let spy = sinon.spy();
-
-        Mep.Motion.on('pathObstacleDetected', spy);
-
         let point = new Point(100, 0);
         let polygon = (new Polygon()).makeSquareAroundPoint(point, 50);
-        Mep.Motion.go(new TunedPoint(200, 0));
-        Mep.Motion._onObstacleDetected(point, polygon);
-        it('should fire an event `pathObstacleDetected`', () => {
-            assert(spy.args[0][0] === true);
+
+
+
+        before((done) => {
+                Mep.Motion.on('pathObstacleDetected', spy);
+                Mep.Motion.go(new TunedPoint(200, 0));
+                Mep.Motion._onObstacleDetected(point, polygon);
+                done();
         });
 
-        point = new Point(500, 0);
-        polygon = new Polygon().makeSquareAroundPoint(point, 100);
-        Mep.Motion._onObstacleDetected(point, polygon);
-        it('should not fire an event', () => {
+        it('should fire an event `pathObstacleDetected`', (done) => {
+            assert(spy.args[0][0] === true);
+            done();
+        });
+
+
+        before((done) => {
+            point = new Point(500, 0);
+            polygon = new Polygon().makeSquareAroundPoint(point, 100);
+            Mep.Motion._onObstacleDetected(point, polygon);
+            return done();
+        });
+
+        it('should not fire an event', (done) => {
             assert(spy.args[1] === undefined);
+            done();
         });
     });
 });

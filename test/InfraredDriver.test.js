@@ -5,20 +5,29 @@ const Buffer = require('buffer').Buffer;
 const assert = require('assert');
 
 describe('InfraredDriverTest', () => {
-    let infraredDriver = new InfraredDriver('InfraredDriver', {
-        sensorAngle: 60,
-        infraredMaxDistance: 200,
-        sensorX: -10,
-        sensorY: 10,
-        deviceId: 0,
-        '@dependencies': { communicator: 'CanDriver' }
+    let infraredDriver;
+
+    before((done) => {
+        Mep.init().then(() => {
+            infraredDriver = new InfraredDriver('InfraredDriver', {
+                sensorAngle: 60,
+                infraredMaxDistance: 200,
+                sensorX: -10,
+                sensorY: 10,
+                deviceId: 0,
+                '@dependencies': { communicator: 'CanDriver' }
+            });
+            done();
+        });
     });
 
     describe('#processDetection(true)', () => {
-        let terrainSpy = sinon.spy();
-        infraredDriver.on('obstacleDetected', terrainSpy);
-
-        infraredDriver.processDetection(Buffer.from([0x01]));
+        let terrainSpy;
+        beforeEach(() => {
+            terrainSpy = sinon.spy();
+            infraredDriver.on('obstacleDetected', terrainSpy);
+            infraredDriver.processDetection(Buffer.from([0x01]));
+        });
 
         it('should callback with params(163, 110)', () => {
             let point = terrainSpy.args[0][1];
