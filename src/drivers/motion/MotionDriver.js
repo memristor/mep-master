@@ -37,7 +37,8 @@ class MotionDriver extends EventEmitter  {
             startOrientation: 0,
             startSpeed: 100,
             refreshDataPeriod: 100,
-            connectionTimeout: 4000
+            connectionTimeout: 4000,
+            ackTimeout: 100
         }, config);
 
         this.positon = new Point(config.startX, config.startY);
@@ -47,11 +48,32 @@ class MotionDriver extends EventEmitter  {
 
         this.communicator = Mep.DriverManager.getDriver(config['@dependencies'].communicator);
         this.communicator.on('data', this._onDataReceived.bind(this));
+
+        this._waitACKQueue = {};
+    }
+
+    _waitACK(type) {
+        let motionDriver = this;
+
+        setTimeout(() => {
+            if (this._waitACKQueue[type] !== undefined) {
+                Mep.Log.error(TAG, 'Error sending a command');
+                motionDriver._sendCommand(this._waitACKQueue[type]);
+            }
+        }, this.config.ackTimeout);
+    }
+
+    _sendCommand(buff) {
+        let type = buff.readUInt8(0);
+
+        this._waitACKQueue[type] = buff;
+        this._waitACK(type);
+
+        this.communicator.send(buff);
     }
 
     /**
      * Check driver by checking checking communication with motion driver board
-     * @param finishedCallback {Function} - Fire callback if driver is loaded successfully
      */
     init() {
         let motionDriver = this;
@@ -85,7 +107,7 @@ class MotionDriver extends EventEmitter  {
      * Finish `moveToCurvilinear` command and prepare robot for another one
      */
     finishCommand() {
-        this.communicator.send(Buffer.from(['i'.charCodeAt(0)]));
+        this._sendCommand(Buffer.from(['i'.charCodeAt(0)]));
         Mep.Log.debug(TAG, 'Finish command sent');
     }
 
@@ -93,14 +115,14 @@ class MotionDriver extends EventEmitter  {
      * Reset all settings in motion driver
      */
     reset() {
-        this.communicator.send(Buffer.from(['R'.charCodeAt(0)]));
+        this._sendCommand(Buffer.from(['R'.charCodeAt(0)]));
     }
 
     /**
      * Request state, position and orientation from motion driver
      */
     requestRefreshData() {
-        this.communicator.send(Buffer.from(['P'.charCodeAt(0)]));
+        this._sendCommand(Buffer.from(['P'.charCodeAt(0)]));
     }
 
     /**
@@ -110,7 +132,7 @@ class MotionDriver extends EventEmitter  {
      * @param orientation {Number} - New robot's orientation
      */
     setPositionAndOrientation(x, y, orientation) {
-        let data = Buffer.from([
+        this._sendCommand(Buffer.from([
             'I'.charCodeAt(0),
             x >> 8,
             x & 0xFF,
@@ -118,9 +140,7 @@ class MotionDriver extends EventEmitter  {
             y & 0xFF,
             orientation >> 8,
             orientation & 0xFF
-        ]);
-
-        this.communicator.send(data);
+        ]));
     }
 
     /**
@@ -128,12 +148,11 @@ class MotionDriver extends EventEmitter  {
      * @param angle {Number} - Angle
      */
     rotateTo(angle) {
-        let data = Buffer.from([
+        this._sendCommand(Buffer.from([
             'A'.charCodeAt(0),
             angle >> 8,
             angle & 0xFF
-        ]);
-        this.communicator.send(data);
+        ]));
     }
 
     /**
@@ -142,27 +161,26 @@ class MotionDriver extends EventEmitter  {
      * @deprecated
      */
     goForward(millimeters) {
-        let data = Buffer.from([
+        this._sendCommand(Buffer.from([
             'D'.charCodeAt(0),
             millimeters >> 8,
             millimeters & 0xFF,
             0
-        ]);
-        this.communicator.send(data);
+        ]));
     }
 
     /**
      * Stop the robot.
      */
-    stop(callback) {
-        this.communicator.send(Buffer.from(['S'.charCodeAt(0)]));
+    stop() {
+        this._sendCommand(Buffer.from(['S'.charCodeAt(0)]));
     }
 
     /**
      * Stop robot by turning off motors.
      */
-    softStop(callback) {
-        this.communicator.send(Buffer.from(['s'.charCodeAt(0)]));
+    softStop() {
+        this._sendCommand(Buffer.from(['s'.charCodeAt(0)]));
     }
 
     /**
@@ -171,7 +189,7 @@ class MotionDriver extends EventEmitter  {
      * @param interval {Number} - Period in milliseconds
      */
     setRefreshInterval(interval) {
-        this.communicator.send(Buffer.from([
+        this._sendCommand(Buffer.from([
             'p'.charCodeAt(0),
             interval >> 8,
             interval & 0xff,
@@ -185,7 +203,7 @@ class MotionDriver extends EventEmitter  {
      */
     setSpeed(speed) {
         this._activeSpeed = speed;
-        this.communicator.send(Buffer.from([
+        this._sendCommand(Buffer.from([
             'V'.charCodeAt(0),
             speed
         ]));
@@ -198,7 +216,7 @@ class MotionDriver extends EventEmitter  {
      * MotionDriver.DIRECTION_BACKWARD
      */
     moveToPosition(position, direction) {
-        this.communicator.send(Buffer.from([
+        this._sendCommand(Buffer.from([
             'G'.charCodeAt(0),
             position.getX() >> 8,
             position.getX() & 0xff,
@@ -217,7 +235,7 @@ class MotionDriver extends EventEmitter  {
      * MotionDriver.DIRECTION_BACKWARD
      */
     moveToCurvilinear(position, direction) {
-        this.communicator.send(Buffer.from([
+        this._sendCommand(Buffer.from([
             'N'.charCodeAt(0),
             position.getX() >> 8,
             position.getX() & 0xff,
@@ -289,6 +307,10 @@ class MotionDriver extends EventEmitter  {
         }
     }
 
+    _onAReceived(buffer) {
+        delete this._waitACKQueue[buffer.readUInt8()];
+    }
+
     /**
      * Callback will be called when new packet is arrived and it will dispatch event to new
      * callback depending on packet type
@@ -297,8 +319,11 @@ class MotionDriver extends EventEmitter  {
      * @private
      */
     _onDataReceived(buffer, type) {
-        if (type === 'P'.charCodeAt(0) && buffer.length === 9) {
+        if (type === ('P'.charCodeAt(0)) && buffer.length === 9) {
             this._onPReceived(buffer);
+        }
+        else if (type == 'A'.charCodeAt(0) && buffer.length === 1) {
+            this._onAReceived(buffer);
         }
     }
 

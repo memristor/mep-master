@@ -2,6 +2,7 @@ const Task = Mep.require('strategy/Task');
 const TunedPoint = Mep.require('strategy/TunedPoint');
 const TunedAngle = Mep.require('strategy/TunedAngle');
 const starter = Mep.getDriver('StarterDriver');
+const Delay = Mep.require('misc/Delay');
 
 const TAG = 'InitTask';
 
@@ -11,16 +12,33 @@ class InitTask extends Task {
         Mep.Motion.go(new TunedPoint(x, y), config);
     }
 
+    rotate(angle, config) {
+        Mep.Motion.rotate(new TunedAngle(angle), config);
+    }
+
+    async home() {
+        await Mep.Motion.go(new TunedPoint(-1300, 0), { pf: true, tolerance: 50, speed: 150 });
+        await Delay(200);
+        await Mep.Motion.rotate(new TunedAngle(0));
+        console.log('Arrived to home');
+    }
+
+    get m() {
+        return Mep.getDriver('MotionDriver');
+    }
+
     async onRun() {
         await starter.waitStartSignal(this);
 
         // Let's move around
         try {
-            let config = { speed: 120, pf: true, tolerance: 150 };
+            let config = { speed: 150, pf: false, tolerance: -1 };
 
-            await Mep.Motion.go(new TunedPoint(900, 0), config);
+            await Mep.Motion.go(new TunedPoint(-200, 200), config);
             await Mep.Motion.go(new TunedPoint(-1300, 0), config);
-            await Mep.Motion.rotate(new TunedAngle(0), { speed: 30 });
+            await Delay(1000);
+            await Mep.Motion.stop();
+            await Mep.Motion.rotate(new TunedAngle(0));
 
 
             //await Mep.Motion.go(new TunedPoint(700, -800), config);

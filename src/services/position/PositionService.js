@@ -43,6 +43,8 @@ class PositionService extends EventEmitter {
     }
 
     _processOrientationChange(driverName, orientation, precision) {
+        Mep.Log.debug(TAG, orientation);
+
         this.orientation = orientation;
         this.emit('orientationChanged', orientation);
 

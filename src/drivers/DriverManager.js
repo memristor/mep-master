@@ -150,7 +150,7 @@ class DriverManager {
         this.driversOutOfOrder[name] = true;
 
         // Notify user
-        Mep.Log.error(TAG, name, 'is out of the order');
+        Mep.Log.error(TAG, name, 'is out of the order', message);
     }
 
     async _initDriver(driverIdentifier) {

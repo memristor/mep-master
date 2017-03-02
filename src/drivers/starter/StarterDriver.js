@@ -4,6 +4,11 @@
 const EventEmitter = require('events');
 const readline = require('readline');
 
+const TunedPoint = Mep.require('strategy/TunedPoint');
+const Point = Mep.require('misc/Point');
+
+const TAG = 'StarterDriver';
+
 /**
  * Detects when rope is pulled out of the robot and starts counting game time.
  * @fires drivers.starter.StarterDriver#tick
@@ -62,10 +67,13 @@ class StarterDriver extends EventEmitter {
 
     /**
      * Wait a start match signal (pulled rope, pressed key or delay)
+     * @param t {Object} - Context for interactive prompt
      * @return {Promise}
      */
-    waitStartSignal(ctx = null) {
+    waitStartSignal(t = null) {
         let starterDriver = this;
+
+        Mep.Log.info('Software is initialized');
 
         return new Promise((resolve, reject) => {
             switch (starterDriver.config.type) {
@@ -89,13 +97,19 @@ class StarterDriver extends EventEmitter {
                         prompt: 'mep > '
                     });
 
-                    rl.write('Application is ready, press [ENTER] to start or enter command...\n');
+                    Mep.Log.info('Press [ENTER] to start executing commands...');
+                    Mep.Log.info('You can type a command (eg. `Mep.Motion.go()` or `t.home()`)...');
+
                     rl.on('line', (line) => {
                         if (line.length === 0) {
                             resolve();
                             starterDriver._initMatchStart();
                         } else {
-                            eval(line);
+                            try {
+                                eval(line);
+                            } catch (e) {
+                                Mep.Log.error(TAG, e);
+                            }
                         }
                         rl.prompt();
                     });
