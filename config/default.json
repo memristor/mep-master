@@ -43,7 +43,7 @@
             "startOrientation": 0,
             "startSpeed": 100,
             "precision": 2,
-            "refreshDataPeriod": 50
+            "refreshDataPeriod": 120
         },
 
         "MotionDriverController": {

@@ -12,12 +12,13 @@ class InitTask extends Task {
         Mep.Motion.go(new TunedPoint(x, y), config);
     }
 
-    rotate(angle, config) {
-        Mep.Motion.rotate(new TunedAngle(angle), config);
+    async rotate(angle, config) {
+        await Mep.Motion.rotate(new TunedAngle(angle), config);
+        console.log('Finished rotation');
     }
 
     async home() {
-        await Mep.Motion.go(new TunedPoint(-1300, 0), { pf: true, tolerance: 50, speed: 150 });
+        await Mep.Motion.go(new TunedPoint(-1300, 0), { pf: true, tolerance: -1, speed: 100 });
         await Delay(200);
         await Mep.Motion.rotate(new TunedAngle(0));
         console.log('Arrived to home');
@@ -31,52 +32,43 @@ class InitTask extends Task {
         await starter.waitStartSignal(this);
 
         // Let's move around
+        /*
         try {
-            let config = { speed: 150, pf: false, tolerance: -1 };
+            let config = { speed: 150, pf: true, tolerance: 100 };
 
-            await Mep.Motion.go(new TunedPoint(-200, 200), config);
+            await Mep.Motion.go(new TunedPoint(-83, 564), config);
+            await Mep.Motion.go(new TunedPoint(-650, 300), config);
+            return;
+
+
+            await Mep.Motion.go(new TunedPoint(0, 600), config);
+            await Mep.Motion.go(new TunedPoint(620, -620), config);
+            await Mep.Motion.go(new TunedPoint(-800, -620), config);
             await Mep.Motion.go(new TunedPoint(-1300, 0), config);
-            await Delay(1000);
-            await Mep.Motion.stop();
+
+            await Delay(500);
             await Mep.Motion.rotate(new TunedAngle(0));
-
-
-            //await Mep.Motion.go(new TunedPoint(700, -800), config);
-            //await Mep.Motion.go(new TunedPoint(-750, -850), config);
-
-
-
-            // await Mep.Motion.go(new TunedPoint(-1200, 0), config);
-            /*
-            await Mep.Motion.go(new TunedPoint(79, -6), config);
-            await Mep.Motion.go(new TunedPoint(500, 100), config);
-            config.speed += 20;
-            await Mep.Motion.go(new TunedPoint(-1100, 0), config);
-
-            //config.tolerance = -1;
-            await Mep.Motion.go(new TunedPoint(-1300, 0), config);
-
-            //Mep.Motion.stop();
-            await Mep.Motion.rotate(new TunedAngle(0), { speed: 30 });
-            */
+            await Delay(500);
 
 
         } catch (e) {
             Mep.Log.error(TAG, e);
             await this.onErrorForwardBack(e);
         }
+        */
 
         this.finish();
     }
 
     async onErrorForwardBack(taskError) {
+        console.log(taskError);
         try {
-            await Mep.Motion.straight(Mep.Motion.getDirection() * (-100));
+            //await Mep.Motion.straight(Mep.Motion.getDirection() * (-100));
             await Mep.Motion.go(new TunedPoint(-1300, 0), {tolerance: 100, speed: 120, pf: true});
             await Mep.Motion.rotate(new TunedAngle(0), {speed: 30});
-            this.finish();
         } catch (e) {
-            this.onErrorForwardBack();
+            console.log(e);
+            this.finish();
         }
     }
 

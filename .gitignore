@@ -1,5 +1,7 @@
 node_modules
 web
+_node_modules
+__node_modules
 
 # Ignore hidden directories
 .idea

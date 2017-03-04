@@ -115,13 +115,11 @@ class MotionService extends EventEmitter {
                 this._targetQueue.addPointsBack(points, params);
 
                 // Start executing a new path
+                this._singleOnPositionChanged = null;
+                this._singleOnStateChanged = null;
                 if (params.tolerance == -1) {
-                    this._singleOnPositionChanged = null;
-                    this._singleOnStateChanged = null;
                     this.stop().then(this._goToNextQueuedTarget);
                 } else {
-                    this._singleOnPositionChanged = null;
-                    this._singleOnStateChanged = null;
                     this.motionDriver.finishCommand();
                     this._goToNextQueuedTarget();
                 }
