@@ -1,7 +1,20 @@
 {
   "Drivers": {
     "CanDriver": {
-      "@class": "drivers/can/CanDriverSimulator"
+      "@class": "drivers/can/CanDriver"
+    },
+
+    "MotionDriver": {
+      "@class": "drivers/motion/MotionDriverSimulator",
+      "@dependencies": []
+    },
+
+    "Lidar": {
+      "@class": "drivers/lidar/LidarDriver",
+      "@load": true,
+      "@dependencies": {
+        "communicator": "CanDriver"
+      }
     },
 
     "InfraredAuto": {
@@ -39,7 +52,7 @@
       "sensorAngle": 90,
       "sensorX": 0,
       "sensorY": 0,
-      "deviceId": 32771,
+      "deviceId": 32770,
       "objectSize": 280
     },
 

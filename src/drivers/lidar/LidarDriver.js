@@ -2,6 +2,8 @@
 
 const EventEmitter = require('events').EventEmitter;
 const simplify = require('simplify-js');
+const Point = Mep.require('misc/Point');
+const Polygon = Mep.require('misc/Polygon');
 
 const TAG = 'LidarDriver';
 
@@ -10,9 +12,9 @@ class LidarDriver extends EventEmitter {
         super();
 
         this.config = Object.assign({
-            id: 1000,
+            cid: 8000,
             eventPeriod: 1000,
-            tolerance: 5
+            tolerance: 60
         }, config);
         this.name = name;
 
@@ -27,7 +29,7 @@ class LidarDriver extends EventEmitter {
         } else {
             this.communicator = Mep.DriverManager.getDriver(this.config['@dependencies'].communicator);
         }
-        this.communicator.on('data_' + this.config.canId, this._onDataReceived);
+        this.communicator.on('data_' + this.config.cid, this._onDataReceived);
 
         this._readings = {};
 
@@ -48,38 +50,48 @@ class LidarDriver extends EventEmitter {
     }
 
     _generatePolygons() {
-        let time = new Date();
+        let time = (new Date).getTime();
         let points = [];
         for (let angle in this._readings) {
             if (time - this._readings[angle].time < this.config.eventPeriod) {
-                // points.push();
-            } else {
-                delete this._readings[angle];
+                let point = new Point(0, this._readings[angle].distance);
+                point.rotate(new Point(0, 0), angle);
+                points.push(point);
             }
         }
 
-        // let polygon = new Polygon(this.name, this.config.duration, point);
-        // this.emit('obstacleDetected', this.name, this.poi, polygon, true);
+        if (points.length > 0) {
+            points = simplify(points, this.config.tolerance);
+            //console.log(points);
 
-        // simplify(points, this.config.tolerance);
+            let polyPoints = [];
+            for (let i = 0; i < points.length; i++) {
+                if (i % 6 === 0 && i !== 0) {
+                    let polygon = new Polygon(this.name, this.config.eventPeriod, polyPoints);
+                    this.emit('obstacleDetected', this.name, polyPoints[0], polygon, true);
+                    polyPoints = [];
+
+                    console.log(polygon);
+                }
+                polyPoints.push(points[i]);
+            }
+        }
+
 
         setTimeout(this._generatePolygons, this.config.eventPeriod);
     }
 
     _onDataReceived(data) {
-        if (data.length !== 8) {
-            Mep.Log.error(TAG, 'Error receiving data');
+        if (data.length !== 4) {
             return;
         }
 
-        let quality = data.readUint8(0) & 0x80;
-        let angle = ((data.readUint8(0) & 0x7F) << 8) | data.readUint8(1);
-        let length = ((data.readUint8(2) & 0xFF) << 8) | data.readUint8(3);
+        let angle = ((data.readUInt8(0) & 0xFF) << 8) | data.readUInt8(1);
+        let distance = ((data.readUInt8(2) & 0xFF) << 8) | data.readUInt8(3);
 
         this._readings[angle] = {
-            quality: quality,
-            length: length,
-            time: new Date()
+            distance: distance,
+            time: (new Date).getTime()
         };
     };
 

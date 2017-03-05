@@ -133,7 +133,7 @@ class InfraredDriver extends EventEmitter {
             }, this.config.duration);
         }
 
-        Mep.Log.debug(TAG, 'Detected at', this.poi);
+        Mep.Log.debug(TAG, this.name, 'Detected at', this.poi);
     }
 
     getGroups() {
