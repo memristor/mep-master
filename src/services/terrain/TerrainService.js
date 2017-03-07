@@ -76,7 +76,7 @@ class TerrainService extends EventEmitter {
         let id = this.pf.addObstacle(polygon.getPoints());
         polygon.setId(id);
 
-        Mep.Log.debug(TAG, 'Obstacle Added', polygon);
+        //Mep.Log.debug(TAG, 'Obstacle Added', polygon);
         Mep.Telemetry.send(TAG, 'ObstacleAdded', polygon);
 
         if (polygon.getDuration() !== Infinity) {
@@ -96,7 +96,7 @@ class TerrainService extends EventEmitter {
 
                 // Try to remove from terrain finding algorithm
                 this.pf.removeObstacle(id);
-                Mep.Log.debug(TAG, 'Obstacle Removed', id);
+                //Mep.Log.debug(TAG, 'Obstacle Removed', id);
                 Mep.Telemetry.send(TAG, 'ObstacleRemoved', { id: id });
                 return true;
             }

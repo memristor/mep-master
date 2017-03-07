@@ -14,7 +14,8 @@ class LidarDriver extends EventEmitter {
         this.config = Object.assign({
             cid: 8000,
             eventPeriod: 1000,
-            tolerance: 60
+            tolerance: 100,
+            volume: 70
         }, config);
         this.name = name;
 
@@ -51,29 +52,57 @@ class LidarDriver extends EventEmitter {
 
     _generatePolygons() {
         let time = (new Date).getTime();
-        let points = [];
+        let minX = 0;
+        let minY = 0;
+        let maxX = 0;
+        let maxY = 0;
+        let polyPointsCount = 0;
+        let previousDistance = 0;
+
         for (let angle in this._readings) {
             if (time - this._readings[angle].time < this.config.eventPeriod) {
-                let point = new Point(0, this._readings[angle].distance);
-                point.rotate(new Point(0, 0), angle);
-                points.push(point);
-            }
-        }
+                if (this._readings[angle].distance < 2000) {
+                    let point = new Point(0, this._readings[angle].distance);
+                    point.rotate(new Point(0, 0), angle);
 
-        if (points.length > 0) {
-            points = simplify(points, this.config.tolerance);
-            //console.log(points);
+                    if (polyPointsCount === 0) {
+                        maxX = point.getX();
+                        minX = point.getX();
+                        maxY = point.getY();
+                        minY = point.getY();
+                        polyPointsCount++;
+                    }
+                    else if (Math.abs(previousDistance - this._readings[angle].distance) < this.config.tolerance) {
+                        if (point.getX() > maxX) maxX = point.getX();
+                        if (point.getX() < minX) minX = point.getX();
+                        if (point.getY() > maxY) maxY = point.getY();
+                        if (point.getY() < minY) minY = point.getY();
+                        polyPointsCount++;
+                    }
+                    else {
+                        if (polyPointsCount < 0 || Math.abs(minY - maxY) > 500) {
+                            //console.log(points[i - 1], points[i], points[i].getDistance(points[i - 1]));
+                        } else {
+                            let polyPoints = [
+                                new Point(minX - this.config.volume, minY - this.config.volume),
+                                new Point(maxX + this.config.volume, minY - this.config.volume),
+                                new Point(maxX + this.config.volume, maxY + this.config.volume),
+                                new Point(minX - this.config.volume, maxY + this.config.volume),
+                            ];
+                            let polygon = new Polygon(this.name, this.config.eventPeriod, polyPoints);
 
-            let polyPoints = [];
-            for (let i = 0; i < points.length; i++) {
-                if (i % 6 === 0 && i !== 0) {
-                    let polygon = new Polygon(this.name, this.config.eventPeriod, polyPoints);
-                    this.emit('obstacleDetected', this.name, polyPoints[0], polygon, true);
-                    polyPoints = [];
+                            this.emit('obstacleDetected',
+                                this.name,
+                                polyPoints[0],
+                                polygon,
+                                true
+                            );
+                        }
+                        polyPointsCount = 0;
+                    }
 
-                    console.log(polygon);
+                    previousDistance = this._readings[angle].distance;
                 }
-                polyPoints.push(points[i]);
             }
         }
 
@@ -89,7 +118,8 @@ class LidarDriver extends EventEmitter {
         let angle = ((data.readUInt8(0) & 0xFF) << 8) | data.readUInt8(1);
         let distance = ((data.readUInt8(2) & 0xFF) << 8) | data.readUInt8(3);
 
-        this._readings[angle] = {
+        let scaledAngle = (-angle + 90) % 360;
+        this._readings[scaledAngle] = {
             distance: distance,
             time: (new Date).getTime()
         };

@@ -4,11 +4,6 @@
       "@class": "drivers/can/CanDriver"
     },
 
-    "MotionDriver": {
-      "@class": "drivers/motion/MotionDriverSimulator",
-      "@dependencies": []
-    },
-
     "Lidar": {
       "@class": "drivers/lidar/LidarDriver",
       "@load": true,
