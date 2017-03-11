@@ -88,6 +88,19 @@ class MotionService extends EventEmitter {
 
     _onObstacleDetected(poi, polygon) {
         // Detect if obstacle is too close
+        /*
+        let target = this._targetQueue.getTargetFront();
+        if (target !== null) {
+            let line = new Line(Mep.Position.getPosition(), target.getPoint());
+            let intersection = line.findIntersectionWithPolygon(polygon);
+            if (intersection !== undefined) {
+                if (intersection.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
+                    this.emit('pathObstacleDetected', true);
+                    return;
+                }
+            }
+        }
+        */
         if (poi.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
             let target = this._targetQueue.getTargetFront();
             if (target !== null) {

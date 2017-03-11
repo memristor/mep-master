@@ -2,6 +2,7 @@
 /** @namespace services.terrain.pathfinding */
 
 const PathFindingBinder = require('bindings')('pathfinding').PathFindingBinder;
+const Point = Mep.require('misc/Point');
 
 let debug = false;
 let TAG = 'Pathfinding';
@@ -14,14 +15,30 @@ class PathFinding extends PathFindingBinder {
      * @return {Number} - ID of the obstacle
      */
     addObstacle(points) {
-        let result = super.addObstacle(points);
+        this.config = {
+            volume: 50
+        };
 
-        if (debug === true) {
-            console.log(TAG, 'addObstacle', points);
-            console.log(TAG, 'addObstacle = ', result);
+        if (points.length === 4) {
+            let minX = points[0].getX();
+            let minY = points[0].getY();
+            let maxX = points[0].getX();
+            let maxY = points[0].getY();
+            for (let i = 1; i < 4; i++) {
+                if (points[i].getX() > maxX) maxX = points[i].getX();
+                if (points[i].getX() < minX) minX = points[i].getX();
+                if (points[i].getY() > maxY) maxY = points[i].getY();
+                if (points[i].getY() < minY) minY = points[i].getY();
+            }
+            points = [
+                new Point(minX - this.config.volume, minY - this.config.volume),
+                new Point(maxX + this.config.volume, minY - this.config.volume),
+                new Point(maxX + this.config.volume, maxY + this.config.volume),
+                new Point(minX - this.config.volume, maxY + this.config.volume),
+            ];
         }
 
-        return result;
+        return super.addObstacle(points);
     }
 
     /**

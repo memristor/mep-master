@@ -41,13 +41,18 @@ class TerrainService extends EventEmitter {
     }
 
     _processObstacleDetection(source, centerPoint, relativePolygon, detected) {
-        let polygon = relativePolygon.clone();
-        polygon.rotate(new Point(0, 0), Mep.Position.getOrientation());
-        polygon.translate(Mep.Position.getPosition());
-
         let poi = centerPoint.clone();
         poi.rotate(new Point(0, 0), Mep.Position.getOrientation());
         poi.translate(Mep.Position.getPosition());
+
+        // Process only if obstacle is in terrain
+        if (poi.getX() < -1500 && poi.getX() > 1500 && poi.getY() < -1000 && poi.getY() > 1000) {
+            return;
+        }
+
+        let polygon = relativePolygon.clone();
+        polygon.rotate(new Point(0, 0), Mep.Position.getOrientation());
+        polygon.translate(Mep.Position.getPosition());
 
         if (detected === true) {
             this.addObstacle(polygon);

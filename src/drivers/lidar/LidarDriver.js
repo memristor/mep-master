@@ -13,9 +13,9 @@ class LidarDriver extends EventEmitter {
 
         this.config = Object.assign({
             cid: 8000,
-            eventPeriod: 1000,
+            eventPeriod: 500,
             tolerance: 100,
-            volume: 70
+            volume: 280
         }, config);
         this.name = name;
 
@@ -79,25 +79,21 @@ class LidarDriver extends EventEmitter {
                         if (point.getY() < minY) minY = point.getY();
                         polyPointsCount++;
                     }
-                    else {
-                        if (polyPointsCount < 0 || Math.abs(minY - maxY) > 500) {
-                            //console.log(points[i - 1], points[i], points[i].getDistance(points[i - 1]));
-                        } else {
-                            let polyPoints = [
-                                new Point(minX - this.config.volume, minY - this.config.volume),
-                                new Point(maxX + this.config.volume, minY - this.config.volume),
-                                new Point(maxX + this.config.volume, maxY + this.config.volume),
-                                new Point(minX - this.config.volume, maxY + this.config.volume),
-                            ];
-                            let polygon = new Polygon(this.name, this.config.eventPeriod, polyPoints);
+                    else if (Math.abs(minY - maxY) < 400 && Math.abs(minX - maxX) < 400) {
+                        let polyPoints = [
+                            new Point(minX - this.config.volume, minY - this.config.volume),
+                            new Point(maxX + this.config.volume, minY - this.config.volume),
+                            new Point(maxX + this.config.volume, maxY + this.config.volume),
+                            new Point(minX - this.config.volume, maxY + this.config.volume),
+                        ];
+                        let polygon = new Polygon(this.name, this.config.eventPeriod, polyPoints);
 
-                            this.emit('obstacleDetected',
-                                this.name,
-                                polyPoints[0],
-                                polygon,
-                                true
-                            );
-                        }
+                        this.emit('obstacleDetected',
+                            this.name,
+                            new Point(minX, maxY),
+                            polygon,
+                            true
+                        );
                         polyPointsCount = 0;
                     }
 

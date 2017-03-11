@@ -17,6 +17,10 @@ class InitTask extends Task {
         console.log('Finished rotation');
     }
 
+    straight(val) {
+        Mep.Motion.straight(val);
+    }
+
     async home() {
         await Mep.Motion.go(new TunedPoint(-1300, 0), { pf: true, tolerance: -1, speed: 100 });
         await Delay(200);
@@ -30,7 +34,7 @@ class InitTask extends Task {
 
     async onRun() {
         await starter.waitStartSignal(this);
-
+        await Mep.Motion.go(new TunedPoint(400, 0), { speed: 100, tolerance: -1, pf: true });
         // Let's move around
         /*
         try {

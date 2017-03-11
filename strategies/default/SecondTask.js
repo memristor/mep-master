@@ -8,8 +8,8 @@ const TAG = 'SecondTask';
 class SecondTask extends Task {
     async onRun() {
         try {
-            await Mep.Motion.go(new TunedPoint(-900, 300 ), { speed: 100, tolerance: 50 });
-            await Mep.Motion.go(new TunedPoint(-600, -300), { speed: 150, tolerance: 50 });
+            //await Mep.Motion.go(new TunedPoint(-900, 300 ), { speed: 100, tolerance: 50, pf: true });
+            //await Mep.Motion.go(new TunedPoint(-600, -300), { speed: 150, tolerance: 50, pf: true });
         } catch (e) {
             if (e.action == 'stuck') {
                 await Mep.Motion.stop();

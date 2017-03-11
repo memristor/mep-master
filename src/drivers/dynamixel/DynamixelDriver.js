@@ -127,33 +127,33 @@ class DynamixelDriver {
     }
 
     getTemperature() {
-        return this._read(AX12.AX_PRESENT_TEMPERATURE);
+        return this._read(DynamixelDriver.AX_PRESENT_TEMPERATURE);
     }
 
     async getVoltage() {
-        let val = await this._read(AX12.AX_PRESENT_VOLTAGE);
+        let val = await this._read(DynamixelDriver.AX_PRESENT_VOLTAGE);
         return val / 10;
     }
 
     getLoad() {
-        return this._read(AX12.AX_PRESENT_LOAD_L);
+        return this._read(DynamixelDriver.AX_PRESENT_LOAD_L);
     }
 
     getTorqueLimit() {
-        return this._read(AX12.AX_TORQUE_LIMIT_L);
+        return this._read(DynamixelDriver.AX_TORQUE_LIMIT_L);
     }
 
     getFirmwareVersion() {
-        return this._read(AX12.AX_VERSION);
+        return this._read(DynamixelDriver.AX_VERSION);
     }
 
     async getPosition() {
-        let position = await this._read(AX12.AX_PRESENT_POSITION_L, true);
+        let position = await this._read(DynamixelDriver.AX_PRESENT_POSITION_L, true);
         return ((position * (300 / 1023)) | 0);
     }
 
     getSpeed() {
-        return this._read(AX12.AX_PRESENT_SPEED_L, true);
+        return this._read(DynamixelDriver.AX_PRESENT_SPEED_L, true);
     }
 
     /**
@@ -169,7 +169,7 @@ class DynamixelDriver {
         let c = Object.assign({
             pollingPeriod: 40,
             tolerance: 3,
-            timeout: 1000,
+            timeout: 3000,
             firmwareImplementation: false
         }, config);
 
@@ -188,7 +188,7 @@ class DynamixelDriver {
                 // Firmware polling implementation
                 throw Error('Firmware implementation is not implemented');
                 this._writeWord(
-                    AX12.AX_POLL_POSITION,
+                    DynamixelDriver.AX_POLL_POSITION,
                     ((c.tolerance << 8) | (c.pollingPeriod & 0xFF))
                 );
 
@@ -197,6 +197,7 @@ class DynamixelDriver {
                 let checkPosition = () => {
                     setTimeout(() => {
                         ax.getPosition().then((currentPosition) => {
+                            console.log(currentPosition);
                             if (Math.abs(currentPosition - position) <= c.tolerance) {
                                 resolve();
                             } else {
@@ -224,11 +225,11 @@ class DynamixelDriver {
     }
 
     setPunch(current) {
-        return this._writeWord(AX12.AX_PUNCH_L, current);
+        return this._writeWord(DynamixelDriver.AX_PUNCH_L, current);
     }
 
     setId(id) {
-        return this._writeByte(AX12.AX_SERVO_ID, id);
+        return this._writeByte(DynamixelDriver.AX_SERVO_ID, id);
     }
 
     setBaudrate(baudrate) {
@@ -244,7 +245,7 @@ class DynamixelDriver {
             9600: 0xCF
         };
         if (baudPairs.hasOwnProperty(baudrate)) {
-            return this._writeByte(AX12.AX_BAUD_RATE, baudPairs[baudrate]);
+            return this._writeByte(DynamixelDriver.AX_BAUD_RATE, baudPairs[baudrate]);
         } else {
             return new Promise((resolve, reject) => {
                 Mep.Log.error(TAG, this.name, 'Invalid baud rate');
@@ -254,12 +255,11 @@ class DynamixelDriver {
     }
 
     setPosition(position) {
-        if (position > 300 || position < 0) {
-            Mep.Log.error(TAG, this.name, 'Position out of range!');
-            return;
+        if (position > 300 || position < 1) {
+            throw Error(TAG, this.name, 'Position out of range!');
         }
 
-        this._writeWord(AX12.AX_GOAL_POSITION_L, (position * (1023 / 300)) | 0);
+        this._writeWord(DynamixelDriver.AX_GOAL_POSITION_L, (position * (1023 / 300)) | 0);
     }
 
     setSpeed(speed) {
@@ -268,19 +268,19 @@ class DynamixelDriver {
             return;
         }
 
-        this._writeWord(AX12.AX_GOAL_SPEED_L, speed | 0);
+        this._writeWord(DynamixelDriver.AX_GOAL_SPEED_L, speed | 0);
     }
 
     setCWAngleLimit(angle) {
-        this._writeWord(AX12.AX_CW_ANGLE_LIMIT_L, (angle * (1023 / 300)) | 0);
+        this._writeWord(DynamixelDriver.AX_CW_ANGLE_LIMIT_L, (angle * (1023 / 300)) | 0);
     }
 
     setCCWAngleLimit(angle) {
-        this._writeWord(AX12.AX_CCW_ANGLE_LIMIT_L, (angle * (1023 / 300)) | 0);
+        this._writeWord(DynamixelDriver.AX_CCW_ANGLE_LIMIT_L, (angle * (1023 / 300)) | 0);
     }
 
     setLED(on) {
-        this._writeByte(AX12.AX_LED, on | 0);
+        this._writeByte(DynamixelDriver.AX_LED, on | 0);
     }
 
     _writeWord(address, word) {
@@ -333,12 +333,12 @@ class DynamixelDriver {
                     return;
                 }
 
-                if (word === true) {
+                if (word === true && data.length > 4) {
                     resolve(
                         (data.readUInt8(4) << 8) |
                         (data.readUInt8(3) & 0xFF)
                     );
-                } else {
+                } else if (data.length > 3) {
                     resolve(data.readUInt8(3));
                 }
                 ax.uniqueDataReceivedCallback = null;

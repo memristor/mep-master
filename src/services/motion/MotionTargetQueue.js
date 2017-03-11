@@ -118,7 +118,7 @@ class MotionTargetQueue {
      * @returns {MotionTarget}
      */
     getPfTarget() {
-        let target = this.getTargetBack();
+        let target = this.getTargetFront();
         if (target !== null && target.getParams().pf === true) {
             return target;
         }

@@ -1,6 +1,8 @@
 'use strict';
 /** @namespace misc */
 
+const Point = require('./Point');
+
 /**
  * Line in 2D space
  * @memberof misc
@@ -48,6 +50,35 @@ class Line {
             this._endPoint.getY()
         );
     }
+
+    // Reference: http://stackoverflow.com/a/40953705/1983050
+    findIntersectionWithLine(line) {
+        let slopeA = (this._startPoint.getY() - this._endPoint.getY()) / (this._startPoint.getX() - this._endPoint.getX());  // slope of line 1
+        let slopeB = (line._startPoint.getY() - line._endPoint.getY()) / (line._startPoint.getX() - line._endPoint.getX());  // slope of line 2
+
+        if ( slopeA - slopeB < Number.EPSILON) {
+            return undefined;
+        } else {
+            return new Point(
+                (slopeA * this._startPoint.getX() - slopeB * line._startPoint.getX() + line._startPoint.getY() - this._startPoint.getY()) / (slopeA - slopeB),
+                (slopeA * slopeB * (line._startPoint.getX() - this._startPoint.getX()) + slopeB * this._startPoint.getY() - slopeA * line._startPoint.getY()) / (slopeB - slopeA)
+            );
+        }
+    }
+
+    findIntersectionWithPolygon(polygon) {
+        for (let i = 0; i < polygon.getPoints().length - 1; i++) {
+            let intersection = this.findIntersectionWithLine(new Line(
+                    polygon.getPoints()[i],
+                    polygon.getPoints()[i + 1]
+                ));
+            if (intersection !== undefined) {
+                return intersection;
+            }
+        }
+        return undefined;
+    }
+
 
     /**
      * Check if it intersect with polygon
