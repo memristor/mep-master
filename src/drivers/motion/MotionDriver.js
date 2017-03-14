@@ -148,6 +148,7 @@ class MotionDriver extends EventEmitter  {
      * @param angle {Number} - Angle
      */
     rotateTo(angle) {
+        Mep.Log.debug(TAG, 'Rotate to:', angle);
         this._sendCommand(Buffer.from([
             'A'.charCodeAt(0),
             angle >> 8,

@@ -14,8 +14,8 @@ class LidarDriver extends EventEmitter {
         this.config = Object.assign({
             cid: 8000,
             eventPeriod: 500,
-            tolerance: 100,
-            volume: 280
+            tolerance: 200,
+            volume: 230
         }, config);
         this.name = name;
 
@@ -57,51 +57,58 @@ class LidarDriver extends EventEmitter {
         let maxX = 0;
         let maxY = 0;
         let polyPointsCount = 0;
-        let previousDistance = 0;
+        let previousPoint = null;
 
         for (let angle in this._readings) {
-            if (time - this._readings[angle].time < this.config.eventPeriod) {
+            // Ignore some measurements
+            if (time - this._readings[angle].time > this.config.eventPeriod) {
+                continue;
+            }
+
+            let point = new Point(0, this._readings[angle].distance);
+            point.rotate(new Point(0, 0), angle);
+
+            if (polyPointsCount === 0) {
                 if (this._readings[angle].distance < 2000) {
-                    let point = new Point(0, this._readings[angle].distance);
-                    point.rotate(new Point(0, 0), angle);
-
-                    if (polyPointsCount === 0) {
-                        maxX = point.getX();
-                        minX = point.getX();
-                        maxY = point.getY();
-                        minY = point.getY();
-                        polyPointsCount++;
-                    }
-                    else if (Math.abs(previousDistance - this._readings[angle].distance) < this.config.tolerance) {
-                        if (point.getX() > maxX) maxX = point.getX();
-                        if (point.getX() < minX) minX = point.getX();
-                        if (point.getY() > maxY) maxY = point.getY();
-                        if (point.getY() < minY) minY = point.getY();
-                        polyPointsCount++;
-                    }
-                    else if (Math.abs(minY - maxY) < 400 && Math.abs(minX - maxX) < 400) {
-                        let polyPoints = [
-                            new Point(minX - this.config.volume, minY - this.config.volume),
-                            new Point(maxX + this.config.volume, minY - this.config.volume),
-                            new Point(maxX + this.config.volume, maxY + this.config.volume),
-                            new Point(minX - this.config.volume, maxY + this.config.volume),
-                        ];
-                        let polygon = new Polygon(this.name, this.config.eventPeriod, polyPoints);
-
-                        this.emit('obstacleDetected',
-                            this.name,
-                            new Point(minX, maxY),
-                            polygon,
-                            true
-                        );
-                        polyPointsCount = 0;
-                    }
-
-                    previousDistance = this._readings[angle].distance;
+                    maxX = point.getX();
+                    minX = point.getX();
+                    maxY = point.getY();
+                    minY = point.getY();
+                    polyPointsCount++;
                 }
             }
-        }
+            else if (point.getDistance(previousPoint) < this.config.tolerance) {
+                if (point.getX() > maxX) maxX = point.getX();
+                if (point.getX() < minX) minX = point.getX();
+                if (point.getY() > maxY) maxY = point.getY();
+                if (point.getY() < minY) minY = point.getY();
+                polyPointsCount++;
+            }
+            else {
+                if (maxY - minY < 400 && maxX - minX < 400) {
+                    let offsetX = (this.config.volume - (maxX - minX) / 2);
+                    let offsetY = (this.config.volume - (maxY - minY) / 2);
+                    let polyPoints = [
+                        new Point(minX - offsetX, minY - offsetY),
+                        new Point(maxX + offsetX, minY - offsetY),
+                        new Point(maxX + offsetX, maxY + offsetY),
+                        new Point(minX - offsetX, maxY + offsetY),
+                    ];
+                    let polygon = new Polygon(this.name, this.config.eventPeriod, polyPoints);
+                    let poi = new Point((minX + maxX) / 2, (minY + maxY) / 2);
 
+                    this.emit('obstacleDetected',
+                        this.name,
+                        poi,
+                        polygon,
+                        true
+                    );
+                }
+                polyPointsCount = 0;
+            }
+
+            previousPoint = point;
+        }
 
         setTimeout(this._generatePolygons, this.config.eventPeriod);
     }
@@ -114,7 +121,7 @@ class LidarDriver extends EventEmitter {
         let angle = ((data.readUInt8(0) & 0xFF) << 8) | data.readUInt8(1);
         let distance = ((data.readUInt8(2) & 0xFF) << 8) | data.readUInt8(3);
 
-        let scaledAngle = (-angle + 90) % 360;
+        let scaledAngle = (-angle + 95) % 360;
         this._readings[scaledAngle] = {
             distance: distance,
             time: (new Date).getTime()
