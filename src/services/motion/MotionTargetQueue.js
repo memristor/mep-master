@@ -103,7 +103,7 @@ class MotionTargetQueue {
      * @returns {misc.Line}
      */
     getPfLine() {
-        let target = this.getPfTarget();
+        let target = this.getTargetFront();
         if (target !== null) {
             return (new Line(
                 Mep.Position.getPosition(),
@@ -129,6 +129,7 @@ class MotionTargetQueue {
      * Remove target from front of queue
      */
     removeFront() {
+        console.log(this._targets);
         this._targets.splice(0, 1);
     }
 

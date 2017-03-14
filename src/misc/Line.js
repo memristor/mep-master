@@ -113,31 +113,6 @@ class Line {
     }
 
 
-    /*
-    _onSeg(xi, yi, xj, yj, xk, yk) {
-        return (xi <= xk || xj <= xk) && (xk <= xi || xk <= xj) &&
-            (yi <= yk || yj <= yk) && (yk <= yi || yk <= yj);
-    }
-
-    _dir(xi, yi, xj, yj, xk, yk) {
-        let a = (xk - xi) * (yj - yi);
-        let b = (xj - xi) * (yk - yi);
-        return a < b ? -1 : a > b ? 1 : 0;
-    }
-
-    _intersect(x1, y1, x2, y2, x3, y3, x4, y4) {
-        let d1 = this._dir(x3, y3, x4, y4, x1, y1);
-        let d2 = this._dir(x3, y3, x4, y4, x2, y2);
-        let d3 = this._dir(x1, y1, x2, y2, x3, y3);
-        let d4 = this._dir(x1, y1, x2, y2, x4, y4);
-        return (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) &&
-            ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0))) ||
-            (d1 === 0 && this._onSeg(x3, y3, x4, y4, x1, y1)) ||
-            (d2 === 0 && this._onSeg(x3, y3, x4, y4, x2, y2)) ||
-            (d3 === 0 && this._onSeg(x1, y1, x2, y2, x3, y3)) ||
-            (d4 === 0 && this._onSeg(x1, y1, x2, y2, x4, y4));
-    }
-    */
 }
 
 module.exports = Line;

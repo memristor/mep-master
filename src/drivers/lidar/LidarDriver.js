@@ -13,8 +13,8 @@ class LidarDriver extends EventEmitter {
 
         this.config = Object.assign({
             cid: 8000,
-            eventPeriod: 500,
-            tolerance: 200,
+            eventPeriod: 250,
+            tolerance: 400,
             volume: 230
         }, config);
         this.name = name;
@@ -121,7 +121,7 @@ class LidarDriver extends EventEmitter {
         let angle = ((data.readUInt8(0) & 0xFF) << 8) | data.readUInt8(1);
         let distance = ((data.readUInt8(2) & 0xFF) << 8) | data.readUInt8(3);
 
-        let scaledAngle = (-angle + 95) % 360;
+        let scaledAngle = (-angle + 92) % 360;
         this._readings[scaledAngle] = {
             distance: distance,
             time: (new Date).getTime()

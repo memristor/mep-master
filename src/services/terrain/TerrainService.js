@@ -46,7 +46,7 @@ class TerrainService extends EventEmitter {
         poi.translate(Mep.Position.getPosition());
 
         // Process only if obstacle is in terrain
-        if (poi.getX() < -1500 && poi.getX() > 1500 && poi.getY() < -1000 && poi.getY() > 1000) {
+        if (poi.getX() < -1350 || poi.getX() > 1350 || poi.getY() < -850 || poi.getY() > 850) {
             return;
         }
 

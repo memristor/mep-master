@@ -22,7 +22,7 @@ class InitTask extends Task {
     }
 
     async home() {
-        await Mep.Motion.go(new TunedPoint(-1300, 0), { pf: true, tolerance: -1, speed: 100 });
+        await Mep.Motion.go(new TunedPoint(-1300, 0), { pf: true, tolerance: -1, speed: 150 });
         await Delay(200);
         await Mep.Motion.rotate(new TunedAngle(0));
         console.log('Arrived to home');
@@ -36,7 +36,7 @@ class InitTask extends Task {
         await starter.waitStartSignal(this);
 
         try {
-            await Mep.Motion.go(new TunedPoint(500, 0), {speed: 110, tolerance: -1, pf: true});
+            await Mep.Motion.go(new TunedPoint(500, 0), {speed: 150, tolerance: -1, pf: true});
             await this.home();
         } catch (e) {
             console.log(e);
