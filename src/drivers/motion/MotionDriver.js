@@ -22,6 +22,7 @@ class MotionDriver extends EventEmitter  {
     static get STATE_ROTATING() { return 'R'.charCodeAt(0); }
     static get STATE_ERROR() { return 'E'.charCodeAt(0); }
     static get STATE_UNDEFINED() { return 'U'.charCodeAt(0); }
+    static get STATE_BREAK() { return 'B'.charCodeAt(0); }
 
     /**
      * @param name {String} - Unique driver name
@@ -38,7 +39,7 @@ class MotionDriver extends EventEmitter  {
             startSpeed: 100,
             refreshDataPeriod: 100,
             connectionTimeout: 4000,
-            ackTimeout: 100
+            ackTimeout: 300
         }, config);
 
         this.positon = new Point(config.startX, config.startY);

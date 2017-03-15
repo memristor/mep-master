@@ -6,6 +6,8 @@
     "scheduler": "",
     "host": "",
 
+    "obstacleMaxPeriod": 400,
+
     "Log": {
       "Console" :{
         "active" : true,

@@ -55,7 +55,6 @@ class InfraredDriver extends EventEmitter {
             throw 'Infrared driver requires driver which enables communication with electronics board (eg. CanDriver)';
         }
         this.config = Object.assign({
-            duration: 2000,
             objectSize: 150,
             sensorX: 0,
             sensorY: 0,
@@ -72,7 +71,7 @@ class InfraredDriver extends EventEmitter {
 
         // Approximation of detected object
         this.poi = new Point(this.config.sensorX, this.config.sensorY + this.config.infraredMaxDistance);
-        this.polygon = new Polygon(name, this.config.duration, [
+        this.polygon = new Polygon(name, Mep.Config.get('obstacleMaxPeriod'), [
             new Point(this.poi.getX() - this.config.objectSize, this.poi.getY() - this.config.objectSize),
             new Point(this.poi.getX() + this.config.objectSize, this.poi.getY() - this.config.objectSize),
             new Point(this.poi.getX() + this.config.objectSize, this.poi.getY() + this.config.objectSize),
@@ -130,7 +129,7 @@ class InfraredDriver extends EventEmitter {
             let infraredDriver = this;
             this.timeoutHandle = setTimeout(() => {
                 infraredDriver.processDetection(buffer);
-            }, this.config.duration);
+            }, Mep.Config.get('obstacleMaxPeriod'));
         }
 
         Mep.Log.debug(TAG, this.name, 'Detected at', this.poi);

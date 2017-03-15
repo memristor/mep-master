@@ -147,7 +147,7 @@ class Task {
 
             this._obstacleDetectedTimeout = setTimeout(() => {
                 Mep.Motion.resume();
-            }, 2000);
+            }, Mep.Config.get('obstacleMaxPeriod') + 100);
         } else {
             Mep.Motion.resume();
         }

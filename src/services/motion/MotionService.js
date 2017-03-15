@@ -45,6 +45,7 @@ class MotionService extends EventEmitter {
         this._direction = this.DIRECTION_NONE;
         this._stopped = false;
         this._paused = false;
+        this._obstacleDetectedTimeout = null;
 
         // Event method configuration
         this._goToNextQueuedTarget = this._goToNextQueuedTarget.bind(this);
@@ -87,34 +88,27 @@ class MotionService extends EventEmitter {
     }
 
     _onObstacleDetected(poi, polygon) {
-        // Detect if obstacle is too close
-        /*
         let target = this._targetQueue.getTargetFront();
-        if (target !== null) {
-            let line = new Line(Mep.Position.getPosition(), target.getPoint());
-            let intersection = line.findIntersectionWithPolygon(polygon);
-            if (intersection !== undefined) {
-                if (intersection.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
-                    this.emit('pathObstacleDetected', true);
-                    return;
-                }
-            }
-        }
-        */
+        if (target === null) return;
+        let line = new Line(Mep.Position.getPosition(), target.getPoint());
+
         if (poi.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
-            let target = this._targetQueue.getTargetFront();
-            if (target !== null) {
-                let line = new Line(Mep.Position.getPosition(), target.getPoint());
-                if (line.isIntersectWithPolygon(polygon) === true) {
-                    this.emit('pathObstacleDetected', true);
-                    return;
+            if (line.isIntersectWithPolygon(polygon) === true) {
+                this._singleOnPositionChanged = null;
+                this._singleOnStateChanged = null;
+                Mep.Motion.stop();
+
+                if (this._obstacleDetectedTimeout !== null) {
+                    clearTimeout(this._obstacleDetectedTimeout);
                 }
+                this._obstacleDetectedTimeout = setTimeout(() => {
+                    this._goToNextQueuedTarget();
+                }, Mep.Config.get('obstacleMaxPeriod') + 100);
             }
         }
 
         // Detect if obstacle intersect path and try to design a new path
-        let line = this._targetQueue.getPfLine();
-        if (line !== null && line.isIntersectWithPolygon(polygon)) {
+        if (line.isIntersectWithPolygon(polygon)) {
             // Redesign path
             let points = Mep.Terrain.findPath(Mep.Position.getPosition(), this._targetQueue.getPfTarget().getPoint());
             if (points.length > 0) {
@@ -130,6 +124,8 @@ class MotionService extends EventEmitter {
                 // Start executing a new path
                 this._singleOnPositionChanged = null;
                 this._singleOnStateChanged = null;
+
+                this._paused = false;
                 if (params.tolerance == -1) {
                     this.stop().then(this._goToNextQueuedTarget);
                 } else {
@@ -197,12 +193,14 @@ class MotionService extends EventEmitter {
                 target.getPoint(),
                 target.getParams()
             ).then(() => {
-                if (motionService._paused === false) {
+                if (motionService._stopped === false) {
                     motionService._targetQueue.removeFront();
                     motionService._goToNextQueuedTarget();
                 }
             }).catch((e) => {
-                motionService._reject(e);
+                if (e.action !== 'break') {
+                    motionService._reject(e);
+                }
             });
         }
     }
@@ -213,7 +211,8 @@ class MotionService extends EventEmitter {
         return new Promise((resolve, reject) => {
             let onPositionChanged = (name, currentPosition) => {
                 if (currentPosition.getDistance(point) <= tolerance) {
-                    this._singleOnPositionChanged = null;
+                    motionService._singleOnStateChanged = null;
+                    motionService._singleOnPositionChanged = null;
                     motionService.motionDriver.finishCommand();
                     resolve();
                 }
@@ -222,16 +221,24 @@ class MotionService extends EventEmitter {
             let onStateChanged = (name, state) => {
                 switch (state) {
                     case MotionDriver.STATE_IDLE:
-                        this._singleOnStateChanged = null;
+                        motionService._singleOnStateChanged = null;
+                        motionService._singleOnPositionChanged = null;
                         resolve();
                         break;
                     case MotionDriver.STATE_STUCK:
-                        this._singleOnStateChanged = null;
+                        motionService._singleOnStateChanged = null;
+                        motionService._singleOnPositionChanged = null;
                         reject(new TaskError(TAG, 'stuck', 'Robot is stacked'));
                         break;
                     case MotionDriver.STATE_ERROR:
-                        this._singleOnStateChanged = null;
+                        motionService._singleOnStateChanged = null;
+                        motionService._singleOnPositionChanged = null;
                         reject(new TaskError(TAG, 'error', 'Unknown moving error'));
+                        break;
+                    case MotionDriver.STATE_BREAK:
+                        motionService._singleOnStateChanged = null;
+                        motionService._singleOnPositionChanged = null;
+                        reject(new TaskError(TAG, 'break', 'Command is broken by another one'));
                         break;
                 }
             };
@@ -301,6 +308,11 @@ class MotionService extends EventEmitter {
      */
     stop(softStop = false) {
         this._stopped = true;
+
+        if (this._singleOnStateChanged !== null) {
+            this._singleOnStateChanged(TAG, MotionDriver.STATE_BREAK);
+        }
+
         if (softStop === true) {
             this.motionDriver.softStop();
         } else {
