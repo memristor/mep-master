@@ -6,6 +6,7 @@ const Line = Mep.require('misc/Line');
 
 const TAG = 'MotionTargetQueue';
 
+
 /**
  * Queue of targets (points) that robot has to reach.
  * @memberOf services.motion
@@ -129,7 +130,6 @@ class MotionTargetQueue {
      * Remove target from front of queue
      */
     removeFront() {
-        console.log(this._targets);
         this._targets.splice(0, 1);
     }
 

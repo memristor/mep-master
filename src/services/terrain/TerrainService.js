@@ -20,10 +20,16 @@ class TerrainService extends EventEmitter {
             maxX: 1500,
             minY: -1000,
             maxY: 1000,
+            pfOffset: 50
         }, config);
 
         this.obstacles = [];
-        this.pf = new PathFinding(1500, -1500, 1000, -1000);
+        this.pf = new PathFinding(
+            1500 - this.config.pfOffset,
+            -1500 + this.config.pfOffset,
+            1000 - this.config.pfOffset,
+            -1000 + this.config.pfOffset
+        );
 
         // Add static obstacles
         for (let pointsArray of config.staticObstacles) {
@@ -74,11 +80,34 @@ class TerrainService extends EventEmitter {
         return points;
     }
 
+    _getOffsetPoints(points) {
+        if (points.length === 4) {
+            let minX = points[0].getX();
+            let minY = points[0].getY();
+            let maxX = points[0].getX();
+            let maxY = points[0].getY();
+            for (let i = 1; i < 4; i++) {
+                if (points[i].getX() > maxX) maxX = points[i].getX();
+                if (points[i].getX() < minX) minX = points[i].getX();
+                if (points[i].getY() > maxY) maxY = points[i].getY();
+                if (points[i].getY() < minY) minY = points[i].getY();
+            }
+            return [
+                new Point(minX - this.config.pfOffset, minY - this.config.pfOffset),
+                new Point(maxX + this.config.pfOffset, minY - this.config.pfOffset),
+                new Point(maxX + this.config.pfOffset, maxY + this.config.pfOffset),
+                new Point(minX - this.config.pfOffset, maxY + this.config.pfOffset),
+            ];
+        }
+        return points;
+    }
+
     addObstacle(polygon) {
         let pathService = this;
 
         this.obstacles.push(polygon);
-        let id = this.pf.addObstacle(polygon.getPoints());
+
+        let id = this.pf.addObstacle(this._getOffsetPoints(polygon.getPoints()));
         polygon.setId(id);
 
         //Mep.Log.debug(TAG, 'Obstacle Added', polygon);

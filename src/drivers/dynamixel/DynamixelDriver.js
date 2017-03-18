@@ -197,7 +197,6 @@ class DynamixelDriver {
                 let checkPosition = () => {
                     setTimeout(() => {
                         ax.getPosition().then((currentPosition) => {
-                            console.log(currentPosition);
                             if (Math.abs(currentPosition - position) <= c.tolerance) {
                                 resolve();
                             } else {

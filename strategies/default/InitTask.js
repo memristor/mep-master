@@ -39,7 +39,7 @@ class InitTask extends Task {
             await Mep.Motion.go(new TunedPoint(770, -700), {speed: 120, tolerance: -1, pf: true});
             await this.home();
         } catch (e) {
-            console.log(e);
+            Mep.Log.error(TAG, e);
         }
         // Let's move around
         /*
@@ -71,13 +71,12 @@ class InitTask extends Task {
     }
 
     async onErrorForwardBack(taskError) {
-        console.log(taskError);
         try {
             //await Mep.Motion.straight(Mep.Motion.getDirection() * (-100));
             await Mep.Motion.go(new TunedPoint(-1300, 0), {tolerance: 100, speed: 120, pf: true});
             await Mep.Motion.rotate(new TunedAngle(0), {speed: 30});
         } catch (e) {
-            console.log(e);
+            Mep.Log.error(TAG, e);
             this.finish();
         }
     }

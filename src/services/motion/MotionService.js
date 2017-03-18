@@ -68,23 +68,27 @@ class MotionService extends EventEmitter {
         let line = new Line(Mep.Position.getPosition(), target.getPoint());
 
         if (poi.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
-            if (line.isIntersectWithPolygon(polygon) === true) {
-                Mep.Motion.stop();
 
+            if (line.isIntersectWithPolygon(polygon) === true) {
                 if (this._obstacleDetectedTimeout !== null) {
                     clearTimeout(this._obstacleDetectedTimeout);
                 } else {
                     this.emit('pathObstacleDetected', true);
+                    console.log('Simple Stop');
                 }
+
                 this._obstacleDetectedTimeout = setTimeout(() => {
                     this._obstacleDetectedTimeout = null;
                     motionService.emit('pathObstacleDetected', false);
-                    this.resume();
+                    console.log('Simple Resume');
                 }, Mep.Config.get('obstacleMaxPeriod') + 100);
+
+                return;
             }
         }
 
         // Detect if obstacle intersect path and try to design a new path
+        return;
         if (this._targetQueue.getPfTarget() !== null && line.isIntersectWithPolygon(polygon)) {
             // Redesign path
             let points = Mep.Terrain.findPath(Mep.Position.getPosition(), this._targetQueue.getPfTarget().getPoint());
@@ -98,9 +102,9 @@ class MotionService extends EventEmitter {
                 this._targetQueue.empty();
                 this._targetQueue.addPointsBack(points, params);
 
-                this._paused = false;
                 if (params.tolerance == -1) {
                     this.stop().then(this.resume);
+                    console.log('Pf Stop and Resume');
                 } else {
                     this.motionDriver.finishCommand();
                     this.resume();

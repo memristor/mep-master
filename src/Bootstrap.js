@@ -1,5 +1,4 @@
 'use strict';
-
 global.Mep = require('./Mep');
 
 async function bootstrap() {

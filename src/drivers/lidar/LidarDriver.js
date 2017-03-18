@@ -107,7 +107,7 @@ class LidarDriver extends EventEmitter {
         let angle = ((data.readUInt8(0) & 0xFF) << 8) | data.readUInt8(1);
         let distance = ((data.readUInt8(2) & 0xFF) << 8) | data.readUInt8(3);
 
-        let scaledAngle = (360 - angle + 92) % 360;
+        let scaledAngle = (360 - angle + 95) % 360;
         this._readings[scaledAngle] = {
             distance: distance,
             time: (new Date).getTime()

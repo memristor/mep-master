@@ -214,6 +214,7 @@ class MotionDriver extends EventEmitter  {
      */
     stop() {
         this._stopped = true;
+        this.emit('stateChanged', this.name, MotionDriver.STATE_BREAK);
         this._sendCommand(Buffer.from(['S'.charCodeAt(0)]));
         return this._promiseToStateChanged();
     }
@@ -223,6 +224,7 @@ class MotionDriver extends EventEmitter  {
      */
     softStop() {
         this._stopped = true;
+        this.emit('stateChanged', this.name, MotionDriver.STATE_BREAK);
         this._sendCommand(Buffer.from(['s'.charCodeAt(0)]));
         return this._promiseToStateChanged();
     }

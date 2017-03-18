@@ -135,22 +135,13 @@ class Task {
      * @param detected
      */
     onPathObstacle(detected) {
-        this.pathObstacleDetected = detected;
-
-        if (this._obstacleDetectedTimeout !== null) {
-            clearTimeout(this._obstacleDetectedTimeout);
-        }
-
-        if (this.pathObstacleDetected === true) {
+        if (detected === true) {
             Mep.Motion.stop();
-            Mep.Motion.pause();
-
-            this._obstacleDetectedTimeout = setTimeout(() => {
-                Mep.Motion.resume();
-            }, Mep.Config.get('obstacleMaxPeriod') + 100);
         } else {
             Mep.Motion.resume();
         }
+
+        Mep.Log.debug(TAG, 'onPathObstacle', detected);
     }
 }
 
