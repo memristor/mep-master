@@ -41,7 +41,8 @@ class Polygon {
     }
 
     setId(id) {
-        this.id = id;
+        this.id = id
+        return this;
     }
 
     getId() {
@@ -56,6 +57,7 @@ class Polygon {
         for (let point of this.points) {
             point.translate(translatePoint);
         }
+        return this;
     }
 
     /**
@@ -67,6 +69,7 @@ class Polygon {
         for (let point of this.points) {
             point.rotate(originPoint, angleDegrees)
         }
+        return this;
     }
 
     /**

@@ -47,6 +47,7 @@ class Point {
     translate(translatePoint) {
         this.x += translatePoint.getX();
         this.y += translatePoint.getY();
+        return this;
     }
 
     /**
@@ -61,6 +62,8 @@ class Point {
         let y = Math.sin(angle) * (this.x - originPoint.getX()) + Math.cos(angle) * (this.y - originPoint.getY()) + originPoint.getY();
         this.x = x | 0;
         this.y = y | 0;
+
+        return this;
     }
 
     /**
@@ -77,6 +80,7 @@ class Point {
      */
     setY(y) {
         this.y = y;
+        return this;
     }
 
     /**
@@ -85,6 +89,7 @@ class Point {
      */
     setX(x) {
         this.x = x;
+        return this;
     }
 
     /**

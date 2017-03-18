@@ -25,7 +25,8 @@ class MotionService extends EventEmitter {
         this.config = Object.assign({
             hazardObstacleDistance: 200,
             timeToStop: 100,
-            maxBypassTolerance: 50
+            maxBypassTolerance: 50,
+            targetLineOffset: 120
         }, config);
 
         this.motionDriver = Mep.DriverManager.getDriver('MotionDriver');
@@ -65,10 +66,17 @@ class MotionService extends EventEmitter {
         let motionService = this;
         let target = this._targetQueue.getTargetFront();
         if (target === null) return;
-        let line = new Line(Mep.Position.getPosition(), target.getPoint());
 
+        // Generate target line offset
+        let offset = new Point(this.config.targetLineOffset, 0);
+        offset.rotate(new Point(0, 0), Mep.Position.getOrientation());
+        let line = new Line(
+            Mep.Position.getPosition().clone().translate(offset),
+            target.getPoint().clone().translate(offset)
+        );
+
+        // Hazard region
         if (poi.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
-
             if (line.isIntersectWithPolygon(polygon) === true) {
                 if (this._obstacleDetectedTimeout !== null) {
                     clearTimeout(this._obstacleDetectedTimeout);
