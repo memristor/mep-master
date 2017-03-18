@@ -25,9 +25,10 @@ describe('TerrainService', () => {
 
     describe('#findPath', () => {
         it('should return correct terrain', () => {
-            let pathPoints = terrainService.findPath(new Point(0, 0), new Point(101, 101));
-            assert(pathPoints[0].getX() === 100);
-            assert(pathPoints[0].getY() === 1);
+            let pathPoints = terrainService.findPath(new Point(0, 0), new Point(200, 200));
+            // Polygon has offset in path finding algorithm
+            assert(pathPoints[0].getX() > 100 || pathPoints[0].getX() < 0);
+            assert(pathPoints[0].getY() > 100 || pathPoints[0].getY() < 0);
         });
     });
 

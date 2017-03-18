@@ -4,6 +4,8 @@
 const Point = Mep.require('misc/Point');
 const EventEmitter = require('events');
 const Buffer = require('buffer').Buffer;
+const TaskError = Mep.require('strategy/TaskError');
+
 
 const TAG = 'MotionDriver';
 
@@ -46,11 +48,16 @@ class MotionDriver extends EventEmitter  {
         this.state = MotionDriver.STATE_UNDEFINED;
         this.orientation = config.startOrientation;
         this._activeSpeed = config.startSpeed;
+        this._stopped = false;
 
         this.communicator = Mep.DriverManager.getDriver(config['@dependencies'].communicator);
         this.communicator.on('data', this._onDataReceived.bind(this));
 
         this._waitACKQueue = {};
+    }
+
+    isStopped() {
+        return this._stopped;
     }
 
     _waitACK(type) {
@@ -155,6 +162,36 @@ class MotionDriver extends EventEmitter  {
             angle >> 8,
             angle & 0xFF
         ]));
+
+        return this._promiseToStateChanged();
+    }
+
+    _promiseToStateChanged() {
+        let motionDriver = this;
+
+        return new Promise((resolve, reject) => {
+            let stateListener = (name, state) => {
+                switch (state) {
+                    case MotionDriver.STATE_IDLE:
+                        resolve();
+                        motionDriver.removeListener('stateChanged', stateListener);
+                        break;
+                    case MotionDriver.STATE_STUCK:
+                        reject(new TaskError(TAG, 'stuck', 'Robot is stacked'));
+                        motionDriver.removeListener('stateChanged', stateListener);
+                        break;
+                    case MotionDriver.STATE_ERROR:
+                        reject(new TaskError(TAG, 'error', 'Unknown moving error'));
+                        motionDriver.removeListener('stateChanged', stateListener);
+                        break;
+                    case MotionDriver.STATE_BREAK:
+                        reject(new TaskError(TAG, 'break', 'Command is broken by another one'));
+                        motionDriver.removeListener('stateChanged', stateListener);
+                        break;
+                }
+            };
+            this.on('stateChanged', stateListener);
+        });
     }
 
     /**
@@ -169,20 +206,25 @@ class MotionDriver extends EventEmitter  {
             millimeters & 0xFF,
             0
         ]));
+        return this._promiseToStateChanged();
     }
 
     /**
      * Stop the robot.
      */
     stop() {
+        this._stopped = true;
         this._sendCommand(Buffer.from(['S'.charCodeAt(0)]));
+        return this._promiseToStateChanged();
     }
 
     /**
      * Stop robot by turning off motors.
      */
     softStop() {
+        this._stopped = true;
         this._sendCommand(Buffer.from(['s'.charCodeAt(0)]));
+        return this._promiseToStateChanged();
     }
 
     /**
@@ -227,6 +269,9 @@ class MotionDriver extends EventEmitter  {
             0,
             direction
         ]));
+        this._stopped = false;
+
+        return this._promiseToStateChanged();
     }
 
     /**
@@ -236,7 +281,9 @@ class MotionDriver extends EventEmitter  {
      * @param direction {Number} - Direction, can be MotionDriver.DIRECTION_FORWARD or
      * MotionDriver.DIRECTION_BACKWARD
      */
-    moveToCurvilinear(position, direction) {
+    moveToCurvilinear(position, direction, tolerance) {
+        let motionDriver = this;
+
         this._sendCommand(Buffer.from([
             'N'.charCodeAt(0),
             position.getX() >> 8,
@@ -245,6 +292,26 @@ class MotionDriver extends EventEmitter  {
             position.getY() & 0xff,
             direction
         ]));
+        this._stopped = false;
+
+        return new Promise((resolve, reject) => {
+            let positionListener = (name, currentPosition) => {
+                if (currentPosition.getDistance(position) <= tolerance) {
+                    motionDriver.removeListener('positionChanged', positionListener);
+                    resolve();
+                }
+            };
+            this.on('positionChanged', positionListener);
+            this._promiseToStateChanged()
+                .then(() => {
+                    motionDriver.removeListener('positionChanged', positionListener);
+                    resolve();
+                })
+                .catch((e) => {
+                    motionDriver.removeListener('positionChanged', positionListener);
+                    reject(e);
+                });
+        });
     }
 
     /**
@@ -321,7 +388,7 @@ class MotionDriver extends EventEmitter  {
      * @private
      */
     _onDataReceived(buffer, type) {
-        if (type === ('P'.charCodeAt(0)) && buffer.length === 9) {
+        if (type == 'P'.charCodeAt(0) && buffer.length === 9) {
             this._onPReceived(buffer);
         }
         else if (type == 'A'.charCodeAt(0) && buffer.length === 1) {

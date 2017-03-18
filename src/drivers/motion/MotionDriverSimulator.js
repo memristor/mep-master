@@ -3,6 +3,7 @@
 
 const Point = Mep.require('misc/Point');
 const EventEmitter = require('events');
+const TaskError = Mep.require('strategy/TaskError');
 
 const TAG = 'MotionDriverSimulator';
 
@@ -12,14 +13,14 @@ const TAG = 'MotionDriverSimulator';
  * @see MotionDriver
  * @memberOf drivers.motion
  */
-class MotionDriverSimulator extends EventEmitter {
-    static get DIRECTION_FORWARD() { return 1; }
-    static get DIRECTION_BACKWARD() { return -1; }
+class MotionDriver extends EventEmitter {
     static get STATE_IDLE() { return 'I'.charCodeAt(0); }
     static get STATE_STUCK() { return 'S'.charCodeAt(0); }
     static get STATE_MOVING() { return 'M'.charCodeAt(0); }
     static get STATE_ROTATING() { return 'R'.charCodeAt(0); }
     static get STATE_ERROR() { return 'E'.charCodeAt(0); }
+    static get STATE_BREAK() { return 'B'.charCodeAt(0); }
+    static get STATE_UNDEFINED() { return 'U'.charCodeAt(0); }
 
     constructor(name, config) {
         super();
@@ -33,7 +34,7 @@ class MotionDriverSimulator extends EventEmitter {
 
         this.position = new Point(this.config.startX, this.config.startY);
         this.orientation = this.config.startOrientation;
-        this.direction = MotionDriverSimulator.DIRECTION_FORWARD;
+        this.direction = MotionDriver.DIRECTION_FORWARD;
 
         this.onPositionChanged = this.onPositionChanged.bind(this);
         this.onStateChanged = this.onStateChanged.bind(this);
@@ -45,6 +46,34 @@ class MotionDriverSimulator extends EventEmitter {
         Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'orientationChanged'), this.onOrientationChanged);
 
         Mep.Log.debug(TAG, 'Driver with name', name, 'initialized');
+    }
+
+    _promiseToStateChanged() {
+        let motionDriver = this;
+
+        return new Promise((resolve, reject) => {
+            let stateListener = (name, state) => {
+                switch (state) {
+                    case MotionDriver.STATE_IDLE:
+                        resolve();
+                        motionDriver.removeListener('stateChanged', stateListener);
+                        break;
+                    case MotionDriver.STATE_STUCK:
+                        reject(new TaskError(TAG, 'stuck', 'Robot is stacked'));
+                        motionDriver.removeListener('stateChanged', stateListener);
+                        break;
+                    case MotionDriver.STATE_ERROR:
+                        reject(new TaskError(TAG, 'error', 'Unknown moving error'));
+                        motionDriver.removeListener('stateChanged', stateListener);
+                        break;
+                    case MotionDriver.STATE_BREAK:
+                        reject(new TaskError(TAG, 'break', 'Command is broken by another one'));
+                        motionDriver.removeListener('stateChanged', stateListener);
+                        break;
+                }
+            };
+            this.on('stateChanged', stateListener);
+        });
     }
 
     onPositionChanged(packet) {
@@ -82,20 +111,21 @@ class MotionDriverSimulator extends EventEmitter {
         return this.direction;
     }
 
-    moveToPosition(position, direction, callback) {
+    moveToPosition(position, direction) {
         Mep.Telemetry.send(TAG, 'moveToPosition', {
             x: position.getX(),
             y: position.getY(),
             direction: direction
         });
+        return this._promiseToStateChanged();
     }
 
-    finishCommand(callback) {
+    finishCommand() {
         Mep.Log.warn(TAG, 'finishCommand() not implemented');
     }
 
     moveToCurvilinear(position, direction, callback) {
-        this.moveToPosition(position, direction, callback);
+        return this.moveToPosition(position, direction, callback);
     }
 
     setSpeed(speed) {
@@ -104,6 +134,13 @@ class MotionDriverSimulator extends EventEmitter {
 
     stop() {
         Mep.Log.warn(TAG, 'stop() not implemented');
+    }
+
+    rotateTo() {
+        Mep.Log.warn(TAG, 'rotateTo() not implemented');
+        return new Promise((resolve, reject) => {
+            setTimeout(resolve, 100);
+        });
     }
 
     getOrientation() {
@@ -119,4 +156,4 @@ class MotionDriverSimulator extends EventEmitter {
     }
 }
 
-module.exports = MotionDriverSimulator;
+module.exports = MotionDriver;

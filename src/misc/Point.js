@@ -21,7 +21,7 @@ class Point {
 
     /**
      * Calculate Euclidean distance between two Points
-     * @param point {Point} - Another point to compare with
+     * @param point {misc.Point} - Another point to compare with
      * @returns {number} - Distance between two Points
      */
     getDistance(point) {

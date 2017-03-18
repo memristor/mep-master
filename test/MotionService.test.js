@@ -33,7 +33,7 @@ describe('MotionServiceTest', () => {
         });
 
         it('should not fire an event', (done) => {
-            assert(spy.args[1] === undefined);
+            assert(spy.args[1][0] === false);
             done();
         });
     });

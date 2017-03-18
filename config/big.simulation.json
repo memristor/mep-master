@@ -20,6 +20,12 @@
       "sensorY": 0,
       "deviceId": 1,
       "objectSize": 100
+    },
+
+    "Uart": {
+      "@class": "drivers/uart/Uart",
+      "@load": false,
+      "protocol": "PLLSP"
     }
   }
 }

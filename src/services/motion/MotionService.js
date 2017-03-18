@@ -42,45 +42,19 @@ class MotionService extends EventEmitter {
         this._resolve = null;
         this._reject = null;
 
-        this._direction = this.DIRECTION_NONE;
-        this._stopped = false;
         this._paused = false;
         this._obstacleDetectedTimeout = null;
 
         // Event method configuration
         this._goToNextQueuedTarget = this._goToNextQueuedTarget.bind(this);
         this._onObstacleDetected = this._onObstacleDetected.bind(this);
-        this._onPositionChanged = this._onPositionChanged.bind(this);
-        this._onStateChanged = this._onStateChanged.bind(this);
 
         // Subscribe on sensors that can provide obstacles on the robot's terrain
         Mep.Terrain.on('obstacleDetected', this._onObstacleDetected);
-        this.motionDriver.on('positionChanged', this._onPositionChanged);
-        this.motionDriver.on('stateChanged', this._onStateChanged);
-
-        // Single subscriber events
-        this._singleOnPositionChanged = null;
-        this._singleOnStateChanged = null;
-    }
-
-    _onStateChanged(name, state) {
-        if (this._singleOnStateChanged !== null) {
-            this._singleOnStateChanged(name, state);
-        }
-    }
-
-    _onPositionChanged(name, position) {
-        if (this._singleOnPositionChanged !== null) {
-            this._singleOnPositionChanged(name, position);
-        }
-    }
-
-    getDirection() {
-        return this._direction;
     }
 
     isStopped() {
-        return this._stopped;
+        return this.motionDriver.isStopped();
     }
 
     isPaused() {
@@ -88,27 +62,30 @@ class MotionService extends EventEmitter {
     }
 
     _onObstacleDetected(poi, polygon) {
+        let motionService = this;
         let target = this._targetQueue.getTargetFront();
         if (target === null) return;
         let line = new Line(Mep.Position.getPosition(), target.getPoint());
 
         if (poi.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
             if (line.isIntersectWithPolygon(polygon) === true) {
-                this._singleOnPositionChanged = null;
-                this._singleOnStateChanged = null;
                 Mep.Motion.stop();
 
                 if (this._obstacleDetectedTimeout !== null) {
                     clearTimeout(this._obstacleDetectedTimeout);
+                } else {
+                    this.emit('pathObstacleDetected', true);
                 }
                 this._obstacleDetectedTimeout = setTimeout(() => {
-                    this._goToNextQueuedTarget();
+                    this._obstacleDetectedTimeout = null;
+                    motionService.emit('pathObstacleDetected', false);
+                    this.resume();
                 }, Mep.Config.get('obstacleMaxPeriod') + 100);
             }
         }
 
         // Detect if obstacle intersect path and try to design a new path
-        if (line.isIntersectWithPolygon(polygon)) {
+        if (this._targetQueue.getPfTarget() !== null && line.isIntersectWithPolygon(polygon)) {
             // Redesign path
             let points = Mep.Terrain.findPath(Mep.Position.getPosition(), this._targetQueue.getPfTarget().getPoint());
             if (points.length > 0) {
@@ -121,16 +98,12 @@ class MotionService extends EventEmitter {
                 this._targetQueue.empty();
                 this._targetQueue.addPointsBack(points, params);
 
-                // Start executing a new path
-                this._singleOnPositionChanged = null;
-                this._singleOnStateChanged = null;
-
                 this._paused = false;
                 if (params.tolerance == -1) {
-                    this.stop().then(this._goToNextQueuedTarget);
+                    this.stop().then(this.resume);
                 } else {
                     this.motionDriver.finishCommand();
-                    this._goToNextQueuedTarget();
+                    this.resume();
                 }
             } else {
                 Mep.Log.warn(TAG, 'Cannot redesign path, possible crash!');
@@ -189,70 +162,15 @@ class MotionService extends EventEmitter {
             this._resolve();
         } else {
             let target = this._targetQueue.getTargetFront();
-            this._goSingleTarget(
-                target.getPoint(),
-                target.getParams()
-            ).then(() => {
-                if (motionService._stopped === false) {
-                    motionService._targetQueue.removeFront();
-                    motionService._goToNextQueuedTarget();
-                }
+            this._goSingleTarget(target.getPoint(), target.getParams()).then(() => {
+                motionService._targetQueue.removeFront();
+                motionService._goToNextQueuedTarget();
             }).catch((e) => {
                 if (e.action !== 'break') {
                     motionService._reject(e);
                 }
             });
         }
-    }
-
-    _promiseToReachDestination(point, tolerance) {
-        let motionService = this;
-
-        return new Promise((resolve, reject) => {
-            let onPositionChanged = (name, currentPosition) => {
-                if (currentPosition.getDistance(point) <= tolerance) {
-                    motionService._singleOnStateChanged = null;
-                    motionService._singleOnPositionChanged = null;
-                    motionService.motionDriver.finishCommand();
-                    resolve();
-                }
-            };
-
-            let onStateChanged = (name, state) => {
-                switch (state) {
-                    case MotionDriver.STATE_IDLE:
-                        motionService._singleOnStateChanged = null;
-                        motionService._singleOnPositionChanged = null;
-                        resolve();
-                        break;
-                    case MotionDriver.STATE_STUCK:
-                        motionService._singleOnStateChanged = null;
-                        motionService._singleOnPositionChanged = null;
-                        reject(new TaskError(TAG, 'stuck', 'Robot is stacked'));
-                        break;
-                    case MotionDriver.STATE_ERROR:
-                        motionService._singleOnStateChanged = null;
-                        motionService._singleOnPositionChanged = null;
-                        reject(new TaskError(TAG, 'error', 'Unknown moving error'));
-                        break;
-                    case MotionDriver.STATE_BREAK:
-                        motionService._singleOnStateChanged = null;
-                        motionService._singleOnPositionChanged = null;
-                        reject(new TaskError(TAG, 'break', 'Command is broken by another one'));
-                        break;
-                }
-            };
-
-            // If tolerance is set to use Euclid's distance to determine if robot can execute next command
-            // It is useful if you want to continue
-            if (tolerance >= 0) {
-                this._singleOnPositionChanged = onPositionChanged;
-                onPositionChanged('auto', Mep.Position.getPosition());
-            }
-
-            // In every case wait new state of motion driver
-            this._singleOnStateChanged = onStateChanged;
-        });
     }
 
     /**
@@ -266,7 +184,6 @@ class MotionService extends EventEmitter {
      */
     _goSingleTarget(point, params) {
         Mep.Log.debug(TAG, 'Simple target go',  point);
-        this._stopped = false;
         this._paused = false;
 
         // Set speed
@@ -274,32 +191,12 @@ class MotionService extends EventEmitter {
             this.motionDriver.setSpeed(params.speed);
         }
 
-        // Save direction
-        this._direction = params.direction;
-
         // Move the robot
         if (params.tolerance < 0) {
-            this.motionDriver.moveToPosition(point, params.direction);
+            return this.motionDriver.moveToPosition(point, params.direction);
         } else {
-            this.motionDriver.moveToCurvilinear(point, params.direction);
+            return this.motionDriver.moveToCurvilinear(point, params.direction, params.tolerance);
         }
-
-        // Check when robot reached the position
-        return this._promiseToReachDestination(point, params.tolerance);
-    }
-
-    /**
-     * Make a curve
-     * @param point {Number} - Center of circle
-     * @param angle {Number} - Angle
-     * @param direction {Number} - Direction
-     * @returns {Promise}
-     */
-    arc(point, angle, direction) {
-        this._stopped = false;
-        this._direction = direction;
-        this.motionDriver.moveArc(point, angle, direction);
-        return this._promiseToReachDestination();
     }
 
     /**
@@ -307,21 +204,12 @@ class MotionService extends EventEmitter {
      * @param softStop - If true robot will turn of motors
      */
     stop(softStop = false) {
-        this._stopped = true;
-
-        if (this._singleOnStateChanged !== null) {
-            this._singleOnStateChanged(TAG, MotionDriver.STATE_BREAK);
-        }
-
+        this.pause();
         if (softStop === true) {
-            this.motionDriver.softStop();
+            return this.motionDriver.softStop();
         } else {
-            this.motionDriver.stop();
+            return this.motionDriver.stop();
         }
-
-        return new Promise((resolve, reject) => {
-            setTimeout(resolve, this.config.timeToStop);
-        });
     }
 
 
@@ -342,10 +230,7 @@ class MotionService extends EventEmitter {
      * @returns {Promise}
      */
     straight(millimeters) {
-        this._stopped = false;
-        this._direction = (millimeters > 0) ? this.DIRECTION_FORWARD : this.DIRECTION_BACKWARD;
-        this.motionDriver.goForward(millimeters | 0);
-        return this._promiseToReachDestination(null, -1);
+        return this.motionDriver.goForward(millimeters | 0);
     }
 
     /**
@@ -355,9 +240,7 @@ class MotionService extends EventEmitter {
      * @returns {Promise}
      */
     rotate(tunedAngle, options) {
-        this._stopped = false;
-        this.motionDriver.rotateTo(tunedAngle.getAngle());
-        return this._promiseToReachDestination(null, -1);
+        return this.motionDriver.rotateTo(tunedAngle.getAngle());
     }
 }
 

@@ -36,7 +36,7 @@ class InitTask extends Task {
         await starter.waitStartSignal(this);
 
         try {
-            await Mep.Motion.go(new TunedPoint(500, 0), {speed: 120, tolerance: -1, pf: true});
+            await Mep.Motion.go(new TunedPoint(770, -700), {speed: 120, tolerance: -1, pf: true});
             await this.home();
         } catch (e) {
             console.log(e);
