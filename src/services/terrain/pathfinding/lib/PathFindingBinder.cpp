@@ -1,5 +1,31 @@
 #include "PathFindingBinder.h"
 
+
+class AsyncAddObstacleWorker : public Nan::AsyncWorker {
+public:
+    AsyncAddObstacleWorker(Nan::Callback* callback, PathFinding* pathFinding, std::vector<geometry::Point2D>* points) :
+        Nan::AsyncWorker(callback),
+        pathFinding(pathFinding),
+        points(points) { }
+    ~AsyncAddObstacleWorker() {
+        delete points;
+     }
+    void Execute() {
+        id = pathFinding->addObstacle(*points);
+    }
+
+    void HandleOKCallback() {
+        v8::Local<v8::Value> argv[] = {
+            Nan::New<v8::Number>(id)
+        };
+        callback->Call(1, argv);
+    }
+private:
+    PathFinding* pathFinding;
+    std::vector<geometry::Point2D>* points;
+    int id;
+};
+
 PathFindingBinder::PathFindingBinder(int maxX, int minX, int maxY, int minY) {
     pathFinding = new PathFinding(maxX, minX, maxY, minY);
 }
@@ -63,16 +89,16 @@ void PathFindingBinder::search(const Nan::FunctionCallbackInfo<Value> &args) {
 void PathFindingBinder::addObstacle(const Nan::FunctionCallbackInfo<Value> &args) {
     Nan::HandleScope scope;
 
-    std::vector<geometry::Point2D> points;
+    std::vector<geometry::Point2D>* points = new std::vector<geometry::Point2D>();
 
     // Export points
     Local<Object> jsPoints = args[0]->ToObject();
     int pointsNumber = jsPoints->Get(Nan::New<v8::String>("length").ToLocalChecked())->ToObject()->Uint32Value();
-    points.resize(pointsNumber);
+    points->resize(pointsNumber);
 
     for (int i = 0; i < pointsNumber; i++) {
         Local<Object> jsPoint = jsPoints->Get(i)->ToObject();
-        points[i] = geometry::Point2D(
+        (*points)[i] = geometry::Point2D(
             jsPoint->Get(Nan::New<v8::String>("x").ToLocalChecked())->IntegerValue(),
             jsPoint->Get(Nan::New<v8::String>("y").ToLocalChecked())->IntegerValue()
         );
@@ -80,10 +106,10 @@ void PathFindingBinder::addObstacle(const Nan::FunctionCallbackInfo<Value> &args
 
     // Add to path finding
     PathFinding *pathFinding = ObjectWrap::Unwrap<PathFindingBinder>(args.Holder())->getPathFinding();
-    int id = pathFinding->addObstacle(points);
+    int id = pathFinding->addObstacle(*points);
 
-    // Return id
-    args.GetReturnValue().Set(id);
+    //Callback *callback = new Callback(args[1].As<v8::Function>());
+    //AsyncQueueWorker(new AsyncAddObstacleWorker(callback, pathFinding, points));
 }
 
 void PathFindingBinder::removeObstacle(const Nan::FunctionCallbackInfo<Value> &args) {

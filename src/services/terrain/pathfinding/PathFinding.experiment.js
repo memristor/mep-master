@@ -13,11 +13,13 @@ let points = [
 ];
 let polygon = new Polygon('test', Infinity, points);
 
-let id = pf.addObstacle(polygon.getPoints());
+let id = pf.addObstacle(polygon.getPoints(), () => {});
 
 setInterval(() => {
     let timeStart = process.hrtime();
-    let ret = pf.search(new Point(0, 0), new Point(101, 101));
+    pf.addObstacle(polygon.getPoints(), (id) => {
+        console.log(id)
+    });
     //Buffer.alloc(1);
     let timerEnd = process.hrtime(timeStart)[1] / 1000;
     console.log('Time took', timerEnd);

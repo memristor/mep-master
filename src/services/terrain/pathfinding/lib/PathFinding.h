@@ -12,6 +12,7 @@
 #include <vector>
 #include <deque>
 #include <map>
+#include <mutex>
 
 #include "Polygon.h"
 #include "Point2D.h"
@@ -38,6 +39,7 @@ private:
 	std::vector<State*> childrenList;
 
 	int maxX, minX, maxY, minY;
+	std::mutex mtx;
 
 	int heuristic(const State &s) const;
 	int evalFunction(const State &s) const;

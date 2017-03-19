@@ -306,6 +306,8 @@ void PathFinding::cleanUpObstacles()
 
 int PathFinding::addObstacle(const vector<geometry::Point2D> &obstaclePoints)
 {
+    std::lock_guard<std::mutex> lock(mtx);
+
 	Polygon *newPol = new Polygon(obstaclePoints);
 
 	addAdjecentMaybeVisible(*newPol);

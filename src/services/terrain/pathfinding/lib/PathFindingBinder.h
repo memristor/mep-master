@@ -12,6 +12,9 @@ using v8::Handle;
 using v8::Isolate;
 using v8::Exception;
 using namespace std;
+using Nan::Callback;
+using Nan::New;
+
 using path_finding::PathFinding;
 
 class PathFindingBinder : public Nan::ObjectWrap {
