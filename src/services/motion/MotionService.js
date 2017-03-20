@@ -17,16 +17,12 @@ const TAG = 'MotionService';
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
 class MotionService extends EventEmitter {
-    get DIRECTION_FORWARD() { return 1; }
-    get DIRECTION_BACKWARD() { return -1; }
-    get DIRECTION_NONE() { return 0; }
-
     init(config) {
         this.config = Object.assign({
             hazardObstacleDistance: 200,
             timeToStop: 100,
             maxBypassTolerance: 50,
-            targetLineOffset: 120
+            targetLineOffset: 200
         }, config);
 
         this.motionDriver = Mep.DriverManager.getDriver('MotionDriver');
@@ -54,10 +50,6 @@ class MotionService extends EventEmitter {
         Mep.Terrain.on('obstacleDetected', this._onObstacleDetected);
     }
 
-    isStopped() {
-        return this.motionDriver.isStopped();
-    }
-
     isPaused() {
         return this._paused;
     }
@@ -76,43 +68,51 @@ class MotionService extends EventEmitter {
         );
 
         // Hazard region
-        if (poi.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
-            if (line.isIntersectWithPolygon(polygon) === true) {
+        if (line.isIntersectWithPolygon(polygon) === true) {
+            if (poi.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
+
                 if (this._obstacleDetectedTimeout !== null) {
                     clearTimeout(this._obstacleDetectedTimeout);
                 } else {
                     this.emit('pathObstacleDetected', true);
-                    console.log('Simple Stop');
                 }
 
                 this._obstacleDetectedTimeout = setTimeout(() => {
                     this._obstacleDetectedTimeout = null;
                     motionService.emit('pathObstacleDetected', false);
-                    console.log('Simple Resume');
                 }, Mep.Config.get('obstacleMaxPeriod') + 100);
-
-                return;
+            } else {
+                // Try to redesign a path
+                if (target.getParams().rerouting === true) {
+                    this.tryRerouting();
+                }
             }
         }
+    }
 
-        // Detect if obstacle intersect path and try to design a new path
-        return;
-        if (this._targetQueue.getPfTarget() !== null && line.isIntersectWithPolygon(polygon)) {
+    tryRerouting() {
+        let motionService = this;
+
+        let pfTarget = this._targetQueue.getTargetBack();
+        if (pfTarget !== null) {
             // Redesign path
-            let points = Mep.Terrain.findPath(Mep.Position.getPosition(), this._targetQueue.getPfTarget().getPoint());
+            let points = Mep.Terrain.findPath(Mep.Position.getPosition(), pfTarget.getPoint());
             if (points.length > 0) {
-                let params = this._targetQueue.getPfTarget().getParams();
+                let params = pfTarget.getParams();
 
                 // Reduce tolerance to get better to get better bypass
-                params.tolerance = params.tolerance > this.config.maxBypassTolerance ? this.config.maxBypassTolerance : params.tolerance;
+                params.tolerance = (params.tolerance > this.config.maxBypassTolerance) ?
+                    this.config.maxBypassTolerance :
+                    params.tolerance;
 
                 // Redesign a path
                 this._targetQueue.empty();
                 this._targetQueue.addPointsBack(points, params);
 
                 if (params.tolerance == -1) {
-                    this.stop().then(this.resume);
-                    console.log('Pf Stop and Resume');
+                    this.stop().then(() => {
+                        motionService.resume();
+                    });
                 } else {
                     this.motionDriver.finishCommand();
                     this.resume();
@@ -130,7 +130,8 @@ class MotionService extends EventEmitter {
      *
      * @param {TunedPoint} tunedPoint - Point that should be reached
      * @param {Boolean} parameters.pf - Use terrain finding algorithm
-     * @param {String} parameters.direction - Direction of robot movement
+     * @param {Boolean} parameters.backward - Enable backward robot moving
+     * @param {Boolean} params.rerouting - Enable rerouting during the movement
      * @param {Boolean} parameters.relative - Use relative to previous position
      * @param {Number} parameters.tolerance - Position will consider as reached if Euclid's distance between current
      * and required position is less than tolerance
@@ -188,7 +189,7 @@ class MotionService extends EventEmitter {
     /**
      * Go to single point without advanced features
      * @param point {misc.Point} - Target point
-     * @param params.direction {Number} - Direction
+     * @param params.backward {Boolean} - Move robot backward
      * @param params.tolerance {Number} - Max radius
      * @param params.speed {Number} - Speed
      * @return {Promise}
@@ -205,9 +206,16 @@ class MotionService extends EventEmitter {
 
         // Move the robot
         if (params.tolerance < 0) {
-            return this.motionDriver.moveToPosition(point, params.direction);
+            return this.motionDriver.moveToPosition(
+                point,
+                params.backward ? -1 : 1
+            );
         } else {
-            return this.motionDriver.moveToCurvilinear(point, params.direction, params.tolerance);
+            return this.motionDriver.moveToCurvilinear(
+                point,
+                params.backward ? -1 : 1,
+                params.tolerance
+            );
         }
     }
 

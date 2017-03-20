@@ -137,7 +137,12 @@ class Task {
     onPathObstacle(detected) {
         if (detected === true) {
             Mep.Motion.stop();
+
+            this._obstacleDetectedTimeout = setTimeout(() => {
+                Mep.Motion.tryRerouting();
+            }, 1000);
         } else {
+            clearTimeout(this._obstacleDetectedTimeout);
             Mep.Motion.resume();
         }
 

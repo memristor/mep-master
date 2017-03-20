@@ -107,6 +107,7 @@ void PathFindingBinder::addObstacle(const Nan::FunctionCallbackInfo<Value> &args
     // Add to path finding
     PathFinding *pathFinding = ObjectWrap::Unwrap<PathFindingBinder>(args.Holder())->getPathFinding();
     int id = pathFinding->addObstacle(*points);
+    args.GetReturnValue().Set(id);
 
     //Callback *callback = new Callback(args[1].As<v8::Function>());
     //AsyncQueueWorker(new AsyncAddObstacleWorker(callback, pathFinding, points));

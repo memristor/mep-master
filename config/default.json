@@ -6,7 +6,7 @@
     "scheduler": "",
     "host": "",
 
-    "obstacleMaxPeriod": 400,
+    "obstacleMaxPeriod": 300,
 
     "Log": {
       "Console" :{
@@ -84,11 +84,12 @@
           "hazardObstacleDistance": 350,
           "timeToStop": 300,
           "moveOptions": {
+            "rerouting": false,
             "pf": false,
-            "direction": 1,
+            "backward": false,
             "relative": false,
             "tolerance": -1,
-            "speed": 40
+            "speed": 80
           },
           "rotateOptions": {
             "relative": false
