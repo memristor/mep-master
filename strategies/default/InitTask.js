@@ -22,7 +22,7 @@ class InitTask extends Task {
     }
 
     async home() {
-        await Mep.Motion.go(new TunedPoint(-1300, 0), { pf: true, tolerance: -1, speed: 100, backward: true });
+        await Mep.Motion.go(new TunedPoint(-1000, 0), { pf: true, tolerance: -1, speed: 100, backward: true });
         await Delay(200);
         await Mep.Motion.rotate(new TunedAngle(0));
         console.log('Arrived to home');
@@ -36,52 +36,15 @@ class InitTask extends Task {
         await starter.waitStartSignal(this);
 
         try {
-            await Mep.Motion.go(new TunedPoint(1000, 0 ), { speed: 120, tolerance:  -1, pf: true, rerouting: false });
+            await Mep.Motion.go(new TunedPoint(0, 0), { speed: 120, tolerance:  -1, pf: true, rerouting: false });
 
             await this.home();
         } catch (e) {
             Mep.Log.error(TAG, e);
         }
-        // Let's move around
-        /*
-        try {
-            let config = { speed: 150, pf: true, tolerance: 100 };
-
-            await Mep.Motion.go(new TunedPoint(-83, 564), config);
-            await Mep.Motion.go(new TunedPoint(-650, 300), config);
-            return;
-
-
-            await Mep.Motion.go(new TunedPoint(0, 600), config);
-            await Mep.Motion.go(new TunedPoint(620, -620), config);
-            await Mep.Motion.go(new TunedPoint(-800, -620), config);
-            await Mep.Motion.go(new TunedPoint(-1300, 0), config);
-
-            await Delay(500);
-            await Mep.Motion.rotate(new TunedAngle(0));
-            await Delay(500);
-
-
-        } catch (e) {
-            Mep.Log.error(TAG, e);
-            await this.onErrorForwardBack(e);
-        }
-        */
 
         this.finish();
     }
-
-    async onErrorForwardBack(taskError) {
-        try {
-            //await Mep.Motion.straight(Mep.Motion.getDirection() * (-100));
-            await Mep.Motion.go(new TunedPoint(-1300, 0), {tolerance: 100, speed: 120, pf: true});
-            await Mep.Motion.rotate(new TunedAngle(0), {speed: 30});
-        } catch (e) {
-            Mep.Log.error(TAG, e);
-            this.finish();
-        }
-    }
-
 }
 
 module.exports = InitTask;

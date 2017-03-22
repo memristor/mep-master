@@ -7,8 +7,8 @@ const TunedPoint = Mep.require('strategy/TunedPoint');
 describe('MotionServiceTest', () => {
     describe('#pathObstacleDetected', () => {
         let spy = sinon.spy();
-        let point = new Point(100, 0);
-        let polygon = (new Polygon()).makeSquareAroundPoint(point, 50);
+        let point = new Point(150, 0);
+        let polygon = (new Polygon()).makeSquareAroundPoint(point, 100);
 
 
 

@@ -139,7 +139,7 @@ class Task {
             Mep.Motion.stop();
 
             this._obstacleDetectedTimeout = setTimeout(() => {
-                Mep.Motion.tryRerouting();
+                //Mep.Motion.tryRerouting();
             }, 1000);
         } else {
             clearTimeout(this._obstacleDetectedTimeout);

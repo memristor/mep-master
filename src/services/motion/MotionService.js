@@ -19,13 +19,12 @@ const TAG = 'MotionService';
 class MotionService extends EventEmitter {
     init(config) {
         this.config = Object.assign({
-            hazardObstacleDistance: 200,
-            timeToStop: 100,
+            hazardObstacleDistance: 400,
             maxBypassTolerance: 50,
-            targetLineOffset: 200
+            targetLineOffset: 150
         }, config);
 
-        this.motionDriver = Mep.DriverManager.getDriver('MotionDriver');
+        this.motionDriver = Mep.getDriver('MotionDriver');
 
         // Important for simulation
         this._targetQueue = new MotionTargetQueue((targets) => {
@@ -60,15 +59,15 @@ class MotionService extends EventEmitter {
         if (target === null) return;
 
         // Generate target line offset
-        let offset = new Point(this.config.targetLineOffset, 0);
-        offset.rotate(new Point(0, 0), Mep.Position.getOrientation());
+        let offset = (new Point(this.config.targetLineOffset * this.motionDriver.getDirection(), 0))
+            .rotate(new Point(0, 0), Mep.Position.getOrientation());
         let line = new Line(
             Mep.Position.getPosition().clone().translate(offset),
             target.getPoint().clone().translate(offset)
         );
 
         // Hazard region
-        if (line.isIntersectWithPolygon(polygon) === true) {
+        if (polygon.isPointInside(poi) || line.isIntersectWithPolygon(polygon) === true) {
             if (poi.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
 
                 if (this._obstacleDetectedTimeout !== null) {
@@ -160,7 +159,7 @@ class MotionService extends EventEmitter {
 
         return new Promise((resolve, reject) => {
             if (this._targetQueue.isEmpty()) {
-                reject(new TaskError(TAG, 'PathFinding', 'Cannot go to required position, no path found'));
+                reject(new TaskError(TAG, 'pf', 'Cannot go to required position, no path found'));
                 return;
             }
             this._resolve = resolve;

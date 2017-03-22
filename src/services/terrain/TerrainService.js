@@ -20,15 +20,16 @@ class TerrainService extends EventEmitter {
             maxX: 1500,
             minY: -1000,
             maxY: 1000,
+            offset: 130,
             pfOffset: 50
         }, config);
 
         this.obstacles = [];
         this.pf = new PathFinding(
-            1500 - this.config.pfOffset,
-            -1500 + this.config.pfOffset,
-            1000 - this.config.pfOffset,
-            -1000 + this.config.pfOffset
+            1500 - this.config.offset,
+            -1500 + this.config.offset,
+            1000 - this.config.offset,
+            -1000 + this.config.offset
         );
 
         // Add static obstacles
@@ -52,7 +53,10 @@ class TerrainService extends EventEmitter {
         poi.translate(Mep.Position.getPosition());
 
         // Process only if obstacle is in terrain
-        if (poi.getX() < -1350 || poi.getX() > 1350 || poi.getY() < -850 || poi.getY() > 850) {
+        if (poi.getX() < -1500 + this.config.offset ||
+            poi.getX() > 1500 - this.config.offset ||
+            poi.getY() < -1000 + this.config.offset ||
+            poi.getY() > 1000 - this.config.offset) {
             return;
         }
 

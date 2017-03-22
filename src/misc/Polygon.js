@@ -104,6 +104,25 @@ class Polygon {
         }
         return new Polygon(this.tag, this.duration, points);
     }
+
+    isPointInside(point) {
+        let minX = this.points[0].getX();
+        let maxX = this.points[0].getX();
+        let minY = this.points[0].getY();
+        let maxY = this.points[0].getY();
+
+        for (let i = 1; i < this.points.length; i++) {
+            if (point.getX() > maxX) maxX = this.points[i].getX();
+            if (point.getX() < minX) minX = this.points[i].getX();
+            if (point.getY() > maxY) maxY = this.points[i].getY();
+            if (point.getY() < minY) minY = this.points[i].getY();
+        }
+
+        if (point.getX() < minX || point.getX() > maxX || point.getY() < minY || point.getY() > maxY) {
+            return false;
+        }
+        return true;
+    }
 }
 
 module.exports = Polygon;

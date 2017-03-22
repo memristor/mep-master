@@ -67,6 +67,14 @@ class Line {
     }
 
     findIntersectionWithPolygon(polygon) {
+        let intersection = this.findIntersectionWithLine(new Line(
+            polygon.getPoints()[0],
+            polygon.getPoints()[polygon.getPoints().length - 1]
+        ));
+        if (intersection !== undefined) {
+            return intersection;
+        }
+
         for (let i = 0; i < polygon.getPoints().length - 1; i++) {
             let intersection = this.findIntersectionWithLine(new Line(
                     polygon.getPoints()[i],

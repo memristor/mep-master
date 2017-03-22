@@ -41,6 +41,13 @@ class LidarDriver extends EventEmitter {
             polyPointsCount: 0,
             previousPoint: null
         };
+
+        for (let i = 0; i < 360; i++) {
+            this._readings[i] = {
+                distance: Infinity,
+                time: (new Date).getTime()
+            };
+        }
     }
 
     // Run this when robot stop
@@ -107,7 +114,7 @@ class LidarDriver extends EventEmitter {
         let angle = ((data.readUInt8(0) & 0xFF) << 8) | data.readUInt8(1);
         let distance = ((data.readUInt8(2) & 0xFF) << 8) | data.readUInt8(3);
 
-        let scaledAngle = (360 - angle + 95) % 360;
+        let scaledAngle = (360 - angle + 180) % 360;
         this._readings[scaledAngle] = {
             distance: distance,
             time: (new Date).getTime()

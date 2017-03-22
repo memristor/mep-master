@@ -26,6 +26,10 @@ class MotionDriver extends EventEmitter  {
     static get STATE_UNDEFINED() { return 'U'.charCodeAt(0); }
     static get STATE_BREAK() { return 'B'.charCodeAt(0); }
 
+    static get DIRECTION_FORWARD() { return 1; }
+    static get DIRECTION_UNDEFINED() { return 0; }
+    static get DIRECTION_BACKWARD() { return -1; }
+
     /**
      * @param name {String} - Unique driver name
      * @param config {Object} - Configuration presented as an associative array
@@ -49,6 +53,7 @@ class MotionDriver extends EventEmitter  {
         this.orientation = config.startOrientation;
         this._activeSpeed = config.startSpeed;
         this._breaking = false;
+        this._direction = MotionDriver.DIRECTION_UNDEFINED;
 
         this.communicator = Mep.DriverManager.getDriver(config['@dependencies'].communicator);
         this.communicator.on('data', this._onDataReceived.bind(this));
@@ -74,6 +79,10 @@ class MotionDriver extends EventEmitter  {
         this._waitACK(type);
 
         this.communicator.send(buff);
+    }
+
+    getDirection() {
+        return this._direction;
     }
 
     /**
@@ -152,7 +161,7 @@ class MotionDriver extends EventEmitter  {
      * @param angle {Number} - Angle
      */
     rotateTo(angle) {
-        Mep.Log.debug(TAG, 'Rotate to:', angle);
+        this._direction = MotionDriver.DIRECTION_UNDEFINED;
         this._sendCommand(Buffer.from([
             'A'.charCodeAt(0),
             angle >> 8,
@@ -198,6 +207,8 @@ class MotionDriver extends EventEmitter  {
      * @deprecated
      */
     goForward(millimeters) {
+        this._direction = (millimeters > 0) ?
+            MotionDriver.DIRECTION_FORWARD : MotionDriver.DIRECTION_BACKWARD;
         this._sendCommand(Buffer.from([
             'D'.charCodeAt(0),
             millimeters >> 8,
@@ -211,6 +222,7 @@ class MotionDriver extends EventEmitter  {
      * Stop the robot.
      */
     stop() {
+        this._direction = MotionDriver.DIRECTION_UNDEFINED;
         this._breaking = true;
         this.state = MotionDriver.STATE_BREAK;
         this.emit('stateChanged', this.name, MotionDriver.STATE_BREAK);
@@ -225,6 +237,7 @@ class MotionDriver extends EventEmitter  {
      * Stop robot by turning off motors.
      */
     softStop() {
+        this._direction = MotionDriver.DIRECTION_UNDEFINED;
         this._breaking = true;
         this.emit('stateChanged', this.name, MotionDriver.STATE_BREAK);
         this._sendCommand(Buffer.from(['s'.charCodeAt(0)]));
@@ -267,6 +280,7 @@ class MotionDriver extends EventEmitter  {
      * MotionDriver.DIRECTION_BACKWARD
      */
     moveToPosition(position, direction) {
+        this._direction = direction;
         this._sendCommand(Buffer.from([
             'G'.charCodeAt(0),
             position.getX() >> 8,
@@ -291,6 +305,7 @@ class MotionDriver extends EventEmitter  {
     moveToCurvilinear(position, direction, tolerance) {
         let motionDriver = this;
 
+        this._direction = direction;
         this._sendCommand(Buffer.from([
             'N'.charCodeAt(0),
             position.getX() >> 8,
