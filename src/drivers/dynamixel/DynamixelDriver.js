@@ -66,7 +66,9 @@ class DynamixelDriver {
     constructor(name, config) {
         this.config = Object.assign({
             id: 0xFE,
-            type: 'AX'  // AX or RX
+            type: 'AX',  // AX or RX
+            maxPosition: 1023,
+            minPosition: 0
         }, config);
         this.name = name;
 
@@ -148,8 +150,7 @@ class DynamixelDriver {
     }
 
     async getPosition() {
-        let position = await this._read(DynamixelDriver.AX_PRESENT_POSITION_L, true);
-        return ((position * (300 / 1023)) | 0);
+        return await this._read(DynamixelDriver.AX_PRESENT_POSITION_L, true);
     }
 
     getSpeed() {
@@ -254,11 +255,11 @@ class DynamixelDriver {
     }
 
     setPosition(position) {
-        if (position > 300 || position < 1) {
+        if (position > this.config.maxPosition || position < this.config.minPosition) {
             throw Error(TAG, this.name, 'Position out of range!');
         }
 
-        this._writeWord(DynamixelDriver.AX_GOAL_POSITION_L, (position * (1023 / 300)) | 0);
+        this._writeWord(DynamixelDriver.AX_GOAL_POSITION_L, position | 0);
     }
 
     setSpeed(speed) {
@@ -271,11 +272,11 @@ class DynamixelDriver {
     }
 
     setCWAngleLimit(angle) {
-        this._writeWord(DynamixelDriver.AX_CW_ANGLE_LIMIT_L, (angle * (1023 / 300)) | 0);
+        this._writeWord(DynamixelDriver.AX_CW_ANGLE_LIMIT_L, angle | 0);
     }
 
     setCCWAngleLimit(angle) {
-        this._writeWord(DynamixelDriver.AX_CCW_ANGLE_LIMIT_L, (angle * (1023 / 300)) | 0);
+        this._writeWord(DynamixelDriver.AX_CCW_ANGLE_LIMIT_L, angle | 0);
     }
 
     setLED(on) {

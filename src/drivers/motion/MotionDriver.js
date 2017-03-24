@@ -361,7 +361,7 @@ class MotionDriver extends EventEmitter  {
              * Position changed event.
              * @event drivers.motion.MotionDriver#positionChanged
              * @property {String} driverName - Unique name of a driver
-             * @property {Point} point - Position of the robot
+             * @property {misc.Point} point - Position of the robot
              */
             this.emit('positionChanged',
                 this.name,

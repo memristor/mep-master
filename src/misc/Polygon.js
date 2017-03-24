@@ -4,6 +4,8 @@
 
 const Point = Mep.require('misc/Point');
 
+const TAG = 'Polygon';
+
 /**
  * Describes an polygon
  * @see https://en.wikipedia.org/wiki/Polygon
@@ -41,7 +43,7 @@ class Polygon {
     }
 
     setId(id) {
-        this.id = id
+        this.id = id;
         return this;
     }
 
@@ -105,6 +107,19 @@ class Polygon {
         return new Polygon(this.tag, this.duration, points);
     }
 
+    /**
+     * Optimized algorithm for polygon rotation around coordinate beginning
+     * @param angleDegrees {Number}
+     * @returns {misc.Polygon}
+     */
+    rotateAroundZero(angleDegrees) {
+        for (let point of this.points) {
+            point.rotateAroundZero(angleDegrees)
+        }
+        return this;
+    }
+
+    // TODO: Consider new algorithm: http://stackoverflow.com/a/2752754/1983050
     isPointInside(point) {
         let minX = this.points[0].getX();
         let maxX = this.points[0].getX();
@@ -118,10 +133,7 @@ class Polygon {
             if (point.getY() < minY) minY = this.points[i].getY();
         }
 
-        if (point.getX() < minX || point.getX() > maxX || point.getY() < minY || point.getY() > maxY) {
-            return false;
-        }
-        return true;
+        return !(point.getX() < minX || point.getX() > maxX || point.getY() < minY || point.getY() > maxY);
     }
 }
 
