@@ -66,7 +66,6 @@ class DynamixelDriver {
     constructor(name, config) {
         this.config = Object.assign({
             id: 0xFE,
-            type: 'AX',  // AX or RX
             maxPosition: 1023,
             minPosition: 0
         }, config);
@@ -90,42 +89,38 @@ class DynamixelDriver {
     }
 
     _onDataReceived(data) {
-        // Length === 1 means there is an error in communication (UART, Servo <--> AVR)
-        if (data.length === 1) {
-            switch(data.readInt8(0)) {
-                case 0x03:
-                    Mep.Log.error(TAG, this.name, 'RX Timeout error');
-                    break;
-
-                case 0x02:
-                    Mep.Log.error(TAG, this.name, 'RX Data corrupted');
-                    break;
-
-                case 0x04:
-                    Mep.Log.error(TAG, this.name, 'TX transfer failed');
-                    break;
-
-                case 0x05:
-                    Mep.Log.error(TAG, this.name, 'TX transfer timeout');
-                    break;
-
-                default:
-                    Mep.Log.error(TAG, this.name, 'Unhandled error', data);
-                    break;
-            }
-            return;
-        }
-
         if (data.readUInt8(0) === (this.config.id | 0)) {
+
+            // Length === 1 means there is an error in communication (UART, Servo <--> AVR)
+            if (data.length === 2) {
+                switch (data.readInt8(1)) {
+                    case 0x03:
+                        Mep.Log.error(TAG, this.name, 'RX Timeout error');
+                        break;
+
+                    case 0x02:
+                        Mep.Log.error(TAG, this.name, 'RX Data corrupted');
+                        break;
+
+                    case 0x04:
+                        Mep.Log.error(TAG, this.name, 'TX transfer failed');
+                        break;
+
+                    case 0x05:
+                        Mep.Log.error(TAG, this.name, 'TX transfer timeout');
+                        break;
+
+                    default:
+                        Mep.Log.error(TAG, this.name, 'Unhandled error', data);
+                        break;
+                }
+                return;
+            }
+
             if (this.uniqueDataReceivedCallback !== null) {
                 this.uniqueDataReceivedCallback(data);
             }
         }
-    }
-
-    init(callback) {
-        callback();
-        // Check status
     }
 
     getTemperature() {
@@ -133,8 +128,7 @@ class DynamixelDriver {
     }
 
     async getVoltage() {
-        let val = await this._read(DynamixelDriver.AX_PRESENT_VOLTAGE);
-        return val / 10;
+        return await this._read(DynamixelDriver.AX_PRESENT_VOLTAGE);
     }
 
     getLoad() {
@@ -169,7 +163,7 @@ class DynamixelDriver {
     go(position, config) {
         let c = Object.assign({
             pollingPeriod: 40,
-            tolerance: 3,
+            tolerance: 15,
             timeout: 3000,
             firmwareImplementation: false
         }, config);
@@ -205,7 +199,7 @@ class DynamixelDriver {
                                     checkPosition();
                                 }
                             }
-                        });
+                        }).catch(checkPosition);
                     }, c.pollingPeriod);
                 };
                 checkPosition();
@@ -258,14 +252,17 @@ class DynamixelDriver {
         if (position > this.config.maxPosition || position < this.config.minPosition) {
             throw Error(TAG, this.name, 'Position out of range!');
         }
-
         this._writeWord(DynamixelDriver.AX_GOAL_POSITION_L, position | 0);
     }
 
-    setSpeed(speed) {
+    setSpeed(speed, inverse = false) {
         if (speed > 1023 || speed < 0) {
             Mep.Log.error(TAG, this.name, 'Speed out of range!');
             return;
+        }
+
+        if (inverse === true) {
+            speed = (1 << 10) | speed;
         }
 
         this._writeWord(DynamixelDriver.AX_GOAL_SPEED_L, speed | 0);
@@ -324,6 +321,8 @@ class DynamixelDriver {
                 reject();
                 return;
             }
+
+
 
             ax.uniqueDataReceivedCallback = (data) => {
                 // Catch error code

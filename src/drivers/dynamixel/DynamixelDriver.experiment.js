@@ -6,25 +6,38 @@ global.Mep = require('../../Mep');
 const AX12 = require('./DynamixelDriver');
 const CAN = require('../can/CanDriver');
 
-let ax2 = new AX12('test', {
-    id: 2,
-    cid: 2000,
-    _communicator: new CAN('CANTest', {})
-});
-
+let ican = new CAN('CANTest', {});
 
 let ax1 = new AX12('test', {
-    id: 1,
+    id: 2,
     cid: 2000,
-    _communicator: new CAN('CANTest', {})
+    _communicator: ican
+});
+
+let ax2 = new AX12('test', {
+    id: 4,
+    cid: 2000,
+    _communicator: ican
 });
 
 
-//ax1.setLED(false);
-ax1.setSpeed(200);
+
+//ax1.setLED(true);
+//ax1.setSpeed(1000, false);
+
+ax1.getPosition()
+    .then((pos) => { console.log(pos); })
+    .catch(() => { console.log('fail'); });
+ax1.go(500).then(() => {
+    console.log('success');
+}).catch(() => {
+    console.log('fail');
+});
+//ax2.setSpeed(500);
+//ax2.setPosition(1000);
 
 function move(pos) {
-    ax1.setSpeed(100);
+    ax1.setSpeed(200);
     pos = Math.abs(pos);
     ax1.go(pos, {timeout: 2000}).then(() => {
         move((pos + 50) % 200 + 1);
@@ -34,9 +47,10 @@ function move(pos) {
         move((pos + 50) % 200 + 1);
     });
 }
-console.log('start');
+//move();
+//console.log('start');
 //ax1.go(1).then(() => { console.log('asdasdasd'); });
-move(100);
+//move(100);
 //ax2.setId(2);
 
 /*

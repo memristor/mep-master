@@ -7,6 +7,12 @@ const Delay = Mep.require('misc/Delay');
 const TAG = 'InitTask';
 
 class InitTask extends Task {
+    constructor(scheduler, weight, time, location) {
+        super(scheduler, weight, time, location);
+
+        this.lunar = Mep.getDriver('LunarCollector');
+    }
+
     // Simplified functions for prompt
     go(x, y, config) {
         Mep.Motion.go(new TunedPoint(x, y), config);
@@ -33,12 +39,26 @@ class InitTask extends Task {
     }
 
     async onRun() {
+        this.scheduler.lunarCollectorFull = true;
+
         await starter.waitStartSignal(this);
 
         try {
-            await Mep.Motion.go(new TunedPoint(0, 0), { speed: 120, tolerance:  -1, pf: true, rerouting: false });
+            //await Mep.Motion.go(new TunedPoint(-1200, 0), { speed: 80, tolerance:  -1, pf: false, rerouting: false });
 
-            await this.home();
+            //Mep.getDriver('MotionDriver').setSpeed(70);
+
+            for (let i = 0; i < 4; i++) {
+                await this.lunar.collect();
+                //await Mep.Motion.straight(-30);
+
+                await this.lunar.standby();
+                //await Mep.Motion.straight(30);
+            }
+
+
+
+            // await this.home();
         } catch (e) {
             Mep.Log.error(TAG, e);
         }

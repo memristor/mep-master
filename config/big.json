@@ -12,6 +12,60 @@
       }
     },
 
+    "ServoCollectorTrackLeft": {
+      "@class": "drivers/dynamixel/DynamixelDriver",
+      "@load": true,
+      "@dependencies": {
+        "communicator": "CanDriver"
+      },
+      "id": 4,
+      "cid": 2000
+    },
+
+    "ServoCollectorHandLeft": {
+      "@class": "drivers/dynamixel/DynamixelDriver",
+      "@load": true,
+      "@dependencies": {
+        "communicator": "CanDriver"
+      },
+      "id": 2,
+      "cid": 2000
+    },
+
+    "ServoCollectorTrackRight": {
+      "@class": "drivers/dynamixel/DynamixelDriver",
+      "@load": true,
+      "@dependencies": {
+        "communicator": "CanDriver"
+      },
+      "id": 9,
+      "cid": 2000
+    },
+
+
+
+    "ServoCollectorHandRight": {
+      "@class": "drivers/dynamixel/DynamixelDriver",
+      "@load": true,
+      "@dependencies": {
+        "communicator": "CanDriver"
+      },
+      "id": 8,
+      "cid": 2000
+    },
+
+    "LunarCollector": {
+      "@class": "drivers/lunarcollector/LunarCollectorDriver",
+      "@load": true,
+      "@dependencies": {
+        "leftTrack": "ServoCollectorTrackLeft",
+        "rightTrack": "ServoCollectorTrackRight",
+        "leftHand": "ServoCollectorHandLeft",
+        "rightHand": "ServoCollectorHandRight"
+      }
+    },
+
+
     "InfraredAuto": {
       "@class": "drivers/infrared/InfraredDriver",
       "@load": false,
