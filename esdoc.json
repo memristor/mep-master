@@ -1,9 +1,9 @@
 {
 	"title": "mep-core",
-	"index": "./README.md",
-	"package": "./package.json",
-	"source": "./src",
-	"destination": "./doc/api",
+	"index": "README.md",
+	"package": "package.json",
+	"source": "src",
+	"destination": "docs/api",
 	"includes": ["\\.js$"],
 	"excludes": ["\\.experiment.js$"],
 	"includeSource": true,
@@ -16,10 +16,10 @@
 	"lint": false,
 	"test": {
 		"type": "mocha",
-		"source": "./test"
+		"source": "test"
 	},
 	"manual": {
-		"About": ["./docs/About.md"],
-		"Creating_Driver": ["./docs/Creating_Driver.md"]
+		"About": ["docs/About.md"],
+		"Creating_Driver": ["docs/Creating_Driver.md"]
 	}
 }
