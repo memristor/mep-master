@@ -28,7 +28,7 @@
     "nconf": "^0.8.4",
     "require-new": "^1.1.0",
     "simplify-js": "^1.2.1",
-    "sinon": "^1.17.6",
+    "sinon": "^2.1.0",
     "socketcan": "^2.1.3",
     "termios": "^0.1.3",
     "usage": "^0.7.1"
