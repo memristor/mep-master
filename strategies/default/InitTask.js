@@ -41,16 +41,25 @@ class InitTask extends Task {
     async onRun() {
         await starter.waitStartSignal(this);
 
+
+        await Mep.Motion.go(new TunedPoint(0, 0));
+        await this.home();
+
+        return;
         try {
             //await Mep.Motion.go(new TunedPoint(0, 0), { speed: 80, tolerance: -1, pf: false, rerouting: false });
 
             for (let i = 0; i < 4; i++) {
                 await this.lunar.collect();
                 await Delay(700);
-                await Mep.Motion.straight(-20);
-                await Delay(1000);
-                await this.lunar.prepare();
-                await Mep.Motion.straight(20);
+                if (i !== 3) {
+                    await Mep.Motion.straight(-20);
+                    await Delay(1000);
+                    this.lunar.prepare();
+                    await Mep.Motion.straight(20);
+                } else {
+                    await Delay(1000);
+                }
             }
             await this.lunar.standby();
 
