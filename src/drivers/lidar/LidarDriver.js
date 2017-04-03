@@ -1,4 +1,5 @@
 'use strict';
+/** @namespace drivers.lidar */
 
 const EventEmitter = require('events').EventEmitter;
 const Point = Mep.require('misc/Point');
@@ -6,23 +7,33 @@ const Polygon = Mep.require('misc/Polygon');
 
 const TAG = 'LidarDriver';
 
+/**
+ * Provides an abstraction layer on top of lidar's firmware and algorithms to determine
+ * robot's position and obstacles
+ * @fires drivers.lidar.LidarDriver#obstacleDetected
+ * @memberOf drivers.lidar
+ * @author Darko Lukic <lukicdarkoo@gmail.com>
+ */
 class LidarDriver extends EventEmitter {
     constructor(name, config) {
         super();
 
+        // Merge configs
         this.config = Object.assign({
             cid: 8000,
             tolerance: 400,
             volume: 230,
-            rpm: 300
+            angle: -90,
+            inverted: true
         }, config);
         this.name = name;
 
+        // Set reference to `this`
         this._onDataReceived = this._onDataReceived.bind(this);
         this._addPointToPolyGenerator = this._addPointToPolyGenerator.bind(this);
         this._calculateRobotsLocation = this._calculateRobotsLocation.bind(this);
 
-
+        // Initialize communication driver
         this.communicator = null;
         if (this.config._communicator !== undefined) {
             // For testing purposes only (experiments)
@@ -32,6 +43,7 @@ class LidarDriver extends EventEmitter {
         }
         this.communicator.on('data_' + this.config.cid, this._onDataReceived);
 
+        // Set state variable
         this._readings = {};
         this._poly = {
             minX: 0,
@@ -41,7 +53,9 @@ class LidarDriver extends EventEmitter {
             polyPointsCount: 0,
             previousPoint: null
         };
+        this._enabled = true;
 
+        // Set initial measurements
         for (let i = 0; i < 360; i++) {
             this._readings[i] = {
                 distance: Infinity,
@@ -50,7 +64,21 @@ class LidarDriver extends EventEmitter {
         }
     }
 
-    // Run this when robot stop
+    /**
+     * Enable lidar driver
+     */
+    enable() {
+        this._enabled = true;
+    }
+
+    /**
+     * Disable lidar driver
+     */
+    disable() {
+        this._enabled = false;
+    }
+
+
     _calculateRobotsLocation() {
         let precision = 0.9;
 
@@ -60,9 +88,17 @@ class LidarDriver extends EventEmitter {
         this.emit('positionChanged', this.config.name, new Point(0, 0), precision);
     }
 
+    /**
+     * Process a measurement and try to make an obstacle approximation.
+     * It uses bounding box algorithm to make an approximation of the obstacle
+     * @link https://en.wikipedia.org/wiki/Minimum_bounding_box
+     * @param angle {Number} - Angle of the measurement
+     * @param distance {Number} - Distance to the closest point at given angle
+     * @private
+     */
     _addPointToPolyGenerator(angle, distance) {
         let point = new Point(0, distance);
-        point.rotate(new Point(0, 0), angle);
+        point.rotateAroundZero(angle);
 
         if (this._poly.polyPointsCount === 0) {
             if (distance < 2000) {
@@ -93,6 +129,14 @@ class LidarDriver extends EventEmitter {
                 let polygon = new Polygon(this.name, Mep.Config.get('obstacleMaxPeriod'), polyPoints);
                 let poi = new Point((this._poly.minX + this._poly.maxX) / 2, (this._poly.minY + this._poly.maxY) / 2);
 
+                /**
+                 * Position changed event.
+                 * @event drivers.lidar.LidarDriver#obstacleDetected
+                 * @property {String} driverName - Unique name of a driver
+                 * @property {misc.Point} poi - Point which is part of obstacle
+                 * @property {misc.Polygon} polygon - Approximation of the obstacle
+                 * @property {Boolean} detected - True if obstacle is detected
+                 */
                 this.emit('obstacleDetected',
                     this.name,
                     poi,
@@ -106,15 +150,24 @@ class LidarDriver extends EventEmitter {
         this._poly.previousPoint = point;
     }
 
+    /**
+     * Process data from lidar
+     * @param data {Buffer} - Buffer from lidar
+     * @private
+     */
     _onDataReceived(data) {
-        if (data.length !== 4) {
+        if (data.length !== 4 || this._enabled === false) {
+            console.log(TAG, data);
             return;
         }
 
         let angle = ((data.readUInt8(0) & 0xFF) << 8) | data.readUInt8(1);
         let distance = ((data.readUInt8(2) & 0xFF) << 8) | data.readUInt8(3);
 
-        let scaledAngle = (360 - angle + 180) % 360;
+        if (this.config.inverted === true) {
+            angle *= -1;
+        }
+        let scaledAngle = ((360 + angle) + this.config.angle) % 360;
         this._readings[scaledAngle] = {
             distance: distance,
             time: (new Date).getTime()

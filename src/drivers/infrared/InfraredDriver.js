@@ -11,7 +11,7 @@ const TAG = 'InfraredDriver';
 /**
  * Uses data from infrared sensors to determine where is an enemy robot and other obstacles.
  *
- * @memberof drivers.infrared
+ * @memberOf drivers.infrared
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  * @fires drivers.infrared.InfraredDriver#obstacleDetected
  */
@@ -61,8 +61,9 @@ class InfraredDriver extends EventEmitter {
             sensorAngle: 90
         }, config);
         this.name = name;
-        this.detected = false;
-        this.timeoutHandle = null;
+        this._detected = false;
+        this._timeoutHandle = null;
+        this._enabled = true;
 
         // Subscribe on communicator
         this.canDriver = Mep.getDriver(this.config['@dependencies'].communicator);
@@ -82,33 +83,32 @@ class InfraredDriver extends EventEmitter {
         this.poi.rotate(new Point(this.config.sensorX, this.config.sensorY), - this.config.sensorAngle);
         this.polygon.rotate(new Point(this.config.sensorX, this.config.sensorY), - this.config.sensorAngle);
 
-        // Additional information
-        this.front = (this.config.sensorAngle > 0 && this.config.sensorAngle < 180);
-
         Mep.Log.debug(TAG, name, 'Detects at', this.poi);
+    }
 
+    /**
+     * Enable sensor
+     */
+    enable() {
+        this._enabled = true;
+    }
 
-        // Let's try to simulate
-        let infraredDriver = this;
-        if (name === 'InfraredAuto') {
-            Mep.Log.info(TAG, 'Is in testing mode');
-            setTimeout(() => {
-                infraredDriver.processDetection(Buffer.from([0x01]));
-            }, 5000);
-            setTimeout(() => {
-                infraredDriver.processDetection(Buffer.from([0x00]));
-            }, 10 * 1000);
-        }
+    /**
+     * Disable sensor
+     */
+    disable() {
+        this._enabled = false;
     }
 
     /**
      * Process detected obstacle
-     *
      * @private
-     * @param state {boolean} - Object is detected or not
+     * @param buffer {Boolean} - Object is detected or not
      */
     processDetection(buffer) {
-        this.detected = !!(buffer.readInt8(0));
+        if (this._enabled === false) return;
+
+        this._detected = !!(buffer.readInt8(0));
 
         /**
          * Obstacle detected event.
@@ -119,15 +119,21 @@ class InfraredDriver extends EventEmitter {
          * @property {Boolean} - Is objected detected or not
          * @property {Object} - Additional information about detected object
          */
-        this.emit('obstacleDetected', this.name, this.poi, this.polygon, this.detected);
+        this.emit(
+            'obstacleDetected',
+            this.name,
+            this.poi.clone(),
+            this.polygon.clone(),
+            this._detected
+        );
 
         // After `duration` publish obstacle detection again if object is still there
-        if (this.timeoutHandle !== null) {
-            clearTimeout(this.timeoutHandle);
+        if (this._timeoutHandle !== null) {
+            clearTimeout(this._timeoutHandle);
         }
-        if (this.detected === true) {
+        if (this._detected === true) {
             let infraredDriver = this;
-            this.timeoutHandle = setTimeout(() => {
+            this._timeoutHandle = setTimeout(() => {
                 infraredDriver.processDetection(buffer);
             }, Mep.Config.get('obstacleMaxPeriod'));
         }

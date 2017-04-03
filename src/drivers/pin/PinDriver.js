@@ -49,6 +49,10 @@ class PinDriver extends EventEmitter {
         }
     }
 
+    /**
+     * Read value of given pin
+     * @returns {Promise}
+     */
     read() {
         return new Promise((resolve, reject) => {
             if (this.config.direction === 'input') {
@@ -63,6 +67,10 @@ class PinDriver extends EventEmitter {
         });
     }
 
+    /**
+     * Write value to given pin
+     * @param value {Number} - [0, 1] for digital pins or [0 - 255] for analog pins
+     */
     write(value) {
         if (this.config.direction === 'output') {
             if (this.config.mode === 'digital' && value != 1 && value != 0) {

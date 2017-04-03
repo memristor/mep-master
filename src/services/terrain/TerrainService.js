@@ -47,9 +47,10 @@ class TerrainService extends EventEmitter {
         Mep.DriverManager.callMethodByGroup('terrain', 'on', ['obstacleDetected', this._processObstacleDetection.bind(this)]);
     }
 
-    _processObstacleDetection(source, centerPoint, relativePolygon, detected) {
-        let poi = centerPoint.clone();
-        poi.rotate(new Point(0, 0), Mep.Position.getOrientation());
+    _processObstacleDetection(source, poi, polygon, detected) {
+        //let poi = centerPoint.clone();
+        //poi.rotate(new Point(0, 0), Mep.Position.getOrientation());
+        poi.rotateAroundZero(Mep.Position.getOrientation());
         poi.translate(Mep.Position.getPosition());
 
         // Process only if obstacle is in terrain
@@ -60,15 +61,14 @@ class TerrainService extends EventEmitter {
             return;
         }
 
-        let polygon = relativePolygon.clone();
-        polygon.rotate(new Point(0, 0), Mep.Position.getOrientation());
+        //let polygon = relativePolygon.clone();
+        //polygon.rotate(new Point(0, 0), Mep.Position.getOrientation());
+        polygon.rotateAroundZero(Mep.Position.getOrientation());
         polygon.translate(Mep.Position.getPosition());
 
         if (detected === true) {
             this.addObstacle(polygon);
             this.emit('obstacleDetected', poi, polygon);
-        } else {
-            // TODO: Remove an obstacle
         }
     }
 

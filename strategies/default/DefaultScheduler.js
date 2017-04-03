@@ -12,6 +12,8 @@ class DefaultScheduler extends Scheduler {
         ];
 
         this.runTask(this.tasks[0]);
+
+        this.lunarCollectorFull = false;
     }
 }
 

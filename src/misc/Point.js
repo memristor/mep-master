@@ -5,7 +5,7 @@
  * Point in 2D space
  *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
- * @memberof misc
+ * @memberOf misc
  */
 class Point {
     /**
@@ -37,7 +37,7 @@ class Point {
      * @returns {boolean}
      */
     equals(point) {
-        return point.getX() === this.getX() && point.getY() === this.getY();
+        return (point.getX() === this.getX() && point.getY() === this.getY());
     }
 
     /**
@@ -52,8 +52,9 @@ class Point {
 
     /**
      * Rotate point around origin point
-     * @param originPoint - Origin point
-     * @param angle - Rotation angle
+     * @param originPoint {misc.Point} - Origin point
+     * @param angleDegrees {Number} - Rotation angle
+     * @returns {misc.Point}
      */
     rotate(originPoint, angleDegrees) {
         let angle = angleDegrees * (Math.PI / 180);
@@ -67,8 +68,24 @@ class Point {
     }
 
     /**
+     * Optimized algorithm for point rotation around coordinate beginning
+     * @param angleDegrees {Number}
+     * @returns {misc.Point}
+     */
+    rotateAroundZero(angleDegrees) {
+        let angle = angleDegrees * (Math.PI / 180);
+
+        let x = Math.cos(angle) * this.x - Math.sin(angle) * this.y;
+        let y = Math.sin(angle) * this.x + Math.cos(angle) * this.y;
+        this.x = x | 0;
+        this.y = y | 0;
+
+        return this;
+    }
+
+    /**
      * Clone the point
-     * @return {Point} - Cloned point
+     * @return {misc.Point} - Cloned point
      */
     clone() {
         return (new Point(this.x, this.y));

@@ -7,6 +7,12 @@ const Delay = Mep.require('misc/Delay');
 const TAG = 'InitTask';
 
 class InitTask extends Task {
+    constructor(scheduler, weight, time, location) {
+        super(scheduler, weight, time, location);
+
+        this.lunar = Mep.getDriver('LunarCollector');
+    }
+
     // Simplified functions for prompt
     go(x, y, config) {
         Mep.Motion.go(new TunedPoint(x, y), config);
@@ -22,7 +28,7 @@ class InitTask extends Task {
     }
 
     async home() {
-        await Mep.Motion.go(new TunedPoint(-1000, 0), { pf: true, tolerance: -1, speed: 100, backward: true });
+        await Mep.Motion.go(new TunedPoint(-1300, 0), { pf: true, tolerance: -1, speed: 100, backward: true });
         await Delay(200);
         await Mep.Motion.rotate(new TunedAngle(0));
         console.log('Arrived to home');
@@ -35,10 +41,30 @@ class InitTask extends Task {
     async onRun() {
         await starter.waitStartSignal(this);
 
-        try {
-            await Mep.Motion.go(new TunedPoint(0, 0), { speed: 120, tolerance:  -1, pf: true, rerouting: false });
 
-            await this.home();
+        await Mep.Motion.go(new TunedPoint(0, 0));
+        await this.home();
+
+        return;
+        try {
+            //await Mep.Motion.go(new TunedPoint(0, 0), { speed: 80, tolerance: -1, pf: false, rerouting: false });
+
+            for (let i = 0; i < 4; i++) {
+                await this.lunar.collect();
+                await Delay(700);
+                if (i !== 3) {
+                    await Mep.Motion.straight(-20);
+                    await Delay(1000);
+                    this.lunar.prepare();
+                    await Mep.Motion.straight(20);
+                } else {
+                    await Delay(1000);
+                }
+            }
+            await this.lunar.standby();
+
+
+            // await this.home();
         } catch (e) {
             Mep.Log.error(TAG, e);
         }
