@@ -28,7 +28,7 @@ class InitTask extends Task {
     }
 
     async home() {
-        await Mep.Motion.go(new TunedPoint(-1000, 0), { pf: true, tolerance: -1, speed: 100, backward: true });
+        await Mep.Motion.go(new TunedPoint(-1300, 0), { pf: true, tolerance: -1, speed: 100, backward: true });
         await Delay(200);
         await Mep.Motion.rotate(new TunedAngle(0));
         console.log('Arrived to home');
@@ -39,23 +39,20 @@ class InitTask extends Task {
     }
 
     async onRun() {
-        this.scheduler.lunarCollectorFull = true;
-
         await starter.waitStartSignal(this);
 
         try {
-            //await Mep.Motion.go(new TunedPoint(-1200, 0), { speed: 80, tolerance:  -1, pf: false, rerouting: false });
-
-            //Mep.getDriver('MotionDriver').setSpeed(70);
+            //await Mep.Motion.go(new TunedPoint(0, 0), { speed: 80, tolerance: -1, pf: false, rerouting: false });
 
             for (let i = 0; i < 4; i++) {
                 await this.lunar.collect();
-                //await Mep.Motion.straight(-30);
-
-                await this.lunar.standby();
-                //await Mep.Motion.straight(30);
+                await Delay(700);
+                await Mep.Motion.straight(-20);
+                await Delay(1000);
+                await this.lunar.prepare();
+                await Mep.Motion.straight(20);
             }
-
+            await this.lunar.standby();
 
 
             // await this.home();

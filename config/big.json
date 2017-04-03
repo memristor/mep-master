@@ -12,6 +12,16 @@
       }
     },
 
+    "ServoCollectorStopper": {
+      "@class": "drivers/dynamixel/DynamixelDriver",
+      "@load": true,
+      "@dependencies": {
+        "communicator": "CanDriver"
+      },
+      "id": 6,
+      "cid": 2000
+    },
+
     "ServoCollectorTrackLeft": {
       "@class": "drivers/dynamixel/DynamixelDriver",
       "@load": true,
@@ -42,8 +52,6 @@
       "cid": 2000
     },
 
-
-
     "ServoCollectorHandRight": {
       "@class": "drivers/dynamixel/DynamixelDriver",
       "@load": true,
@@ -54,6 +62,15 @@
       "cid": 2000
     },
 
+    "CollectorBigTrack": {
+      "@class": "drivers/hbridge/HBridgeDriver",
+      "@load": true,
+      "@dependencies": {
+        "communicator": "CanDriver"
+      },
+      "cid": 1101
+    },
+
     "LunarCollector": {
       "@class": "drivers/lunarcollector/LunarCollectorDriver",
       "@load": true,
@@ -61,7 +78,8 @@
         "leftTrack": "ServoCollectorTrackLeft",
         "rightTrack": "ServoCollectorTrackRight",
         "leftHand": "ServoCollectorHandLeft",
-        "rightHand": "ServoCollectorHandRight"
+        "rightHand": "ServoCollectorHandRight",
+        "bigTrack": "CollectorBigTrack"
       }
     },
 

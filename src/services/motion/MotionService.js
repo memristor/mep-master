@@ -126,15 +126,15 @@ class MotionService extends EventEmitter {
 
     /**
      * Move the robot, set new position of the robot
-     *
-     * @param {TunedPoint} tunedPoint - Point that should be reached
-     * @param {Boolean} parameters.pf - Use terrain finding algorithm
-     * @param {Boolean} parameters.backward - Enable backward robot moving
-     * @param {Boolean} params.rerouting - Enable rerouting during the movement
-     * @param {Boolean} parameters.relative - Use relative to previous position
-     * @param {Number} parameters.tolerance - Position will consider as reached if Euclid's distance between current
-     * and required position is less than tolerance
-     * @param {Number} parameters.speed - Speed of the robot movement in range (0, 255)
+     * @param {TunedPoint} tunedPoint Point that should be reached
+     * @param {Object} [parameters] Configuration options.
+     * @param {Boolean} [parameters.pf] Use terrain finding algorithm.
+     * @param {Boolean} [parameters.backward] Set backward robot moving.
+     * @param {Boolean} [parameters.rerouting] Enable rerouting during the movement.
+     * @param {Boolean} [parameters.relative] Use relative to previous position.
+     * @param {Number} [parameters.tolerance] Position will consider as reached if Euclid's distance between current
+     * and required position is less than tolerance.
+     * @param {Number} [parameters.speed] Speed of the robot movement in range (0, 255).
      * @returns {Promise}
      */
     go(tunedPoint, parameters) {
@@ -187,10 +187,11 @@ class MotionService extends EventEmitter {
 
     /**
      * Go to single point without advanced features
-     * @param point {misc.Point} - Target point
-     * @param params.backward {Boolean} - Move robot backward
-     * @param params.tolerance {Number} - Max radius
-     * @param params.speed {Number} - Speed
+     * @param {misc.Point} point Target point
+     * @param {Object} params Additional options
+     * @param {Boolean} [params.backward] Move robot backward
+     * @param {Number} [params.tolerance] Max radius
+     * @param {Number} [params.speed] Speed
      * @return {Promise}
      * @private
      */
@@ -220,7 +221,7 @@ class MotionService extends EventEmitter {
 
     /**
      * Stop the robot
-     * @param softStop - If true robot will turn of motors
+     * @param {Boolean} softStop If true robot will turn of motors
      */
     stop(softStop = false) {
         this.pause();

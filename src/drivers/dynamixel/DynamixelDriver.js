@@ -1,9 +1,11 @@
 'use strict';
 
 /** @namespace drivers.dynamixel */
+const TaskError = Mep.require('strategy/TaskError');
 
-const TAG = 'Dynamixel';
 
+
+const TAG = 'DynamixelDriver';
 
 /**
  * Communicates with dynamixel servos (AX12 & RX24).
@@ -162,8 +164,8 @@ class DynamixelDriver {
      */
     go(position, config) {
         let c = Object.assign({
-            pollingPeriod: 40,
-            tolerance: 15,
+            pollingPeriod: 150,
+            tolerance: 20,
             timeout: 3000,
             firmwareImplementation: false
         }, config);
@@ -176,7 +178,7 @@ class DynamixelDriver {
             // Apply time out
             setTimeout(() => {
                 timeout = true;
-                reject();
+                reject(new TaskError(TAG, 'timeout', 'Dynamixel cannot reach position in time'));
             }, c.timeout);
 
             if (c.firmwareImplementation === true) {
@@ -317,8 +319,7 @@ class DynamixelDriver {
 
         return new Promise((resolve, reject) => {
             if (ax.config.id === 0xFE) {
-                Mep.Log.error(TAG, this.name, 'Cannot use broadcast ID for reading');
-                reject();
+                reject(new TaskError(TAG, 'broadcast', 'Cannot use broadcast ID for reading'));
                 return;
             }
 
