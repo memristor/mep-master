@@ -1,6 +1,4 @@
-"use strict";
-
-module.exports = {
+{
 	"title": "mep-core",
 	"index": "./README.md",
 	"package": "./package.json",
@@ -14,14 +12,13 @@ module.exports = {
 	"undocumentIdentifier": true,
 	"builtinExternal": true,
 	"coverage": true,
-	"includeSource": true,
 	"lint": true,
 	"test": {
-    	"type": "mocha",
-    	"source": "./test"
-  	},
+		"type": "mocha",
+		"source": "./test"
+	},
 	"manual": {
-    	"About": ["./docs/About.md"],
+		"About": ["./docs/About.md"],
 		"Creating_Driver": ["./docs/Creating_Driver.md"]
 	}
 }
