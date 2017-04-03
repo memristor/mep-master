@@ -5,6 +5,7 @@
 	"source": "./src",
 	"destination": "./doc/api",
 	"includes": ["\\.js$"],
+	"excludes": ["\\.experiment.js$"],
 	"includeSource": true,
 	"access": ["public", "protected"],
 	"autoPrivate": true,
@@ -12,7 +13,7 @@
 	"undocumentIdentifier": true,
 	"builtinExternal": true,
 	"coverage": true,
-	"lint": true,
+	"lint": false,
 	"test": {
 		"type": "mocha",
 		"source": "./test"
