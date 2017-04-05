@@ -94,6 +94,13 @@ class Line {
      * @returns {Boolean} - True if line intersect polygon
      */
     isIntersectWithPolygon(polygon) {
+        if (this.isIntersectWithLine(new Line(
+                polygon.getPoints()[polygon.getPoints().length - 1],
+                polygon.getPoints()[0]
+            )) === true) {
+            return true;
+        }
+
         for (let i = 0; i < polygon.getPoints().length - 1; i++) {
             if (this.isIntersectWithLine(new Line(
                 polygon.getPoints()[i],

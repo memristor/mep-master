@@ -156,6 +156,27 @@ class MotionDriver extends EventEmitter  {
         ]));
     }
 
+
+    configureEncoders(wheelR, wheelDistance) {
+        let fixedWheelR = (wheelR * 1000) | 0;
+        let fixedWheelDistance = (wheelDistance * 1000) | 0;
+
+        let buffer = Buffer.from([
+            'C'.charCodeAt(0),
+            (fixedWheelR >> 24) & 0xFF,
+            (fixedWheelR >> 16) & 0xFF,
+            (fixedWheelR >> 8) & 0xFF,
+            fixedWheelR & 0xFF,
+            (fixedWheelDistance >> 24) & 0xFF,
+            (fixedWheelDistance >> 16) & 0xFF,
+            (fixedWheelDistance >> 8) & 0xFF,
+            fixedWheelDistance & 0xFF,
+        ]);
+        //console.log(buffer);
+
+        this._sendCommand(buffer);
+    }
+
     /**
      * Rotate robot to given angle
      * @param angle {Number} - Angle
@@ -163,7 +184,8 @@ class MotionDriver extends EventEmitter  {
     rotateTo(angle) {
         this._direction = MotionDriver.DIRECTION_UNDEFINED;
         this._sendCommand(Buffer.from([
-            'A'.charCodeAt(0),
+            //'A'.charCodeAt(0),
+            'T'.charCodeAt(0),
             angle >> 8,
             angle & 0xFF
         ]));

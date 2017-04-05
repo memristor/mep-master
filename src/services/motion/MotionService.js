@@ -66,8 +66,10 @@ class MotionService extends EventEmitter {
             target.getPoint().clone().translate(offset)
         );
 
+
+
         // Hazard region
-        if (polygon.isPointInside(poi) || line.isIntersectWithPolygon(polygon) === true) {
+        if (polygon.isPointInside(target.getPoint()) || line.isIntersectWithPolygon(polygon) === true) {
             if (poi.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
 
                 if (this._obstacleDetectedTimeout !== null) {

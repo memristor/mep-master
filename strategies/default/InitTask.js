@@ -38,12 +38,20 @@ class InitTask extends Task {
         return Mep.getDriver('MotionDriver');
     }
 
+    c(r, distance) {
+        Mep.getDriver('MotionDriver').configureEncoders(r, distance);
+    }
+
     async onRun() {
+        // Mep.getDriver('MotionDriver').setPositionAndOrientation(0, 0, 0);
         await starter.waitStartSignal(this);
+        let config = { speed: 100, tolerance: -1, pf: false, rerouting: false };
 
-
-        await Mep.Motion.go(new TunedPoint(0, 0));
-        await this.home();
+        await Mep.Motion.go(new TunedPoint(-1000, -100), config);
+        await Mep.Motion.go(new TunedPoint(-700, 100), config);
+        await Mep.Motion.go(new TunedPoint(-400, -100), config);
+        await Mep.Motion.go(new TunedPoint(-100, 100), config);
+        //await this.home();
 
         return;
         try {
@@ -51,18 +59,18 @@ class InitTask extends Task {
 
             for (let i = 0; i < 4; i++) {
                 await this.lunar.collect();
-                await Delay(700);
+                //await Delay(700);
                 if (i !== 3) {
-                    await Mep.Motion.straight(-20);
-                    await Delay(1000);
+                    await Mep.Motion.straight(-15);
+                    await Delay(1200);
                     this.lunar.prepare();
-                    await Mep.Motion.straight(20);
+                    await Mep.Motion.straight(15);
                 } else {
                     await Delay(1000);
                 }
             }
-            await this.lunar.standby();
-
+            //await this.lunar.standby();
+            await Mep.Motion.straight(-50);
 
             // await this.home();
         } catch (e) {

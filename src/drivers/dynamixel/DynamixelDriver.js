@@ -165,7 +165,7 @@ class DynamixelDriver {
     go(position, config) {
         let c = Object.assign({
             pollingPeriod: 150,
-            tolerance: 20,
+            tolerance: 35,
             timeout: 3000,
             firmwareImplementation: false
         }, config);
