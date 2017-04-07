@@ -24,7 +24,7 @@ class LidarDriver extends EventEmitter {
             tolerance: 400,
             volume: 230,
             angle: 270,
-            inverted: true
+            inverted: false
         }, config);
         this.name = name;
 

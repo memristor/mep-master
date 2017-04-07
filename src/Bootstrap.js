@@ -14,7 +14,11 @@ async function bootstrap() {
 
     // Load strategy
     let Scheduler = require(Mep.Config.get('scheduler'));
-    new Scheduler();
+    try {
+        new Scheduler();
+    } catch (e) {
+        Mep.Log.error('Strategy', e);
+    }
 }
 
 bootstrap();

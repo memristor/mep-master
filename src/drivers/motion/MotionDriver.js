@@ -30,6 +30,30 @@ class MotionDriver extends EventEmitter  {
     static get DIRECTION_UNDEFINED() { return 0; }
     static get DIRECTION_BACKWARD() { return -1; }
 
+    static get CONFIG_DISTANCE_REGULATOR() { return 0; }
+    static get CONFIG_ROTATION_REGULATOR() { return 1; }
+    static get CONFIG_STUCK() { return 2; }
+    static get CONFIG_DEBUG() { return 3; }
+    static get CONFIG_STATUS_CHANGE_REPORT() { return 4; }
+
+    static get CONFIG_STUCK_DISTANCE_JUMP() { return 5; }
+    static get CONFIG_STUCK_ROTATION_JUMP() { return 6; }
+    static get CONFIG_STUCK_DISTANCE_MAX_FAIL_COUNT() { return 7; }
+    static get CONFIG_STUCK_ROTATION_MAX_FAIL_COUNT() { return 8; }
+
+    static get CONFIG_WHEEL_DISTANCE() { return 9; }
+    static get CONFIG_WHEEL_R1() { return 10; }
+    static get CONFIG_WHEEL_R2() { return 11; }
+    static get CONFIG_PID_D_P() { return 12; }
+    static get CONFIG_PID_D_D() { return 13; }
+    static get CONFIG_PID_R_P() { return 14; }
+    static get CONFIG_PID_R_D() { return 15; }
+    static get CONFIG_SPEED() { return 16; }
+    static get CONFIG_RSPEED() { return 17; }
+    static get CONFIG_ACCEL() { return 18; }
+    static get CONFIG_ALPHA() { return 19; }
+
+
     /**
      * @param name {String} - Unique driver name
      * @param config {Object} - Configuration presented as an associative array
@@ -156,6 +180,43 @@ class MotionDriver extends EventEmitter  {
         ]));
     }
 
+    setConfig(key, value, exp = 3) {
+        let fixedValue = (value * Math.pow(10, exp)) | 0;
+
+        let buffer = Buffer.from([
+            'c'.charCodeAt(0),
+            key & 0xFF,
+            (fixedValue >> 20) & 0x0F,
+            (fixedValue >> 12) & 0xFF,
+            (fixedValue >> 4) & 0xFF,
+            ((fixedValue & 0x0F) << 4) | (exp & 0x0F)
+        ]);
+
+        console.log(buffer);
+
+        this._sendCommand(buffer);
+    }
+
+    getConfig(key) {
+        let buffer = Buffer.from([
+            'C'.charCodeAt(0),
+            key & 0xFF
+            ]);
+        this._sendCommand(buffer);
+    }
+
+    _onCReceived(buffer) {
+        let value = buffer.readUInt8(0) << 20;
+        value |= buffer.readUInt8(1) << 12;
+        value |= buffer.readUInt8(2) << 4;
+        value |= buffer.readUInt8(3) >> 4;
+
+        let exp = buffer.readUInt8(3) & 0x0F;
+
+        let result = value / Math.pow(10, exp);
+
+        Mep.Log.info(TAG, 'Value =', result)
+    }
 
     configureEncoders(wheelR, wheelDistance) {
         let fixedWheelR = (wheelR * 1000) | 0;
@@ -440,6 +501,9 @@ class MotionDriver extends EventEmitter  {
         }
         else if (type == 'A'.charCodeAt(0) && buffer.length === 1) {
             this._onAReceived(buffer);
+        }
+        else if (type == 'C'.charCodeAt(0) && buffer.length === 4) {
+            this._onCReceived(buffer);
         }
     }
 

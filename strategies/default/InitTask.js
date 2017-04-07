@@ -10,12 +10,12 @@ class InitTask extends Task {
     constructor(scheduler, weight, time, location) {
         super(scheduler, weight, time, location);
 
-        this.lunar = Mep.getDriver('LunarCollector');
+        //this.lunar = Mep.getDriver('LunarCollector');
     }
 
     // Simplified functions for prompt
-    go(x, y, config) {
-        Mep.Motion.go(new TunedPoint(x, y), config);
+    async go(x, y, config) {
+        await Mep.Motion.go(new TunedPoint(x, y), config);
     }
 
     async rotate(angle, config) {
@@ -38,19 +38,43 @@ class InitTask extends Task {
         return Mep.getDriver('MotionDriver');
     }
 
-    c(r, distance) {
-        Mep.getDriver('MotionDriver').configureEncoders(r, distance);
+    c(a, b) {
+        Mep.getDriver('MotionDriver').setConfig(a, b);
+    }
+
+    r(a) {
+        Mep.getDriver('MotionDriver').getConfig(a);
+    }
+
+    async test() {
+        await Mep.Motion.go(new TunedPoint(-1300, -500));
+        await Mep.Motion.go(new TunedPoint(0, -500));
+        await Mep.Motion.go(new TunedPoint(0, 100));
+        await Mep.Motion.go(new TunedPoint(-1300, 100));
     }
 
     async onRun() {
+
+        //await Mep.Motion.go(new TunedPoint(500, 500));
+
         // Mep.getDriver('MotionDriver').setPositionAndOrientation(0, 0, 0);
         await starter.waitStartSignal(this);
-        let config = { speed: 100, tolerance: -1, pf: false, rerouting: false };
+        //for (let i = 0; i < 4; i++) await this.test();
+        //await this.go(700, 0);
+        //await this.home();
+        //return;
 
-        await Mep.Motion.go(new TunedPoint(-1000, -100), config);
-        await Mep.Motion.go(new TunedPoint(-700, 100), config);
-        await Mep.Motion.go(new TunedPoint(-400, -100), config);
-        await Mep.Motion.go(new TunedPoint(-100, 100), config);
+        let config = { speed: 70, tolerance: 150, pf: false, rerouting: false };
+
+        if (false) {
+            await Mep.Motion.go(new TunedPoint(-1000, -100), config);
+            await Mep.Motion.go(new TunedPoint(-700, 100), config);
+            await Mep.Motion.go(new TunedPoint(-400, -100), config);
+            await Mep.Motion.go(new TunedPoint(-100, 100), config);
+        }
+
+        //await Mep.Motion.go(new TunedPoint(500, -100), config);
+        await Mep.Motion.go(new TunedPoint(0, 0));
         //await this.home();
 
         return;

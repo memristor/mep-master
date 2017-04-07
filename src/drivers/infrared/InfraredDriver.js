@@ -27,9 +27,9 @@ class InfraredDriver extends EventEmitter {
      *  |  Robot  |
      *  |_________|
      *
-     *  Sensor s1 params: sensorAngle~=60, sensorY~-10, sensorX~=10
+     *  Sensor s1 params: sensorAngle~=110, sensorY~10, sensorX~=10
      *  Sensor s2 params: sensorAngle~=90, sensorY~=0, sensorX~=10
-     *  Sensor s3 params: sensorAngle~=110, sensorY~=10, sensorX~=10
+     *  Sensor s3 params: sensorAngle~=60, sensorY~=-10, sensorX~=10
      *  </pre>
      *
      * @param name {String} - Unique driver name

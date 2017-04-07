@@ -9,23 +9,8 @@
       "@class": "drivers/can/CanDriverSimulator"
     },
 
-    "LaserFrontLeft": {
-      "@class": "drivers/infrared/InfraredDriver",
-      "@load": true,
-      "@dependencies": { "communicator": "CanDriver" },
-
-      "infraredMaxDistance": 100,
-      "sensorAngle": 90,
-      "sensorX": 0,
-      "sensorY": 0,
-      "deviceId": 1,
-      "objectSize": 100
-    },
-
     "Uart": {
-      "@class": "drivers/uart/Uart",
-      "@load": false,
-      "protocol": "PLLSP"
+      "@load": false
     }
   }
 }

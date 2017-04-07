@@ -83,48 +83,6 @@
       }
     },
 
-
-    "InfraredAuto": {
-      "@class": "drivers/infrared/InfraredDriver",
-      "@load": false,
-      "@dependencies": { "communicator": "CanDriver" },
-
-      "infraredMaxDistance": 600,
-      "sensorAngle": 90,
-      "sensorX": 0,
-      "sensorY": 0,
-      "deviceId": 1,
-      "objectSize": 150
-    },
-
-    "InfraredFront": {
-      "@class": "drivers/infrared/InfraredDriver",
-      "@load": true,
-      "@dependencies": { "communicator": "CanDriver" },
-
-      "infraredMaxDistance": 250,
-      "sensorAngle": 90,
-      "sensorX": 0,
-      "sensorY": 0,
-      "deviceId": 32768,
-      "objectSize": 150
-    },
-
-    "InfraredFrontPf": {
-      "@class": "drivers/infrared/InfraredDriver",
-      "@load": true,
-      "@dependencies": { "communicator": "CanDriver" },
-
-      "infraredMaxDistance": 900,
-      "sensorAngle": 90,
-      "sensorX": 0,
-      "sensorY": 0,
-      "deviceId": 32770,
-      "objectSize": 280
-    },
-
-
-
     "InfraredBack": {
       "@class": "drivers/infrared/InfraredDriver",
       "@load": true,
