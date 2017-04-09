@@ -6,7 +6,7 @@ const EventEmitter = require('events').EventEmitter;
 const TAG = 'Telemetry';
 
 /**
- * Enables communication between `mep-core` and `mep-dash`.
+ * Enables communication between `mep-master` and `mep-dash`.
  *
  * @fires Telemetry#data_[from]_[tag]_[action]
  */

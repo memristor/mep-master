@@ -1,5 +1,5 @@
 {
-  "name": "mep-core",
+  "name": "mep-master",
   "version": "2017.0.0",
   "description": "Memristor's Eurobot Platform",
   "main": "src/Bootstrap.js",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Memristor-Robotics/mep-core.git"
+    "url": "git+https://github.com/Memristor-Robotics/mep-master.git"
   },
   "author": "Darko Lukic <lukicdarkoo@gmail.com>",
   "license": "ISC",
