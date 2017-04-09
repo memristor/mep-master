@@ -1,3 +1,5 @@
+# Inspiration
+
 ## Previous Memristor's software
 The most of concepts are taken by previous software built by Pandurov.
 

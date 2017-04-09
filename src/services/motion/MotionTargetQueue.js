@@ -65,8 +65,8 @@ class MotionTargetQueue {
 
     /**
      * Add single point at the beginning of the queue
-     * @param points {misc.Point} - Point
-     * @param params {Object} - Params for target
+     * @param {misc.Point} point Point
+     * @param {Object} params Params for target
      */
     addPointFront(point, params) {
         this._addPointFront(point, params);

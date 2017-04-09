@@ -155,11 +155,12 @@ class DynamixelDriver {
 
     /**
      * Set servo to required position and get promise when position is reached
-     * @param position {Number} - Required position in degrees
-     * @param config.pollingPeriod {Number} - Polling period for servo's present position in ms
-     * @param config.tolerance {Number} - Tolerated error in degrees
-     * @param config.timeout {Number} - Maximal time servo to reach a position in ms
-     * @param config.firmwareImplementation {Boolean} - Should it use firmware (true) or software (false) implementation.
+     * @param {Number} position Required position in degrees
+     * @param {Object} [config] Configuration options.
+     * @param {Number} [config.pollingPeriod] Polling period for servo's present position in ms
+     * @param {Number} [config.tolerance] Tolerated error in degrees
+     * @param {Number} [config.timeout] Maximal time servo to reach a position in ms
+     * @param {Boolean} [config.firmwareImplementation] Should it use firmware (true) or software (false) implementation.
      * Firmware implementation is faster, however in that case we have to have a dedicated hardware (our actuator board supports it).
      */
     go(position, config) {

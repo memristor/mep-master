@@ -2,6 +2,7 @@ node_modules
 web
 _node_modules
 __node_modules
+docs/api
 
 # Ignore hidden directories
 .idea

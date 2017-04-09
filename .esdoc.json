@@ -1,0 +1,44 @@
+{
+  "source": "src",
+  "destination": "docs/api",
+  "access": [
+    "public",
+    "protected",
+    "private"
+  ],
+  "includes": [
+    "\\.js$"
+  ],
+  "excludes": [
+    "\\.experiment.js$"
+  ],
+  "unexportIdentifier": true,
+  "undocumentIdentifier": false,
+  "test": {
+    "type": "mocha",
+    "source": "test"
+  },
+  "manual": {
+    "index": "README.md",
+    "overview": [
+      "./docs/Log.md",
+      "./docs/About.md",
+
+      "./docs/Goals.md",
+      "./docs/Guide.md",
+      "./docs/Inspiration.md",
+      "./docs/Services_vs_Drivers.md"
+    ],
+    "design": [ ],
+    "installation": [ ],
+    "usage": [ ],
+    "tutorial": [ ],
+    "configuration": [ ],
+    "example": [
+      "./docs/Creating_Driver.md"
+    ],
+    "advanced": [ ],
+    "faq": [ ],
+    "changelog": [ ]
+  }
+}

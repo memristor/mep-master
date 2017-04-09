@@ -56,7 +56,8 @@ class Uart extends EventEmitter {
 
     /**
      * Method will be called only if protocol is not `null` and protocol generated packet.
-     * @param packet - Parsed packet
+     * @param {Buffer} packet Parsed packet
+     * @param {String} type Single character that represents type of packet
      * @private
      */
     _onPacketReceived(packet, type) {

@@ -1,4 +1,6 @@
-## Modular 
+# Goals
+
+## Modular
 Every driver or service can be easily replaced and tested separately.
 
 ## Team orientated

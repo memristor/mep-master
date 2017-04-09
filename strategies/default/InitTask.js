@@ -47,10 +47,17 @@ class InitTask extends Task {
     }
 
     async test() {
-        await Mep.Motion.go(new TunedPoint(-1300, -500));
-        await Mep.Motion.go(new TunedPoint(0, -500));
-        await Mep.Motion.go(new TunedPoint(0, 100));
-        await Mep.Motion.go(new TunedPoint(-1300, 100));
+        Mep.getDriver('MotionDriver').setRefreshInterval(50);
+        this.t.c(9, 329.5);
+        this.t.c(10, 91);
+        this.t.c(10, 91);
+
+        for (let i = 0; i < 0; i++) {
+            await Mep.Motion.go(new TunedPoint(0, 500));
+            await Mep.Motion.go(new TunedPoint(1000, 500));
+            await Mep.Motion.go(new TunedPoint(1000, -100));
+            await Mep.Motion.go(new TunedPoint(0, -100));
+        }
     }
 
     async onRun() {
@@ -66,7 +73,7 @@ class InitTask extends Task {
 
         let config = { speed: 70, tolerance: 150, pf: false, rerouting: false };
 
-        if (false) {
+        if (true) {
             await Mep.Motion.go(new TunedPoint(-1000, -100), config);
             await Mep.Motion.go(new TunedPoint(-700, 100), config);
             await Mep.Motion.go(new TunedPoint(-400, -100), config);
@@ -74,7 +81,6 @@ class InitTask extends Task {
         }
 
         //await Mep.Motion.go(new TunedPoint(500, -100), config);
-        await Mep.Motion.go(new TunedPoint(0, 0));
         //await this.home();
 
         return;

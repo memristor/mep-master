@@ -8,10 +8,9 @@
   },
   "scripts": {
     "test": "mocha --slow 0 --require test/Init",
-    "docs": "jsdoc -c jsdoc.json -u docs",
+    "docs": "esdoc",
     "start": "node src/Bootstrap.js --harmony-async-await",
-    "simulation": "node --harmony-async-await src/Bootstrap.js -s -v 127.0.0.1:1117",
-    "simulation-debug": "node %NODE_DEBUG_OPTION% --harmony-async-await src/Bootstrap.js -s"
+    "simulation": "node --harmony-async-await src/Bootstrap.js -s -v 127.0.0.1:1117"
   },
   "repository": {
     "type": "git",
@@ -26,8 +25,6 @@
     "bunyan-format": "^0.2.1",
     "nan": "^2.3.5",
     "nconf": "^0.8.4",
-    "require-new": "^1.1.0",
-    "simplify-js": "^1.2.1",
     "sinon": "^2.1.0",
     "socketcan": "^2.1.3",
     "termios": "^0.1.3",

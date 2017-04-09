@@ -41,35 +41,3 @@ create a documentation locally
 npm run-script docs
 ```
 or check for [online docs](https://doclets.io/Memristor-Robotics/mep-core/master)
-
-
-## For Windows
-
-### Windows installation for simulation only
-
-Install Visual Studio C++
- 
-Install mep2:
-```
-git clone https://github.com/Memristor-Robotics/mep2.git 
-npm install
-```
-
-### Build services manually
-
-Build services:
-
-```
-node-gyp configure --directory src/services/path/pathfinding
-node-gyp build --directory src/services/path/pathfinding
-```
-
-### Execute 
-```
-node --harmony-async-await src/Bootstrap.js [Options]
-```
-
-check for arguments
-```
-node src/Bootstrap.js --help
-```

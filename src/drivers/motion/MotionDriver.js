@@ -218,26 +218,6 @@ class MotionDriver extends EventEmitter  {
         Mep.Log.info(TAG, 'Value =', result)
     }
 
-    configureEncoders(wheelR, wheelDistance) {
-        let fixedWheelR = (wheelR * 1000) | 0;
-        let fixedWheelDistance = (wheelDistance * 1000) | 0;
-
-        let buffer = Buffer.from([
-            'C'.charCodeAt(0),
-            (fixedWheelR >> 24) & 0xFF,
-            (fixedWheelR >> 16) & 0xFF,
-            (fixedWheelR >> 8) & 0xFF,
-            fixedWheelR & 0xFF,
-            (fixedWheelDistance >> 24) & 0xFF,
-            (fixedWheelDistance >> 16) & 0xFF,
-            (fixedWheelDistance >> 8) & 0xFF,
-            fixedWheelDistance & 0xFF,
-        ]);
-        //console.log(buffer);
-
-        this._sendCommand(buffer);
-    }
-
     /**
      * Rotate robot to given angle
      * @param angle {Number} - Angle
@@ -381,9 +361,10 @@ class MotionDriver extends EventEmitter  {
     /**
      * Move robot to absolute position but robot make curves to speed up motion. This
      * command requires `finishCommand()` before next motion command.
-     * @param position {misc.Point} - Required position of the robot
-     * @param direction {Number} - Direction, can be MotionDriver.DIRECTION_FORWARD or
+     * @param {misc.Point} position Required position of the robot
+     * @param {Number} direction Direction, can be MotionDriver.DIRECTION_FORWARD or
      * MotionDriver.DIRECTION_BACKWARD
+     * @param {Number} tolerance Radius
      */
     moveToCurvilinear(position, direction, tolerance) {
         let motionDriver = this;

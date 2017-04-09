@@ -1,4 +1,6 @@
-## Drivers 
+# Services vs Drivers
+
+## Drivers
 A driver provides a software interface to hardware devices, enabling 
 services and users to access hardware functions without needing 
 to know precise details of the hardware being used.  

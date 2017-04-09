@@ -1,4 +1,4 @@
-#About
+# About
 
 Our goal is to make a modular platform for developing robots for Eurobot competition.
 
