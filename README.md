@@ -1,5 +1,5 @@
 [![Build Status](https://semaphoreci.com/api/v1/lukicdarkoo/mep-core/branches/master/shields_badge.svg)](https://semaphoreci.com/lukicdarkoo/mep-core)
-[![API Doc](https://doclets.io/Memristor-Robotics/mep-core/master.svg)](https://doclets.io/Memristor-Robotics/mep-core/master)
+[![API Doc](https://doc.esdoc.org/github.com/Memristor-Robotics/mep-core/badge.svg)](https://doc.esdoc.org/github.com/Memristor-Robotics/mep-core/identifiers.html)
 [![Code Climate](https://codeclimate.com/github/Memristor-Robotics/mep-core//badges/gpa.svg)](https://codeclimate.com/github/Memristor-Robotics/mep-core)
 [![Dependencies](https://david-dm.org/Memristor-Robotics/mep-core.svg)](https://david-dm.org/Memristor-Robotics/mep-core/)
 
