@@ -1,18 +1,16 @@
 'use strict';
-/** @namespace misc */
 
 /**
  * Point in 2D space
  *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
- * @memberOf misc
+ * @type {misc.Point}
  */
 class Point {
     /**
      * Make new point.
      * @param x {number} - x coordinate
      * @param y {number} - y coordinate
-     * @param tag {string} - Option parameter. It is used to determine to which table point belongs.
      */
     constructor(x, y) {
         this.x = x;
@@ -33,8 +31,8 @@ class Point {
 
     /**
      * Check if points are equal
-     * @param point {Point} - Another point to be compared
-     * @returns {boolean}
+     * @param {Point} point Another point to be compared
+     * @returns {Boolean}
      */
     equals(point) {
         return (point.getX() === this.getX() && point.getY() === this.getY());
@@ -42,7 +40,7 @@ class Point {
 
     /**
      * Translate point
-     * @param translatePoint - x and y parameters for translation
+     * @param translatePoint
      */
     translate(translatePoint) {
         this.x += translatePoint.getX();
@@ -52,8 +50,8 @@ class Point {
 
     /**
      * Rotate point around origin point
-     * @param originPoint {misc.Point} - Origin point
-     * @param angleDegrees {Number} - Rotation angle
+     * @param {misc.Point} originPoint Origin point
+     * @param {Number} angleDegrees Rotation angle
      * @returns {misc.Point}
      */
     rotate(originPoint, angleDegrees) {
@@ -81,6 +79,10 @@ class Point {
         this.y = y | 0;
 
         return this;
+    }
+
+    getAngleFromZero() {
+        return Math.atan2(this.y, this.x) * (180 / Math.PI);
     }
 
     /**

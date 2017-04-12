@@ -38,49 +38,43 @@ class Task {
 
     /**
      * Default constructor for task
-     * @param scheduler {Scheduler} - Reference to strategy's scheduler
-     * @param weight {Number} - Importance of the task, initial order
-     * @param time {Number} - Predicted time to be executed
-     * @param location - Predicted area of execution
+     * @param scheduler {Scheduler} Reference to strategy's scheduler
+     * @param {Object} params Additional params
+     * @param {Number} params.weight Importance of the task, initial order
+     * @param {Number} params.time Predicted time to be executed
+     * @param {misc.Point} params.location Predicted area of execution
      */
-    constructor(scheduler, weight, time, location) {
+    constructor(scheduler, params) {
+
+
         this.state = Task.READY;
-        this.weight = weight;
-        this.time = time;
-        this.location = location;
+        this.weight = params.weight;
+        this.time = params.time;
+        this.location = params.location;
         this.scheduler = scheduler;
 
         this.pathObstacleDetected = false;
 
         this._obstacleDetectedTimeout = null;
         this.onPathObstacle = this.onPathObstacle.bind(this);
-        Mep.Motion.on('pathObstacleDetected', (detected) => {
-            if (this.state === Task.ACTIVE) {
-                this.onPathObstacle(detected);
-            }
-        });
     }
 
     /**
      * Finish this task and run next one
      */
     finish() {
-        let lastState = this.state;
         this.state = Task.FINISHED;
-        if (lastState !== Task.FINISHED) {
-            this.scheduler.runNextTask();
-        }
+        this.scheduler.runNextTask();
+        Mep.Motion.removeListener('pathObstacleDetected', this.onPathObstacle);
     }
 
     /**
      * Suspend this task and run next one
      */
     suspend() {
-        let lastState = this.state;
         this.state = Task.SUSPENDED;
-        if (lastState !== Task.SUSPENDED) {
-            this.scheduler.runNextTask();
-        }
+        this.scheduler.runNextTask();
+        Mep.Motion.removeListener('pathObstacleDetected', this.onPathObstacle);
     }
 
     /**
@@ -121,6 +115,8 @@ class Task {
     run() {
         this.state = Task.ACTIVE;
         this.onRun();
+
+        Mep.Motion.on('pathObstacleDetected', this.onPathObstacle);
     }
 
     /**
@@ -139,8 +135,9 @@ class Task {
             Mep.Motion.stop();
 
             this._obstacleDetectedTimeout = setTimeout(() => {
+                Mep.Log.info(TAG, 'Maybe to add rerouting now?');
                 //Mep.Motion.tryRerouting();
-            }, 1000);
+            }, 2000);
         } else {
             clearTimeout(this._obstacleDetectedTimeout);
             Mep.Motion.resume();

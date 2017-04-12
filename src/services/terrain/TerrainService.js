@@ -47,9 +47,8 @@ class TerrainService extends EventEmitter {
         Mep.DriverManager.callMethodByGroup('terrain', 'on', ['obstacleDetected', this._processObstacleDetection.bind(this)]);
     }
 
-    _processObstacleDetection(source, poi, polygon, detected) {
-        //let poi = centerPoint.clone();
-        //poi.rotate(new Point(0, 0), Mep.Position.getOrientation());
+    _processObstacleDetection(source, relativePoi, polygon, detected) {
+        let poi = relativePoi.clone();
         poi.rotateAroundZero(Mep.Position.getOrientation());
         poi.translate(Mep.Position.getPosition());
 
@@ -68,7 +67,11 @@ class TerrainService extends EventEmitter {
 
         if (detected === true) {
             this.addObstacle(polygon);
-            this.emit('obstacleDetected', poi, polygon);
+            this.emit('obstacleDetected', {
+                poi: poi,
+                polygon: polygon,
+                relativePoi: relativePoi
+            });
         }
     }
 

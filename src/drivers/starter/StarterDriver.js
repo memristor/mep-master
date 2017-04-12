@@ -44,6 +44,10 @@ class StarterDriver extends EventEmitter {
         this._tick();
     }
 
+    getRemainingTime() {
+        return (90 - this.getTime());
+    }
+
     /**
      * Get time in seconds since match is started
      * @return {number} - Seconds since match is started
@@ -54,7 +58,7 @@ class StarterDriver extends EventEmitter {
 
     /**
      * Get time in milliseconds since match is started
-     * @return {number} - Milliseconds since match is started
+     * @return {Number} Milliseconds since match is started
      */
     getTimeMills() {
         if (this.started === false) {

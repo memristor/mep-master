@@ -3,12 +3,14 @@ const TunedPoint = Mep.require('strategy/TunedPoint');
 const TunedAngle = Mep.require('strategy/TunedAngle');
 const starter = Mep.getDriver('StarterDriver');
 const Delay = Mep.require('misc/Delay');
+const Point = Mep.require('misc/Point');
+
 
 const TAG = 'InitTask';
 
 class InitTask extends Task {
-    constructor(scheduler, weight, time, location) {
-        super(scheduler, weight, time, location);
+    constructor(scheduler, params) {
+        super(scheduler, params);
 
         //this.lunar = Mep.getDriver('LunarCollector');
     }
@@ -47,20 +49,25 @@ class InitTask extends Task {
     }
 
     async test() {
+        Mep.getDriver('MotionDriver').reset();
         Mep.getDriver('MotionDriver').setRefreshInterval(50);
-        this.t.c(9, 329.5);
-        this.t.c(10, 91);
-        this.t.c(10, 91);
+        Mep.getDriver('MotionDriver').setSpeed(70);
+        this.c(9, 329.5); // 329.5
+        this.c(10, 92.6); // 92.6
+        this.c(11, 92.6); // 92.6
 
-        for (let i = 0; i < 0; i++) {
-            await Mep.Motion.go(new TunedPoint(0, 500));
-            await Mep.Motion.go(new TunedPoint(1000, 500));
-            await Mep.Motion.go(new TunedPoint(1000, -100));
-            await Mep.Motion.go(new TunedPoint(0, -100));
+        for (let i = 0; i < 4; i++) {
+            await Mep.getDriver('MotionDriver').moveToPosition(new Point(0, -500));
+
+            await Mep.getDriver('MotionDriver').moveToPosition(new Point(-1000, -500));
+            await Mep.getDriver('MotionDriver').moveToPosition(new Point(-1000, 0));
+            await Mep.getDriver('MotionDriver').moveToPosition(new Point(0, 0));
         }
     }
 
     async onRun() {
+        this.test();
+
 
         //await Mep.Motion.go(new TunedPoint(500, 500));
 

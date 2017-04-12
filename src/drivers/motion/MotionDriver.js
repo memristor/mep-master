@@ -55,8 +55,15 @@ class MotionDriver extends EventEmitter  {
 
 
     /**
-     * @param name {String} - Unique driver name
-     * @param config {Object} - Configuration presented as an associative array
+     * @param {String} name Unique driver name
+     * @param {Object} config Configuration presented as an associative array
+     * @param {Number} [config.startX] X coordinate for start position
+     * @param {Number} [config.startY] Y coordinate for start position
+     * @param {Number} [config.startOrientation] Start orientation
+     * @param {Number} [config.startSpeed] Initial speed
+     * @param {Number} [config.refreshDataPeriod] Get state from motion driver every `refreshDataPeriod` in ms
+     * @param {Number} [config.connectionTimeout] Connection timeout in ms
+     * @param {Number} [config.ackTimeout] Acknowledgment timeout
      */
     constructor(name, config) {
         super();
@@ -313,7 +320,7 @@ class MotionDriver extends EventEmitter  {
     /**
      * Set required refresh interval of robot status. Note that it is required
      * refresh interval and robot can choose to send or not depending on it's state.
-     * @param interval {Number} - Period in milliseconds
+     * @param {Number} interval Period in milliseconds
      */
     setRefreshInterval(interval) {
         this._sendCommand(Buffer.from([
@@ -326,7 +333,7 @@ class MotionDriver extends EventEmitter  {
 
     /**
      * Set default speed of the robot
-     * @param speed {Number} - Speed (0 - 255)
+     * @param {Number} speed Speed (0 - 255)
      */
     setSpeed(speed) {
         this._activeSpeed = speed;
@@ -338,8 +345,8 @@ class MotionDriver extends EventEmitter  {
 
     /**
      * Move robot to absolute position
-     * @param position {misc.Point} - Required position of the robot
-     * @param direction {Number} - Direction, can be MotionDriver.DIRECTION_FORWARD or
+     * @param {misc.Point} position Required position of the robot
+     * @param {Number} direction Direction, can be MotionDriver.DIRECTION_FORWARD or
      * MotionDriver.DIRECTION_BACKWARD
      */
     moveToPosition(position, direction) {
@@ -403,7 +410,7 @@ class MotionDriver extends EventEmitter  {
 
     /**
      * Packet type P is received
-     * @param buffer {Buffer} - Payload
+     * @param {Buffer} buffer Payload
      * @private
      */
     _onPReceived(buffer) {
@@ -454,8 +461,8 @@ class MotionDriver extends EventEmitter  {
             /**
              * Orientation change event.
              * @event drivers.motion.MotionDriver#orientationChanged
-             * @property {String} driverName - Unique name of a driver
-             * @property {Number} orientation - New orientation
+             * @property {String} driverName Unique name of a driver
+             * @property {Number} orientation New orientation
              */
             this.emit('orientationChanged',
                 this.name,
@@ -472,8 +479,8 @@ class MotionDriver extends EventEmitter  {
     /**
      * Callback will be called when new packet is arrived and it will dispatch event to new
      * callback depending on packet type
-     * @param buffer {Buffer} - Payload
-     * @param type {String} - Packet type
+     * @param {Buffer} buffer Payload
+     * @param {String} type Packet type
      * @private
      */
     _onDataReceived(buffer, type) {
@@ -490,7 +497,7 @@ class MotionDriver extends EventEmitter  {
 
     /**
      * Get position of the robot
-     * @return {Point} - Position of the robot
+     * @return {misc.Point} Position of the robot
      */
     getPosition() {
         return this.positon;

@@ -7,6 +7,7 @@ const Point = Mep.require('misc/Point');
 const MotionDriver = Mep.require('drivers/motion/MotionDriver');
 const MotionTargetQueue = require('./MotionTargetQueue');
 const Line = Mep.require('misc/Line');
+const Misc = Mep.require('misc/Misc');
 
 const TAG = 'MotionService';
 
@@ -21,7 +22,9 @@ class MotionService extends EventEmitter {
         this.config = Object.assign({
             hazardObstacleDistance: 400,
             maxBypassTolerance: 50,
-            targetLineOffset: 150
+            targetLineOffset: 150,
+            hazardAngleFront: [-70, 70],
+            hazardAngleBack: [110, -110]
         }, config);
 
         this.motionDriver = Mep.getDriver('MotionDriver');
@@ -53,41 +56,35 @@ class MotionService extends EventEmitter {
         return this._paused;
     }
 
-    _onObstacleDetected(poi, polygon) {
+    _onObstacleDetected(params) {
         let motionService = this;
-        let target = this._targetQueue.getTargetFront();
-        if (target === null) return;
+        //if (this._targetQueue.getTargetFront() === null) return;
 
-        // Generate target line offset
-        let offset = (new Point(this.config.targetLineOffset * this.motionDriver.getDirection(), 0))
-            .rotate(new Point(0, 0), Mep.Position.getOrientation());
-        let line = new Line(
-            Mep.Position.getPosition().clone().translate(offset),
-            target.getPoint().clone().translate(offset)
-        );
-
-
+        let hazardAngle = (this.motionDriver.getDirection() === MotionDriver.DIRECTION_FORWARD) ?
+            this.config.hazardAngleFront : this.config.hazardAngleBack;
 
         // Hazard region
-        if (polygon.isPointInside(target.getPoint()) || line.isIntersectWithPolygon(polygon) === true) {
-            if (poi.getDistance(Mep.Position.getPosition()) < this.config.hazardObstacleDistance) {
+        if (Misc.isAngleInRange(hazardAngle[0], hazardAngle[1], params.relativePoi.getAngleFromZero()) &&
+            params.relativePoi.getDistance(new Point(0, 0)) < this.config.hazardObstacleDistance) {
 
-                if (this._obstacleDetectedTimeout !== null) {
-                    clearTimeout(this._obstacleDetectedTimeout);
-                } else {
-                    this.emit('pathObstacleDetected', true);
-                }
-
-                this._obstacleDetectedTimeout = setTimeout(() => {
-                    this._obstacleDetectedTimeout = null;
-                    motionService.emit('pathObstacleDetected', false);
-                }, Mep.Config.get('obstacleMaxPeriod') + 100);
+            if (this._obstacleDetectedTimeout !== null) {
+                clearTimeout(this._obstacleDetectedTimeout);
             } else {
-                // Try to redesign a path
-                if (target.getParams().rerouting === true) {
-                    this.tryRerouting();
-                }
+                this.emit('pathObstacleDetected', true);
             }
+
+            this._obstacleDetectedTimeout = setTimeout(() => {
+                this._obstacleDetectedTimeout = null;
+                motionService.emit('pathObstacleDetected', false);
+            }, Mep.Config.get('obstacleMaxPeriod') + 100);
+        } else {
+            // Try to redesign a path
+            // TODO:
+            /*
+             if (target.getParams().rerouting === true) {
+             this.tryRerouting();
+             }
+             */
         }
     }
 
@@ -110,7 +107,7 @@ class MotionService extends EventEmitter {
                 this._targetQueue.empty();
                 this._targetQueue.addPointsBack(points, params);
 
-                if (params.tolerance == -1) {
+                if (params.tolerance === -1) {
                     this.stop().then(() => {
                         motionService.resume();
                     });
@@ -173,7 +170,9 @@ class MotionService extends EventEmitter {
     _goToNextQueuedTarget() {
         let motionService = this;
         if (this._targetQueue.isEmpty()) {
-            this._resolve();
+            if (this._resolve !== null) {
+                this._resolve();
+            }
         } else {
             let target = this._targetQueue.getTargetFront();
             this._goSingleTarget(target.getPoint(), target.getParams()).then(() => {

@@ -11,16 +11,17 @@ const TAG = 'CanDriver';
 
 /**
  * Driver for CAN bus (Controller Area Network)
- * @fires drivers.can.CanDriver#data
- * @fires drivers.can.CanDriver#data_[id]
+ * @emits drivers.can.CanDriver#data Emit event when data arrive
+ * @emits drivers.can.CanDriver#data_[id] Emit event when data arrive for given `id`
  * @memberOf drivers.can
  */
 class CanDriver extends EventEmitter {
 
     /**
-     * Creates instance of CanDriver
-     * @param name {String} - Unique name of a driver
-     * @param config {Object} - Configuration presented as an associative array
+     * @param {String} name Unique name of a driver
+     * @param {Object} config Configuration presented as an associative array
+     * @param {String} config.device Device ID
+     * @param {Number} config.bitrate CAN bus speed
      */
     constructor(name, config) {
         super();
@@ -46,8 +47,8 @@ class CanDriver extends EventEmitter {
             /**
              * Data arrived.
              * @event drivers.can.CanDriver#data
-             * @property {Number} id - ID of the function
-             * @property {Buffer} data - Data received from CAN
+             * @property {Number} id ID of the function
+             * @property {Buffer} data Data received from CAN
              */
             canDriver.emit('data', message.id, message.data);
 
@@ -60,9 +61,8 @@ class CanDriver extends EventEmitter {
 
     /**
      * Send buffer to specific ID
-     * @param id
-     * @param buffer
-     *
+     * @param {Number} id Device ID
+     * @param {Buffer} buffer Data
      * @example
      * canDriver.send(0x4324234, Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72, 0x00, 0x00]));
      */
@@ -77,6 +77,12 @@ class CanDriver extends EventEmitter {
         this.channel.send(canMessage);
     }
 
+    /**
+     * Start CAN bus device
+     * @param {String} device
+     * @param {Number} bitrate
+     * @private
+     */
     _startCAN(device, bitrate) {
         let result;
 

@@ -40,5 +40,5 @@ create a documentation locally
 ```
 npm run-script docs
 ```
-or check for [online docs](https://doc.esdoc.org/github.com/Memristor-Robotics/mep-master/identifiers.html)  
+or check for [online docs](https://doc.esdoc.org/github.com/Memristor-Robotics/mep-master/identifiers.html)
 or [generate online](https://doc.esdoc.org/-/generate.html) by entering `git@github.com:Memristor-Robotics/mep-master.git`

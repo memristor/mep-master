@@ -13,7 +13,7 @@ const TAG = 'MotionDriverSimulator';
  * @see MotionDriver
  * @memberOf drivers.motion
  */
-class MotionDriver extends EventEmitter {
+class MotionDriverSimulator extends EventEmitter {
     static get STATE_IDLE() { return 'I'.charCodeAt(0); }
     static get STATE_STUCK() { return 'S'.charCodeAt(0); }
     static get STATE_MOVING() { return 'M'.charCodeAt(0); }
@@ -156,4 +156,4 @@ class MotionDriver extends EventEmitter {
     }
 }
 
-module.exports = MotionDriver;
+module.exports = MotionDriverSimulator;
