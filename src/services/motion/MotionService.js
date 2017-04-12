@@ -58,7 +58,7 @@ class MotionService extends EventEmitter {
 
     _onObstacleDetected(params) {
         let motionService = this;
-        //if (this._targetQueue.getTargetFront() === null) return;
+        if (this._targetQueue.getTargetFront() === null) return;
 
         let hazardAngle = (this.motionDriver.getDirection() === MotionDriver.DIRECTION_FORWARD) ?
             this.config.hazardAngleFront : this.config.hazardAngleBack;

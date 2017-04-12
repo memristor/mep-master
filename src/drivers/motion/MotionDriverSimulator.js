@@ -22,6 +22,10 @@ class MotionDriverSimulator extends EventEmitter {
     static get STATE_BREAK() { return 'B'.charCodeAt(0); }
     static get STATE_UNDEFINED() { return 'U'.charCodeAt(0); }
 
+    static get DIRECTION_FORWARD() { return 1; }
+    static get DIRECTION_UNDEFINED() { return 0; }
+    static get DIRECTION_BACKWARD() { return -1; }
+
     constructor(name, config) {
         super();
 
@@ -34,7 +38,7 @@ class MotionDriverSimulator extends EventEmitter {
 
         this.position = new Point(this.config.startX, this.config.startY);
         this.orientation = this.config.startOrientation;
-        this.direction = MotionDriver.DIRECTION_FORWARD;
+        this.direction = MotionDriverSimulator.DIRECTION_FORWARD;
 
         this.onPositionChanged = this.onPositionChanged.bind(this);
         this.onStateChanged = this.onStateChanged.bind(this);
@@ -54,19 +58,19 @@ class MotionDriverSimulator extends EventEmitter {
         return new Promise((resolve, reject) => {
             let stateListener = (name, state) => {
                 switch (state) {
-                    case MotionDriver.STATE_IDLE:
+                    case MotionDriverSimulator.STATE_IDLE:
                         resolve();
                         motionDriver.removeListener('stateChanged', stateListener);
                         break;
-                    case MotionDriver.STATE_STUCK:
+                    case MotionDriverSimulator.STATE_STUCK:
                         reject(new TaskError(TAG, 'stuck', 'Robot is stacked'));
                         motionDriver.removeListener('stateChanged', stateListener);
                         break;
-                    case MotionDriver.STATE_ERROR:
+                    case MotionDriverSimulator.STATE_ERROR:
                         reject(new TaskError(TAG, 'error', 'Unknown moving error'));
                         motionDriver.removeListener('stateChanged', stateListener);
                         break;
-                    case MotionDriver.STATE_BREAK:
+                    case MotionDriverSimulator.STATE_BREAK:
                         reject(new TaskError(TAG, 'break', 'Command is broken by another one'));
                         motionDriver.removeListener('stateChanged', stateListener);
                         break;

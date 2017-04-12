@@ -21,13 +21,27 @@
     "InfraredDriver": {
       "@class": "drivers/infrared/InfraredDriver",
       "@load": true,
+      "infraredMaxDistance": 300,
+      "sensorAngle": 270,
+      "sensorX": 0,
+      "sensorY": 0,
+      "deviceId": 32775,
+      "objectSize": 150,
       "@dependencies": { "communicator": "CanDriver" }
+    },
+
+    "StarterDriver": {
+      "@class": "drivers/starter/StarterDriver",
+      "@load": true,
+      "type": "keyboard",
+      "delayTimer": 400
     }
   },
 
   "Services": {
     "TerrainService": {
       "staticObstacles": []
-    }
+    },
+    "PositionService": {}
   }
 }

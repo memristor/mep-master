@@ -6,6 +6,8 @@ const Telemetry = require('./Telemetry');
 
 let telemetry = new Telemetry(Config.get('Telemetry'));
 
+const TAG = 'Mep';
+
 /**
  * Proxy to custom require(), Log, Config, DriverManager & services.
  *
@@ -147,19 +149,24 @@ class Mep {
      * Initialize necessary modules. Should be called only once during an application bootstrapping
      */
     static async init() {
-        Mep._driverManager = new (require('./drivers/DriverManager'))();
-        Mep._position = new (require('./services/position/PositionService'))();
-        Mep._motion = new (require('./services/motion/MotionService'))();
-        Mep._terrain = new (require('./services/terrain/TerrainService'))();
-        Mep._scheduler = new (require('./services/scheduler/SchedulerService'))();
-        Mep._share = new (require('./services/share/ShareService'))();
+        try {
+            Mep._driverManager = new (require('./drivers/DriverManager'))();
+            Mep._position = new (require('./services/position/PositionService'))();
+            Mep._motion = new (require('./services/motion/MotionService'))();
+            Mep._terrain = new (require('./services/terrain/TerrainService'))();
+            Mep._scheduler = new (require('./services/scheduler/SchedulerService'))();
+            Mep._share = new (require('./services/share/ShareService'))();
 
-        await Mep._driverManager.init();
-        Mep._position.init(Config.get('Services:PositionService'));
-        Mep._motion.init(Config.get('Services:MotionService'));
-        Mep._terrain.init(Config.get('Services:TerrainService'));
-        Mep._scheduler.init(Config.get('Services:SchedulerService'));
-        Mep._share.init(Config.get('Services:ShareService'));
+            await Mep._driverManager.init();
+            Mep._position.init(Config.get('Services:PositionService'));
+            Mep._motion.init(Config.get('Services:MotionService'));
+            Mep._terrain.init(Config.get('Services:TerrainService'));
+            Mep._scheduler.init(Config.get('Services:SchedulerService'));
+            Mep._share.init(Config.get('Services:ShareService'));
+        } catch (e) {
+            Mep.Log.error(TAG, e);
+            console.log(e);
+        }
     }
 }
 

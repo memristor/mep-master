@@ -46,8 +46,8 @@ class DriverManager {
 
     /**
      * Check if driver is out of order
-     * @param name {String} - Unique name of a driver
-     * @returns {boolean}
+     * @param {String} name Unique name of a driver
+     * @returns {Boolean}
      */
     isDriverOutOfOrder(name) {
         return (name in this.driversOutOfOrder);
@@ -56,8 +56,8 @@ class DriverManager {
     /**
      * Get driver instance by driver name
      *
-     * @param name {String} - Driver name, eg. "MotionDriver", or "ModbusDriver".
-     * @returns {Object} - Required driver
+     * @param {String} name Driver name, eg. "MotionDriver", or "ModbusDriver".
+     * @returns {Object} Required driver
      */
     getDriver(name) {
         if (this.isDriverAvailable(name) === false) {
@@ -69,8 +69,8 @@ class DriverManager {
 
     /**
      * Returns true if driver is available
-     * @param name - Driver name
-     * @returns {boolean} - Is driver available
+     * @param {String} name Driver name
+     * @returns {Boolean} Is driver available
      */
     isDriverAvailable(name) {
         return (name in this.drivers);
@@ -85,8 +85,8 @@ class DriverManager {
      * data processing, not mechanisms for data collection from different drivers.
      * Services are in this case also hardware independent.</p>
      *
-     * @param type {String} - Data type which driver can provide. Can be: position & terrain.
-     * @returns {Object} - List of filtered drivers
+     * @param {String} type Data type which driver can provide. Can be: position & terrain.
+     * @returns {Object} List of filtered drivers
      */
     getDriversByGroup(type) {
         let filteredDrivers = {};
@@ -119,9 +119,9 @@ class DriverManager {
      * between displays, and it communicates between them in very similar way. To sum up, the same is for this method,
      * method will be called to all drivers that are the part of the group.</p>
      *
-     * @param type {String} - Data type which driver can provide. Can be: position & terrain.
-     * @param method {String} - Method to be called.
-     * @param params {Array} - Params to be passed to method.
+     * @param {String} type Data type which driver can provide. Can be: position & terrain.
+     * @param {String} method Method to be called.
+     * @param {Array} params Params to be passed to method.
      *
      * @see DriverManager.getDriversByGroup
      */
@@ -134,8 +134,8 @@ class DriverManager {
 
     /**
      * Put driver out of order
-     * @param name {String} - Unique name of a driver
-     * @param message {String} - Describe more why the fault happened
+     * @param {String} name Unique name of a driver
+     * @param {String} message Describe more why the fault happened
      */
     putDriverOutOfOrder(name, message) {
         // Check if it is already out of order
@@ -168,9 +168,15 @@ class DriverManager {
         // Load driver
         let load = moduleConfig['@load'];
         let classPath = moduleConfig['@class'];
+
         // Do not initialize if `load field == false`
-        if (load !== false) {
-            let ModuleClass = Mep.require(classPath);
+        if (load === true) {
+            let ModuleClass;
+            try {
+                ModuleClass = Mep.require(classPath);
+            } catch (e) {
+                console.log(e);
+            }
 
             // Resolve dependencies
             if (moduleConfig['@dependencies'] !== undefined) {
@@ -203,6 +209,7 @@ class DriverManager {
                 // Test if all methods are OK
                 DriverChecker.check(driverInstance);
             } catch (error) {
+                console.log(TAG, error);
                 this.putDriverOutOfOrder(driverIdentifier, error);
             }
         } else {

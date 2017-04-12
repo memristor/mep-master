@@ -15,7 +15,11 @@ describe('MotionServiceTest', () => {
         before((done) => {
                 Mep.Motion.on('pathObstacleDetected', spy);
                 Mep.Motion.go(new TunedPoint(200, 0));
-                Mep.Motion._onObstacleDetected(point, polygon);
+                Mep.Motion._onObstacleDetected({
+                    poi: point,
+                    relativePoi: point,
+                    polygon: polygon
+                });
                 done();
         });
 
@@ -28,7 +32,11 @@ describe('MotionServiceTest', () => {
         before((done) => {
             point = new Point(500, 0);
             polygon = new Polygon().makeSquareAroundPoint(point, 100);
-            Mep.Motion._onObstacleDetected(point, polygon);
+            Mep.Motion._onObstacleDetected({
+                poi: point,
+                relativePoi: point,
+                polygon: polygon
+            });
             return done();
         });
 
