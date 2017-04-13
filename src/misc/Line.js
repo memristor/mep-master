@@ -36,7 +36,7 @@ class Line {
     /**
      * Check if it intersect with another line
      * @param line {misc.Line} - Another line to check intersection with
-     * @return {Boolean} - True if two lines intersect
+     * @return {Point} - If lines intersect, else return undefined
      */
     isIntersectWithLine(line) {
         return this._intersect(
@@ -124,9 +124,13 @@ class Line {
         s = (-s1_y * (p0_x - p2_x) + s1_x * (p0_y - p2_y)) / (-s2_x * s1_y + s1_x * s2_y);
         t = ( s2_x * (p0_y - p2_y) - s2_y * (p0_x - p2_x)) / (-s2_x * s1_y + s1_x * s2_y);
 
-        return (s >= 0 && s <= 1 && t >= 0 && t <= 1);
+        if(s >= 0 && s <= 1 && t >= 0 && t <= 1){
+            let new_x = p0_x + t*s1_x;
+            let new_y = p0_y + t*s1_y;
+            return new Point(new_x, new_y);
+        }
+        return undefined;
     }
-
 
 }
 

@@ -1,6 +1,8 @@
 'use strict';
 /** @namespace misc */
 
+
+
 /**
  * Point in 2D space
  *
@@ -124,6 +126,30 @@ class Point {
     getY() {
         return this.y;
     }
+
+    /**
+    * Check if this point is on the same side of line segment as refferent point
+    * Algorithm: replace line with straight line and create straight line from
+    * this and refferent point. Find intersection of those lines and check if it
+    * belongs to line segment created from this and refferent point.
+    * @param line {Line}
+    * @param refferentPoint {Point}
+    * @returns {boolean}
+    */
+    isSameSide(line, refferentPoint){
+        const StraightLine = require('./StraightLine');
+        let straightLineFromSegment = new StraightLine(line.getStartPoint(), line.getEndPoint());
+        let straightLineFromPoints = new StraightLine(this.clone(), refferentPoint);
+        let intersectionResult = straightLineFromPoints.isIntersectWithStraightLine(straightLineFromSegment);
+        if(intersectionResult === undefined){
+            return true;
+        }else{
+          //Reference: http://stackoverflow.com/a/328193
+          let addition = this.getDistance(intersectionResult) + refferentPoint.getDistance(intersectionResult);
+          return  Math.abs(addition - this.getDistance(refferentPoint)) > 0.01;
+        }
+    }
 }
+
 
 module.exports = Point;

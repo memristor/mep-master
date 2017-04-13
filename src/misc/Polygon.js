@@ -3,6 +3,7 @@
 /** @namespace misc */
 
 const Point = Mep.require('misc/Point');
+const Line = Mep.require('misc/Line');
 
 const TAG = 'Polygon';
 
@@ -134,6 +135,19 @@ class Polygon {
         }
 
         return !(point.getX() < minX || point.getX() > maxX || point.getY() < minY || point.getY() > maxY);
+    }
+    /**
+     * Check if this polygon intersect with polygon
+     * @param polygon {Polygon} - Polygon to check intersection with
+     * @returns {Boolean} - True if line intersect polygon
+     */
+    isIntersectWithPolygon(polygon) {
+        for(let i = 0; i < this.points.length-1; i++){
+          let line = new Line(this.points[i], this.points[i+1]);
+          if(line.isIntersectWithPolygon(polygon))
+              return true;
+        }
+        return false;
     }
 }
 
