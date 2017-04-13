@@ -5,7 +5,7 @@ const CAN = require('../can/CanDriver');
 let ican = new CAN('CANTest', {});
 
 let ax1 = new AX12('test', {
-    id: 2,
+    id: 5,
     cid: 2000,
     _communicator: ican
 });
@@ -24,7 +24,7 @@ let ax2 = new AX12('test', {
 ax1.getPosition()
     .then((pos) => { console.log(pos); })
     .catch(() => { console.log('fail'); });
-ax1.go(500).then(() => {
+ax1.go(330).then(() => {
     console.log('success');
 }).catch(() => {
     console.log('fail');

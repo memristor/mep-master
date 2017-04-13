@@ -166,8 +166,8 @@ class DynamixelDriver {
     go(position, config) {
         let c = Object.assign({
             pollingPeriod: 150,
-            tolerance: 35,
-            timeout: 3000,
+            tolerance: 80,
+            timeout: 2500,
             firmwareImplementation: false
         }, config);
 
@@ -195,6 +195,7 @@ class DynamixelDriver {
                 let checkPosition = () => {
                     setTimeout(() => {
                         ax.getPosition().then((currentPosition) => {
+                            console.log(currentPosition);
                             if (Math.abs(currentPosition - position) <= c.tolerance) {
                                 resolve();
                             } else {

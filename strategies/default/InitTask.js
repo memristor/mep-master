@@ -52,8 +52,8 @@ class InitTask extends Task {
         //Mep.getDriver('MotionDriver').reset();
         //Mep.getDriver('MotionDriver').setRefreshInterval(50);
 
-        this.c(9, 329.5); // 329.5
-        this.c(10, 92.6); // 92.6
+        this.c(9, 332); // 329.5
+        this.c(10, 90); // 92.6
         this.c(11, 92.6); // 92.6
 
         for (let i = 0; i < 0; i++) {
@@ -67,37 +67,42 @@ class InitTask extends Task {
     }
 
     async onRun() {
-        this.test();
+        //this.test();
+        //Mep.getDriver('MotionDriver').softStop();
+
+        //Mep.getDriver('ServoCollectorHandRight').setPosition(500);
 
         await starter.waitStartSignal(this);
 
-        // await Mep.Motion.go(new TunedPoint(0, 0), { speed: 100 });
-        let config = { speed: 90, tolerance: 150, pf: false, rerouting: false };
-        if (false) {
-            await Mep.Motion.go(new TunedPoint(-1000, -100), config);
-            await Mep.Motion.go(new TunedPoint(-700, 100), config);
-            await Mep.Motion.go(new TunedPoint(-400, -100), config);
-            await Mep.Motion.go(new TunedPoint(-100, 100), config);
-        }
-
+        await Mep.Motion.go(new TunedPoint(-350, -350), { speed: 70, backward: true });
+        await Mep.Motion.go(new TunedPoint(-350, -750), { speed: 70, backward: false });
 
         try {
-            //await Mep.Motion.go(new TunedPoint(0, 0), { speed: 80, tolerance: -1, pf: false, rerouting: false });
-
-            for (let i = 0; i < 4; i++) {
-                await this.lunar.collect();
-                //await Delay(700);
-                if (i !== 3) {
-                    await Mep.Motion.straight(-15);
-                    await Delay(1200);
-                    this.lunar.prepare();
-                    await Mep.Motion.straight(15);
-                } else {
-                    await Delay(1000);
-                }
+            this.lunar.closeLimiter();
+            for (let i = 0; i < 3; i++) {
+                try { await this.lunar.collect(); } catch (e) {}
+                await Mep.Motion.straight(-40);
+                await Delay(1300);
+                this.lunar.prepare();
+                await Mep.Motion.straight(40);
             }
-            //await this.lunar.standby();
-            await Mep.Motion.straight(-50);
+            try { await this.lunar.collect(); } catch (e) {}
+            this.lunar.hold();
+
+            await this.lunar.stopTrack();
+            await Mep.Motion.straight(-100);
+            await Mep.Motion.go(new TunedPoint(0, 30), { speed: 70, backward: true });
+            await Mep.Motion.go(new TunedPoint(0, 210), { speed: 70, backward: true });
+
+            try { await this.lunar.openLimiter(); } catch (e) {}
+            try { await this.lunar.collect(); } catch (e) {}
+            await Delay(1500);
+            try { await this.lunar.prepare(); } catch (e) {}
+
+            // Last module
+            await Delay(5000);
+            await Mep.Motion.straight(100);
+            await Mep.Motion.straight(-100);
 
             // await this.home();
         } catch (e) {

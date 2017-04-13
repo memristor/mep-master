@@ -78,9 +78,8 @@ class MotionService extends EventEmitter {
                 motionService.emit('pathObstacleDetected', false);
             }, Mep.Config.get('obstacleMaxPeriod') + 100);
         } else {
-            // Try to redesign a path
-            // TODO:
             /*
+             TODO: Try to redesign a path
              if (target.getParams().rerouting === true) {
              this.tryRerouting();
              }
@@ -247,7 +246,7 @@ class MotionService extends EventEmitter {
 
     /**
      * Move robot forward or backward depending on param `millimeters`
-     * @param millimeters {Number} - Path that needs to be passed. If negative robot will go backward
+     * @param {Number} millimeters Path that needs to be passed. If negative robot will go backward
      * @returns {Promise}
      */
     straight(millimeters) {
@@ -256,8 +255,8 @@ class MotionService extends EventEmitter {
 
     /**
      * Rotate robot for an angle
-     * @param tunedAngle {TunedAngle} - Angle to rotate
-     * @param options {Object} - Additional options
+     * @param {TunedAngle} tunedAngle Angle to rotate
+     * @param {Object} options Additional options
      * @returns {Promise}
      */
     rotate(tunedAngle, options) {

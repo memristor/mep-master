@@ -1,5 +1,13 @@
 {
   "Drivers": {
+    "MotionDriver": {
+      "startX": -610,
+      "startY": -790,
+      "startOrientation": -90,
+      "startSpeed": 100,
+      "refreshDataPeriod": 10
+    },
+
     "CanDriver": {
       "@class": "drivers/can/CanDriver"
     },
@@ -42,6 +50,16 @@
       "cid": 2000
     },
 
+    "ServoPump": {
+      "@class": "drivers/dynamixel/DynamixelDriver",
+      "@load": true,
+      "@dependencies": {
+        "communicator": "CanDriver"
+      },
+      "id": 5,
+      "cid": 2000
+    },
+
     "ServoCollectorTrackRight": {
       "@class": "drivers/dynamixel/DynamixelDriver",
       "@load": true,
@@ -52,13 +70,23 @@
       "cid": 2000
     },
 
+    "ServoLimiter": {
+      "@class": "drivers/dynamixel/DynamixelDriver",
+      "@load": true,
+      "@dependencies": {
+        "communicator": "CanDriver"
+      },
+      "id": 6,
+      "cid": 2000
+    },
+
     "ServoCollectorHandRight": {
       "@class": "drivers/dynamixel/DynamixelDriver",
       "@load": true,
       "@dependencies": {
         "communicator": "CanDriver"
       },
-      "id": 8,
+      "id": 11,
       "cid": 2000
     },
 
@@ -79,7 +107,9 @@
         "rightTrack": "ServoCollectorTrackRight",
         "leftHand": "ServoCollectorHandLeft",
         "rightHand": "ServoCollectorHandRight",
-        "bigTrack": "CollectorBigTrack"
+        "bigTrack": "CollectorBigTrack",
+        "limiter": "ServoLimiter",
+        "servoPump": "ServoPump"
       }
     },
 
