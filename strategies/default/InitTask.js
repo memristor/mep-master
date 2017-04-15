@@ -4,6 +4,7 @@ const TunedAngle = Mep.require('strategy/TunedAngle');
 const starter = Mep.getDriver('StarterDriver');
 const Delay = Mep.require('misc/Delay');
 const Point = Mep.require('misc/Point');
+const lunar = Mep.getDriver('LunarCollector');
 
 
 const TAG = 'InitTask';
@@ -11,8 +12,6 @@ const TAG = 'InitTask';
 class InitTask extends Task {
     constructor(scheduler, params) {
         super(scheduler, params);
-
-        this.lunar = Mep.getDriver('LunarCollector');
     }
 
     // Simplified functions for prompt
@@ -78,26 +77,26 @@ class InitTask extends Task {
         await Mep.Motion.go(new TunedPoint(-350, -750), { speed: 70, backward: false });
 
         try {
-            this.lunar.closeLimiter();
+            lunar.closeLimiter();
             for (let i = 0; i < 3; i++) {
-                try { await this.lunar.collect(); } catch (e) {}
+                try { await lunar.collect(); } catch (e) {}
                 await Mep.Motion.straight(-40);
                 await Delay(1300);
-                this.lunar.prepare();
+                lunar.prepare();
                 await Mep.Motion.straight(40);
             }
-            try { await this.lunar.collect(); } catch (e) {}
-            this.lunar.hold();
+            try { await lunar.collect(); } catch (e) {}
+            lunar.hold();
 
-            await this.lunar.stopTrack();
+            await lunar.stopTrack();
             await Mep.Motion.straight(-100);
             await Mep.Motion.go(new TunedPoint(0, 30), { speed: 70, backward: true });
             await Mep.Motion.go(new TunedPoint(0, 210), { speed: 70, backward: true });
 
-            try { await this.lunar.openLimiter(); } catch (e) {}
-            try { await this.lunar.collect(); } catch (e) {}
+            try { await lunar.openLimiter(); } catch (e) {}
+            try { await lunar.collect(); } catch (e) {}
             await Delay(1500);
-            try { await this.lunar.prepare(); } catch (e) {}
+            try { await lunar.prepare(); } catch (e) {}
 
             // Last module
             await Delay(5000);

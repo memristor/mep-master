@@ -6,8 +6,8 @@ const EventEmitter = require('events').EventEmitter;
 
 const TAG = 'ColorDriver';
 
-
 /**
+ * Driver detects color based on RGB components
  * @memberOf drivers.color
  * @author Darko Lukic <lukicdarkoo@gmail.com>
  */
@@ -16,17 +16,15 @@ class ColorDriver extends EventEmitter {
         super();
 
         this.config = Object.assign({
+            colors: {
+                yellow: [ 210, 185, 155 ],
+                blue: [ 140, 140, 170 ],
+                white: [ 210, 210, 210 ]
+            },
             tolerance: 10,
             // perception: [ 0.30, 0.59, 0.11 ]
             perception: [ 0.3, 0.3, 0.3 ]
         }, config);
-
-        this.config.colors = Object.assign({
-            yellow: [ 210, 185, 155 ],
-            blue: [ 140, 140, 170 ],
-            white: [ 210, 210, 210 ]
-        }, config.colors);
-
         this.name = name;
 
         this._onDataReceived = this._onDataReceived.bind(this);
@@ -44,14 +42,25 @@ class ColorDriver extends EventEmitter {
         this.lastColor = 'undefined';
     }
 
+    /**
+     * Start reading data from sensor
+     * @param {Number} interval Receive RGB components every `interval`[ms]
+     */
     start(interval = 100) {
         this.communicator.send(this.config.cid, Buffer.from([interval]));
     }
 
+    /**
+     * Stop receiving RGB components
+     */
     stop() {
         this.start(0);
     }
 
+    /**
+     * Get last read color
+     * @returns {String} Color
+     */
     getColor() {
         let bestMatch = {
             difference: Infinity,

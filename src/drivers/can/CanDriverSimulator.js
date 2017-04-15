@@ -23,6 +23,10 @@ class CanDriverSimulator extends EventEmitter {
         });
     }
 
+    send(buffer) {
+
+    }
+
     getGroups() {
         return [];
     }

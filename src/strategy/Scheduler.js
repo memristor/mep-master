@@ -10,7 +10,7 @@ const TAG = 'Scheduler';
  * class MyScheduler extends Scheduler {
  *  constructor() {
  *      this.tasks = [
- *          new InitTask(this, 10000, 10, 1)
+ *          new InitTask(this, { weight: 10000, time: 10, location: new Point(0, 0) })
  *      ];
  *  }
  *  runNextTask() {
@@ -23,6 +23,8 @@ class Scheduler {
         this.tasks = [];
 
         process.on('unhandledRejection', this.onUnhandledTaskError.bind(this));
+
+        this.world = {};
     }
 
     /**

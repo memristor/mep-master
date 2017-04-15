@@ -4,11 +4,19 @@ const Yargs = require('yargs');
 const fs = require('fs');
 const CONFIG_DIR = Path.join(__dirname, '../config');
 
+// We have chosen yaml over json because it supports hexadecimal numbers
+NConf.formats.yaml = require('nconf-yaml');
 NConf.use('memory');
 
 // Choose the top level config file
 if (process.env.MEP_TEST) {
-    NConf.file(CONFIG_DIR + '/test.json');
+    NConf.add('general', {
+        format: NConf.formats.yaml,
+        type: 'file',
+        file: CONFIG_DIR + '/test.yaml'
+    });
+
+    NConf.load();
 
 } else {
     // Set config parameters from CLI
@@ -60,18 +68,29 @@ if (process.env.MEP_TEST) {
         .epilog('Copyright @2016 Memristor')
         .argv;
 
-    let simulationSuffix = NConf.get('simulation') ? '.simulation' : '';
-    let configFilePath = CONFIG_DIR + '/' + NConf.get('robot') + simulationSuffix + '.json';
-    if (fs.existsSync(configFilePath) === false) {
-        throw Error('There is no config file at terrain: ' + configFilePath);
+
+    if (NConf.get('simulation') === true) {
+        NConf.add('simulation', {
+            format: NConf.formats.yaml,
+            type: 'file',
+            file: CONFIG_DIR + '/' + NConf.get('robot') + '.simulation.yaml'
+        });
     }
-    NConf.file(configFilePath);
+
+    NConf.add('robot', {
+        format: NConf.formats.yaml,
+        type: 'file',
+        file: CONFIG_DIR + '/' + NConf.get('robot') + '.yaml'
+    });
 
     // Fill the rest of the configuration with default values
-    NConf.add('test', {
+    NConf.add('general', {
+        format: NConf.formats.yaml,
         type: 'file',
-        file: CONFIG_DIR + '/default.json'
+        file: CONFIG_DIR + '/default.yaml'
     });
+
+    NConf.load();
 
 }
 

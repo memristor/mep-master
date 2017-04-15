@@ -76,7 +76,8 @@ class MotionDriver extends EventEmitter  {
             startSpeed: 100,
             refreshDataPeriod: 100,
             connectionTimeout: 4000,
-            ackTimeout: 150
+            ackTimeout: 150,
+            epsilonDistance: 20
         }, config);
 
         this.positon = new Point(config.startX, config.startY);
@@ -227,12 +228,29 @@ class MotionDriver extends EventEmitter  {
 
     /**
      * Rotate robot to given angle
-     * @param angle {Number} - Angle
+     * @param {Number} angle Angle
+     * @returns {Promise}
      */
     rotateTo(angle) {
         this._direction = MotionDriver.DIRECTION_UNDEFINED;
         this._sendCommand(Buffer.from([
-            //'A'.charCodeAt(0),
+            'A'.charCodeAt(0),
+            angle >> 8,
+            angle & 0xFF
+        ]));
+        this._breaking = false;
+
+        return this._promiseToStateChanged();
+    }
+
+    /**
+     * Rotate for given angle
+     * @param {Number} angle
+     * @returns {Promise}
+     */
+    rotateFor(angle) {
+        this._direction = MotionDriver.DIRECTION_UNDEFINED;
+        this._sendCommand(Buffer.from([
             'T'.charCodeAt(0),
             angle >> 8,
             angle & 0xFF
@@ -273,7 +291,7 @@ class MotionDriver extends EventEmitter  {
 
     /**
      * Move robot forward or backward depending on sign
-     * @param millimeters
+     * @param {Number} millimeters
      * @deprecated
      */
     goForward(millimeters) {
@@ -350,6 +368,8 @@ class MotionDriver extends EventEmitter  {
      * MotionDriver.DIRECTION_BACKWARD
      */
     moveToPosition(position, direction) {
+        let motionDriver = this;
+
         this._direction = direction;
         this._sendCommand(Buffer.from([
             'G'.charCodeAt(0),
@@ -362,7 +382,19 @@ class MotionDriver extends EventEmitter  {
         ]));
         this._breaking = false;
 
-        return this._promiseToStateChanged();
+        return new Promise((resolve, reject) => {
+            this._promiseToStateChanged()
+                .then(() => {
+                    if (motionDriver.getPosition().getDistance(position) < this.config.epsilonDistance) {
+                        resolve();
+                    } else {
+                        reject(new TaskError(TAG, 'unreached', 'Robot has not reached the position'));
+                    }
+                })
+                .catch((e) => {
+                    reject(e);
+                });
+        });
     }
 
     /**
@@ -383,7 +415,9 @@ class MotionDriver extends EventEmitter  {
             position.getX() & 0xff,
             position.getY() >> 8,
             position.getY() & 0xff,
-            direction
+            direction,
+            tolerance >> 8,
+            tolerance & 0xff,
         ]));
         this._breaking = false;
 
@@ -431,8 +465,8 @@ class MotionDriver extends EventEmitter  {
             /**
              * Position changed event.
              * @event drivers.motion.MotionDriver#positionChanged
-             * @property {String} driverName - Unique name of a driver
-             * @property {misc.Point} point - Position of the robot
+             * @property {String} driverName Unique name of a driver
+             * @property {misc.Point} point Position of the robot
              */
             this.emit('positionChanged',
                 this.name,
@@ -449,7 +483,7 @@ class MotionDriver extends EventEmitter  {
                 /**
                  * State change event.
                  * @event drivers.motion.MotionDriver#stateChanged
-                 * @property {Number} state - New state
+                 * @property {Number} state New state
                  */
                 this.emit('stateChanged', this.name, this.state);
             }

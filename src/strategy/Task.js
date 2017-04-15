@@ -45,13 +45,12 @@ class Task {
      * @param {misc.Point} params.location Predicted area of execution
      */
     constructor(scheduler, params) {
-
-
         this.state = Task.READY;
         this.weight = params.weight;
         this.time = params.time;
         this.location = params.location;
         this.scheduler = scheduler;
+        this.world = scheduler.world;
 
         this.pathObstacleDetected = false;
 

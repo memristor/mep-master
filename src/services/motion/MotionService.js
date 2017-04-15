@@ -178,7 +178,7 @@ class MotionService extends EventEmitter {
                 motionService._targetQueue.removeFront();
                 motionService._goToNextQueuedTarget();
             }).catch((e) => {
-                if (e.action !== 'break') {
+                if (e.action !== 'break' || e.action !== 'unreached') {
                     motionService._reject(e);
                 }
             });
@@ -248,6 +248,7 @@ class MotionService extends EventEmitter {
      * Move robot forward or backward depending on param `millimeters`
      * @param {Number} millimeters Path that needs to be passed. If negative robot will go backward
      * @returns {Promise}
+     * @deprecated
      */
     straight(millimeters) {
         return this.motionDriver.goForward(millimeters | 0);

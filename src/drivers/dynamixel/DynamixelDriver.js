@@ -172,6 +172,7 @@ class DynamixelDriver {
         }, config);
 
         let ax = this;
+        let pooling = null;
         let timeout = false;
         this.setPosition(position);
 
@@ -180,33 +181,26 @@ class DynamixelDriver {
             setTimeout(() => {
                 timeout = true;
                 reject(new TaskError(TAG, 'timeout', 'Dynamixel cannot reach position in time'));
+
+                if (pooling !== null) {
+                    clearInterval(pooling);
+                }
             }, c.timeout);
 
             if (c.firmwareImplementation === true) {
                 // Firmware polling implementation
                 throw Error('Firmware implementation is not implemented');
-                this._writeWord(
-                    DynamixelDriver.AX_POLL_POSITION,
-                    ((c.tolerance << 8) | (c.pollingPeriod & 0xFF))
-                );
 
             } else {
                 // Software polling implementation
-                let checkPosition = () => {
-                    setTimeout(() => {
-                        ax.getPosition().then((currentPosition) => {
-                            console.log(currentPosition);
-                            if (Math.abs(currentPosition - position) <= c.tolerance) {
-                                resolve();
-                            } else {
-                                if (timeout === false) {
-                                    checkPosition();
-                                }
-                            }
-                        }).catch(checkPosition);
-                    }, c.pollingPeriod);
-                };
-                checkPosition();
+                pooling = setInterval(() => {
+                    ax.getPosition().then((currentPosition) => {
+                        if (Math.abs(currentPosition - position) <= c.tolerance) {
+                            resolve();
+                            clearInterval(pooling);
+                        }
+                    }).catch(() => {});
+                }, c.pollingPeriod);
             }
         });
     }

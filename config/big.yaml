@@ -1,0 +1,114 @@
+Drivers:
+  MotionDriver:
+    startX: -610
+    startY: -790
+    startOrientation: -90
+    startSpeed: 100
+    refreshDataPeriod: 100
+
+  CanDriver:
+    "@class": drivers/can/CanDriver
+
+  Lidar:
+    "@class": drivers/lidar/LidarDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+
+  ColorCollector:
+    "@class": drivers/color/ColorDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 1501
+    colors:
+      yellow: [ 210, 185, 155 ]
+      blue: [ 140, 140, 170 ]
+      white: [ 210, 210, 210 ]
+
+  ServoCollectorStopper:
+    "@class": drivers/dynamixel/DynamixelDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    id: 6
+    cid: 0x00007F00
+
+  ServoCollectorTrackLeft:
+    "@class": drivers/dynamixel/DynamixelDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    id: 4
+    cid: 0x00007F00
+
+  ServoCollectorHandLeft:
+    "@class": drivers/dynamixel/DynamixelDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    id: 2
+    cid: 0x00007F00
+
+  ServoPump:
+    "@class": drivers/dynamixel/DynamixelDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    id: 5
+    cid: 0x00007F00
+
+  ServoCollectorTrackRight:
+    "@class": drivers/dynamixel/DynamixelDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    id: 9
+    cid: 0x00007F00
+
+  ServoLimiter:
+    "@class": drivers/dynamixel/DynamixelDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    id: 6
+    cid: 0x00007F00
+
+  ServoCollectorHandRight:
+    "@class": drivers/dynamixel/DynamixelDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    id: 11
+    cid: 0x00007F00
+
+  CollectorBigTrack:
+    "@class": drivers/hbridge/HBridgeDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 0x00007F13
+
+  LunarCollector:
+    "@class": drivers/lunarcollector/LunarCollectorDriver
+    "@load": true
+    "@dependencies":
+      leftTrack: ServoCollectorTrackLeft
+      rightTrack: ServoCollectorTrackRight
+      leftHand: ServoCollectorHandLeft
+      rightHand: ServoCollectorHandRight
+      bigTrack: CollectorBigTrack
+      limiter: ServoLimiter
+      servoPump: ServoPump
+
+  InfraredBack:
+    "@class": drivers/infrared/InfraredDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    infraredMaxDistance: 300
+    sensorAngle: 270
+    sensorX: 0
+    sensorY: 0
+    deviceId: 0x00007F09
+    objectSize: 150

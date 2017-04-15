@@ -13,9 +13,9 @@ const TAG = 'Polygon';
  */
 class Polygon {
     /**
-     * @param tag {String} - Additional information about polygon to describe it
-     * @param duration {Number} - Polygon will be destroyed after given number of milliseconds
-     * @param points {Array<misc.Point>} - Array of points which can describe an polygon
+     * @param {String} tag Additional information about polygon to describe it
+     * @param {Number} duration Polygon will be destroyed after given number of milliseconds
+     * @param {Array<misc.Point>} points Array of points which can describe an polygon
      */
     constructor(tag, duration, points) {
         // Check points
@@ -53,7 +53,7 @@ class Polygon {
 
     /**
      * Translate all points of polygon
-     * @param translatePoint {misc.Point} Point which represents x and y value of translation
+     * @param {misc.Point} translatePoint Point which represents x and y value of translation
      */
     translate(translatePoint) {
         for (let point of this.points) {
@@ -64,8 +64,8 @@ class Polygon {
 
     /**
      * Rotate all points of polygon around an origin point
-     * @param originPoint {misc.Point} Center point of rotation
-     * @param angleDegrees {Number} Required angle of rotation
+     * @param {misc.Point} originPoint Center point of rotation
+     * @param {Number} angleDegrees Required angle of rotation
      */
     rotate(originPoint, angleDegrees) {
         for (let point of this.points) {
@@ -109,7 +109,7 @@ class Polygon {
 
     /**
      * Optimized algorithm for polygon rotation around coordinate beginning
-     * @param angleDegrees {Number}
+     * @param {Number} angleDegrees
      * @returns {misc.Polygon}
      */
     rotateAroundZero(angleDegrees) {
