@@ -155,7 +155,7 @@ class DynamixelDriver {
 
     /**
      * Set servo to required position and get promise when position is reached
-     * @param {Number} position Required position in degrees
+     * @param position {Number} - Required position in degrees
      * @param {Object} [config] Configuration options.
      * @param {Number} [config.pollingPeriod] Polling period for servo's present position in ms
      * @param {Number} [config.tolerance] Tolerated error in degrees
@@ -165,14 +165,13 @@ class DynamixelDriver {
      */
     go(position, config) {
         let c = Object.assign({
-            pollingPeriod: 150,
-            tolerance: 80,
-            timeout: 2500,
+            pollingPeriod: 300,
+            tolerance: 35,
+            timeout: 3000,
             firmwareImplementation: false
         }, config);
 
         let ax = this;
-        let pooling = null;
         let timeout = false;
         this.setPosition(position);
 
@@ -181,26 +180,32 @@ class DynamixelDriver {
             setTimeout(() => {
                 timeout = true;
                 reject(new TaskError(TAG, 'timeout', 'Dynamixel cannot reach position in time'));
-
-                if (pooling !== null) {
-                    clearInterval(pooling);
-                }
             }, c.timeout);
 
             if (c.firmwareImplementation === true) {
                 // Firmware polling implementation
                 throw Error('Firmware implementation is not implemented');
+                this._writeWord(
+                    DynamixelDriver.AX_POLL_POSITION,
+                    ((c.tolerance << 8) | (c.pollingPeriod & 0xFF))
+                );
 
             } else {
                 // Software polling implementation
-                pooling = setInterval(() => {
-                    ax.getPosition().then((currentPosition) => {
-                        if (Math.abs(currentPosition - position) <= c.tolerance) {
-                            resolve();
-                            clearInterval(pooling);
-                        }
-                    }).catch(() => {});
-                }, c.pollingPeriod);
+                let checkPosition = () => {
+                    setTimeout(() => {
+                        ax.getPosition().then((currentPosition) => {
+                            if (Math.abs(currentPosition - position) <= c.tolerance) {
+                                resolve();
+                            } else {
+                                if (timeout === false) {
+                                    checkPosition();
+                                }
+                            }
+                        }).catch(checkPosition);
+                    }, c.pollingPeriod);
+                };
+                checkPosition();
             }
         });
     }

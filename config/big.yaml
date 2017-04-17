@@ -12,6 +12,7 @@ Drivers:
   Lidar:
     "@class": drivers/lidar/LidarDriver
     "@load": true
+    cid: 0x00000100
     "@dependencies":
       communicator: CanDriver
 

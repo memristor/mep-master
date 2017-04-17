@@ -65,6 +65,44 @@ class InitTask extends Task {
         }
     }
 
+    async collect() {
+        try {
+            lunar.closeLimiter();
+            for (let i = 0; i < 3; i++) {
+                try { await lunar.collect(); } catch (e) {}
+                await Mep.Motion.straight(-40);
+                await Delay(1300);
+                lunar.prepare();
+                await Mep.Motion.straight(40);
+            }
+            try { await lunar.collect(); } catch (e) {}
+            await Delay(500);
+            lunar.hold();
+
+            await lunar.stopTrack();
+            await Mep.Motion.straight(-100);
+        } catch (e) {
+            Mep.Log.error(TAG, e);
+        }
+    }
+
+    async push() {
+        try { await lunar.openLimiter(); } catch (e) {}
+
+        // Last module
+        await Delay(1000);
+        try { await lunar.collect(); } catch (e) {}
+        await Delay(1000);
+        await Mep.Motion.straight(100);
+        await Mep.Motion.straight(-100);
+        await Delay(1000);
+        try { await lunar.prepare(); } catch (e) {}
+        await Mep.Motion.straight(100);
+        await Mep.Motion.straight(-100);
+        await Mep.Motion.straight(200);
+        lunar.stopTrack();
+    }
+
     async onRun() {
         //this.test();
         //Mep.getDriver('MotionDriver').softStop();
@@ -76,37 +114,22 @@ class InitTask extends Task {
         await Mep.Motion.go(new TunedPoint(-350, -350), { speed: 70, backward: true });
         await Mep.Motion.go(new TunedPoint(-350, -750), { speed: 70, backward: false });
 
-        try {
-            lunar.closeLimiter();
-            for (let i = 0; i < 3; i++) {
-                try { await lunar.collect(); } catch (e) {}
-                await Mep.Motion.straight(-40);
-                await Delay(1300);
-                lunar.prepare();
-                await Mep.Motion.straight(40);
-            }
-            try { await lunar.collect(); } catch (e) {}
-            lunar.hold();
+        await this.collect();
+        await Mep.Motion.go(new TunedPoint(0, -200), { speed: 70, backward: true });
+        await Mep.Motion.go(new TunedPoint(0, 40), { speed: 70, backward: true });
 
-            await lunar.stopTrack();
-            await Mep.Motion.straight(-100);
-            await Mep.Motion.go(new TunedPoint(0, 30), { speed: 70, backward: true });
-            await Mep.Motion.go(new TunedPoint(0, 210), { speed: 70, backward: true });
+        await this.push();
 
-            try { await lunar.openLimiter(); } catch (e) {}
-            try { await lunar.collect(); } catch (e) {}
-            await Delay(1500);
-            try { await lunar.prepare(); } catch (e) {}
 
-            // Last module
-            await Delay(5000);
-            await Mep.Motion.straight(100);
-            await Mep.Motion.straight(-100);
+        // Go to next rocket
+        await Mep.Motion.go(new TunedPoint(-1100, 360), { speed: 70, backward: false });
+        await Mep.Motion.go(new TunedPoint(-1240, 360), { speed: 70, backward: false });
+        await this.collect();
+        await Mep.Motion.go(new TunedPoint(-900, 150), { speed: 70, backward: true });
+        await Mep.Motion.go(new TunedPoint(-710, 250), { speed: 70, backward: true });
+        await Mep.Motion.rotate(new TunedAngle(225));
 
-            // await this.home();
-        } catch (e) {
-            Mep.Log.error(TAG, e);
-        }
+        await this.push();
 
         this.finish();
     }

@@ -175,10 +175,13 @@ class MotionService extends EventEmitter {
         } else {
             let target = this._targetQueue.getTargetFront();
             this._goSingleTarget(target.getPoint(), target.getParams()).then(() => {
-                motionService._targetQueue.removeFront();
+                // console.log('sadasdsa');
+                if (Mep.Position.getPosition().getDistance(target.getPoint()) < 50) {
+                    motionService._targetQueue.removeFront();
+                }
                 motionService._goToNextQueuedTarget();
             }).catch((e) => {
-                if (e.action !== 'break' || e.action !== 'unreached') {
+                if (e.action !== 'break') {
                     motionService._reject(e);
                 }
             });
@@ -248,10 +251,25 @@ class MotionService extends EventEmitter {
      * Move robot forward or backward depending on param `millimeters`
      * @param {Number} millimeters Path that needs to be passed. If negative robot will go backward
      * @returns {Promise}
-     * @deprecated
      */
-    straight(millimeters) {
-        return this.motionDriver.goForward(millimeters | 0);
+    straight(millimeters, parameters) {
+        let params = Object.assign({}, this.config.moveOptions, parameters);
+        let point = new Point(millimeters, 0);
+
+        point.rotateAroundZero(Mep.Position.getOrientation());
+        point.translate(Mep.Position.getPosition());
+        params.backward = millimeters < 0;
+        params.rerouting = false;
+        params.pf = false;
+
+        this._targetQueue.addPointBack(point, params);
+
+        return new Promise((resolve, reject) => {
+            this._resolve = resolve;
+            this._reject = reject;
+            this._goToNextQueuedTarget();
+        });
+        //return this.motionDriver.goForward(millimeters | 0);
     }
 
     /**

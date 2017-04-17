@@ -2,11 +2,13 @@ global.Mep = require('../../Mep');
 const AX12 = require('./DynamixelDriver');
 const CAN = require('../can/CanDriver');
 
-let ican = new CAN('CANTest', {});
+let ican = new CAN('CANTest', {
+    bitrate: 500000
+});
 
 let ax1 = new AX12('test', {
-    id: 5,
-    cid: 2000,
+    id: 9,
+    cid: 0x00007F00,
     _communicator: ican
 });
 
@@ -18,17 +20,9 @@ let ax2 = new AX12('test', {
 
 
 
-//ax1.setLED(true);
+ax1.setLED(true);
 //ax1.setSpeed(1000, false);
 
-ax1.getPosition()
-    .then((pos) => { console.log(pos); })
-    .catch(() => { console.log('fail'); });
-ax1.go(330).then(() => {
-    console.log('success');
-}).catch(() => {
-    console.log('fail');
-});
 //ax2.setSpeed(500);
 //ax2.setPosition(1000);
 

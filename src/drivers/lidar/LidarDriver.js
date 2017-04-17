@@ -92,8 +92,8 @@ class LidarDriver extends EventEmitter {
      * Process a measurement and try to make an obstacle approximation.
      * It uses bounding box algorithm to make an approximation of the obstacle
      * @link https://en.wikipedia.org/wiki/Minimum_bounding_box
-     * @param angle {Number} - Angle of the measurement
-     * @param distance {Number} - Distance to the closest point at given angle
+     * @param {Number} angle Angle of the measurement
+     * @param {Number} distance Distance to the closest point at given angle
      * @private
      */
     _addPointToPolyGenerator(angle, distance) {
@@ -132,10 +132,10 @@ class LidarDriver extends EventEmitter {
                 /**
                  * Position changed event.
                  * @event drivers.lidar.LidarDriver#obstacleDetected
-                 * @property {String} driverName - Unique name of a driver
-                 * @property {misc.Point} poi - Point which is part of obstacle
-                 * @property {misc.Polygon} polygon - Approximation of the obstacle
-                 * @property {Boolean} detected - True if obstacle is detected
+                 * @property {String} driverName Unique name of a driver
+                 * @property {misc.Point} poi Point which is part of obstacle
+                 * @property {misc.Polygon} polygon Approximation of the obstacle
+                 * @property {Boolean} detected True if obstacle is detected
                  */
                 this.emit('obstacleDetected',
                     this.name,
@@ -152,7 +152,7 @@ class LidarDriver extends EventEmitter {
 
     /**
      * Process data from lidar
-     * @param data {Buffer} - Buffer from lidar
+     * @param {Buffer} data Buffer from lidar
      * @private
      */
     _onDataReceived(data) {

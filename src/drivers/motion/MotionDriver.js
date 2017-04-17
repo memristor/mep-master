@@ -76,8 +76,7 @@ class MotionDriver extends EventEmitter  {
             startSpeed: 100,
             refreshDataPeriod: 100,
             connectionTimeout: 4000,
-            ackTimeout: 150,
-            epsilonDistance: 20
+            ackTimeout: 150
         }, config);
 
         this.positon = new Point(config.startX, config.startY);
@@ -382,19 +381,7 @@ class MotionDriver extends EventEmitter  {
         ]));
         this._breaking = false;
 
-        return new Promise((resolve, reject) => {
-            this._promiseToStateChanged()
-                .then(() => {
-                    if (motionDriver.getPosition().getDistance(position) < this.config.epsilonDistance) {
-                        resolve();
-                    } else {
-                        reject(new TaskError(TAG, 'unreached', 'Robot has not reached the position'));
-                    }
-                })
-                .catch((e) => {
-                    reject(e);
-                });
-        });
+        return this._promiseToStateChanged();
     }
 
     /**
