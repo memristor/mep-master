@@ -80,7 +80,7 @@ class InitTask extends Task {
             lunar.hold();
 
             await lunar.stopTrack();
-            await Mep.Motion.straight(-100);
+            await Mep.Motion.straight(-150);
         } catch (e) {
             Mep.Log.error(TAG, e);
         }
@@ -108,6 +108,11 @@ class InitTask extends Task {
         //Mep.getDriver('MotionDriver').softStop();
 
         //Mep.getDriver('ServoCollectorHandRight').setPosition(500);
+
+        //Mep.getDriver('ServoPump').go(200);
+
+
+        //lunar.eject();
 
         await starter.waitStartSignal(this);
 

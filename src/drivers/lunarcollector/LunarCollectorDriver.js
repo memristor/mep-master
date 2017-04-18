@@ -1,5 +1,7 @@
 'use strict';
 
+const Delay = Mep.require('misc/Delay');
+
 /** @namespace drivers.lunarcollector */
 
 const TAG = 'LunarCollector';
@@ -27,11 +29,12 @@ class LunarCollectorDriver {
         this._bigTrack = Mep.getDriver(this.config['@dependencies']['bigTrack']);
         this._limiter = Mep.getDriver(this.config['@dependencies']['limiter']);
         this._servoPump = Mep.getDriver(this.config['@dependencies']['servoPump']);
-
+        this._vacuumPump = Mep.getDriver(this.config['@dependencies']['vacuumPump']);
+        this._cylinder = Mep.getDriver(this.config['@dependencies']['cylinder']);
 
         this._leftHand.setSpeed(600);
         this._rightHand.setSpeed(600);
-        this._servoPump.setPosition(100); // Put put inside robot
+        this._servoPump.setPosition(200); // Put put inside robot
     }
 
     collect() {
@@ -53,6 +56,21 @@ class LunarCollectorDriver {
 
     stopTrack() {
         this._bigTrack.stop();
+    }
+
+    async eject() {
+        this._cylinder.write(0);
+        this._vacuumPump.write(1);
+        try { await this._servoPump.go(200); } catch (e) {}
+        this._cylinder.write(1);
+        await Delay(1000);
+        this._cylinder.write(0);
+        await Delay(1000);
+
+        // Eject hand
+        this._vacuumPump.write(0);
+        try { await this._servoPump.go(830); } catch (e) {}
+        this._cylinder.write(1);
     }
 
     async openLimiter() {

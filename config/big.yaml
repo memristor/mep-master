@@ -35,6 +35,24 @@ Drivers:
     id: 6
     cid: 0x00007F00
 
+  VacuumPump:
+      "@class": drivers/pin/PinDriver
+      "@load": true
+      "@dependencies":
+        communicator: CanDriver
+      cid: 0x00007F02
+      direction: 'output'
+      mode: 'digital'
+
+  Cylinder:
+      "@class": drivers/pin/PinDriver
+      "@load": true
+      "@dependencies":
+        communicator: CanDriver
+      cid: 0x00007F03
+      direction: 'output'
+      mode: 'digital'
+
   ServoCollectorTrackLeft:
     "@class": drivers/dynamixel/DynamixelDriver
     "@load": true
@@ -101,6 +119,8 @@ Drivers:
       bigTrack: CollectorBigTrack
       limiter: ServoLimiter
       servoPump: ServoPump
+      vacuumPump: VacuumPump
+      cylinder: Cylinder
 
   InfraredBack:
     "@class": drivers/infrared/InfraredDriver

@@ -69,17 +69,22 @@ class PinDriver extends EventEmitter {
 
     /**
      * Write value to given pin
-     * @param value {Number} - [0, 1] for digital pins or [0 - 255] for analog pins
+     * @param {Number} value [0, 1] for digital pins or [0 - 255] for analog pins
      */
     write(value) {
         if (this.config.direction === 'output') {
             if (this.config.mode === 'digital' && value != 1 && value != 0) {
                 value = 1;
             }
-            this.communicator.send(this.config.cid, Buffer.from([value]));
+            let buffer = Buffer.from([value]);
+            this.communicator.send(this.config.cid, buffer);
         } else {
             throw Error('Cannot write to input pin');
         }
+    }
+
+    getGroups() {
+        return [];
     }
 }
 

@@ -2,17 +2,17 @@ global.Mep = require('../../Mep');
 const PinDriver = require('./PinDriver');
 const CAN = require('../can/CanDriver');
 
-let can = new CAN('CANTest', {});
-
-
+let ican = new CAN('CANTest', {
+    bitrate: 500000
+});
 
 let pwmPin = new PinDriver('TestLED', {
-    cid: 3000,
+    cid: 0x00007F02,
     direction: 'output',
-    mode: 'analog',
-    _communicator: can
+    mode: 'digital',
+    _communicator: ican
 });
-pwmPin.write(100);
+pwmPin.write(1);
 
 /*
 let pin = new PinDriver('TestLED', {
