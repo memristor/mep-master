@@ -24,7 +24,7 @@ class Scheduler {
 
         process.on('unhandledRejection', this.onUnhandledTaskError.bind(this));
 
-        this.world = {};
+        this.common = {};
     }
 
     /**
@@ -60,6 +60,7 @@ class Scheduler {
     }
 
     runTask(task) {
+        Mep.Log.info(TAG, task.constructor.name);
         task.run();
     }
 }

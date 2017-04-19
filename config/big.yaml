@@ -108,6 +108,15 @@ Drivers:
       communicator: CanDriver
     cid: 0x00007F13
 
+  CircularEjector:
+    "@class": drivers/pin/PinDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 0x00007F04
+    direction: 'output'
+    mode: 'digital'
+
   LunarCollector:
     "@class": drivers/lunarcollector/LunarCollectorDriver
     "@load": true
@@ -121,6 +130,7 @@ Drivers:
       servoPump: ServoPump
       vacuumPump: VacuumPump
       cylinder: Cylinder
+      circularEjector: CircularEjector
 
   InfraredBack:
     "@class": drivers/infrared/InfraredDriver

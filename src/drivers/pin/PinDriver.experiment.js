@@ -7,12 +7,12 @@ let ican = new CAN('CANTest', {
 });
 
 let pwmPin = new PinDriver('TestLED', {
-    cid: 0x00007F02,
+    cid: 0x00007F04,
     direction: 'output',
     mode: 'digital',
     _communicator: ican
 });
-pwmPin.write(1);
+pwmPin.write(0);
 
 /*
 let pin = new PinDriver('TestLED', {

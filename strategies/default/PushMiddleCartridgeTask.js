@@ -1,22 +1,20 @@
 const Task = Mep.require('strategy/Task');
 const TunedPoint = Mep.require('strategy/TunedPoint');
 const TunedAngle = Mep.require('strategy/TunedAngle');
-const starter = Mep.getDriver('StarterDriver');
 const Delay = Mep.require('misc/Delay');
 const Point = Mep.require('misc/Point');
 const lunar = Mep.getDriver('LunarCollector');
 const Console = require('./Console');
 
-const TAG = 'InitTask';
+const TAG = 'PushMiddleCartridgeTask';
 
-class InitTask extends Task {
+class PushMiddleCartridgeTask extends Task {
     async onRun() {
-        // Mep.getDriver('MotionDriver').softStop();
-        Mep.getDriver('ServoLimiter').setPosition(560);
-        await starter.waitStartSignal(new Console());
-
         try {
-            await Mep.Motion.go(new TunedPoint(-350, -350), { speed: 70, backward: true });
+            await Mep.Motion.go(new TunedPoint(10, -200), {speed: 70, backward: true});
+            await Mep.Motion.go(new TunedPoint(10, 50), {speed: 70, backward: true});
+
+            await this.common.push();
         } catch (e) {
             Mep.Log.error(TAG, e);
         }
@@ -25,4 +23,4 @@ class InitTask extends Task {
     }
 }
 
-module.exports = InitTask;
+module.exports = PushMiddleCartridgeTask;

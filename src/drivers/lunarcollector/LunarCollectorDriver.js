@@ -31,6 +31,7 @@ class LunarCollectorDriver {
         this._servoPump = Mep.getDriver(this.config['@dependencies']['servoPump']);
         this._vacuumPump = Mep.getDriver(this.config['@dependencies']['vacuumPump']);
         this._cylinder = Mep.getDriver(this.config['@dependencies']['cylinder']);
+        this._circularEjector = Mep.getDriver(this.config['@dependencies']['circularEjector']);
 
         this._leftHand.setSpeed(600);
         this._rightHand.setSpeed(600);
@@ -42,7 +43,7 @@ class LunarCollectorDriver {
         this._rightTrack.setSpeed(1023);
         this.startTrack();
         let leftHandPromise = this._leftHand.go(500, { tolerance: 150 });
-        let rightHandPromise = this._rightHand.go(510, { tolerance: 150 });
+        let rightHandPromise = this._rightHand.go(520, { tolerance: 150 });
 
         return Promise.all([
             leftHandPromise,
@@ -56,9 +57,12 @@ class LunarCollectorDriver {
 
     stopTrack() {
         this._bigTrack.stop();
+        this._circularEjector.write(0);
     }
 
-    async eject() {
+    async ejectSide() {
+        this._limiter.setPosition(530);
+
         this._cylinder.write(0);
         this._vacuumPump.write(1);
         try { await this._servoPump.go(200); } catch (e) {}
@@ -69,18 +73,20 @@ class LunarCollectorDriver {
 
         // Eject hand
         this._vacuumPump.write(0);
-        try { await this._servoPump.go(830); } catch (e) {}
+        try { await this._servoPump.go(850); } catch (e) {}
         this._cylinder.write(1);
     }
 
     async openLimiter() {
         await this.stopTrack();
-        await this._limiter.go(330);
+        await this._limiter.go(310);
         await this.startTrack();
+        this._circularEjector.write(1);
     }
 
     closeLimiter() {
-        return this._limiter.go(500);
+        this._circularEjector.write(0);
+        return this._limiter.go(480);
     }
 
     hold() {

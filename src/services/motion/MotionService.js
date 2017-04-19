@@ -270,7 +270,8 @@ class MotionService extends EventEmitter {
             this._reject = reject;
             this._goToNextQueuedTarget();
         });
-        //return this.motionDriver.goForward(millimeters | 0);
+
+        // return this.motionDriver.goForward(millimeters | 0);
     }
 
     /**

@@ -50,7 +50,7 @@ class Task {
         this.time = params.time;
         this.location = params.location;
         this.scheduler = scheduler;
-        this.world = scheduler.world;
+        this.common = scheduler.common;
 
         this.pathObstacleDetected = false;
 

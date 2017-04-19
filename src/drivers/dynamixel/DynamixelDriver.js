@@ -179,7 +179,7 @@ class DynamixelDriver {
             // Apply time out
             setTimeout(() => {
                 timeout = true;
-                reject(new TaskError(TAG, 'timeout', 'Dynamixel cannot reach position in time'));
+                reject(new TaskError(TAG + ':' + this.name, 'timeout', 'Dynamixel cannot reach position (' + position + ') in time'));
             }, c.timeout);
 
             if (c.firmwareImplementation === true) {

@@ -31,6 +31,10 @@ class SchedulerService {
             }
         }
 
+        if (maxWeightTask === null) {
+            Mep.Log.error(TAG, 'Cannot suggest next task');
+        }
+
         return maxWeightTask;
     }
 }
