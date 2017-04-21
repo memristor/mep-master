@@ -52,10 +52,10 @@ class DefaultScheduler extends Scheduler {
             lunar.closeLimiter().catch((e) => { Mep.Log.error(TAG, 'Lunar.closeLimiter', e); });
             for (let i = 0; i < 2; i++) {
                 try { await lunar.collect(); } catch (e) { Mep.Log.error(TAG, 'Lunar.collect', e); }
-                try { await Mep.Motion.straight(-40); } catch (e) {}
+                try { await Mep.Motion.straight(-40); } catch (e) { Mep.Log.error(TAG, 'Motion.straight', e); }
                 await Delay(1500);
                 lunar.prepare().catch((e) => { Mep.Log.error(TAG, 'Lunar.prepare', e); });
-                try { await Mep.Motion.straight(40) } catch (e) {}
+                try { await Mep.Motion.straight(40) } catch (e) { Mep.Log.error(TAG, 'Motion.straight', e); }
             }
             try { await lunar.collect(); } catch (e) { Mep.Log.error(TAG, 'Lunar.collect', e); }
             await Delay(2000);
@@ -64,7 +64,7 @@ class DefaultScheduler extends Scheduler {
 
             try { await lunar.collect(); } catch (e) { Mep.Log.error(TAG, 'Lunar.collect', e); }
             await Delay(500);
-            lunar.hold().catch((e) => { Mep.Log.error(TAG, 'Lunar.hold', e); });
+            lunar.hold();
 
             try { await lunar.stopTrack(); } catch (e) { Mep.Log.error(TAG, 'Lunar.stopTrack', e); }
         } catch (e) {

@@ -24,7 +24,8 @@ class LidarDriver extends EventEmitter {
             tolerance: 400,
             volume: 230,
             angle: 270,
-            inverted: false
+            inverted: false,
+            minDistance: 170
         }, config);
         this.name = name;
 
@@ -157,12 +158,13 @@ class LidarDriver extends EventEmitter {
      */
     _onDataReceived(data) {
         if (data.length !== 4 || this._enabled === false) {
-            console.log(TAG, data);
             return;
         }
 
         let angle = ((data.readUInt8(0) & 0xFF) << 8) | data.readUInt8(1);
         let distance = ((data.readUInt8(2) & 0xFF) << 8) | data.readUInt8(3);
+
+        if (distance < this.config.minDistance) return;
 
         if (this.config.inverted === true) {
             angle *= -1;
@@ -172,6 +174,8 @@ class LidarDriver extends EventEmitter {
             distance: distance,
             time: (new Date).getTime()
         };
+
+
 
         // Try to generate polygons
         this._addPointToPolyGenerator(scaledAngle, distance);

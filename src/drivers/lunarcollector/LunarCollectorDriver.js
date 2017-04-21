@@ -94,17 +94,20 @@ class LunarCollectorDriver {
         this._rightTrack.setSpeed(0);
     }
 
-    prepare() {
+    async prepare() {
         this._leftTrack.setSpeed(0);
         this._rightTrack.setSpeed(0);
-        let leftHandPromise = this._leftHand.go(600);
-        let rightHandPromise = this._rightHand.go(400);
-        this.startTrack();
 
-        return Promise.all([
-            leftHandPromise,
-            rightHandPromise
-        ]);
+        try {
+            await Promise.all([
+                this._leftHand.go(600),
+                this._rightHand.go(400)
+            ]);
+        } catch (e) {
+            Mep.Log.error(TAG, 'prepare', e);
+        }
+
+        this.startTrack();
     }
 
     standby() {

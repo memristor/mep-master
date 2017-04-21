@@ -32,26 +32,31 @@ class MotionDriver extends EventEmitter  {
 
     static get CONFIG_DISTANCE_REGULATOR() { return 0; }
     static get CONFIG_ROTATION_REGULATOR() { return 1; }
-    static get CONFIG_STUCK() { return 2; }
-    static get CONFIG_DEBUG() { return 3; }
-    static get CONFIG_STATUS_CHANGE_REPORT() { return 4; }
+    static get CONFIG_ENABLE_STUCK() { return 2; }
+    static get CONFIG_STUCK() { return 3; }
+    static get CONFIG_DEBUG() { return 4; }
+    static get CONFIG_STATUS_CHANGE_REPORT() { return 5; }
+    static get CONFIG_KEEP_COUNT() { return 6; }
 
-    static get CONFIG_STUCK_DISTANCE_JUMP() { return 5; }
-    static get CONFIG_STUCK_ROTATION_JUMP() { return 6; }
-    static get CONFIG_STUCK_DISTANCE_MAX_FAIL_COUNT() { return 7; }
-    static get CONFIG_STUCK_ROTATION_MAX_FAIL_COUNT() { return 8; }
+    static get CONFIG_STUCK_DISTANCE_JUMP() { return 7; }
+    static get CONFIG_STUCK_ROTATION_JUMP() { return 8; }
+    static get CONFIG_STUCK_DISTANCE_MAX_FAIL_COUNT() { return 9; }
+    static get CONFIG_STUCK_ROTATION_MAX_FAIL_COUNT() { return 10; }
+    static get CONFIG_MOTOR_SPEED_LIMIT() { return 11; }
+    static get CONFIG_MOTOR_RATE_OF_CHANGE() { return 12; }
+    static get CONFIG_SEND_STATUS_INTERVAL() { return 14; }
 
-    static get CONFIG_WHEEL_DISTANCE() { return 9; }
-    static get CONFIG_WHEEL_R1() { return 10; }
-    static get CONFIG_WHEEL_R2() { return 11; }
-    static get CONFIG_PID_D_P() { return 12; }
-    static get CONFIG_PID_D_D() { return 13; }
-    static get CONFIG_PID_R_P() { return 14; }
-    static get CONFIG_PID_R_D() { return 15; }
-    static get CONFIG_SPEED() { return 16; }
-    static get CONFIG_RSPEED() { return 17; }
-    static get CONFIG_ACCEL() { return 18; }
-    static get CONFIG_ALPHA() { return 19; }
+    static get CONFIG_WHEEL_DISTANCE() { return 14; }
+    static get CONFIG_WHEEL_R1() { return 15; }
+    static get CONFIG_WHEEL_R2() { return 16; }
+    static get CONFIG_PID_D_P() { return 17; }
+    static get CONFIG_PID_D_D() { return 18; }
+    static get CONFIG_PID_R_P() { return 19; }
+    static get CONFIG_PID_R_D() { return 20; }
+    static get CONFIG_VMAX() { return 21; }
+    static get CONFIG_OMEGA() { return 22; }
+    static get CONFIG_ACCEL() { return 23; }
+    static get CONFIG_ALPHA() { return 24; }
 
 
     /**
@@ -128,7 +133,7 @@ class MotionDriver extends EventEmitter  {
             this.config.startY,
             this.config.startOrientation
         );
-        this.setRefreshInterval(this.config.refreshDataPeriod);
+        this.setConfig(MotionDriver.CONFIG_SEND_STATUS_INTERVAL, this.config.refreshDataPeriod, 0);
         this.requestRefreshData();
 
         return new Promise((resolve) => {
@@ -198,8 +203,6 @@ class MotionDriver extends EventEmitter  {
             (fixedValue >> 4) & 0xFF,
             ((fixedValue & 0x0F) << 4) | (exp & 0x0F)
         ]);
-
-        console.log(buffer);
 
         this._sendCommand(buffer);
     }
@@ -311,7 +314,7 @@ class MotionDriver extends EventEmitter  {
     stop() {
         this._direction = MotionDriver.DIRECTION_UNDEFINED;
         this._breaking = true;
-        this.state = MotionDriver.STATE_BREAK;
+        this.state = MotionDriver.STATE_IDLE;
         this.emit('stateChanged', this.name, MotionDriver.STATE_BREAK);
         this._sendCommand(Buffer.from(['S'.charCodeAt(0)]));
 
@@ -333,20 +336,6 @@ class MotionDriver extends EventEmitter  {
             resolve();
         });
     }
-
-    /**
-     * Set required refresh interval of robot status. Note that it is required
-     * refresh interval and robot can choose to send or not depending on it's state.
-     * @param {Number} interval Period in milliseconds
-     */
-    setRefreshInterval(interval) {
-        this._sendCommand(Buffer.from([
-            'p'.charCodeAt(0),
-            interval >> 8,
-            interval & 0xff,
-        ]));
-    }
-
 
     /**
      * Set default speed of the robot
@@ -392,7 +381,7 @@ class MotionDriver extends EventEmitter  {
      * MotionDriver.DIRECTION_BACKWARD
      * @param {Number} tolerance Radius
      */
-    moveToCurvilinear(position, direction, tolerance) {
+    moveToCurvilinear(position, direction, radius, tolerance) {
         let motionDriver = this;
 
         this._direction = direction;
@@ -403,8 +392,8 @@ class MotionDriver extends EventEmitter  {
             position.getY() >> 8,
             position.getY() & 0xff,
             direction,
-            tolerance >> 8,
-            tolerance & 0xff,
+            radius >> 8,
+            radius & 0xff,
         ]));
         this._breaking = false;
 
@@ -444,7 +433,17 @@ class MotionDriver extends EventEmitter  {
         let orientation = (buffer.readInt8(5) << 8) | (buffer.readInt8(6) & 0xFF);
         let speed = (buffer.readInt8(7) << 8) | (buffer.readInt8(8) & 0xFF);
 
-        Mep.Telemetry.send(TAG, 'Speed', {speed: speed});
+        // Checks
+        if ([MotionDriver.STATE_MOVING,
+                MotionDriver.STATE_IDLE,
+                MotionDriver.STATE_ROTATING,
+                MotionDriver.STATE_ERROR,
+                MotionDriver.STATE_STUCK].indexOf(state) < 0) {
+            return;
+        }
+        if (orientation < -180 || orientation > 180) return;
+        if (position.getX() > 2000 || position.getX() < -2000) return;
+        if (position.getY() > 2000 || position.getY() < -2000) return;
 
         if (this.positon.equals(position) === false) {
             this.positon = position;

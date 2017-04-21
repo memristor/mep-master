@@ -40,6 +40,8 @@ class PinDriver extends EventEmitter {
     }
 
     _onDataReceived(data) {
+        if (data.length !== 1) return;
+
         if (this.uniqueDataReceivedCallback !== null) {
             this.uniqueDataReceivedCallback(data);
         }

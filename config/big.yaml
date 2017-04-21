@@ -4,7 +4,7 @@ Drivers:
     startY: -790
     startOrientation: -90
     startSpeed: 100
-    refreshDataPeriod: 100
+    refreshDataPeriod: 40
 
   CanDriver:
     "@class": drivers/can/CanDriver
@@ -117,6 +117,24 @@ Drivers:
     direction: 'output'
     mode: 'digital'
 
+  BackLunarDetector:
+    "@class": drivers/pin/PinDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 0x00007F0B
+    direction: 'input'
+    mode: 'digital'
+
+  FrontLunarDetector:
+    "@class": drivers/pin/PinDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 0x00007F0C
+    direction: 'input'
+    mode: 'digital'
+
   LunarCollector:
     "@class": drivers/lunarcollector/LunarCollectorDriver
     "@load": true
@@ -132,14 +150,3 @@ Drivers:
       cylinder: Cylinder
       circularEjector: CircularEjector
 
-  InfraredBack:
-    "@class": drivers/infrared/InfraredDriver
-    "@load": true
-    "@dependencies":
-      communicator: CanDriver
-    infraredMaxDistance: 300
-    sensorAngle: 270
-    sensorX: 0
-    sensorY: 0
-    deviceId: 0x00007F09
-    objectSize: 150

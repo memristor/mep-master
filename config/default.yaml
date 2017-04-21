@@ -55,8 +55,7 @@ Drivers:
 Services:
   PositionService:
   MotionService:
-    hazardObstacleDistance: 350
-    timeToStop: 300
+    hazardObstacleDistance: 450
     moveOptions:
       rerouting: false
       pf: false
@@ -64,6 +63,7 @@ Services:
       relative: false
       tolerance: -1
       speed: 80
+      radius: 80
     rotateOptions:
       relative: false
   TerrainService:

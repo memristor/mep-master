@@ -24,8 +24,7 @@ class MotionService extends EventEmitter {
             maxBypassTolerance: 50,
             targetLineOffset: 150,
             hazardAngleFront: [-70, 70],
-            hazardAngleBack: [110, -110],
-            epsilonRadius: 50
+            hazardAngleBack: [110, -110]
         }, config);
 
         this.motionDriver = Mep.getDriver('MotionDriver');
@@ -176,13 +175,11 @@ class MotionService extends EventEmitter {
         } else {
             let target = this._targetQueue.getTargetFront();
             this._goSingleTarget(target.getPoint(), target.getParams()).then(() => {
-                // console.log('sadasdsa');
-                if (Mep.Position.getPosition().getDistance(target.getPoint()) < this.config.epsilonRadius) {
-                    motionService._targetQueue.removeFront();
-                }
+                motionService._targetQueue.removeFront();
                 motionService._goToNextQueuedTarget();
             }).catch((e) => {
                 if (e.action !== 'break') {
+                    Mep.Log.error(TAG, e);
                     motionService._reject(e);
                 }
             });
@@ -218,6 +215,7 @@ class MotionService extends EventEmitter {
             return this.motionDriver.moveToCurvilinear(
                 point,
                 params.backward ? -1 : 1,
+                params.radius,
                 params.tolerance
             );
         }
