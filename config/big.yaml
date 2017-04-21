@@ -4,7 +4,7 @@ Drivers:
     startY: -790
     startOrientation: -90
     startSpeed: 100
-    refreshDataPeriod: 40
+    refreshDataPeriod: 20
 
   CanDriver:
     "@class": drivers/can/CanDriver

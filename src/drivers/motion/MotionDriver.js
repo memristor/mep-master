@@ -342,6 +342,7 @@ class MotionDriver extends EventEmitter  {
      * @param {Number} speed Speed (0 - 255)
      */
     setSpeed(speed) {
+        // speed *= (speed * 1.5) | 0;
         this._activeSpeed = speed;
         this._sendCommand(Buffer.from([
             'V'.charCodeAt(0),
@@ -400,9 +401,11 @@ class MotionDriver extends EventEmitter  {
         return new Promise((resolve, reject) => {
             let positionListener = (name, currentPosition) => {
                 if (currentPosition.getDistance(position) <= tolerance) {
+                    motionDriver.state = MotionDriver.STATE_IDLE;
                     motionDriver.finishCommand();
-                    motionDriver.removeListener('positionChanged', positionListener);
-                    resolve();
+                    motionDriver.emit('stateChanged', motionDriver.name, motionDriver.state);
+                    //motionDriver.removeListener('positionChanged', positionListener);
+                    //resolve();
                 }
             };
             this.on('positionChanged', positionListener);
