@@ -22,8 +22,9 @@ Drivers:
     "@class": drivers/uart/Uart
     "@load": true
     protocol: PLLSP
+
   MotionDriver:
-    "@class": drivers/motion/MotionDriver
+    "@class": drivers/motion/MotionDriverSimulator
     "@load": true
     "@dependencies":
       communicator: Uart
@@ -33,16 +34,19 @@ Drivers:
     startSpeed: 100
     precision: 2
     refreshDataPeriod: 30
+
   MotionDriverController:
     "@class": drivers/motion/MotionDriverController
     "@load": true
     "@dependencies":
       motionDriver: MotionDriver
+
   CanDriver:
     "@class": drivers/can/CanDriver
     "@load": true
     device: can0
     bitrate: 500000
+
   StarterDriver:
     "@class": drivers/starter/StarterDriver
     "@load": true

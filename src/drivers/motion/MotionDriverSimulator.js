@@ -4,6 +4,8 @@
 const Point = Mep.require('misc/Point');
 const EventEmitter = require('events');
 const TaskError = Mep.require('strategy/TaskError');
+const TunedPoint = Mep.require('strategy/TunedPoint');
+const TunedAngle = Mep.require('strategy/TunedAngle');
 
 const TAG = 'MotionDriverSimulator';
 
@@ -36,8 +38,8 @@ class MotionDriverSimulator extends EventEmitter {
             startOrientation: 0
         }, config);
 
-        this.position = new Point(this.config.startX, this.config.startY);
-        this.orientation = this.config.startOrientation;
+        this.position = new TunedPoint(...this.config.startPosition).getPoint();
+        this.orientation = new TunedAngle(...this.config.startOrientation).getAngle();
         this.direction = MotionDriverSimulator.DIRECTION_FORWARD;
 
         this.onPositionChanged = this.onPositionChanged.bind(this);

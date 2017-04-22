@@ -5,7 +5,8 @@ const Point = Mep.require('misc/Point');
 const EventEmitter = require('events');
 const Buffer = require('buffer').Buffer;
 const TaskError = Mep.require('strategy/TaskError');
-
+const TunedPoint = Mep.require('strategy/TunedPoint');
+const TunedAngle = Mep.require('strategy/TunedAngle');
 
 const TAG = 'MotionDriver';
 
@@ -62,8 +63,7 @@ class MotionDriver extends EventEmitter  {
     /**
      * @param {String} name Unique driver name
      * @param {Object} config Configuration presented as an associative array
-     * @param {Number} [config.startX] X coordinate for start position
-     * @param {Number} [config.startY] Y coordinate for start position
+     * @param {Number} [config.startPosition] Point for start position
      * @param {Number} [config.startOrientation] Start orientation
      * @param {Number} [config.startSpeed] Initial speed
      * @param {Number} [config.refreshDataPeriod] Get state from motion driver every `refreshDataPeriod` in ms
@@ -75,24 +75,22 @@ class MotionDriver extends EventEmitter  {
 
         this.name = name;
         this.config = Object.assign({
-            startX: -1300,
-            startY: 0,
-            startOrientation: 0,
             startSpeed: 100,
             refreshDataPeriod: 100,
             connectionTimeout: 4000,
             ackTimeout: 150
         }, config);
 
-        this.positon = new Point(config.startX, config.startY);
+        this.positon = new TunedPoint(...this.config.startPosition).getPoint();
+        this.orientation = new TunedAngle(...config.startOrientation).getAngle();
         this.state = MotionDriver.STATE_UNDEFINED;
-        this.orientation = config.startOrientation;
         this._activeSpeed = config.startSpeed;
         this._breaking = false;
         this._direction = MotionDriver.DIRECTION_UNDEFINED;
-
         this.communicator = Mep.DriverManager.getDriver(config['@dependencies'].communicator);
         this.communicator.on('data', this._onDataReceived.bind(this));
+
+        Mep.Log.info(TAG, 'Start point:', this.positon, 'orientation:', this.orientation);
 
         this._waitACKQueue = {};
     }
@@ -129,9 +127,9 @@ class MotionDriver extends EventEmitter  {
 
         this.reset();
         this.setPositionAndOrientation(
-            this.config.startX,
-            this.config.startY,
-            this.config.startOrientation
+            this.positon.getX(),
+            this.positon.getY(),
+            this.orientation
         );
         this.setConfig(MotionDriver.CONFIG_SEND_STATUS_INTERVAL, this.config.refreshDataPeriod, 0);
         this.requestRefreshData();
@@ -357,8 +355,6 @@ class MotionDriver extends EventEmitter  {
      * MotionDriver.DIRECTION_BACKWARD
      */
     moveToPosition(position, direction) {
-        let motionDriver = this;
-
         this._direction = direction;
         this._sendCommand(Buffer.from([
             'G'.charCodeAt(0),
@@ -404,8 +400,7 @@ class MotionDriver extends EventEmitter  {
                     motionDriver.state = MotionDriver.STATE_IDLE;
                     motionDriver.finishCommand();
                     motionDriver.emit('stateChanged', motionDriver.name, motionDriver.state);
-                    //motionDriver.removeListener('positionChanged', positionListener);
-                    //resolve();
+                    resolve();
                 }
             };
             this.on('positionChanged', positionListener);
@@ -421,29 +416,16 @@ class MotionDriver extends EventEmitter  {
         });
     }
 
-    /**
-     * Packet type P is received
-     * @param {Buffer} buffer Payload
-     * @private
-     */
-    _onPReceived(buffer) {
-        // Ignore garbage
+    _onPositionReceived(buffer) {
         let state = buffer.readInt8(0);
         let position = new Point(
             (buffer.readInt8(1) << 8) | (buffer.readInt8(2) & 0xFF),
             (buffer.readInt8(3) << 8) | (buffer.readInt8(4) & 0xFF)
         );
         let orientation = (buffer.readInt8(5) << 8) | (buffer.readInt8(6) & 0xFF);
-        let speed = (buffer.readInt8(7) << 8) | (buffer.readInt8(8) & 0xFF);
+
 
         // Checks
-        if ([MotionDriver.STATE_MOVING,
-                MotionDriver.STATE_IDLE,
-                MotionDriver.STATE_ROTATING,
-                MotionDriver.STATE_ERROR,
-                MotionDriver.STATE_STUCK].indexOf(state) < 0) {
-            return;
-        }
         if (orientation < -180 || orientation > 180) return;
         if (position.getX() > 2000 || position.getX() < -2000) return;
         if (position.getY() > 2000 || position.getY() < -2000) return;
@@ -464,20 +446,6 @@ class MotionDriver extends EventEmitter  {
             );
         }
 
-        // If state is changed
-        if (state !== this.state) {
-            if (this._breaking === false) {
-                this.state = state;
-
-                /**
-                 * State change event.
-                 * @event drivers.motion.MotionDriver#stateChanged
-                 * @property {Number} state New state
-                 */
-                this.emit('stateChanged', this.name, this.state);
-            }
-        }
-
         if (orientation !== this.orientation) {
             this.orientation = orientation;
 
@@ -495,6 +463,82 @@ class MotionDriver extends EventEmitter  {
         }
     }
 
+    /**
+     * Packet type P is received
+     * @param {Buffer} buffer Payload
+     * @private
+     */
+    _onStateReceived(buffer) {
+        // Ignore garbage
+        let state = buffer.readInt8(0);
+        let position = new Point(
+            (buffer.readInt8(1) << 8) | (buffer.readInt8(2) & 0xFF),
+            (buffer.readInt8(3) << 8) | (buffer.readInt8(4) & 0xFF)
+        );
+        let orientation = (buffer.readInt8(5) << 8) | (buffer.readInt8(6) & 0xFF);
+        let speed = (buffer.readInt8(7) << 8) | (buffer.readInt8(8) & 0xFF);
+
+        // Checks
+        if (orientation < -180 || orientation > 180) return;
+        if (position.getX() > 2000 || position.getX() < -2000) return;
+        if (position.getY() > 2000 || position.getY() < -2000) return;
+        if ([MotionDriver.STATE_MOVING,
+                MotionDriver.STATE_IDLE,
+                MotionDriver.STATE_ROTATING,
+                MotionDriver.STATE_ERROR,
+                MotionDriver.STATE_STUCK].indexOf(state) < 0) {
+            Mep.Log.error(TAG, 'Error receiving state');
+            return;
+        }
+
+        if (this.positon.equals(position) === false) {
+            this.positon = position;
+
+            /**
+             * Position changed event.
+             * @event drivers.motion.MotionDriver#positionChanged
+             * @property {String} driverName Unique name of a driver
+             * @property {misc.Point} point Position of the robot
+             */
+            this.emit('positionChanged',
+                this.name,
+                this.positon,
+                this.config.precision
+            );
+        }
+
+        if (orientation !== this.orientation) {
+            this.orientation = orientation;
+
+            /**
+             * Orientation change event.
+             * @event drivers.motion.MotionDriver#orientationChanged
+             * @property {String} driverName Unique name of a driver
+             * @property {Number} orientation New orientation
+             */
+            this.emit('orientationChanged',
+                this.name,
+                orientation,
+                this.config.precision
+            );
+        }
+
+        // If state is changed
+        if (state !== this.state) {
+            if (this._breaking === false) {
+                this.state = state;
+                Mep.Log.info(TAG, 'State:', String.fromCharCode(state));
+
+                /**
+                 * State change event.
+                 * @event drivers.motion.MotionDriver#stateChanged
+                 * @property {Number} state New state
+                 */
+                this.emit('stateChanged', this.name, this.state);
+            }
+        }
+    }
+
     _onAReceived(buffer) {
         delete this._waitACKQueue[buffer.readUInt8()];
     }
@@ -508,7 +552,10 @@ class MotionDriver extends EventEmitter  {
      */
     _onDataReceived(buffer, type) {
         if (type == 'P'.charCodeAt(0) && buffer.length === 9) {
-            this._onPReceived(buffer);
+            this._onStateReceived(buffer);
+        }
+        else if (type == 'p'.charCodeAt(0) && buffer.length === 7) {
+            this._onPositionReceived(buffer);
         }
         else if (type == 'A'.charCodeAt(0) && buffer.length === 1) {
             this._onAReceived(buffer);

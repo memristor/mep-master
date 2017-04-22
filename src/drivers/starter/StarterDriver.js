@@ -18,15 +18,23 @@ class StarterDriver extends EventEmitter {
     constructor(name, config) {
         super();
 
+        this.config = Object.assign({
+
+        }, config);
+        this.name = name;
+
+
         if (['delay', 'rope', 'keyboard'].indexOf(config.type) == -1) {
             throw '`config.type` must be delay, rope or keyboard';
         }
 
-        this.name = name;
-        this.config = config;
-
         this.started = false;
-        this.startTime;
+        this.startTime = 0;
+
+        this._ropePin = null;
+        if (this.config.type === 'rope') {
+            this._ropePin = Mep.getDriver(this.config['@dependencies']['ropePin']);
+        }
     }
 
     _tick() {
@@ -90,7 +98,16 @@ class StarterDriver extends EventEmitter {
                     break;
 
                 case 'rope':
-                    throw Error('Rope detector is not implemented');
+                    let ropePin = this._ropePin;
+                    let pinListener = (value) => {
+                        if (value === 0) {
+                            resolve();
+                            starterDriver._initMatchStart();
+                            ropePin.removeListener('changed', pinListener);
+                        }
+                    };
+
+                    this._ropePin.on('changed', pinListener);
                     break;
 
                 // Keyboard mode

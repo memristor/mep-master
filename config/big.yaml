@@ -1,10 +1,25 @@
 Drivers:
+  RopePin:
+    "@class": drivers/pin/PinDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 0x00007F09
+    direction: 'input'
+    mode: 'digital'
+
+  StarterDriver:
+    type: 'rope'
+    "@dependencies":
+      ropePin: RopePin
+
   MotionDriver:
+    startPosition: [ -610, -790, [ -610, -790, 'yellow' ], [ 610, -790, 'blue' ] ]
     startX: -610
     startY: -790
-    startOrientation: -90
+    startOrientation: [ -90, [ -90, 'yellow' ] ]
     startSpeed: 100
-    refreshDataPeriod: 20
+    refreshDataPeriod: 100
 
   CanDriver:
     "@class": drivers/can/CanDriver
@@ -15,6 +30,42 @@ Drivers:
     cid: 0x00000100
     "@dependencies":
       communicator: CanDriver
+
+  LaserBackLeft:
+    "@class": drivers/infrared/InfraredDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    infraredMaxDistance: 200
+    sensorAngle: -90
+    sensorX: 100
+    sensorY: 70
+    cid: 0x00007F0C
+    objectSize: 150
+
+  LaserBackRight:
+    "@class": drivers/infrared/InfraredDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    infraredMaxDistance: 200
+    sensorAngle: -90
+    sensorX: 100
+    sensorY: -70
+    cid: 0x00007F0B
+    objectSize: 150
+
+  LaserFrontCenter:
+    "@class": drivers/infrared/InfraredDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    infraredMaxDistance: 200
+    sensorAngle: 90
+    sensorX: 0
+    sensorY: 70
+    cid: 0x00007F0F
+    objectSize: 150
 
   ColorCollector:
     "@class": drivers/color/ColorDriver
@@ -122,7 +173,7 @@ Drivers:
     "@load": true
     "@dependencies":
       communicator: CanDriver
-    cid: 0x00007F0B
+    cid: 0x00007F10
     direction: 'input'
     mode: 'digital'
 
@@ -131,9 +182,18 @@ Drivers:
     "@load": true
     "@dependencies":
       communicator: CanDriver
-    cid: 0x00007F0C
+    cid: 0x00007F0E
     direction: 'input'
     mode: 'digital'
+
+  MiddleLunarDetector:
+      "@class": drivers/pin/PinDriver
+      "@load": true
+      "@dependencies":
+        communicator: CanDriver
+      cid: 0x00007F0D
+      direction: 'input'
+      mode: 'digital'
 
   LunarCollector:
     "@class": drivers/lunarcollector/LunarCollectorDriver
@@ -149,4 +209,6 @@ Drivers:
       vacuumPump: VacuumPump
       cylinder: Cylinder
       circularEjector: CircularEjector
-
+      frontDetector: FrontLunarDetector
+      backDetector: BackLunarDetector
+      middleDetector: MiddleLunarDetector

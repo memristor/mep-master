@@ -1,3 +1,6 @@
+const TunedPoint = Mep.require('strategy/TunedPoint');
+const TunedAngle = Mep.require('strategy/TunedAngle');
+
 class Console {
     // Simplified functions for prompt
     async go(x, y, config) {
@@ -8,14 +11,14 @@ class Console {
         await Mep.Motion.rotate(new TunedAngle(angle), config);
     }
 
-    straight(val) {
-        Mep.Motion.straight(val);
+    async straight(val) {
+        await Mep.Motion.straight(val);
+        console.log('Straight() - Finished');
     }
 
     async home() {
-        await Mep.Motion.go(new TunedPoint(-1300, 0), { pf: true, tolerance: -1, speed: 100, backward: true });
-        await Delay(200);
-        await Mep.Motion.rotate(new TunedAngle(0));
+        let homePosition = new TunedPoint(...Mep.Config.get('Drivers:MotionDriver:startPosition'));
+        await Mep.Motion.go(homePosition, { pf: true, tolerance: -1, speed: 100, backward: true });
     }
 
     get m() {

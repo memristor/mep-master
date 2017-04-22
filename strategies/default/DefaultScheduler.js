@@ -39,7 +39,16 @@ class DefaultScheduler extends Scheduler {
         try { await lunar.openLimiter(); } catch (e) {}
         await Delay(500);
         try { await lunar.collect(); } catch (e) {}
-        await Delay(5500);
+
+        // Wait to empty
+        await Delay(1500);
+        for (let i = 0; i < 20; i++) {
+            await Delay(300);
+            if (lunar.isEmpty() === true) {
+                break;
+            }
+        }
+        await Delay(300);
 
         // Last module
         lunar.prepare().catch(() => {});
@@ -65,7 +74,7 @@ class DefaultScheduler extends Scheduler {
             try { await lunar.collect(); } catch (e) { Mep.Log.error(TAG, 'Lunar.collect', e); }
             await Delay(500);
             lunar.hold();
-
+            try { await Mep.Motion.straight(-40); } catch (e) { Mep.Log.error(TAG, 'Motion.straight', e); }
             try { await lunar.stopTrack(); } catch (e) { Mep.Log.error(TAG, 'Lunar.stopTrack', e); }
         } catch (e) {
             Mep.Log.error(TAG, e);

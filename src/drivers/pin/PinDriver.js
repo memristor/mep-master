@@ -25,6 +25,8 @@ class PinDriver extends EventEmitter {
             throw Error(TAG, this.name, 'You must provide a communication ID');
         }
 
+        this._value = 0;
+
         this._onDataReceived = this._onDataReceived.bind(this);
         this.uniqueDataReceivedCallback = null;
 
@@ -47,12 +49,23 @@ class PinDriver extends EventEmitter {
         }
 
         if (this.config.direction === 'input') {
-            this.emit('changed', data.readUInt8(0));
+            this._value = data.readUInt8(0);
+            this.emit('changed', this._value);
         }
     }
 
     /**
+     * Get last value
+     * @example let value = Mep.getDriver('PinDriver').getLastState();
+     * @returns {Number} High or low
+     */
+    getLastValue() {
+        return this._value;
+    }
+
+    /**
      * Read value of given pin
+     * @example Mep.getDriver('PinDriver').read((value) => { console.log(value) });
      * @returns {Promise}
      */
     read() {

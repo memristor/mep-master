@@ -37,7 +37,7 @@ class InfraredDriver extends EventEmitter {
      * @param config.sensorAngle {Number} - Angle relative to the robot (look at the picture above)
      * @param config.sensorX {Number} - Sensor translated on x coordinate
      * @param config.sensorY {Number} - Sensor translated on y coordinate
-     * @param config.deviceId {Number} - Function ID for CAN driver
+     * @param config.cid {Number} - Function ID for CAN driver
      * @param config.objectSize {Number} - Approximation coefficient for obstacle size. Distance between edges and point of interest,
      * @param config['@dependencies'] {String} - ID of Driver can provide communication between core and electronics
      */
@@ -48,8 +48,8 @@ class InfraredDriver extends EventEmitter {
         if (typeof config.infraredMaxDistance === 'undefined') {
             throw '`config.infraredMaxDistance` is not defined';
         }
-        if (typeof config.deviceId === 'undefined') {
-            throw '`config.deviceId` is not defined';
+        if (typeof config.cid === 'undefined') {
+            throw '`config.cid` is not defined';
         }
         if (typeof config['@dependencies'].communicator === 'undefined') {
             throw 'Infrared driver requires driver which enables communication with electronics board (eg. CanDriver)';
@@ -67,8 +67,7 @@ class InfraredDriver extends EventEmitter {
 
         // Subscribe on communicator
         this.canDriver = Mep.getDriver(this.config['@dependencies'].communicator);
-        this.canDriver.on('data_' + this.config.deviceId, this.processDetection.bind(this));
-
+        this.canDriver.on('data_' + this.config.cid, this.processDetection.bind(this));
 
         // Approximation of detected object
         this.poi = new Point(this.config.sensorX, this.config.sensorY + this.config.infraredMaxDistance);

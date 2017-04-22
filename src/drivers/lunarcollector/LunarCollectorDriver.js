@@ -33,9 +33,20 @@ class LunarCollectorDriver {
         this._cylinder = Mep.getDriver(this.config['@dependencies']['cylinder']);
         this._circularEjector = Mep.getDriver(this.config['@dependencies']['circularEjector']);
 
+        this._middleDetector = Mep.getDriver(this.config['@dependencies']['middleDetector']);
+        this._frontDetector = Mep.getDriver(this.config['@dependencies']['frontDetector']);
+        this._backDetector = Mep.getDriver(this.config['@dependencies']['backDetector']);
+
         this._leftHand.setSpeed(600);
         this._rightHand.setSpeed(600);
         this._servoPump.setPosition(200); // Put put inside robot
+    }
+
+    isEmpty() {
+        return (this._middleDetector.getLastValue() === 0 &&
+            this._frontDetector.getLastValue() === 0 &&
+            this._backDetector.getLastValue() === 0
+        );
     }
 
     collect() {
@@ -43,7 +54,7 @@ class LunarCollectorDriver {
         this._rightTrack.setSpeed(1023);
         this.startTrack();
         let leftHandPromise = this._leftHand.go(500, { tolerance: 150 });
-        let rightHandPromise = this._rightHand.go(520, { tolerance: 150 });
+        let rightHandPromise = this._rightHand.go(500, { tolerance: 150 });
 
         return Promise.all([
             leftHandPromise,
