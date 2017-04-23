@@ -15,7 +15,8 @@ const TAG = 'HBridgeDriver';
 class HBridgeDriver {
     constructor(name, config) {
         this.config = Object.assign({
-
+            max: 255,
+            min: 0
         }, config);
         this.name = name;
 
@@ -31,6 +32,15 @@ class HBridgeDriver {
     }
 
     start(speed, inverse = false) {
+        if (speed > this.config.max) {
+            speed = this.config.max;
+            Mep.Log.error(TAG, this.name, 'Max value is:', this.config.max);
+        }
+        else if (speed < this.config.min) {
+            speed = this.config.min;
+            Mep.Log.error(TAG, this.name, 'Min value is:', this.config.min);
+        }
+
         let buffer = Buffer.from([
             speed | 0,
             (inverse === true) ? 1 : 0

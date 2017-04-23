@@ -18,7 +18,8 @@ const TAG = 'LunarCollector';
 class LunarCollectorDriver {
     constructor(name, config) {
         this.config = Object.assign({
-
+            ejectorSpeed: 150,
+            colorTimeout: 5000
         }, config);
         this.name = name;
 
@@ -32,6 +33,9 @@ class LunarCollectorDriver {
         this._vacuumPump = Mep.getDriver(this.config['@dependencies']['vacuumPump']);
         this._cylinder = Mep.getDriver(this.config['@dependencies']['cylinder']);
         this._circularEjector = Mep.getDriver(this.config['@dependencies']['circularEjector']);
+        this._colorSensor = Mep.getDriver(this.config['@dependencies']['colorSensor']);
+        this._colorRotator = Mep.getDriver(this.config['@dependencies']['colorRotator']);
+        this._colorServo = Mep.getDriver(this.config['@dependencies']['colorServo']);
 
         this._middleDetector = Mep.getDriver(this.config['@dependencies']['middleDetector']);
         this._frontDetector = Mep.getDriver(this.config['@dependencies']['frontDetector']);
@@ -68,7 +72,7 @@ class LunarCollectorDriver {
 
     stopTrack() {
         this._bigTrack.stop();
-        this._circularEjector.write(0);
+        this._circularEjector.stop();
     }
 
     async ejectSide() {
@@ -88,15 +92,51 @@ class LunarCollectorDriver {
         this._cylinder.write(1);
     }
 
+    async colorStandby() {
+        await Delay(100);
+        this._colorServo.setPosition(600);
+        this._colorRotator.write(255);
+        this._colorSensor.stop();
+    }
+
+    rotate() {
+        let lunarCollector = this;
+        let requiredColor = (Mep.Config.get('table').indexOf('blue') >= 0) ? 'blue' : 'yellow';
+        this._colorSensor.start();
+        this._colorRotator.write(100);
+        this._colorServo.setPosition(730);
+
+        return new Promise((resolve, reject) => {
+            let colorSensor = this._colorSensor;
+
+            let colorChangedPromise = (color) => {
+                if (color === requiredColor) {
+                    colorSensor.removeListener('changed', colorChangedPromise);
+                    resolve();
+                    lunarCollector.colorStandby();
+                }
+            };
+
+            this._colorSensor.on('changed', colorChangedPromise);
+
+            setTimeout(() => {
+                reject();
+                lunarCollector.colorStandby();
+                colorSensor.removeListener('changed', colorChangedPromise);
+            }, this.config.colorTimeout);
+        });
+    }
+
+
     async openLimiter() {
         await this.stopTrack();
         await this._limiter.go(310);
         await this.startTrack();
-        this._circularEjector.write(1);
+        this._circularEjector.start(this.config.ejectorSpeed);
     }
 
     closeLimiter() {
-        this._circularEjector.write(0);
+        this._circularEjector.stop();
         return this._limiter.go(480);
     }
 

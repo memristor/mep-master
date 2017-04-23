@@ -52,7 +52,7 @@ Drivers:
     sensorAngle: -90
     sensorX: 100
     sensorY: -70
-    cid: 0x00007F0B
+    cid: 0x00007F0F
     objectSize: 150
 
   LaserFrontCenter:
@@ -60,23 +60,23 @@ Drivers:
     "@load": true
     "@dependencies":
       communicator: CanDriver
-    infraredMaxDistance: 200
+    infraredMaxDistance: 300
     sensorAngle: 90
     sensorX: 0
     sensorY: 70
-    cid: 0x00007F0F
+    cid: 0x00007F0B
     objectSize: 150
 
-  ColorCollector:
+  ColorSensor:
     "@class": drivers/color/ColorDriver
     "@load": true
     "@dependencies":
       communicator: CanDriver
     cid: 1501
+    tolerance: 6
     colors:
-      yellow: [ 210, 185, 155 ]
-      blue: [ 140, 140, 170 ]
-      white: [ 210, 210, 210 ]
+      yellow: [ 0xfe, 0xf7, 0xdc ]
+      blue: [ 0xb4, 0xdb, 0xf1 ]
 
   ServoCollectorStopper:
     "@class": drivers/dynamixel/DynamixelDriver
@@ -159,15 +159,6 @@ Drivers:
       communicator: CanDriver
     cid: 0x00007F13
 
-  CircularEjector:
-    "@class": drivers/pin/PinDriver
-    "@load": true
-    "@dependencies":
-      communicator: CanDriver
-    cid: 0x00007F04
-    direction: 'output'
-    mode: 'digital'
-
   BackLunarDetector:
     "@class": drivers/pin/PinDriver
     "@load": true
@@ -195,6 +186,34 @@ Drivers:
       direction: 'input'
       mode: 'digital'
 
+  ColorRotator:
+    "@class": drivers/pin/PinDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 0x00007F12
+    min: 150
+    max: 255
+    direction: 'output'
+    mode: 'analog'
+
+  CircularEjector:
+    "@class": drivers/hbridge/HBridgeDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 0x00007F14
+    max: 120
+    min: 0
+
+  ColorServo:
+    "@class": drivers/dynamixel/DynamixelDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    id: 7
+    cid: 0x00007F00
+
   LunarCollector:
     "@class": drivers/lunarcollector/LunarCollectorDriver
     "@load": true
@@ -212,3 +231,6 @@ Drivers:
       frontDetector: FrontLunarDetector
       backDetector: BackLunarDetector
       middleDetector: MiddleLunarDetector
+      colorRotator: ColorRotator
+      colorSensor: ColorSensor
+      colorServo: ColorServo

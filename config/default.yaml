@@ -24,16 +24,13 @@ Drivers:
     protocol: PLLSP
 
   MotionDriver:
-    "@class": drivers/motion/MotionDriverSimulator
+    "@class": drivers/motion/MotionDriver
     "@load": true
     "@dependencies":
       communicator: Uart
-    startX: -1300
-    startY: 0
-    startOrientation: 0
     startSpeed: 100
     precision: 2
-    refreshDataPeriod: 30
+    refreshDataPeriod: 50
 
   MotionDriverController:
     "@class": drivers/motion/MotionDriverController

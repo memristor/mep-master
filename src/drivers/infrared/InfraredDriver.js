@@ -134,7 +134,7 @@ class InfraredDriver extends EventEmitter {
             let infraredDriver = this;
             this._timeoutHandle = setTimeout(() => {
                 infraredDriver.processDetection(buffer);
-            }, Mep.Config.get('obstacleMaxPeriod'));
+            }, Mep.Config.get('obstacleMaxPeriod') - 100);
         }
 
         Mep.Log.debug(TAG, this.name, 'Detected at', this.poi);

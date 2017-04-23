@@ -16,6 +16,8 @@ class PinDriver extends EventEmitter {
         super();
 
         this.config = Object.assign({
+            min: 0,
+            max: 255,
             mode: 'analog',     // `analog` or `digital`
             direction: 'input', // `input` or `output`
         }, config);
@@ -88,8 +90,19 @@ class PinDriver extends EventEmitter {
      */
     write(value) {
         if (this.config.direction === 'output') {
-            if (this.config.mode === 'digital' && value != 1 && value != 0) {
-                value = 1;
+            if (this.config.mode === 'digital') {
+                if (value > 1 || value < 0) {
+                    value = 1;
+                }
+            } else {
+                if (value > this.config.max) {
+                    value = this.config.max;
+                    Mep.Log.error(TAG, this.name, 'Max value is:', this.config.max);
+                }
+                else if (value < this.config.min) {
+                    value = this.config.min;
+                    Mep.Log.error(TAG, this.name, 'Min value is:', this.config.min);
+                }
             }
             let buffer = Buffer.from([value]);
             this.communicator.send(this.config.cid, buffer);
