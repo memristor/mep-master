@@ -5,8 +5,8 @@ const Delay = Mep.require('misc/Delay');
 /** @namespace drivers.lunarcollector */
 
 const TAG = 'LunarCollector';
-
-
+//
+//
 /**
  * @param {String} config.leftTrack Name of Dynamixel driver which runs left track
  * @param {String} config.rightTrack Name of Dynamixel driver which runs right track
@@ -52,13 +52,15 @@ class LunarCollectorDriver {
             this._backDetector.getLastValue() === 0
         );
     }
-
+    isLastHere() {
+        return (this._backDetector.getLastValue() === 1);
+    }
     collect() {
         this._leftTrack.setSpeed(1023, true);
         this._rightTrack.setSpeed(1023);
         this.startTrack();
         let leftHandPromise = this._leftHand.go(500, { tolerance: 150 });
-        let rightHandPromise = this._rightHand.go(500, { tolerance: 150 });
+        let rightHandPromise = this._rightHand.go(515, { tolerance: 150 });
 
         return Promise.all([
             leftHandPromise,
@@ -90,6 +92,8 @@ class LunarCollectorDriver {
         this._vacuumPump.write(0);
         try { await this._servoPump.go(850); } catch (e) {}
         this._cylinder.write(1);
+        await Delay(700);
+        this._cylinder.write(0);
     }
 
     async colorStandby() {
@@ -151,8 +155,8 @@ class LunarCollectorDriver {
 
         try {
             await Promise.all([
-                this._leftHand.go(600),
-                this._rightHand.go(400)
+                this._leftHand.go(550),
+                this._rightHand.go(450)
             ]);
         } catch (e) {
             Mep.Log.error(TAG, 'prepare', e);
@@ -160,7 +164,6 @@ class LunarCollectorDriver {
 
         this.startTrack();
     }
-
     standby() {
         this._leftTrack.setSpeed(0);
         this._rightTrack.setSpeed(0);

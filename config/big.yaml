@@ -9,7 +9,7 @@ Drivers:
     mode: 'digital'
 
   StarterDriver:
-    type: 'rope'
+    type: 'keyboard' # keyboard, rope
     "@dependencies":
       ropePin: RopePin
 
@@ -28,6 +28,7 @@ Drivers:
     "@class": drivers/lidar/LidarDriver
     "@load": true
     cid: 0x00000100
+    minDistance: 200
     "@dependencies":
       communicator: CanDriver
 
