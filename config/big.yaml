@@ -74,10 +74,13 @@ Drivers:
     "@dependencies":
       communicator: CanDriver
     cid: 1501
-    tolerance: 6
+    tolerance: 8
+    type: 'hsv'
     colors:
-      yellow: [ 0xfe, 0xf7, 0xdc ]
-      blue: [ 0xb4, 0xdb, 0xf1 ]
+      # yellow: [ 0xfe, 0xf7, 0xdc ]
+      # blue: [ 0xb4, 0xdb, 0xf1 ]
+      yellow: [ 30, 10, 250 ]
+      blue: [ 150, 40, 230 ]
 
   ServoCollectorStopper:
     "@class": drivers/dynamixel/DynamixelDriver

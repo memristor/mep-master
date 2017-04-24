@@ -5,8 +5,8 @@ const Delay = Mep.require('misc/Delay');
 /** @namespace drivers.lunarcollector */
 
 const TAG = 'LunarCollector';
-//
-//
+
+
 /**
  * @param {String} config.leftTrack Name of Dynamixel driver which runs left track
  * @param {String} config.rightTrack Name of Dynamixel driver which runs right track
@@ -44,6 +44,44 @@ class LunarCollectorDriver {
         this._leftHand.setSpeed(600);
         this._rightHand.setSpeed(600);
         this._servoPump.setPosition(200); // Put put inside robot
+        //this.colorStandby();
+    }
+
+    async limiterOpenSafe() {
+        await this.trackStop();
+        await this._limiter.go(310);
+        await this.trackStart();
+        this._circularEjector.start(this.config.ejectorSpeed, true);
+    }
+
+    limiterClose() {
+        this._circularEjector.stop();
+        return this._limiter.go(480);
+    }
+
+    limiterPrepare() {
+        this._limiter.setPosition(400);
+    }
+
+    limiterOpen() {
+        this._limiter.setPosition(310);
+    }
+
+    limiterToggle() {
+        if (this._limiter.getLastPosition() < 350) {
+            this.limiterPrepare();
+        } else {
+            this.limiterOpen()
+        }
+    }
+
+    trackStart() {
+        this._bigTrack.start(100);
+    }
+
+    trackStop() {
+        this._bigTrack.stop();
+        this._circularEjector.stop();
     }
 
     isEmpty() {
@@ -52,13 +90,22 @@ class LunarCollectorDriver {
             this._backDetector.getLastValue() === 0
         );
     }
-    isLastHere() {
+
+    isLastInside() {
         return (this._backDetector.getLastValue() === 1);
     }
+
+    isLastOnly() {
+        return (this._middleDetector.getLastValue() === 0 &&
+            this._frontDetector.getLastValue() === 0 &&
+            this._backDetector.getLastValue() === 1
+        );
+    }
+
     collect() {
         this._leftTrack.setSpeed(1023, true);
         this._rightTrack.setSpeed(1023);
-        this.startTrack();
+        this.trackStart();
         let leftHandPromise = this._leftHand.go(500, { tolerance: 150 });
         let rightHandPromise = this._rightHand.go(515, { tolerance: 150 });
 
@@ -68,31 +115,25 @@ class LunarCollectorDriver {
         ]);
     }
 
-    startTrack() {
-        this._bigTrack.start(100);
-    }
-
-    stopTrack() {
-        this._bigTrack.stop();
-        this._circularEjector.stop();
-    }
-
-    async ejectSide() {
+    async lunarTake() {
         this._limiter.setPosition(530);
 
+        // Take a lunar
         this._cylinder.write(0);
         this._vacuumPump.write(1);
-        try { await this._servoPump.go(200); } catch (e) {}
+        try { await this._servoPump.go(170); } catch (e) {}
         this._cylinder.write(1);
         await Delay(1000);
         this._cylinder.write(0);
         await Delay(1000);
+    }
 
-        // Eject hand
+    async lunarEject() {
+        // Eject a lunar
         this._vacuumPump.write(0);
         try { await this._servoPump.go(850); } catch (e) {}
         this._cylinder.write(1);
-        await Delay(700);
+        await Delay(1000);
         this._cylinder.write(0);
     }
 
@@ -101,18 +142,26 @@ class LunarCollectorDriver {
         this._colorServo.setPosition(600);
         this._colorRotator.write(255);
         this._colorSensor.stop();
+        this._circularEjector.stop();
     }
 
-    rotate() {
+    async rotate() {
         let lunarCollector = this;
         let requiredColor = (Mep.Config.get('table').indexOf('blue') >= 0) ? 'blue' : 'yellow';
+
+        // Make lunar rotatable
+        this._bigTrack.start(100, true);
+        await Delay(20);
+        lunarCollector.trackStop();
+
+        // Prepare mechanisms for rotation
         this._colorSensor.start();
         this._colorRotator.write(100);
         this._colorServo.setPosition(730);
 
+        // Rotate until color
         return new Promise((resolve, reject) => {
             let colorSensor = this._colorSensor;
-
             let colorChangedPromise = (color) => {
                 if (color === requiredColor) {
                     colorSensor.removeListener('changed', colorChangedPromise);
@@ -122,26 +171,12 @@ class LunarCollectorDriver {
             };
 
             this._colorSensor.on('changed', colorChangedPromise);
-
             setTimeout(() => {
                 reject();
                 lunarCollector.colorStandby();
                 colorSensor.removeListener('changed', colorChangedPromise);
             }, this.config.colorTimeout);
         });
-    }
-
-
-    async openLimiter() {
-        await this.stopTrack();
-        await this._limiter.go(310);
-        await this.startTrack();
-        this._circularEjector.start(this.config.ejectorSpeed);
-    }
-
-    closeLimiter() {
-        this._circularEjector.stop();
-        return this._limiter.go(480);
     }
 
     hold() {
@@ -162,12 +197,13 @@ class LunarCollectorDriver {
             Mep.Log.error(TAG, 'prepare', e);
         }
 
-        this.startTrack();
+        this.trackStart();
     }
+
     standby() {
         this._leftTrack.setSpeed(0);
         this._rightTrack.setSpeed(0);
-        this.stopTrack();
+        this.trackStop();
         let leftHandPromise = this._leftHand.go(860);
         let rightHandPromise = this._rightHand.go(160);
 

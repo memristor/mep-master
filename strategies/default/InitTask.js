@@ -32,12 +32,18 @@ class InitTask extends Task {
 
         // Mep.getDriver('ServoCollectorHandRight').setPosition(500);
         //Mep.getDriver('ColorRotator').write(1);
+
         //Mep.getDriver('CircularEjector').start(100, true);
-        // Mep.getDriver('CollectorBigTrack').start(100);
+        //Mep.getDriver('CollectorBigTrack').start(100);
         //Mep.getDriver('ColorServo').setPosition(730); // 600
 
         // lunar.rotate().catch((e) => { console.log(e); });
         // lunar.openLimiter();
+        // lunar.collect();
+
+        //Mep.getDriver('BackLunarDetector').on('changed', () => { console.log('sadasd'); });
+
+        // while (true) { console.log(lunar.isLastInside()); await Delay(300); }
 
         await starter.waitStartSignal(new Console());
 

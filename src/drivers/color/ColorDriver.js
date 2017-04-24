@@ -21,6 +21,7 @@ class ColorDriver extends EventEmitter {
                 blue: [ 140, 140, 170 ],
                 white: [ 210, 210, 210 ]
             },
+            type: 'rgb', // rgb, hsv, hsl
             tolerance: 10,
             // perception: [ 0.30, 0.59, 0.11 ]
             perception: [ 0.3, 0.3, 0.3 ]
@@ -71,11 +72,24 @@ class ColorDriver extends EventEmitter {
             let loopColor = this.config.colors[color];
 
             // Reference: http://stackoverflow.com/a/1847112/1983050
-            let difference = Math.sqrt(
-                Math.pow((loopColor[0] - this.lastReadings[0]) * this.config.perception[0], 2) +
-                Math.pow((loopColor[1] - this.lastReadings[1]) * this.config.perception[1], 2) +
-                Math.pow((loopColor[2] - this.lastReadings[2]) * this.config.perception[2], 2)
-            );
+            let difference = null;
+            switch (this.config.type) {
+                case 'hsv': case 'hsl':
+                    difference = Math.sqrt(
+                        Math.pow((loopColor[0] - this.lastReadings[0]) * this.config.perception[0], 2) +
+                        Math.pow((loopColor[1] - this.lastReadings[1]) * this.config.perception[1], 2)
+                    );
+                    break;
+
+                default:
+                    difference = Math.sqrt(
+                        Math.pow((loopColor[0] - this.lastReadings[0]) * this.config.perception[0], 2) +
+                        Math.pow((loopColor[1] - this.lastReadings[1]) * this.config.perception[1], 2) +
+                        Math.pow((loopColor[2] - this.lastReadings[2]) * this.config.perception[2], 2)
+                    );
+                    break;
+            }
+
 
             if (difference < bestMatch.difference) {
                 bestMatch = {
@@ -100,6 +114,27 @@ class ColorDriver extends EventEmitter {
                 buffer.readUInt8(2)
             ];
 
+            // Convert if needed
+            switch (this.config.type) {
+                case 'hsv':
+                    this.lastReadings = this.rgbToHsv(...this.lastReadings);
+                    break;
+
+                case 'hsl':
+                    this.lastReadings = this.rgbToHsl(...this.lastReadings);
+                    break;
+
+                case 'rgb':
+                    // Already RGB
+                    break;
+
+                default:
+                    Mep.Log.error(TAG, this.config.type, 'is not available');
+                    break;
+            }
+            // Mep.Log.debug(TAG, 'Readings', this.lastReadings);
+
+            // Detect color
             let color = this.getColor();
             if (color !== 'undefined') {
                 this.emit('detected', color);
@@ -111,6 +146,81 @@ class ColorDriver extends EventEmitter {
             }
         }
     }
+
+    /**
+     * Converts an RGB color value to HSV. Conversion formula
+     * adapted from http://en.wikipedia.org/wiki/HSV_color_space.
+     * Assumes r, g, and b are contained in the set [0, 255] and
+     * returns h, s, and v in the set [0, 1].
+     * @ref https://gist.github.com/mjackson/5311256
+     * @param {Number}  r       The red color value
+     * @param {Number}  g       The green color value
+     * @param {Number}  b       The blue color value
+     * @return  Array           The HSV representation
+     */
+    rgbToHsv(r, g, b) {
+        r /= 255;
+        g /= 255;
+        b /= 255;
+
+        let max = Math.max(r, g, b), min = Math.min(r, g, b);
+        let h, s, v = max;
+
+        let d = max - min;
+        s = max === 0 ? 0 : d / max;
+
+        if (max === min) {
+            h = 0; // achromatic
+        } else {
+            switch (max) {
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
+            }
+
+            h /= 6;
+        }
+
+        return [ (h * 255) | 0, (s * 255) | 0, (v * 255) | 0 ];
+    }
+
+    /**
+     * Converts an RGB color value to HSL. Conversion formula
+     * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+     * Assumes r, g, and b are contained in the set [0, 255] and
+     * returns h, s, and l in the set [0, 1].
+     * @ref https://gist.github.com/mjackson/5311256
+     * @param {Number}  r       The red color value
+     * @param {Number}  g       The green color value
+     * @param {Number}  b       The blue color value
+     * @return  Array           The HSL representation
+     */
+    rgbToHsl(r, g, b) {
+        r /= 255;
+        g /= 255;
+        b /= 255;
+
+        let max = Math.max(r, g, b), min = Math.min(r, g, b);
+        let h, s, l = (max + min) / 2;
+
+        if (max === min) {
+            h = s = 0; // achromatic
+        } else {
+            let d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+            switch (max) {
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
+            }
+
+            h /= 6;
+        }
+
+        return [ (h * 255) | 0, (s * 255) | 0, (l * 255) | 0 ];
+    }
+
 
     getGroups() {
         return [];

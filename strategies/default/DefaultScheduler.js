@@ -21,8 +21,8 @@ class DefaultScheduler extends Scheduler {
         this.tasks = [
             new InitTask(this, { weight: 10000, time: 10, location: new Point(0, 0) }),
 
-            new CollectStartRocketTask(this, { weight: 1000, time: 10, location: new Point(0, 0) }),
-            new PushMiddleCartridgeTask(this, { weight: 980, time: 10, location: new Point(0, 0) }),
+            //new CollectStartRocketTask(this, { weight: 1000, time: 10, location: new Point(0, 0) }),
+            //new PushMiddleCartridgeTask(this, { weight: 980, time: 10, location: new Point(0, 0) }),
             new CollectBackRocketTask(this, { weight: 960, time: 10, location: new Point(0, 0) }),
             new EjectStartCartridgeTask(this, { weight: 940, time: 10, location: new Point(0, 0) }),
         ];
@@ -36,7 +36,7 @@ class DefaultScheduler extends Scheduler {
     }
 
     async push() {
-        try { await lunar.openLimiter(); } catch (e) {}
+        try { await lunar.limiterOpenSafe(); } catch (e) {}
         await Delay(500);
         try { await lunar.collect(); } catch (e) {}
 
@@ -47,18 +47,23 @@ class DefaultScheduler extends Scheduler {
             if (lunar.isEmpty() === true) {
                 break;
             }
+            if (lunar.isLastOnly() === true) {
+                lunar.limiterToggle();
+            }
         }
-        await Delay(300);
+        lunar.limiterPrepare();
+        await Delay(600);
+        lunar.limiterOpen();
 
         // Last module
         lunar.prepare().catch(() => {});
-        lunar.stopTrack();
+        lunar.trackStop();
         await Mep.Motion.straight(100);
     }
 
     async collect() {
         try {
-            lunar.closeLimiter().catch((e) => { Mep.Log.error(TAG, 'Lunar.closeLimiter', e); });
+            lunar.limiterClose().catch((e) => { Mep.Log.error(TAG, 'Lunar.closeLimiter', e); });
             for (let i = 0; i < 2; i++) {
                 try { await lunar.collect(); } catch (e) { Mep.Log.error(TAG, 'Lunar.collect', e); }
                 try { await Mep.Motion.straight(-40); } catch (e) { Mep.Log.error(TAG, 'Motion.straight', e); }
@@ -75,7 +80,7 @@ class DefaultScheduler extends Scheduler {
             await Delay(500);
             lunar.hold();
             try { await Mep.Motion.straight(-40); } catch (e) { Mep.Log.error(TAG, 'Motion.straight', e); }
-            try { await lunar.stopTrack(); } catch (e) { Mep.Log.error(TAG, 'Lunar.stopTrack', e); }
+            try { await lunar.trackStop(); } catch (e) { Mep.Log.error(TAG, 'Lunar.trackStop', e); }
         } catch (e) {
             Mep.Log.error(TAG, e);
         }

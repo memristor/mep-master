@@ -80,6 +80,8 @@ class DynamixelDriver {
         this._onDataReceived = this._onDataReceived.bind(this);
         this.uniqueDataReceivedCallback = null;
 
+        this._lastPosition = 0;
+
         this.communicator = null;
         if (this.config._communicator !== undefined) {
             // For testing purposes only (experiments)
@@ -251,7 +253,13 @@ class DynamixelDriver {
         }
     }
 
+    getLastPosition() {
+        return this._lastPosition;
+    }
+
     setPosition(position) {
+        this._lastPosition = position;
+
         if (position > this.config.maxPosition || position < this.config.minPosition) {
             throw Error(TAG, this.name, 'Position out of range!');
         }
