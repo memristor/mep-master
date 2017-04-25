@@ -199,6 +199,20 @@ class LunarCollectorDriver {
 
         this.trackStart();
     }
+    async prepare(left = 550, right = 450) {
+        this._leftTrack.setSpeed(0);
+        this._rightTrack.setSpeed(0);
+
+        try {
+            await Promise.all([
+                this._leftHand.go(left),
+                this._rightHand.go(right)
+            ]);
+        } catch (e) {
+            Mep.Log.error(TAG, 'prepare', e);
+        }
+        //this.trackStart();
+    }
 
     standby() {
         this._leftTrack.setSpeed(0);

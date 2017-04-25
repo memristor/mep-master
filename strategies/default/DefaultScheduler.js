@@ -21,8 +21,8 @@ class DefaultScheduler extends Scheduler {
         this.tasks = [
             new InitTask(this, { weight: 10000, time: 10, location: new Point(0, 0) }),
 
-            //new CollectStartRocketTask(this, { weight: 1000, time: 10, location: new Point(0, 0) }),
-            //new PushMiddleCartridgeTask(this, { weight: 980, time: 10, location: new Point(0, 0) }),
+            new CollectStartRocketTask(this, { weight: 1000, time: 10, location: new Point(0, 0) }),
+            new PushMiddleCartridgeTask(this, { weight: 980, time: 10, location: new Point(0, 0) }),
             new CollectBackRocketTask(this, { weight: 960, time: 10, location: new Point(0, 0) }),
             new EjectStartCartridgeTask(this, { weight: 940, time: 10, location: new Point(0, 0) }),
         ];
