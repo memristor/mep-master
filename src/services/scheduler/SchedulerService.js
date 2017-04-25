@@ -26,7 +26,8 @@ class SchedulerService {
             if ((maxWeightTask === null ||
                 tasks[i].getWeight() > maxWeightTask.getWeight()) &&
                 tasks[i].getState() === Task.READY &&
-                tasks[i].getTime() < this.starterDriver.getRemainingTime()) {
+                tasks[i].getTime() < this.starterDriver.getRemainingTime() &&
+                tasks[i].isAvailable() === true) {
                 maxWeightTask = tasks[i];
             }
         }
@@ -34,6 +35,8 @@ class SchedulerService {
         if (maxWeightTask === null) {
             Mep.Log.error(TAG, 'Cannot suggest next task');
         }
+
+        Mep.Log.debug(TAG, 'Remaining time', this.starterDriver.getRemainingTime());
 
         return maxWeightTask;
     }

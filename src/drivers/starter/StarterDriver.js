@@ -24,7 +24,7 @@ class StarterDriver extends EventEmitter {
         this.name = name;
 
 
-        if (['delay', 'rope', 'keyboard'].indexOf(config.type) == -1) {
+        if (['delay', 'rope', 'keyboard'].indexOf(config.type) === -1) {
             throw '`config.type` must be delay, rope or keyboard';
         }
 

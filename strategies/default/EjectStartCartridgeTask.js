@@ -65,6 +65,10 @@ class CollectStartRocketTask extends Task {
 
         this.finish();
     }
+
+    isAvailable() {
+        return !lunar.isEmpty();
+    }
 }
 
 module.exports = CollectStartRocketTask;

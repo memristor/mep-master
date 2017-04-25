@@ -39,7 +39,7 @@ class InitTask extends Task {
 
         // lunar.rotate().catch((e) => { console.log(e); });
         // lunar.openLimiter();
-        // lunar.collect();
+        lunar.collect().catch(() => {});
 
         //Mep.getDriver('BackLunarDetector').on('changed', () => { console.log('sadasd'); });
 

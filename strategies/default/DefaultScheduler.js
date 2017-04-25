@@ -11,6 +11,10 @@ const CollectStartRocketTask = require('./CollectStartRocketTask');
 const PushSideCartridgeTask = require('./PushSideCartridgeTask');
 const PushMiddleCartridgeTask = require('./PushMiddleCartridgeTask');
 const EjectStartCartridgeTask = require('./EjectStartCartridgeTask');
+const FirstTask5 = require('./FirstTask5');
+const Module1Task = require('./Module1Task');
+const Module2Task = require('./Module2Task');
+const Module3Task = require('./Module3Task');
 
 const TAG = 'DefaultScheduler';
 
@@ -22,9 +26,13 @@ class DefaultScheduler extends Scheduler {
             new InitTask(this, { weight: 10000, time: 10, location: new Point(0, 0) }),
 
             //new CollectStartRocketTask(this, { weight: 1000, time: 10, location: new Point(0, 0) }),
-            //new PushMiddleCartridgeTask(this, { weight: 980, time: 10, location: new Point(0, 0) }),
-            new CollectBackRocketTask(this, { weight: 960, time: 10, location: new Point(0, 0) }),
-            new EjectStartCartridgeTask(this, { weight: 940, time: 10, location: new Point(0, 0) }),
+            //new FirstTask5(this, { weight: 1000, time: 10, location: new Point(0, 0) }),
+            new PushMiddleCartridgeTask(this, { weight: 980, time: 10, location: new Point(0, 0) }),
+            new Module1Task(this, { weight: 970, time: 10, location: new Point(0, 0) }),
+            new Module2Task(this, { weight: 970, time: 10, location: new Point(0, 0) }),
+            new Module3Task(this, { weight: 970, time: 10, location: new Point(0, 0) }),
+            //new CollectBackRocketTask(this, { weight: 960, time: 10, location: new Point(0, 0) }),
+            //new EjectStartCartridgeTask(this, { weight: 940, time: 10, location: new Point(0, 0) }),
         ];
 
         // Init task is always first
@@ -47,9 +55,11 @@ class DefaultScheduler extends Scheduler {
             if (lunar.isEmpty() === true) {
                 break;
             }
-            if (lunar.isLastOnly() === true) {
-                lunar.limiterToggle();
-            }
+            /*
+             if (lunar.isLastOnly() === true) {
+             lunar.limiterToggle();
+             }
+             */
         }
         lunar.limiterPrepare();
         await Delay(600);
