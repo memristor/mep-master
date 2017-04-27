@@ -10,8 +10,6 @@ const MotionDriver = Mep.require('drivers/motion/MotionDriver');
 
 const TAG = 'InitTask';
 
-let counter = 0;
-
 class InitTask extends Task {
     async onRun() {
         // Mep.getDriver('FrontLunarDetector').on('changed', (val) => { if (val === 1) console.log('Lunars:', ++counter); });
@@ -39,16 +37,25 @@ class InitTask extends Task {
 
         // lunar.rotate().catch((e) => { console.log(e); });
         // lunar.openLimiter();
-        lunar.collect().catch(() => {});
+        // lunar.collect().catch(() => {});
 
         //Mep.getDriver('BackLunarDetector').on('changed', () => { console.log('sadasd'); });
 
         // while (true) { console.log(lunar.isLastInside()); await Delay(300); }
 
+        // Mep.getDriver('CircularEjector').start(150);
+        // Mep.getDriver('CollectorBigTrack').start(50);
+        // Mep.getDriver('ColorRotator').write(100);
+
+        // Mep.getDriver('FunnyServo').write(0);
+        // Mep.getDriver('FunnyServo').write(70);
+
+        // Mep.getDriver('CollectorBigTrack').write(1);
+
         await starter.waitStartSignal(new Console());
 
         try {
-            await Mep.Motion.go(new TunedPoint(-360, -550), { speed: 90, backward: true, tolerance: 0, radius: 180 });
+            await Mep.Motion.go(new TunedPoint(-360, -550), { speed: 110, backward: true, tolerance: 0, radius: 180 });
 
             // await Mep.Motion.go(new TunedPoint(-350, -350), { speed: 70, backward: true });
         } catch (e) {

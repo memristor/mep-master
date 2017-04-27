@@ -6,9 +6,12 @@ const Point = Mep.require('misc/Point');
 const lunar = Mep.getDriver('LunarCollector');
 const Console = require('./Console');
 
-const TAG = 'CollectStartRocketTask';
+const TAG = 'EjectStartCartridgeTask';
 
-class CollectStartRocketTask extends Task {
+class EjectStartCartridgeTask extends Task {
+    /**
+     * @override
+     */
     async onRun() {
         // Define points
         let points = [
@@ -19,6 +22,7 @@ class CollectStartRocketTask extends Task {
 
         try {
             // Go to position
+            await Mep.Motion.go(new TunedPoint(-923, 83), { backward: true });
             await Mep.Motion.go(new TunedPoint(-1200, -120), { speed: 70, backward: true });
             await Mep.Motion.rotate(new TunedAngle(90));
 
@@ -48,7 +52,6 @@ class CollectStartRocketTask extends Task {
 
                 // Rotate
                 await Delay(300);
-                lunar.trackStop();
                 try { await lunar.rotate(); } catch (e) { }
 
                 // Eject
@@ -59,16 +62,14 @@ class CollectStartRocketTask extends Task {
 
             // Go away from edge
             await Mep.Motion.go(new TunedPoint(-1000, -100), { speed: 70, backward: true, radius: 300, tolerance: 100 });
+
+
+            this.finish();
         } catch (e) {
             Mep.Log.error(TAG, e);
+            this.suspend();
         }
-
-        this.finish();
-    }
-
-    isAvailable() {
-        return !lunar.isEmpty();
     }
 }
 
-module.exports = CollectStartRocketTask;
+module.exports = EjectStartCartridgeTask;

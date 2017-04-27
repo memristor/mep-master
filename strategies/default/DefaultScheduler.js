@@ -11,10 +11,12 @@ const CollectStartRocketTask = require('./CollectStartRocketTask');
 const PushSideCartridgeTask = require('./PushSideCartridgeTask');
 const PushMiddleCartridgeTask = require('./PushMiddleCartridgeTask');
 const EjectStartCartridgeTask = require('./EjectStartCartridgeTask');
-const FirstTask5 = require('./FirstTask5');
 const Module1Task = require('./Module1Task');
 const Module2Task = require('./Module2Task');
 const Module3Task = require('./Module3Task');
+const Module4Task = require('./Module4Task');
+const Module5Task = require('./Module5Task');
+const FinalTask = require('./FinalTask');
 
 const TAG = 'DefaultScheduler';
 
@@ -22,18 +24,27 @@ class DefaultScheduler extends Scheduler {
     constructor() {
         super();
 
+        this._finalTaskExecuted = false;
+        this._finalTask = new FinalTask(this, { weight: 10000, time: 0 });
         this.tasks = [
-            new InitTask(this, { weight: 10000, time: 10, location: new Point(0, 0) }),
+            new InitTask(this, { weight: 10000, time: 10 }),
 
-            //new CollectStartRocketTask(this, { weight: 1000, time: 10, location: new Point(0, 0) }),
-            //new FirstTask5(this, { weight: 1000, time: 10, location: new Point(0, 0) }),
-            new PushMiddleCartridgeTask(this, { weight: 980, time: 10, location: new Point(0, 0) }),
-            new Module1Task(this, { weight: 970, time: 10, location: new Point(0, 0) }),
-            new Module2Task(this, { weight: 970, time: 10, location: new Point(0, 0) }),
-            new Module3Task(this, { weight: 970, time: 10, location: new Point(0, 0) }),
-            //new CollectBackRocketTask(this, { weight: 960, time: 10, location: new Point(0, 0) }),
-            //new EjectStartCartridgeTask(this, { weight: 940, time: 10, location: new Point(0, 0) }),
+            new CollectStartRocketTask(this, { weight: 1000, time: 20 }),
+            new PushMiddleCartridgeTask(this, { weight: 980, time: 10 }),
+
+            // new Module1Task(this, { weight: 920, time: 10 }),
+            // new Module2Task(this, { weight: 900, time: 10 }),
+            new Module3Task(this, { weight: 880, time: 10 }),
+            new Module4Task(this, { weight: 875, time: 10 }),
+            new Module5Task(this, { weight: 870, time: 10 }),
+            new PushSideCartridgeTask(this, { weight: 860, time: 20 }),
+
+
+            new CollectBackRocketTask(this, { weight: 820, time: 20 }),
+            new EjectStartCartridgeTask(this, { weight: 800, time: 10 })
         ];
+
+        this._onTick = this._onTick.bind(this);
 
         // Init task is always first
         this.runTask(this.tasks[0]);
@@ -41,6 +52,18 @@ class DefaultScheduler extends Scheduler {
         // Common
         this.common.push = this.push;
         this.common.collect = this.collect;
+
+        // Last task
+        this._starterDriver = Mep.getDriver('StarterDriver');
+        this._starterDriver.on('tick', this._onTick);
+    }
+
+    _onTick(secondsPassed) {
+        console.log('Time passed', secondsPassed);
+        if (secondsPassed > 88 && this._finalTaskExecuted === false) {
+            this.runTask(this._finalTask);
+            this._finalTaskExecuted = true;
+        }
     }
 
     async push() {
@@ -55,13 +78,16 @@ class DefaultScheduler extends Scheduler {
             if (lunar.isEmpty() === true) {
                 break;
             }
-            /*
-             if (lunar.isLastOnly() === true) {
-             lunar.limiterToggle();
-             }
-             */
+
+            // Go up-down with limiter
+            if (lunar.isLastOnly() === true) {
+                if (i % 5 === 0) {
+                    lunar.limiterOpen();
+                } else {
+                    lunar.limiterPrepare();
+                }
+            }
         }
-        lunar.limiterPrepare();
         await Delay(600);
         lunar.limiterOpen();
 
@@ -80,6 +106,10 @@ class DefaultScheduler extends Scheduler {
                 await Delay(1500);
                 lunar.prepare().catch((e) => { Mep.Log.error(TAG, 'Lunar.prepare', e); });
                 try { await Mep.Motion.straight(40) } catch (e) { Mep.Log.error(TAG, 'Motion.straight', e); }
+
+                if (lunar.numberOfModules() === 0) {
+                    i--;
+                }
             }
             try { await lunar.collect(); } catch (e) { Mep.Log.error(TAG, 'Lunar.collect', e); }
             await Delay(2000);

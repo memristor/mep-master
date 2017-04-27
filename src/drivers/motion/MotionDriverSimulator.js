@@ -54,6 +54,16 @@ class MotionDriverSimulator extends EventEmitter {
         Mep.Log.debug(TAG, 'Driver with name', name, 'initialized');
     }
 
+    goForward(millimeters) {
+        let point = new Point(millimeters, 0);
+        let direction = (millimeters < 0) ? -1 : 1;
+
+        point.rotateAroundZero(Mep.Position.getOrientation());
+        point.translate(Mep.Position.getPosition());
+
+        this.moveToPosition(point, direction);
+    }
+
     _promiseToStateChanged() {
         let motionDriver = this;
 

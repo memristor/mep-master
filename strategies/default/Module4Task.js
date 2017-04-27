@@ -7,26 +7,27 @@ const lunar = Mep.getDriver('LunarCollector');
 const Console = require('./Console');
 const MotionDriver = Mep.require('drivers/motion/MotionDriver');
 
-const TAG = 'Module1Task';
+const TAG = 'Module4Task';
 
-class Module1Task extends Task {
+class Module4Task extends Task {
 	async onRun(){
 		try {
-            lunar.limiterClose();
-			lunar.prepare();
-			await Mep.Motion.go(new TunedPoint(-510, -410));
-			lunar.collect();
 			lunar.limiterClose();
-			await Mep.Motion.go(new TunedPoint(-700, -100));
+			await Mep.Motion.go(new TunedPoint(-1161, -210));
+			await lunar.prepare();
+			await Mep.Motion.straight(20);
+			await lunar.collect();
+            await Delay(500);
+			await Mep.Motion.straight(-100);
 
             lunar.standby().catch(() => {});
 
             this.finish();
 		} catch (e) {
-			Mep.Log.error(TAG, e);
+            Mep.Log.error(TAG, e);
             this.suspend();
         }
+
     }
 }
-
-module.exports = Module1Task;
+module.exports = Module4Task;

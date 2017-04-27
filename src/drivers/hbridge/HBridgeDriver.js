@@ -31,7 +31,7 @@ class HBridgeDriver {
         }
     }
 
-    start(speed, inverse = false) {
+    write(speed, inverse = false) {
         if (speed > this.config.max) {
             speed = this.config.max;
             Mep.Log.error(TAG, this.name, 'Max value is:', this.config.max);
@@ -47,10 +47,6 @@ class HBridgeDriver {
         ]);
 
         this.communicator.send(this.config.cid, buffer);
-    }
-
-    stop() {
-        this.start(0);
     }
 
     getGroups() {

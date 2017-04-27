@@ -13,23 +13,18 @@ class CollectStartRocketTask extends Task {
         try {
             //lunar.close();
             await Mep.Motion.go(
-                new TunedPoint(-365, -740, [ 350, -750, 'blue' ]),
-                { speed: 70, backward: false, pf: true });
+                new TunedPoint(-365, -750, [ 350, -750, 'blue' ]),
+                { speed: 70, backward: false });
             await Mep.Motion.rotate(new TunedAngle(-90));
 
             await this.common.collect();
-            await Mep.Motion.go(
-                new TunedPoint(-360, -590, [ 350, -750, 'blue' ]),
-                { speed: 90, backward: true, tolerance: 40, radius: 100 });
-            // await Mep.Motion.go(new TunedPoint(-360, -600), {speed: 70, backward: true});
+            await Mep.Motion.straight(-30);
 
+            this.finish();
         } catch (e) {
             Mep.Log.error(TAG, e);
             this.suspend();
-            return;
         }
-
-        this.finish();
     }
 }
 

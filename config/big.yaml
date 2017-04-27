@@ -15,11 +15,9 @@ Drivers:
 
   MotionDriver:
     startPosition: [ -610, -790, [ -610, -790, 'yellow' ], [ 610, -790, 'blue' ] ]
-    startX: -610
-    startY: -790
     startOrientation: [ -90, [ -90, 'yellow' ] ]
     startSpeed: 100
-    refreshDataPeriod: 100
+    refreshDataPeriod: 120
 
   CanDriver:
     "@class": drivers/can/CanDriver
@@ -74,13 +72,13 @@ Drivers:
     "@dependencies":
       communicator: CanDriver
     cid: 1501
-    tolerance: 8
+    tolerance: 10
     type: 'hsv'
     colors:
       # yellow: [ 0xfe, 0xf7, 0xdc ]
       # blue: [ 0xb4, 0xdb, 0xf1 ]
-      yellow: [ 30, 10, 250 ]
-      blue: [ 150, 40, 230 ]
+      yellow: [ 30, 34, 250 ]
+      blue: [ 160, 40, 230 ]
 
   ServoCollectorStopper:
     "@class": drivers/dynamixel/DynamixelDriver
@@ -107,6 +105,16 @@ Drivers:
       cid: 0x00007F03
       direction: 'output'
       mode: 'digital'
+
+  FunnyServo:
+    "@class": drivers/pin/PinDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 1502
+    direction: 'output'
+    mode: 'analog'
+    max: 30
 
   ServoCollectorTrackLeft:
     "@class": drivers/dynamixel/DynamixelDriver
@@ -157,11 +165,13 @@ Drivers:
     cid: 0x00007F00
 
   CollectorBigTrack:
-    "@class": drivers/hbridge/HBridgeDriver
+    "@class": drivers/pin/PinDriver
     "@load": true
     "@dependencies":
       communicator: CanDriver
-    cid: 0x00007F13
+    cid: 0x00007F06
+    direction: 'output'
+    mode: 'digital'
 
   BackLunarDetector:
     "@class": drivers/pin/PinDriver
@@ -202,13 +212,13 @@ Drivers:
     mode: 'analog'
 
   CircularEjector:
-    "@class": drivers/hbridge/HBridgeDriver
+    "@class": drivers/pin/PinDriver
     "@load": true
     "@dependencies":
       communicator: CanDriver
-    cid: 0x00007F14
-    max: 120
-    min: 0
+    cid: 0x00007F05
+    direction: 'output'
+    mode: 'digital'
 
   ColorServo:
     "@class": drivers/dynamixel/DynamixelDriver

@@ -63,7 +63,7 @@ Services:
       backward: false
       relative: false
       tolerance: -1
-      speed: 80
+      speed: 100
       radius: 80
     rotateOptions:
       relative: false

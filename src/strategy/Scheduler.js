@@ -25,17 +25,18 @@ class Scheduler {
         process.on('unhandledRejection', this.onUnhandledTaskError.bind(this));
 
         this.common = {};
+        this._timeIsUp = false;
     }
 
     /**
      * Run default action if there is the exception in task is not caught with `try {} catch(e) {}`.
-     * @param {TaskError} reason - Describes more about an exception
+     * @param {TaskError} reason Describes more about an exception
      */
     onUnhandledTaskError(reason) {
         if (reason !== undefined && reason.constructor !== undefined) {
             if (reason.constructor.name === 'TaskError') {
                 Mep.Log.warn(TAG, reason);
-                this.runNextTask();
+                // this.runNextTask();
             }
         } else {
             throw Error(reason);
@@ -53,7 +54,11 @@ class Scheduler {
     runNextTask() {
         let nextTask = Mep.Scheduler.recommendNextTask(this.tasks);
         if (nextTask !== null) {
-            this.runTask(nextTask);
+            if (this._timeIsUp === false) {
+                this.runTask(nextTask);
+            } else {
+                Mep.Log.info(TAG, 'Tasks are blocked, time\'s up');
+            }
         } else {
             Mep.Log.info(TAG, 'No more tasks');
         }

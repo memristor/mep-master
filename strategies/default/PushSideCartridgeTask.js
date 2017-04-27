@@ -11,15 +11,15 @@ const TAG = 'PushSideCartridgeTask';
 class PushSideCartridgeTask extends Task {
     async onRun() {
         try {
-            await Mep.Motion.go(new TunedPoint(-710, 250), {speed: 70, backward: true});
-            await Mep.Motion.rotate(new TunedAngle(225));
-
+            await Mep.Motion.go(new TunedPoint(-870, 80), { backward: true });
+            await Mep.Motion.go(new TunedPoint(-650, 310), { speed: 70, backward: true });
             await this.common.push();
+
+            this.finish();
         } catch (e) {
             Mep.Log.error(TAG, e);
+            this.suspend();
         }
-
-        this.finish();
     }
 }
 

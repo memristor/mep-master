@@ -177,7 +177,8 @@ class Task {
                         break;
 
                     case 'skip':
-                        task.finish();
+                        Mep.Motion.forceReject();
+                        // task.finish();
                         break;
 
                     default:

@@ -12,16 +12,16 @@ let hbridge = new HBridge('TestHBridge', {
 });
 
 
-hbridge.start(150);
+hbridge.write(150);
 
 setTimeout(() => {
-    hbridge.stop();
+    hbridge.write(0);
 }, 1000);
 
 setTimeout(() => {
-    hbridge.start(150, true);
+    hbridge.write(150, true);
 }, 2000);
 
 setTimeout(() => {
-    hbridge.stop();
+    hbridge.write(0);
 }, 3000);

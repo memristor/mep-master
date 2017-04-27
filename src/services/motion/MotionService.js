@@ -24,7 +24,8 @@ class MotionService extends EventEmitter {
             maxBypassTolerance: 50,
             targetLineOffset: 150,
             hazardAngleFront: [-70, 70],
-            hazardAngleBack: [110, -110]
+            hazardAngleBack: [110, -110],
+            epsilonRadius: 30
         }, config);
 
         this.motionDriver = Mep.getDriver('MotionDriver');
@@ -176,6 +177,7 @@ class MotionService extends EventEmitter {
             let target = this._targetQueue.getTargetFront();
             this._goSingleTarget(target.getPoint(), target.getParams()).then(() => {
                 motionService._targetQueue.removeFront();
+
                 motionService._goToNextQueuedTarget();
             }).catch((e) => {
                 if (e.action !== 'break') {
@@ -252,6 +254,8 @@ class MotionService extends EventEmitter {
      * @returns {Promise}
      */
     straight(millimeters, parameters) {
+        return this.motionDriver.goForward(millimeters);
+
         let params = Object.assign({}, this.config.moveOptions, parameters);
         let point = new Point(millimeters, 0);
 
@@ -280,6 +284,13 @@ class MotionService extends EventEmitter {
      */
     rotate(tunedAngle, options) {
         return this.motionDriver.rotateTo(tunedAngle.getAngle());
+    }
+
+    forceReject() {
+        if (this._reject !== null) {
+            this._targetQueue.empty();
+            this._reject(new TaskError(TAG, 'obstacle', 'Obstacle is too long in front of robot'));
+        }
     }
 }
 

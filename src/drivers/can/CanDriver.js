@@ -33,6 +33,8 @@ class CanDriver extends EventEmitter {
             bitrate: 125000
         }, config);
 
+        this._enabled = true;
+
         this._startCAN(this.config.device, this.config.bitrate);
 
         this.channel = CAN.createRawChannel(this.config.device, true);
@@ -59,6 +61,14 @@ class CanDriver extends EventEmitter {
         Mep.Log.debug(TAG, 'Driver with name', name, 'initialized');
     }
 
+    enable() {
+        this._enabled = true;
+    }
+
+    disable() {
+        this._enabled = false;
+    }
+
     /**
      * Send buffer to specific ID
      * @param {Number} id Device ID
@@ -67,14 +77,16 @@ class CanDriver extends EventEmitter {
      * canDriver.send(0x4324234, Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72, 0x00, 0x00]));
      */
     send(id, buffer) {
-        let canMessage = {
-            id: id,
-            ext: true,
-            rtr: false,
-            data : buffer
-        };
-        //Mep.Log.debug(TAG, 'Buffer sent', buffer);
-        this.channel.send(canMessage);
+        if (this._enabled === true) {
+            let canMessage = {
+                id: id,
+                ext: true,
+                rtr: false,
+                data: buffer
+            };
+            //Mep.Log.debug(TAG, 'Buffer sent', buffer);
+            this.channel.send(canMessage);
+        }
     }
 
     /**

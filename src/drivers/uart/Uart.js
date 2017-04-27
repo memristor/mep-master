@@ -52,6 +52,8 @@ class Uart extends EventEmitter {
         this.out = new tty.WriteStream(fd);
         this.in.setRawMode(true);
         this.in.on('data', this._onDataReceived.bind(this));
+
+        this._enabled = true;
     }
 
     /**
@@ -76,6 +78,10 @@ class Uart extends EventEmitter {
         this.in.resume();
     }
 
+    disable() {
+        this._enabled = false;
+    }
+
     /**
      * Send data to Uart
      * @param buffer {Buffer} - Buffer of data which will be sent to uart
@@ -83,6 +89,10 @@ class Uart extends EventEmitter {
      * @param type {Number} - Type of packet, will be ignored if protocol doesn't support
      */
     send(buffer, callback, type) {
+        if (this._enabled === false) {
+            return;
+        }
+
         if (buffer.length === 0) {
             Mep.Log.error('Buffer length cannot be 0');
             return;

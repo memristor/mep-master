@@ -355,8 +355,6 @@ class MotionDriver extends EventEmitter  {
      * MotionDriver.DIRECTION_BACKWARD
      */
     moveToPosition(position, direction) {
-        let motionDriver = this;
-
         this._direction = direction;
         this._sendCommand(Buffer.from([
             'G'.charCodeAt(0),
@@ -367,6 +365,7 @@ class MotionDriver extends EventEmitter  {
             0,
             direction
         ]));
+
         this._breaking = false;
 
         return this._promiseToStateChanged();

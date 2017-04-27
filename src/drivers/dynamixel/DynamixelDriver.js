@@ -261,9 +261,10 @@ class DynamixelDriver {
         this._lastPosition = position;
 
         if (position > this.config.maxPosition || position < this.config.minPosition) {
-            throw Error(TAG, this.name, 'Position out of range!');
+            Mep.Log.error(TAG + ':' + this.name, 'Position out of range!');
+        } else {
+            this._writeWord(DynamixelDriver.AX_GOAL_POSITION_L, position | 0);
         }
-        this._writeWord(DynamixelDriver.AX_GOAL_POSITION_L, position | 0);
     }
 
     setSpeed(speed, inverse = false) {

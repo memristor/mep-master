@@ -11,15 +11,16 @@ const TAG = 'CollectBackRocketTask';
 class CollectBackRocketTask extends Task {
     async onRun() {
         try {
-            await Mep.Motion.go(new TunedPoint(-1100, 370), {speed: 70, backward: false});
-            await Mep.Motion.go(new TunedPoint(-1240, 370), {speed: 70, backward: false});
+            await Mep.Motion.go(new TunedPoint(-1000, 370), { speed: 70, backward: false, tolerance: -1 });
+            await Mep.Motion.go(new TunedPoint(-1240, 370), { speed: 70, backward: false, tolerance: -1 });
             await this.common.collect();
-            await Mep.Motion.go(new TunedPoint(-1100, 370), {speed: 70, backward: true});
+            await Mep.Motion.go(new TunedPoint(-1100, 370), { speed: 70, backward: true });
 
+            this.finish();
         } catch (e) {
+            this.suspend();
             Mep.Log.error(TAG, e);
         }
-        this.finish();
     }
 }
 
