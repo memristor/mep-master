@@ -15,7 +15,7 @@ class InitTask extends Task {
         // Mep.getDriver('FrontLunarDetector').on('changed', (val) => { if (val === 1) console.log('Lunars:', ++counter); });
         // await Delay(200);
         //await this.common.collect();
-        // Mep.getDriver('MotionDriver').softStop();
+        Mep.getDriver('MotionDriver').softStop();
         // Mep.getDriver('ServoLimiter').setPosition(560);
         // await Mep.Motion.straight(-200, { speed: 110 });
 
@@ -36,8 +36,12 @@ class InitTask extends Task {
         //Mep.getDriver('ColorServo').setPosition(730); // 600
 
         // lunar.rotate().catch((e) => { console.log(e); });
-        // lunar.openLimiter();
+        //lunar.openLimiter();
         // lunar.collect().catch(() => {});
+        // Mep.getDriver('CollectorBigTrack').write(0);
+        // Mep.getDriver('ServoCollectorTrackRight').setSpeed(0);
+        // Mep.getDriver('ServoCollectorTrackLeft').setSpeed(0);
+
 
         //Mep.getDriver('BackLunarDetector').on('changed', () => { console.log('sadasd'); });
 

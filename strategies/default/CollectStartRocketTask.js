@@ -11,20 +11,23 @@ const TAG = 'CollectStartRocketTask';
 class CollectStartRocketTask extends Task {
     async onRun() {
         try {
-            //lunar.close();
+            lunar.prepare();
             await Mep.Motion.go(
-                new TunedPoint(-365, -750, [ 350, -750, 'blue' ]),
+                new TunedPoint(-365, -745, [ 350, -750, 'blue' ]),
                 { speed: 70, backward: false });
-            await Mep.Motion.rotate(new TunedAngle(-90));
 
             await this.common.collect();
-            await Mep.Motion.straight(-30);
+            await Mep.Motion.straight(-100, { speed: 150 });
 
             this.finish();
         } catch (e) {
             Mep.Log.error(TAG, e);
             this.suspend();
         }
+    }
+
+    isAvailable() {
+        return (lunar.isEmpty() === true);
     }
 }
 

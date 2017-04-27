@@ -72,7 +72,7 @@ Drivers:
     "@dependencies":
       communicator: CanDriver
     cid: 1501
-    tolerance: 10
+    tolerance: 20
     type: 'hsv'
     colors:
       # yellow: [ 0xfe, 0xf7, 0xdc ]

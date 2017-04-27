@@ -21,6 +21,10 @@ class PushSideCartridgeTask extends Task {
             this.suspend();
         }
     }
+
+    isAvailable() {
+        return (lunar.isEmpty() === false);
+    }
 }
 
 module.exports = PushSideCartridgeTask;

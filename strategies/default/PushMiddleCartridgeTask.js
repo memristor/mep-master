@@ -14,10 +14,10 @@ class PushMiddleCartridgeTask extends Task {
         // Move to position to go back
         try {
             await Mep.Motion.go(
-                new TunedPoint(0, -100, [ 25, -150, 'blue' ]),
+                new TunedPoint(0, -150, [ 25, -150, 'blue' ]),
                 { speed: 110, backward: true, tolerance: 0, radius: 200 });
             await Mep.Motion.go(
-                new TunedPoint(0, 0, [ 0, 0, 'blue' ]),
+                new TunedPoint(0, -30, [ 0, 0, 'blue' ]),
                 { speed: 110, backward: true });
             await Mep.Motion.go(
                 new TunedPoint(0, 25, [ 25, -200, 'blue' ]),
@@ -43,6 +43,10 @@ class PushMiddleCartridgeTask extends Task {
         }
 
         lunar.standby().catch(() => {});
+    }
+
+    isAvailable() {
+        return (lunar.isEmpty() === false);
     }
 }
 

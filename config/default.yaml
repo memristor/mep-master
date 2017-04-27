@@ -30,7 +30,7 @@ Drivers:
       communicator: Uart
     startSpeed: 100
     precision: 2
-    refreshDataPeriod: 120
+    refreshDataPeriod: 100
 
   MotionDriverController:
     "@class": drivers/motion/MotionDriverController

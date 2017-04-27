@@ -106,9 +106,9 @@ class LunarCollectorDriver {
     }
 
     collect() {
+        this.trackStart();
         this._leftTrack.setSpeed(1023, true);
         this._rightTrack.setSpeed(1023);
-        this.trackStart();
         let leftHandPromise = this._leftHand.go(500, { tolerance: 150 });
         let rightHandPromise = this._rightHand.go(515, { tolerance: 150 });
 
@@ -119,6 +119,7 @@ class LunarCollectorDriver {
     }
 
     async lunarTake() {
+        this._servoPump.setSpeed(700);
         this._limiter.setPosition(530);
 
         // Take a lunar
@@ -132,6 +133,8 @@ class LunarCollectorDriver {
     }
 
     async lunarEject() {
+        this._servoPump.setSpeed(300);
+
         // Eject a lunar
         this._vacuumPump.write(0);
         try { await this._servoPump.go(850); } catch (e) {}
@@ -156,7 +159,7 @@ class LunarCollectorDriver {
         this._circularEjector.stop();
     }
 
-    async rotate() {
+    async rotate(timeout = this.config.colorTimeout) {
         let lunarCollector = this;
         let requiredColor = (Mep.Config.get('table').indexOf('blue') >= 0) ? 'blue' : 'yellow';
 
@@ -172,7 +175,7 @@ class LunarCollectorDriver {
             let colorChangedPromise = (color) => {
                 if (color === requiredColor) {
                     colorSensor.removeListener('changed', colorChangedPromise);
-                    resolve();
+                    setTimeout(resolve, 150); // Resolve with delay
                     lunarCollector.colorStandby();
                 }
             };
@@ -183,7 +186,7 @@ class LunarCollectorDriver {
                 lunarCollector.colorStandby();
                 lunarCollector.trackStop();
                 colorSensor.removeListener('changed', colorChangedPromise);
-            }, this.config.colorTimeout);
+            }, timeout);
         });
     }
 
@@ -212,6 +215,8 @@ class LunarCollectorDriver {
         this._leftTrack.setSpeed(0);
         this._rightTrack.setSpeed(0);
         this.trackStop();
+        this._cylinder.write(0);
+        this._servoPump.go(200);
         let leftHandPromise = this._leftHand.go(860);
         let rightHandPromise = this._rightHand.go(160);
 

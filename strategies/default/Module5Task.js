@@ -13,7 +13,7 @@ class Module5Task extends Task {
 	async onRun(){
 		try {
             lunar.limiterClose();
-            await lunar.prepare();
+            lunar.prepare().catch(() => {});
             await Mep.Motion.go(new TunedPoint(-765, 670));
             await lunar.collect();
             await Delay(500);

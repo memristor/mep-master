@@ -15,11 +15,13 @@ class Module3Task extends Task {
 		try {
 			lunar.limiterClose();
 			await Mep.Motion.go(new TunedPoint(-900, 60));
-			await Mep.Motion.go(new TunedPoint(-725, 244));
+            lunar.prepare().catch(() => {});
+			await Mep.Motion.go(new TunedPoint(-700, 260));
             try { await lunar.collect(); } catch (e) {}
             await Mep.Motion.go(new TunedPoint(-923, 83), { backward: true });
 
             // lunar.standby().catch(() => {});
+            this.common.robot.colorfulModules++;
 
             this.finish();
 		} catch (e) {
