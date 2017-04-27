@@ -164,7 +164,7 @@ class LunarCollectorDriver {
         let requiredColor = (Mep.Config.get('table').indexOf('blue') >= 0) ? 'blue' : 'yellow';
 
         // Prepare mechanisms for rotation
-        this._colorSensor.start(100);
+        this._colorSensor.start(50);
         this._colorRotator.write(100);
         this._colorServo.setPosition(730);
         this.trackStart();

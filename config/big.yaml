@@ -9,7 +9,7 @@ Drivers:
     mode: 'digital'
 
   StarterDriver:
-    type: 'keyboard' # keyboard, rope
+    type: 'rope' # keyboard, rope
     "@dependencies":
       ropePin: RopePin
 
@@ -72,7 +72,7 @@ Drivers:
     "@dependencies":
       communicator: CanDriver
     cid: 1501
-    tolerance: 20
+    tolerance: 30
     type: 'hsv'
     colors:
       # yellow: [ 0xfe, 0xf7, 0xdc ]

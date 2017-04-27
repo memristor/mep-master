@@ -7,6 +7,7 @@ const Buffer = require('buffer').Buffer;
 const TaskError = Mep.require('strategy/TaskError');
 const TunedPoint = Mep.require('strategy/TunedPoint');
 const TunedAngle = Mep.require('strategy/TunedAngle');
+const Delay = Mep.require('misc/Delay');
 
 const TAG = 'MotionDriver';
 
@@ -100,7 +101,7 @@ class MotionDriver extends EventEmitter  {
 
         setTimeout(() => {
             if (this._waitACKQueue[type] !== undefined) {
-                Mep.Log.error(TAG, 'Error sending a command');
+                Mep.Log.error(TAG, 'Error sending a command', type);
                 motionDriver._sendCommand(this._waitACKQueue[type]);
             }
         }, this.config.ackTimeout);
@@ -122,7 +123,7 @@ class MotionDriver extends EventEmitter  {
     /**
      * Check driver by checking checking communication with motion driver board
      */
-    init() {
+    async init() {
         let motionDriver = this;
 
         this.reset();
