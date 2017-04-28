@@ -145,6 +145,10 @@ class Mep {
      */
     static get Share() { return Mep._share; }
 
+    static isOppositeSide() {
+        return (Config.get('table').indexOf('blue') >= 0);
+    }
+
     /**
      * Initialize necessary modules. Should be called only once during an application bootstrapping
      */

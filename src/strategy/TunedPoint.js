@@ -26,9 +26,10 @@ class TunedPoint {
      * @param defaultY {Number} - Default point Y coordinate
      */
     constructor(defaultX, defaultY) {
+        let table = Mep.Config.get('table');
+
         // If there are table dependent points
         for (let i = 2; i < arguments.length; i++) {
-
             // Check if the argument is valid
             if (typeof arguments[i][0] === 'undefined' ||
                 typeof arguments[i][1] === 'undefined' ||
@@ -38,9 +39,15 @@ class TunedPoint {
                 continue;
             }
 
-            // Check if table name matches
-            if (Mep.Config.get('table') == arguments[i][2]) {
+            // Check for similar table
+            if (arguments[i][2].indexOf(table) >= 0) {
                 this.point = new Point(arguments[i][0], arguments[i][1]);
+            }
+
+            // Check if table name matches
+            if (table == arguments[i][2]) {
+                this.point = new Point(arguments[i][0], arguments[i][1]);
+                break;
             }
         }
 

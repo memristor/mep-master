@@ -13,8 +13,8 @@ class CollectStartRocketTask extends Task {
         try {
             lunar.prepare();
             await Mep.Motion.go(
-                new TunedPoint(-365, -745, [ 350, -750, 'blue' ]),
-                { speed: 70, backward: false });
+                new TunedPoint(-365, -745, [ 355, -745, 'blue' ]),
+                { speed: 100, backward: false });
 
             await this.common.collect();
             await Mep.Motion.straight(-100, { speed: 150 });

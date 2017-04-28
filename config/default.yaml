@@ -5,6 +5,8 @@ robot: ''
 scheduler: ''
 host: ''
 obstacleMaxPeriod: 300
+duration: 90
+
 Log:
   Console:
     active: true

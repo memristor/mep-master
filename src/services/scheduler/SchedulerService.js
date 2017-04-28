@@ -30,6 +30,10 @@ class SchedulerService {
                 tasks[i].isAvailable() === true) {
                 maxWeightTask = tasks[i];
             }
+
+            if (tasks[i].getState() === Task.SUSPENDED) {
+                tasks[i].setState(Task.READY);
+            }
         }
 
         if (maxWeightTask === null) {

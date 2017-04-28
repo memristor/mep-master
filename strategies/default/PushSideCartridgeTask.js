@@ -11,8 +11,8 @@ const TAG = 'PushSideCartridgeTask';
 class PushSideCartridgeTask extends Task {
     async onRun() {
         try {
-            await Mep.Motion.go(new TunedPoint(-870, 80), { backward: true });
-            await Mep.Motion.go(new TunedPoint(-650, 310), { speed: 70, backward: true });
+            await Mep.Motion.go(new TunedPoint(-870, 80, [ 870, 80, 'blue' ]), { backward: true });
+            await Mep.Motion.go(new TunedPoint(-650, 310, [ 670, 300, 'blue' ]), { speed: 70, backward: true });
             await this.common.push();
 
             this.finish();
@@ -23,7 +23,7 @@ class PushSideCartridgeTask extends Task {
     }
 
     isAvailable() {
-        return (lunar.isEmpty() === false);
+        return (lunar.isEmpty() === false && this.common.robot.colorfulModules <= 1);
     }
 }
 

@@ -110,6 +110,10 @@ class Task {
         return this.state;
     }
 
+    setState(state) {
+        this.state = state;
+    }
+
     /**
      * Change default weight of the task
      * @param weight {Number}

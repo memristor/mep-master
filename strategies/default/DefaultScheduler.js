@@ -74,7 +74,8 @@ class DefaultScheduler extends Scheduler {
 
     _onTick(secondsPassed) {
         console.log('Time passed', secondsPassed);
-        if (secondsPassed > 88 && this._finalTaskExecuted === false) {
+        // TODO
+        if (secondsPassed > (Mep.Config.get('duration') - 3) && this._finalTaskExecuted === false) {
             this.runTask(this._finalTask);
             this._finalTaskExecuted = true;
         }
@@ -87,6 +88,7 @@ class DefaultScheduler extends Scheduler {
             this.common.robot.colorfulModules--;
         }
 
+        lunar.prepare().catch(() => {});
         try { await lunar.limiterOpenSafe(); } catch (e) {}
         try { await lunar.collect(); } catch (e) {}
 
@@ -119,6 +121,7 @@ class DefaultScheduler extends Scheduler {
     }
 
     async _collect2() {
+        let numberOfFails = 0;
         try {
             lunar.limiterClose().catch((e) => {
                 Mep.Log.error(TAG, 'Lunar.closeLimiter', e);
@@ -146,6 +149,10 @@ class DefaultScheduler extends Scheduler {
 
                 if (lunar.numberOfModules() === 0) {
                     i--;
+                    numberOfFails++;
+                }
+                if (numberOfFails === 2) {
+                    break;
                 }
             }
             lunar.trackStop();

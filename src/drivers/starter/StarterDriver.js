@@ -34,6 +34,7 @@ class StarterDriver extends EventEmitter {
         this._secondPassed = 0;
         this._ropePin = null;
         this._startTime = 0;
+        this._duration = Mep.Config.get('duration');
 
         if (this.config.type === 'rope') {
             this._ropePin = Mep.getDriver(this.config['@dependencies']['ropePin']);
@@ -57,7 +58,7 @@ class StarterDriver extends EventEmitter {
     }
 
     getRemainingTime() {
-        return (90 - this.getTime());
+        return (this._duration - this.getTime());
     }
 
     /**

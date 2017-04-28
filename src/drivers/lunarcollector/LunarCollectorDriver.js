@@ -184,7 +184,6 @@ class LunarCollectorDriver {
             setTimeout(() => {
                 reject();
                 lunarCollector.colorStandby();
-                lunarCollector.trackStop();
                 colorSensor.removeListener('changed', colorChangedPromise);
             }, timeout);
         });

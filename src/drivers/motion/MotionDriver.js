@@ -39,34 +39,37 @@ class MotionDriver extends EventEmitter  {
     static get CONFIG_DEBUG() { return 4; }
     static get CONFIG_STATUS_CHANGE_REPORT() { return 5; }
     static get CONFIG_KEEP_COUNT() { return 6; }
+    static get CONFIG_TMR() { return 7; }
 
-    static get CONFIG_STUCK_DISTANCE_JUMP() { return 7; }
-    static get CONFIG_STUCK_ROTATION_JUMP() { return 8; }
-    static get CONFIG_STUCK_DISTANCE_MAX_FAIL_COUNT() { return 9; }
-    static get CONFIG_STUCK_ROTATION_MAX_FAIL_COUNT() { return 10; }
-    static get CONFIG_MOTOR_SPEED_LIMIT() { return 11; }
-    static get CONFIG_MOTOR_RATE_OF_CHANGE() { return 12; }
+    static get CONFIG_STUCK_DISTANCE_JUMP() { return 8; }
+    static get CONFIG_STUCK_ROTATION_JUMP() { return 9; }
+    static get CONFIG_STUCK_DISTANCE_MAX_FAIL_COUNT() { return 10; }
+    static get CONFIG_STUCK_ROTATION_MAX_FAIL_COUNT() { return 11; }
+    static get CONFIG_MOTOR_SPEED_LIMIT() { return 12; }
+    static get CONFIG_MOTOR_RATE_OF_CHANGE() { return 13; }
     static get CONFIG_SEND_STATUS_INTERVAL() { return 14; }
 
-    static get CONFIG_WHEEL_DISTANCE() { return 14; }
-    static get CONFIG_WHEEL_R1() { return 15; }
-    static get CONFIG_WHEEL_R2() { return 16; }
-    static get CONFIG_PID_D_P() { return 17; }
-    static get CONFIG_PID_D_D() { return 18; }
-    static get CONFIG_PID_R_P() { return 19; }
-    static get CONFIG_PID_R_D() { return 20; }
-    static get CONFIG_VMAX() { return 21; }
-    static get CONFIG_OMEGA() { return 22; }
-    static get CONFIG_ACCEL() { return 23; }
-    static get CONFIG_ALPHA() { return 24; }
+    static get CONFIG_WHEEL_DISTANCE() { return 15; }
+    static get CONFIG_WHEEL_R1() { return 16; }
+    static get CONFIG_WHEEL_R2() { return 17; }
+    static get CONFIG_PID_D_P() { return 18; }
+    static get CONFIG_PID_D_D() { return 19; }
+    static get CONFIG_PID_R_P() { return 20; }
+    static get CONFIG_PID_R_D() { return 21; }
+    static get CONFIG_VMAX() { return 22; }
+    static get CONFIG_OMEGA() { return 23; }
+    static get CONFIG_ACCEL() { return 24; }
+    static get CONFIG_ALPHA() { return 25; }
+    static get CONFIG_SLOWDOWN() { return 26; }
+    static get CONFIG_ANGLE_SPEEDUP() { return 27; }
+
 
 
     /**
      * @param {String} name Unique driver name
      * @param {Object} config Configuration presented as an associative array
-     * @param {Number} [config.startX] X coordinate for start position
-     * @param {Number} [config.startY] Y coordinate for start position
-     * @param {Number} [config.startOrientation] Start orientation
+     * @param {strategy.TunedPoint} [config.startPosition] X coordinate for start position
+     * @param {strategy.TunedAngle} [config.startOrientation] Start orientation
      * @param {Number} [config.startSpeed] Initial speed
      * @param {Number} [config.refreshDataPeriod] Get state from motion driver every `refreshDataPeriod` in ms
      * @param {Number} [config.connectionTimeout] Connection timeout in ms
@@ -81,7 +84,9 @@ class MotionDriver extends EventEmitter  {
             startSpeed: 100,
             refreshDataPeriod: 100,
             connectionTimeout: 4000,
-            ackTimeout: 150
+            ackTimeout: 150,
+            commandTimeout: (10 * 1000),
+            commandStartTimeout: (2 * 1000)
         }, config);
 
         this.positon = new TunedPoint(...this.config.startPosition).getPoint();
@@ -264,24 +269,44 @@ class MotionDriver extends EventEmitter  {
     _promiseToStateChanged() {
         let motionDriver = this;
 
+        let timeout = setTimeout(() => {
+            motionDriver.emit('stateChanged', MotionDriver.STATE_STUCK);
+        }, this.config.commandTimeout);
+
+        let startTimeout = setTimeout(() => {
+            motionDriver.emit('stateChanged', MotionDriver.STATE_STUCK);
+        }, this.config.commandStartTimeout);
+
         return new Promise((resolve, reject) => {
             let stateListener = (name, state) => {
                 switch (state) {
                     case MotionDriver.STATE_IDLE:
+                        Mep.Log.debug(TAG, 'Resolved');
+                        clearTimeout(timeout);
+                        clearTimeout(startTimeout);
                         resolve();
                         motionDriver.removeListener('stateChanged', stateListener);
                         break;
                     case MotionDriver.STATE_STUCK:
+                        clearTimeout(timeout);
+                        clearTimeout(startTimeout);
                         reject(new TaskError(TAG, 'stuck', 'Robot is stacked'));
                         motionDriver.removeListener('stateChanged', stateListener);
                         break;
                     case MotionDriver.STATE_ERROR:
+                        clearTimeout(timeout);
+                        clearTimeout(startTimeout);
                         reject(new TaskError(TAG, 'error', 'Unknown moving error'));
                         motionDriver.removeListener('stateChanged', stateListener);
                         break;
                     case MotionDriver.STATE_BREAK:
+                        clearTimeout(timeout);
+                        clearTimeout(startTimeout);
                         reject(new TaskError(TAG, 'break', 'Command is broken by another one'));
                         motionDriver.removeListener('stateChanged', stateListener);
+                        break;
+                    default:
+                        clearTimeout(startTimeout);
                         break;
                 }
             };
@@ -341,11 +366,11 @@ class MotionDriver extends EventEmitter  {
      * @param {Number} speed Speed (0 - 255)
      */
     setSpeed(speed) {
-        // speed *= (speed * 1.5) | 0;
-        this._activeSpeed = speed;
+        // speed = (speed * 0.5) | 0;
+        this._activeSpeed = speed | 0;
         this._sendCommand(Buffer.from([
             'V'.charCodeAt(0),
-            speed
+            this._activeSpeed | 0
         ]));
     }
 
@@ -473,6 +498,7 @@ class MotionDriver extends EventEmitter  {
                  * @property {Number} state New state
                  */
                 this.emit('stateChanged', this.name, this.state);
+                Mep.Log.debug(TAG, 'State', String.fromCharCode(this.state));
             }
         }
 

@@ -1,0 +1,9 @@
+Drivers:
+  StarterDriver:
+    type: 'keyboard'
+
+  MotionDriver:
+    startPosition: [ -610, -790, [ -610, -790, 'yellow' ], [ 610, -790, 'blue' ] ]
+    startOrientation: [ -90, [ -90, 'yellow' ] ]
+    startSpeed: 100
+    refreshDataPeriod: 120

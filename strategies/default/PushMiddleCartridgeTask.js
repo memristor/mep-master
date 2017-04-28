@@ -14,13 +14,13 @@ class PushMiddleCartridgeTask extends Task {
         // Move to position to go back
         try {
             await Mep.Motion.go(
-                new TunedPoint(0, -150, [ 25, -150, 'blue' ]),
+                new TunedPoint(0, -150, [ 0, -150, 'blue' ]),
                 { speed: 110, backward: true, tolerance: 0, radius: 200 });
             await Mep.Motion.go(
-                new TunedPoint(0, -30, [ 0, 0, 'blue' ]),
+                new TunedPoint(0, -30, [ 0, -30, 'blue' ]),
                 { speed: 110, backward: true });
             await Mep.Motion.go(
-                new TunedPoint(0, 25, [ 25, -200, 'blue' ]),
+                new TunedPoint(0, 25, [ 0, 25, 'blue' ]),
                 { speed: 110, backward: true });
         }
         catch (e) {
@@ -46,7 +46,7 @@ class PushMiddleCartridgeTask extends Task {
     }
 
     isAvailable() {
-        return (lunar.isEmpty() === false);
+        return (lunar.isEmpty() === false && this.common.robot.colorfulModules <= 1);
     }
 }
 
