@@ -15,7 +15,7 @@ class EjectStartCartridgeTask extends Task {
     async onRun() {
         // Define points
         //let points = [ new TunedPoint(-1200, 0), new TunedPoint(-1200, 115), new TunedPoint(-1200, 230)];
-        let points = [ new TunedPoint(-1200, 70, [ 1200, -80, 'blue' ]) ];
+        let points = [ new TunedPoint(-1200, 80, [ 1200, -80, 'blue' ]) ];
 
 
         try {
@@ -35,7 +35,7 @@ class EjectStartCartridgeTask extends Task {
             lunar.trackStart();
             for (let i = 0; i < points.length; i++) {
                 // Move to ejection location
-                await Mep.Motion.go( points[i], {speed: 70, backward: true });
+                await Mep.Motion.go( points[i], { speed: 70, backward: (Mep.isOppositeSide() ? true : false) });
 
                 // Wait for module and if there is no module break
                 let moduleFound = false;

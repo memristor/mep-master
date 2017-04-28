@@ -51,7 +51,7 @@ class Task {
             weight: 0,
             time: 20,
             location: new Point(0, 0),
-            avoidanceStrategy: 'stop', // stop, rerouting, skip
+            avoidanceStrategy: 'stop', // stop, rerouting, reject
             avoidanceStrategyDelay: 2000
         }, parameters);
 
@@ -151,7 +151,7 @@ class Task {
 
     /**
      * Change avoidance strategy during task execution
-     * @param {String} strategy Can be: 'stop', 'rerouting' or 'skip'
+     * @param {String} strategy Can be: 'stop', 'rerouting' or 'reject'
      * @param {Number} delay
      */
     setAvoidanceStrategy(strategy, delay) {
@@ -180,7 +180,7 @@ class Task {
                         Mep.Motion.tryRerouting();
                         break;
 
-                    case 'skip':
+                    case 'reject':
                         Mep.Motion.forceReject();
                         // task.finish();
                         break;
