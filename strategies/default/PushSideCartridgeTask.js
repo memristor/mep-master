@@ -25,7 +25,11 @@ class PushSideCartridgeTask extends Task {
     }
 
     isAvailable() {
-        return (lunar.isEmpty() === false && this.common.robot.colorfulModules <= 1);
+        return (lunar.isEmpty() === false);
+    }
+
+    plusPriority() {
+        return (this.common.robot.colorfulModules > 1) ? -500 : 0;
     }
 }
 

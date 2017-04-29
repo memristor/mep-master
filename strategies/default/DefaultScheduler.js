@@ -99,8 +99,8 @@ class DefaultScheduler extends Scheduler {
 
         // Wait to empty
         await Delay(1000);
-        for (let i = 0; i < 20; i++) {
-            await Delay(300);
+        for (let i = 0; i < 10; i++) {
+            await Delay(600);
             if (lunar.isEmpty() === true) {
                 break;
             }
