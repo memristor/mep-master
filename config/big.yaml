@@ -66,6 +66,30 @@ Drivers:
     cid: 0x00007F0B
     objectSize: 150
 
+  LaserFrontLeft:
+    "@class": drivers/infrared/InfraredDriver
+    "@load": false
+    "@dependencies":
+      communicator: CanDriver
+    infraredMaxDistance: 300
+    sensorAngle: 110
+    sensorX: 0
+    sensorY: 70
+    cid: 0x00007F24
+    objectSize: 150
+
+  LaserFrontRight:
+    "@class": drivers/infrared/InfraredDriver
+    "@load": false
+    "@dependencies":
+      communicator: CanDriver
+    infraredMaxDistance: 300
+    sensorAngle: 60
+    sensorX: 0
+    sensorY: 70
+    cid: 0x00007F23
+    objectSize: 150
+
   ColorSensor:
     "@class": drivers/color/ColorDriver
     "@load": true

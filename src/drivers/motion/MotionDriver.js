@@ -406,6 +406,10 @@ class MotionDriver extends EventEmitter  {
      * @param {Number} tolerance Radius
      */
     moveToCurvilinear(position, direction, radius, tolerance) {
+        if (Mep.Position.getPosition().getDistance(position) > 500) {
+            return this.moveToPosition(position, direction);
+        }
+
         let motionDriver = this;
 
         this._direction = direction;

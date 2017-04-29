@@ -26,7 +26,14 @@ class Module4Task extends Task {
             Mep.Log.error(TAG, e);
             this.suspend();
         }
+    }
 
+    isAvailable() {
+        return (this.common.robot.colorfulModules !== 4 && this.common.robot.monochromeModules !== 4);
+    }
+
+    plusPriority() {
+       return (this.scheduler.getPreviousTask() == 'Module5Task') ? 100 : 0;
     }
 }
 module.exports = Module4Task;

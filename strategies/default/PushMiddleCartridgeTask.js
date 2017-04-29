@@ -24,9 +24,7 @@ class PushMiddleCartridgeTask extends Task {
                 { speed: 110, backward: true });
         }
         catch (e) {
-            Mep.Log.error(TAG, 'backward', e);
-            await Delay(500);
-            try { await Mep.Motion.straight(100); } catch (e) { console.log('forward'); }
+            Mep.Log.error(TAG, e);
             this.suspend();
             suspended = true;
         }
@@ -34,6 +32,7 @@ class PushMiddleCartridgeTask extends Task {
         // Push
         if (suspended === false) {
             try {
+                this.common.robot.monochromeModules = 0;
                 await this.common.push();
                 this.finish();
             } catch (e) {
@@ -46,6 +45,7 @@ class PushMiddleCartridgeTask extends Task {
     }
 
     isAvailable() {
+        console.log(TAG, lunar.isEmpty(), this.common.robot.colorfulModules);
         return (lunar.isEmpty() === false && this.common.robot.colorfulModules <= 1);
     }
 }

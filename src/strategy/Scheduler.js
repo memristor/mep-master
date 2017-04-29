@@ -26,6 +26,15 @@ class Scheduler {
 
         this.common = {};
         this._timeIsUp = false;
+        this._previousTask = '';
+    }
+
+    setPreviousTask(task) {
+        this._previousTask = task;
+    }
+
+    getPreviousTask() {
+        return this._previousTask;
     }
 
     /**

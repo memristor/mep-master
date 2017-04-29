@@ -72,6 +72,7 @@ class Task {
      * Finish this task and run next one
      */
     finish() {
+        this.scheduler.setPreviousTask(this.constructor.name);
         this.state = Task.FINISHED;
         this.scheduler.runNextTask();
         Mep.Motion.removeListener('pathObstacleDetected', this.onPathObstacle);
@@ -81,6 +82,7 @@ class Task {
      * Suspend this task and run next one
      */
     suspend() {
+        this.scheduler.setPreviousTask(this.constructor.name);
         this.state = Task.SUSPENDED;
         this.scheduler.runNextTask();
         Mep.Motion.removeListener('pathObstacleDetected', this.onPathObstacle);
@@ -120,6 +122,10 @@ class Task {
      */
     setWeight(weight) {
         this.weight = weight;
+    }
+
+    plusPriority() {
+        return 0;
     }
 
     /**

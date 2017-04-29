@@ -30,7 +30,11 @@ class DefaultScheduler extends Scheduler {
             new InitTask(this, { weight: 10000, time: 10 }),
 
             new CollectStartRocketTask(this, { weight: 1000, time: 20 }),
-            new PushMiddleCartridgeTask(this, { weight: 980, time: 10 }),
+            new PushMiddleCartridgeTask(this, {
+                weight: 980,
+                time: 10,
+                avoidanceStrategy: 'reject',
+                avoidanceStrategyDelay: 5000 }),
 
             // new Module1Task(this, { weight: 920, time: 10 }),
             // new Module2Task(this, { weight: 900, time: 10 }),
@@ -60,7 +64,8 @@ class DefaultScheduler extends Scheduler {
             backRocketModules: 4,
             middleCartridgeModules: 0,
             sideCartridgeModules: 0,
-            startCartridgeModules: 0
+            startCartridgeModules: 0,
+            lunar3Available: true
         };
         this.common.robot = {
             colorfulModules: 0,
@@ -73,8 +78,7 @@ class DefaultScheduler extends Scheduler {
     }
 
     _onTick(secondsPassed) {
-        console.log('Time passed', secondsPassed);
-        // TODO
+        console.log('Seconds passed', secondsPassed);
         if (secondsPassed > (Mep.Config.get('duration') - 3) && this._finalTaskExecuted === false) {
             this.runTask(this._finalTask);
             this._finalTaskExecuted = true;

@@ -14,8 +14,8 @@ class InitTask extends Task {
     async onRun() {
         // Mep.getDriver('FrontLunarDetector').on('changed', (val) => { if (val === 1) console.log('Lunars:', ++counter); });
         // await Delay(200);
-        //await this.common.collect();
-        //Mep.getDriver('MotionDriver').softStop();
+        // await this.common.collect();
+        // Mep.getDriver('MotionDriver').softStop();
         // Mep.getDriver('ServoLimiter').setPosition(560);
         // await Mep.Motion.straight(-200, { speed: 110 });
 

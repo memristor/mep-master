@@ -70,8 +70,18 @@ class EjectStartCartridgeTask extends Task {
             this.finish();
         } catch (e) {
             Mep.Log.error(TAG, e);
+            Mep.getDriver('MotionDriver').finishCommand();
+            Mep.Motion.straight(100);
             this.suspend();
         }
+    }
+
+    isAvailable() {
+        return (this.common.robot.monochromeModules <= 0);
+    }
+
+    plusPriority() {
+        return 0;
     }
 }
 

@@ -29,5 +29,12 @@ class Module3Task extends Task {
 			this.suspend();
         }
     }
+
+    isAvailable() {
+		return (this.common.robot.colorfulModules !== 4 &&
+			this.common.robot.monochromeModules !== 4 &&
+			this.common.terrain.lunar3Available === true
+		);
+	}
 }
 module.exports = Module3Task;
