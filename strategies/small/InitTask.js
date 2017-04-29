@@ -11,12 +11,12 @@ const TAG = 'InitTask';
 
 class InitTask extends Task {
     async onRun() {
+        Mep.getDriver('Servo').go(1000);
+
         await starter.waitStartSignal(new Console());
 
         try {
-            await Mep.Motion.go(new TunedPoint(-360, -550), { speed: 110, backward: true, tolerance: 0, radius: 180 });
-
-            // await Mep.Motion.go(new TunedPoint(-350, -350), { speed: 70, backward: true });
+            await Mep.Motion.straight(1000);
         } catch (e) {
             Mep.Log.error(TAG, e);
         }

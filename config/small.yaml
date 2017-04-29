@@ -7,3 +7,11 @@ Drivers:
     startOrientation: [ -90, [ -90, 'yellow' ] ]
     startSpeed: 100
     refreshDataPeriod: 120
+
+  Servo:
+    "@class": drivers/dynamixel/DynamixelDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    id: 1
+    cid: 0x00007F00
