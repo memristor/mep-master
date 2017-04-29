@@ -9,6 +9,11 @@ for file in $(find ./src -name *.js); do
 	node -c --harmony-async-await ${file}
 done
 
+for file in $(find ./strategies/default -name *.js); do
+	echo "Validating: ${file}"
+	node -c --harmony-async-await ${file}
+done
+
 
 # Run tests
 echo ""

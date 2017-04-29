@@ -101,8 +101,8 @@ Drivers:
     colors:
       # yellow: [ 0xfe, 0xf7, 0xdc ]
       # blue: [ 0xb4, 0xdb, 0xf1 ]
-      yellow: [ 33, 34, 250 ]
-      blue: [ 150, 50, 230 ]
+      yellow: [ 28, 32, 250 ]
+      blue: [ 160, 25, 230 ]
 
   ServoCollectorStopper:
     "@class": drivers/dynamixel/DynamixelDriver

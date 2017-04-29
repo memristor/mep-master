@@ -132,7 +132,7 @@ class ColorDriver extends EventEmitter {
                     Mep.Log.error(TAG, this.config.type, 'is not available');
                     break;
             }
-            // Mep.Log.debug(TAG, 'Readings', this.lastReadings);
+            Mep.Log.debug(TAG, 'Readings', this.lastReadings);
 
             // Detect color
             let color = this.getColor();
