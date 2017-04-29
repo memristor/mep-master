@@ -20,7 +20,7 @@ class TerrainService extends EventEmitter {
             maxX: 1500,
             minY: -1000,
             maxY: 1000,
-            offset: 160,
+            offset: 200,
             pfOffset: 50
         }, config);
 

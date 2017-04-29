@@ -69,7 +69,8 @@ class DefaultScheduler extends Scheduler {
         };
         this.common.robot = {
             colorfulModules: 0,
-            monochromeModules: 0
+            monochromeModules: 0,
+            rejectedOnTheMiddle: false
         };
 
         // Last task

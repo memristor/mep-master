@@ -39,9 +39,8 @@ class PushMiddleCartridgeTask extends Task {
                 Mep.Log.error(TAG, e);
                 this.suspend();
             }
+            lunar.standby().catch(() => {});
         }
-
-        lunar.standby().catch(() => {});
     }
 
     isAvailable() {

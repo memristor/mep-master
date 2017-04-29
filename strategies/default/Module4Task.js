@@ -33,7 +33,7 @@ class Module4Task extends Task {
     }
 
     plusPriority() {
-       return (this.scheduler.getPreviousTask() == 'Module5Task') ? 100 : 0;
+       return (this.scheduler.getPreviousTask() == 'Module5Task') ? 300 : 0;
     }
 }
 module.exports = Module4Task;
