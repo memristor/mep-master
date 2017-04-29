@@ -20,6 +20,7 @@ class EjectStartCartridgeTask extends Task {
 
         try {
             // Go to position
+            lunar.trackStart();
             await Mep.Motion.go(new TunedPoint(-1110, 80, [ 1100, 80, 'blue' ]),
                 { backward: (Mep.isOppositeSide() ? false : true) });
             await Mep.Motion.go(new TunedPoint(-1190, -90, [ 1200, -200, 'blue' ]),
