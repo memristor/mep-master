@@ -23,14 +23,6 @@ class SchedulerService {
         let maxWeightTask = null;
 
         for (let i = 0; i < tasks.length; i++) {
-            Mep.Log.error(TAG,
-                tasks[i].constructor.name,
-                tasks[i].getWeight() + tasks[i].plusPriority(),
-                tasks[i].getState(),
-                tasks[i].getTime(),
-                tasks[i].isAvailable()
-            );
-
             if ((maxWeightTask === null ||
                 tasks[i].getWeight() + tasks[i].plusPriority() > maxWeightTask.getWeight() + maxWeightTask.plusPriority()) &&
                 tasks[i].getState() === Task.READY &&
