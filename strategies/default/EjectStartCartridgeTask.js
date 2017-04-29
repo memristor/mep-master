@@ -58,6 +58,7 @@ class EjectStartCartridgeTask extends Task {
                 await lunar.lunarTake();
                 lunar.collect().catch(() => {});
                 await lunar.lunarEject();
+                await Delay(250);
             }
             this.common.robot.colorfulModules = 0;
             lunar.standby();

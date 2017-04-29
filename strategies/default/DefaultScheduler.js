@@ -121,6 +121,31 @@ class DefaultScheduler extends Scheduler {
 
         // Last module
         lunar.prepare().catch(() => {});
+
+        // START: Budz za izbacivanje posljednje zaglavljenog valjka
+        await Delay(2000);
+        for (let i = 0; i < 10; i++) {
+            await Delay(600);
+            if (lunar.isEmpty() === true) {
+                break;
+            }
+
+            // Go up-down with limiter
+            if (lunar.isLastOnly() === true) {
+                if (i % 5 === 0) {
+                    lunar.limiterOpen();
+                } else {
+                    lunar.limiterPrepare();
+                }
+            }
+        }
+        lunar.limiterOpen();
+        await Delay(600);
+        await Mep.Motion.straight(30);
+        await Mep.Motion.straight(-30);
+        lunar.prepare().catch(() => {});
+        // END: Budz
+
         lunar.trackStop();
         await Mep.Motion.straight(100);
     }
