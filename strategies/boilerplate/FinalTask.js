@@ -1,25 +1,23 @@
 const Task = Mep.require('strategy/Task');
 const Delay = Mep.require('misc/Delay');
-const MotionDriver = Mep.require('drivers/motion/MotionDriver');
 
 const TAG = 'FinalTask';
 
 class FinalTask extends Task {
     async onRun() {
-        try {
-            Mep.Motion.stop(true);
-        } catch (e) {
-            Mep.Log.error(TAG, e);
-        }
+        // Turn off motors
+        Mep.Motion.stop(true);
 
+        // Disable all communication protocols
         Mep.getDriver('CanDriver').disable();
         Mep.getDriver('Uart').disable();
 
-        await Delay(2000);
+        // Wait a little for funny action
+        await Delay(3000);
 
         // Last command block
         Mep.getDriver('CanDriver').enable();
-        // funnyServo.write(70);
+        // Run here a funny action
         Mep.getDriver('CanDriver').disable();
     }
 }

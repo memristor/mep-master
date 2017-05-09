@@ -82,8 +82,12 @@ class Console {
      * @example mep > t.driver('MotionDriver')
      */
     driver(id) {
-        console.log('Listing driver properties for driver:', id);
-        console.log(Mep.Config.get('Drivers:' + id));
+        if (Mep.Config.get('Drivers:' + id) === true) {
+            console.log('Listing driver properties for driver:', id);
+            console.log(Mep.Config.get('Drivers:' + id));
+        } else {
+            console.log('There is no drivers with id', id);
+        }
     }
 }
 

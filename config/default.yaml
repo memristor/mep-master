@@ -60,6 +60,7 @@ Services:
   MotionService:
     hazardObstacleDistance: 450
     moveOptions:
+      obstacle: 90000
       rerouting: false
       pf: false
       backward: false

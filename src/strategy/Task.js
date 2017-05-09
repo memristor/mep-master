@@ -50,9 +50,7 @@ class Task {
         this.params = Object.assign({
             weight: 0,
             time: 20,
-            location: new Point(0, 0),
-            avoidanceStrategy: 'stop', // stop, rerouting, reject
-            avoidanceStrategyDelay: 2000
+            location: new Point(0, 0)
         }, parameters);
 
         this.state = Task.READY;
@@ -61,11 +59,6 @@ class Task {
         this.location = this.params.location;
         this.scheduler = scheduler;
         this.common = scheduler.common;
-
-        this.pathObstacleDetected = false;
-
-        this._obstacleDetectedTimeout = null;
-        this.onPathObstacle = this.onPathObstacle.bind(this);
     }
 
     /**
@@ -75,7 +68,6 @@ class Task {
         this.scheduler.setPreviousTask(this.constructor.name);
         this.state = Task.FINISHED;
         this.scheduler.runNextTask();
-        Mep.Motion.removeListener('pathObstacleDetected', this.onPathObstacle);
     }
 
     /**
@@ -85,7 +77,6 @@ class Task {
         this.scheduler.setPreviousTask(this.constructor.name);
         this.state = Task.SUSPENDED;
         this.scheduler.runNextTask();
-        Mep.Motion.removeListener('pathObstacleDetected', this.onPathObstacle);
     }
 
     /**
@@ -106,12 +97,16 @@ class Task {
 
     /**
      * Get current state
-     * @returns {Number} - Can be Task.READY, Task.SUSPENDED, Task.ACTIVE and Task.FINISHED
+     * @returns {Number} Can be Task.READY, Task.SUSPENDED, Task.ACTIVE and Task.FINISHED
      */
     getState() {
         return this.state;
     }
 
+    /**
+     * Set current state
+     * @param {Number} state Can be Task.READY, Task.SUSPENDED, Task.ACTIVE and Task.FINISHED
+     */
     setState(state) {
         this.state = state;
     }
@@ -124,6 +119,10 @@ class Task {
         this.weight = weight;
     }
 
+    /**
+     * Change priority during runtime
+     * @returns {number}
+     */
     plusPriority() {
         return 0;
     }
@@ -134,8 +133,6 @@ class Task {
     run() {
         this.state = Task.ACTIVE;
         this.onRun();
-
-        Mep.Motion.on('pathObstacleDetected', this.onPathObstacle);
     }
 
     /**
@@ -153,53 +150,6 @@ class Task {
      */
     isAvailable() {
         return true;
-    }
-
-    /**
-     * Change avoidance strategy during task execution
-     * @param {String} strategy Can be: 'stop', 'rerouting' or 'reject'
-     * @param {Number} delay
-     */
-    setAvoidanceStrategy(strategy, delay) {
-        this.params.avoidanceStrategy = strategy;
-        this.params.avoidanceStrategyDelay = delay;
-    }
-
-    /**
-     * This method will be executed when some obstacle is detected on the path
-     * @param detected
-     */
-    onPathObstacle(detected) {
-        let task = this;
-
-        if (detected === true) {
-            Mep.Motion.stop();
-            Mep.Log.debug(TAG, 'Obstacle detected, robot stopped');
-
-            this._obstacleDetectedTimeout = setTimeout(() => {
-                switch (this.params.avoidanceStrategy) {
-                    case 'stop':
-                        Mep.Log.info(TAG, 'Maybe to implement different avoidance strategy');
-                        break;
-
-                    case 'rerouting':
-                        Mep.Motion.tryRerouting();
-                        break;
-
-                    case 'reject':
-                        Mep.Motion.forceReject();
-                        // task.finish();
-                        break;
-
-                    default:
-                        Mep.Log.error(TAG, 'Invalid avoidance strategy', this.params.avoidanceStrategy);
-                        break;
-                }
-            }, this.params.avoidanceStrategyDelay);
-        } else {
-            clearTimeout(this._obstacleDetectedTimeout);
-            Mep.Motion.resume();
-        }
     }
 }
 

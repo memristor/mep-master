@@ -44,10 +44,12 @@ class MotionService extends EventEmitter {
 
         this._paused = false;
         this._obstacleDetectedTimeout = null;
+        this._pathObstacleDetectedTimeout = null;
 
         // Event method configuration
         this._goToNextQueuedTarget = this._goToNextQueuedTarget.bind(this);
         this._onObstacleDetected = this._onObstacleDetected.bind(this);
+        this._onPathObstacleDetected = this._onPathObstacleDetected.bind(this);
 
         // Subscribe on sensors that can provide obstacles on the robot's terrain
         Mep.Terrain.on('obstacleDetected', this._onObstacleDetected);
@@ -71,12 +73,12 @@ class MotionService extends EventEmitter {
             if (this._obstacleDetectedTimeout !== null) {
                 clearTimeout(this._obstacleDetectedTimeout);
             } else {
-                this.emit('pathObstacleDetected', true);
+                this._onPathObstacleDetected(true);
             }
 
             this._obstacleDetectedTimeout = setTimeout(() => {
                 this._obstacleDetectedTimeout = null;
-                motionService.emit('pathObstacleDetected', false);
+                this._onPathObstacleDetected(false);
             }, Mep.Config.get('obstacleMaxPeriod') + 100);
         } else {
             /*
@@ -85,6 +87,24 @@ class MotionService extends EventEmitter {
              this.tryRerouting();
              }
              */
+        }
+    }
+
+    _onPathObstacleDetected(detected) {
+        let target = this._targetQueue.getTargetFront();
+
+        if (detected === true) {
+            Mep.Motion.stop();
+            Mep.Log.debug(TAG, 'Obstacle detected, robot stopped');
+
+            this._pathObstacleDetectedTimeout = setTimeout(() => {
+                Mep.Motion.forceReject();
+            }, target.getParams().obstacle);
+        } else {
+            if (this._pathObstacleDetectedTimeout !== null) {
+                clearTimeout(this._pathObstacleDetectedTimeout);
+            }
+            Mep.Motion.resume();
         }
     }
 
@@ -134,6 +154,8 @@ class MotionService extends EventEmitter {
      * @param {Number} [parameters.tolerance] Position will consider as reached if Euclid's distance between current
      * and required position is less than tolerance.
      * @param {Number} [parameters.speed] Speed of the robot movement in range (0, 255).
+     * @param {Number} [parameters.obstacle] Time [ms] after command will be rejected (with TaskError.type === 'obstacle')
+     * if obstacle is detected in hazard region
      * @returns {Promise}
      */
     go(tunedPoint, parameters) {
