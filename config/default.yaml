@@ -6,6 +6,7 @@ scheduler: ''
 host: ''
 obstacleMaxPeriod: 300
 duration: 90
+volume: 1280
 
 Log:
   Console:
@@ -61,6 +62,7 @@ Services:
     hazardObstacleDistance: 450
     moveOptions:
       obstacle: 90000
+      friend: 90000
       rerouting: false
       pf: false
       backward: false

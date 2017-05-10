@@ -15,7 +15,7 @@ class PushMiddleCartridgeTask extends Task {
         try {
             await Mep.Motion.go(
                 new TunedPoint(0, -150, [ 0, -150, 'blue' ]),
-                { speed: 110, backward: true, tolerance: 0, radius: 200 });
+                { speed: 110, backward: true, tolerance: 0, radius: 200, obstacle: 500, friend: 5000 });
             await Mep.Motion.go(
                 new TunedPoint(0, -30, [ 0, -30, 'blue' ]),
                 { speed: 110, backward: true });
@@ -25,6 +25,12 @@ class PushMiddleCartridgeTask extends Task {
         }
         catch (e) {
             Mep.Log.error(TAG, e);
+
+            if (e.action === 'stuck') {
+                await Delay(500);
+                Mep.Motion.straight(200, { opposite: true });
+            }
+
             this.suspend();
             suspended = true;
         }

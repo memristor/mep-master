@@ -95,6 +95,10 @@ class Polygon {
         return this.tag;
     }
 
+    setTag(tag) {
+        this.tag = tag;
+    }
+
     /**
      * Clone a polygon
      * @returns {misc.Polygon} Cloned polygon

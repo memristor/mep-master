@@ -20,7 +20,7 @@ class Udp extends EventEmitter {
         this.config = Object.assign({
             sourcePort: 9001,
             destinationPort: 9001,
-            ip: '255.255.255.255',
+            ip: '192.168.255.255',
             broadcast: true
         }, config);
 
@@ -52,7 +52,7 @@ class Udp extends EventEmitter {
                 parsedData
             );
         } catch (e) {
-            Mep.Log.warn(TAG, 'Error parsing packet:', data.toString());
+            Mep.Log.warn(TAG, 'Error parsing packet:', data.toString(), e);
         }
     }
 

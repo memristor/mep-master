@@ -43,6 +43,8 @@ class MotionService extends EventEmitter {
         this._reject = null;
 
         this._paused = false;
+        this._lastDirection = MotionDriver.DIRECTION_UNDEFINED;
+
         this._obstacleDetectedTimeout = null;
         this._pathObstacleDetectedTimeout = null;
 
@@ -69,20 +71,21 @@ class MotionService extends EventEmitter {
         // Hazard region
         if (Misc.isAngleInRange(hazardAngle[0], hazardAngle[1], params.relativePoi.getAngleFromZero()) &&
             params.relativePoi.getDistance(new Point(0, 0)) < this.config.hazardObstacleDistance) {
+            let friend = params.polygon.isPointInside(Mep.Share.getLastFriendPosition());
 
             if (this._obstacleDetectedTimeout !== null) {
                 clearTimeout(this._obstacleDetectedTimeout);
             } else {
-                this._onPathObstacleDetected(true);
+                this._onPathObstacleDetected(true, friend);
             }
 
             this._obstacleDetectedTimeout = setTimeout(() => {
                 this._obstacleDetectedTimeout = null;
-                this._onPathObstacleDetected(false);
+                this._onPathObstacleDetected(false, friend);
             }, Mep.Config.get('obstacleMaxPeriod') + 100);
         } else {
             /*
-             TODO: Try to redesign a path
+             TODO: Try to redesign a path in runtime
              if (target.getParams().rerouting === true) {
              this.tryRerouting();
              }
@@ -90,16 +93,17 @@ class MotionService extends EventEmitter {
         }
     }
 
-    _onPathObstacleDetected(detected) {
+    _onPathObstacleDetected(detected, friend) {
         let target = this._targetQueue.getTargetFront();
+        let timeout = (friend === true) ? target.getParams().friend : target.getParams().obstacle;
 
         if (detected === true) {
             Mep.Motion.stop();
             Mep.Log.debug(TAG, 'Obstacle detected, robot stopped');
 
             this._pathObstacleDetectedTimeout = setTimeout(() => {
-                Mep.Motion.forceReject();
-            }, target.getParams().obstacle);
+                Mep.Motion.forceReject(friend);
+            }, timeout);
         } else {
             if (this._pathObstacleDetectedTimeout !== null) {
                 clearTimeout(this._pathObstacleDetectedTimeout);
@@ -154,13 +158,20 @@ class MotionService extends EventEmitter {
      * @param {Number} [parameters.tolerance] Position will consider as reached if Euclid's distance between current
      * and required position is less than tolerance.
      * @param {Number} [parameters.speed] Speed of the robot movement in range (0, 255).
-     * @param {Number} [parameters.obstacle] Time [ms] after command will be rejected (with TaskError.type === 'obstacle')
+     * @param {Number} [parameters.obstacle] Time [ms] after command will be rejected (with TaskError.action === 'obstacle')
      * if obstacle is detected in hazard region
+     * @param {Number} [parameters.friend] Time [ms] after command will be rejected (with TaskError.action === 'friend')
+     * if friend is detected in hazard region
      * @returns {Promise}
      */
     go(tunedPoint, parameters) {
         let point = tunedPoint.getPoint();
         let params = Object.assign({}, this.config.moveOptions, parameters);
+
+        // Update last moving direction
+        if (this.motionDriver.getDirection() !== MotionDriver.DIRECTION_UNDEFINED) {
+            this._lastDirection = this.motionDriver.getDirection();
+        }
 
         this._targetQueue.empty();
 
@@ -199,7 +210,6 @@ class MotionService extends EventEmitter {
             let target = this._targetQueue.getTargetFront();
             this._goSingleTarget(target.getPoint(), target.getParams()).then(() => {
                 motionService._targetQueue.removeFront();
-
                 motionService._goToNextQueuedTarget();
             }).catch((e) => {
                 if (e.action !== 'break') {
@@ -274,13 +284,34 @@ class MotionService extends EventEmitter {
      * Move robot forward or backward depending on param `millimeters`
      * @param {Number} millimeters Path that needs to be passed. If negative robot will go backward
      * @param {Object} params
-     * @param {Number} params.speed
+     * @param {Number} [params.speed] Speed
+     * @params {Boolean} [params.opposite] Move in opposite direction to previous command
      * @returns {Promise}
      */
     straight(millimeters, params) {
-        // Set speed
-        if (params !== undefined && params.speed !== undefined && this.motionDriver.getActiveSpeed() !== params.speed) {
-            this.motionDriver.setSpeed(params.speed);
+        // Update last moving directiObstacle is too long in front of roboton
+        if (this.motionDriver.getDirection() !== MotionDriver.DIRECTION_UNDEFINED) {
+            this._lastDirection = this.motionDriver.getDirection();
+        }
+
+        // Apply params
+        if (params !== undefined) {
+            // Apply speed
+            if (params.speed !== undefined && this.motionDriver.getActiveSpeed() !== params.speed) {
+                this.motionDriver.setSpeed(params.speed);
+            }
+
+            // Apply inverse
+            if (params.opposite !== undefined) {
+                switch (this._lastDirection) {
+                    case MotionDriver.DIRECTION_FORWARD:
+                        millimeters = (-1) * Math.abs(millimeters);
+                        break;
+                    case MotionDriver.DIRECTION_BACKWARD:
+                        millimeters = Math.abs(millimeters);
+                        break;
+                }
+            }
         }
 
         return this.motionDriver.goForward(millimeters);
@@ -296,10 +327,15 @@ class MotionService extends EventEmitter {
         return this.motionDriver.rotateTo(tunedAngle.getAngle());
     }
 
-    forceReject() {
+    forceReject(friend) {
         if (this._reject !== null) {
             this._targetQueue.empty();
-            this._reject(new TaskError(TAG, 'obstacle', 'Obstacle is too long in front of robot'));
+
+            if (friend === true) {
+                this._reject(new TaskError(TAG, 'friend', 'Friend is too long in front of robot'));
+            } else {
+                this._reject(new TaskError(TAG, 'obstacle', 'Obstacle is too long in front of robot'));
+            }
         }
     }
 }

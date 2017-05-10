@@ -47,7 +47,7 @@ class MotionDriver extends EventEmitter  {
     static get CONFIG_STUCK_ROTATION_MAX_FAIL_COUNT() { return 11; }
     static get CONFIG_MOTOR_SPEED_LIMIT() { return 12; }
     static get CONFIG_MOTOR_RATE_OF_CHANGE() { return 13; }
-    static get CONFIG_SEND_STATUS_INTERVAL() { return 14; }
+    static get CONFIG_SEND_STATUS_INTERVAL() { return 15; }
 
     static get CONFIG_WHEEL_DISTANCE() { return 15; }
     static get CONFIG_WHEEL_R1() { return 16; }
@@ -406,10 +406,6 @@ class MotionDriver extends EventEmitter  {
      * @param {Number} tolerance Radius
      */
     moveToCurvilinear(position, direction, radius, tolerance) {
-        if (Mep.Position.getPosition().getDistance(position) > 500) {
-            return this.moveToPosition(position, direction);
-        }
-
         let motionDriver = this;
 
         this._direction = direction;

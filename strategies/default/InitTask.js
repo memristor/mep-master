@@ -59,11 +59,13 @@ class InitTask extends Task {
         // lunar.trackStart();
         // lunar.limiterOpen();
 
+        // Mep.getDriver('ServoLimiter').setPosition(480);
+
         await starter.waitStartSignal(new Console());
 
         try {
             await Mep.Motion.go(new TunedPoint(-360, -550, [ 360, -550, 'blue' ]),
-                { speed: 110, backward: true, tolerance: 0, radius: 180, obstacle: 0 });
+                { speed: 110, backward: true, tolerance: 0, radius: 180 });
 
             // await Mep.Motion.go(new TunedPoint(-350, -350), { speed: 70, backward: true });
         } catch (e) {
