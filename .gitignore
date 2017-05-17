@@ -3,6 +3,7 @@ web
 _node_modules
 __node_modules
 docs/api
+code_map.txt
 
 # Ignore hidden directories
 .idea

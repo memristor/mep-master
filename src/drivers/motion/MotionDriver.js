@@ -113,12 +113,16 @@ class MotionDriver extends EventEmitter  {
     }
 
     _sendCommand(buff) {
-        let type = buff.readUInt8(0);
-
-        this._waitACKQueue[type] = buff;
-        this._waitACK(type);
-
-        this.communicator.send(buff);
+		if(this.config.cid === undefined) {
+			// using UART
+			let type = buff.readUInt8(0);
+			this._waitACKQueue[type] = buff;
+			this._waitACK(type);
+			this.communicator.send(buff);
+		} else {
+			// using CAN
+			this.communicator.send(this.config.cid, buff);
+		}
     }
 
     getDirection() {
@@ -457,8 +461,8 @@ class MotionDriver extends EventEmitter  {
             (buffer.readInt8(3) << 8) | (buffer.readInt8(4) & 0xFF)
         );
         let orientation = (buffer.readInt8(5) << 8) | (buffer.readInt8(6) & 0xFF);
-        let speed = (buffer.readInt8(7) << 8) | (buffer.readInt8(8) & 0xFF);
-
+		let speed = buffer.readInt8(7);
+		
         // Checks
         if ([MotionDriver.STATE_MOVING,
                 MotionDriver.STATE_IDLE,
@@ -531,7 +535,7 @@ class MotionDriver extends EventEmitter  {
      * @private
      */
     _onDataReceived(buffer, type) {
-        if (type == 'P'.charCodeAt(0) && buffer.length === 9) {
+        if (type == 'P'.charCodeAt(0) && buffer.length === 8) {
             this._onPReceived(buffer);
         }
         else if (type == 'A'.charCodeAt(0) && buffer.length === 1) {

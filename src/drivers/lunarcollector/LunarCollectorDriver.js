@@ -165,9 +165,9 @@ class LunarCollectorDriver {
 
         // Prepare mechanisms for rotation
         this._colorSensor.start(50);
-        this._colorRotator.write(100);
+        this._colorRotator.write(0); // NOTE: this is temporary because motors are in series and should be in parallel
         this._colorServo.setPosition(730);
-        this.trackStart();
+		this.trackStart();
 
         // Rotate until color
         return new Promise((resolve, reject) => {
