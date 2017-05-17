@@ -145,8 +145,8 @@ Drivers:
     "@load": true
     "@dependencies":
       communicator: CanDriver
-    id: 4
-    cid: 0x00007F00
+    id: 1
+    cid: 0x00007F01
 
   ServoCollectorHandLeft:
     "@class": drivers/dynamixel/DynamixelDriver

@@ -11,6 +11,10 @@ const TAG = 'SchedulerService';
  */
 class SchedulerService {
     init(config) {
+        this.config = Object.assign({
+            distanceWeightCoeff: 400,
+        }, config);
+
         this.starterDriver = Mep.getDriver('StarterDriver');
     }
 
@@ -23,6 +27,7 @@ class SchedulerService {
         let maxWeightTask = null;
 
         for (let i = 0; i < tasks.length; i++) {
+            // Find the best task
             if ((maxWeightTask === null ||
                 tasks[i].getWeight() + tasks[i].plusPriority() > maxWeightTask.getWeight() + maxWeightTask.plusPriority()) &&
                 tasks[i].getState() === Task.READY &&
@@ -31,6 +36,8 @@ class SchedulerService {
                 maxWeightTask = tasks[i];
             }
 
+            // If task was suspended make it ready.
+            // Task automatically becomes ready after it is suspended. If task is finished than task can be run again
             if (tasks[i].getState() === Task.SUSPENDED) {
                 tasks[i].setState(Task.READY);
             }

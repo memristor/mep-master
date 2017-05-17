@@ -42,6 +42,12 @@ class MotionDriverSimulator extends EventEmitter {
         this.orientation = new TunedAngle(...this.config.startOrientation).getAngle();
         this.direction = MotionDriverSimulator.DIRECTION_FORWARD;
 
+        this.setPositionAndOrientation(
+            this.position.getX(),
+            this.position.getY(),
+            this.orientation
+        );
+
         this.onPositionChanged = this.onPositionChanged.bind(this);
         this.onStateChanged = this.onStateChanged.bind(this);
         this.onOrientationChanged = this.onOrientationChanged.bind(this);
@@ -52,6 +58,14 @@ class MotionDriverSimulator extends EventEmitter {
         Mep.Telemetry.on(Mep.Telemetry.genOn(TAG, 'orientationChanged'), this.onOrientationChanged);
 
         Mep.Log.debug(TAG, 'Driver with name', name, 'initialized');
+    }
+
+    setPositionAndOrientation(x, y, orientation) {
+        Mep.Telemetry.send(TAG, 'setPositionAndOrientation', {
+            x: x,
+            y: y,
+            orientation: orientation
+        });
     }
 
     goForward(millimeters) {
