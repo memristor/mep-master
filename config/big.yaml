@@ -154,7 +154,7 @@ Drivers:
     "@dependencies":
       communicator: CanDriver
     id: 2
-    cid: 0x00007F01
+    cid: 0x00007F00
 
   ServoPump:
     "@class": drivers/dynamixel/DynamixelDriver
@@ -169,8 +169,8 @@ Drivers:
     "@load": true
     "@dependencies":
       communicator: CanDriver
-    id: 9
-    cid: 0x00007F00
+    id: 2
+    cid: 0x00007F01
 
   ServoLimiter:
     "@class": drivers/dynamixel/DynamixelDriver
@@ -185,8 +185,8 @@ Drivers:
     "@load": true
     "@dependencies":
       communicator: CanDriver
-    id: 1
-    cid: 0x00007F01
+    id: 11
+    cid: 0x00007F00
 
   CollectorBigTrack:
     "@class": drivers/pin/PinDriver
