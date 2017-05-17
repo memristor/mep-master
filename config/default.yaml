@@ -30,7 +30,8 @@ Drivers:
     "@class": drivers/motion/MotionDriver
     "@load": true
     "@dependencies":
-      communicator: Uart
+      communicator: CanDriver
+    cid: 600
     startSpeed: 100
     precision: 2
     refreshDataPeriod: 100
