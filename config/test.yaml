@@ -1,47 +1,46 @@
-{
-  "simulation": true,
-  "performance": true,
+simulation: true
+performance: true
+Log:
+  Console:
+    active: true
+    outputMode: short
+    color: true
+Telemetry:
 
-  "Log": { },
-  "Telemetry": { },
+Drivers: 
+ MotionDriver: 
+  "@class": "drivers/motion/MotionDriverSimulator"
+  "@load": true
+  startPosition: [ -610, -790, [ -610, -790, 'yellow' ], [ 610, -790, 'blue' ] ]
+  startOrientation: [ -90, [ -90, 'yellow' ] ]
 
-  "Drivers": {
-    "MotionDriver": {
-      "@class": "drivers/motion/MotionDriverSimulator",
-      "@load": true,
-      "startX": 0,
-      "startY": 0
-    },
+ CanDriver: 
+  "@class": "drivers/can/CanDriverSimulator"
+  "@load": true
 
-    "CanDriver": {
-      "@class": "drivers/can/CanDriverSimulator",
-      "@load": true
-    },
+ StarterDriver: 
+  "@class": "drivers/starter/StarterDriver"
+  "@load": true
+  type: keyboard
+  delayTimer: 400
 
-    "InfraredDriver": {
-      "@class": "drivers/infrared/InfraredDriver",
-      "@load": true,
-      "infraredMaxDistance": 300,
-      "sensorAngle": 270,
-      "sensorX": 0,
-      "sensorY": 0,
-      "deviceId": 32775,
-      "objectSize": 150,
-      "@dependencies": { "communicator": "CanDriver" }
-    },
+Services:
+ TerrainService:
+  staticObstacles: []
 
-    "StarterDriver": {
-      "@class": "drivers/starter/StarterDriver",
-      "@load": true,
-      "type": "keyboard",
-      "delayTimer": 400
-    }
-  },
+ PositionService:
 
-  "Services": {
-    "TerrainService": {
-      "staticObstacles": []
-    },
-    "PositionService": {}
-  }
-}
+  MotionService:
+    hazardObstacleDistance: 450
+    moveOptions:
+      obstacle: 90000
+      friend: 90000
+      rerouting: false
+      pf: false
+      backward: false
+      relative: false
+      tolerance: -1
+      speed: 100
+      radius: 80
+    rotateOptions:
+      relative: false

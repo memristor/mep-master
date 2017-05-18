@@ -62,7 +62,6 @@ class MotionService extends EventEmitter {
     }
 
     _onObstacleDetected(params) {
-        let motionService = this;
         if (this._targetQueue.getTargetFront() === null) return;
 
         let hazardAngle = (this.motionDriver.getDirection() === MotionDriver.DIRECTION_FORWARD) ?
@@ -71,7 +70,8 @@ class MotionService extends EventEmitter {
         // Hazard region
         if (Misc.isAngleInRange(hazardAngle[0], hazardAngle[1], params.relativePoi.getAngleFromZero()) &&
             params.relativePoi.getDistance(new Point(0, 0)) < this.config.hazardObstacleDistance) {
-            let friend = params.polygon.isPointInside(Mep.Share.getLastFriendPosition());
+            let friend = Mep.Share.getLastFriendPosition() !== null &&
+                params.polygon.isPointInside(Mep.Share.getLastFriendPosition());
 
             if (this._obstacleDetectedTimeout !== null) {
                 clearTimeout(this._obstacleDetectedTimeout);
@@ -94,10 +94,10 @@ class MotionService extends EventEmitter {
     }
 
     _onPathObstacleDetected(detected, friend) {
-        let target = this._targetQueue.getTargetFront();
-        let timeout = (friend === true) ? target.getParams().friend : target.getParams().obstacle;
-
         if (detected === true) {
+            let target = this._targetQueue.getTargetFront();
+            let timeout = (friend === true) ? target.getParams().friend : target.getParams().obstacle;
+
             Mep.Motion.stop();
             Mep.Log.debug(TAG, 'Obstacle detected, robot stopped');
 

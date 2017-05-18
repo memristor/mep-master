@@ -14,7 +14,7 @@ describe('InfraredDriverTest', () => {
                 infraredMaxDistance: 200,
                 sensorX: -10,
                 sensorY: 10,
-                deviceId: 0,
+                cid: 0,
                 '@dependencies': { communicator: 'CanDriver' }
             });
             done();
