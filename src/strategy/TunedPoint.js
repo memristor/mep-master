@@ -22,8 +22,8 @@ class TunedPoint {
      * at least one Point which will be used as default. Other Points
      * must have tag!
      *
-     * @param defaultX {Number} - Default point X coordinate
-     * @param defaultY {Number} - Default point Y coordinate
+     * @param {Number} defaultX Default point X coordinate
+     * @param {Number} defaultY Default point Y coordinate
      */
     constructor(defaultX, defaultY) {
         let table = Mep.Config.get('table');
@@ -60,7 +60,7 @@ class TunedPoint {
     /**
      * Get point depending on the chosen table in configuration.
      *
-     * @returns {Point} - Point
+     * @returns {Point} Point
      */
     getPoint() {
         return this.point;

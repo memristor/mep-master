@@ -9,8 +9,8 @@ const Point = require('./Point');
  */
 class Line {
     /**
-     * @param startPoint {misc.Point} - Start point of the line
-     * @param endPoint {misc.Point} - End point of the line
+     * @param {misc.Point} startPoint Start point of the line
+     * @param {misc.Point} endPoint End point of the line
      */
     constructor(startPoint, endPoint) {
         this._startPoint = startPoint;
@@ -35,8 +35,8 @@ class Line {
 
     /**
      * Check if it intersect with another line
-     * @param line {misc.Line} - Another line to check intersection with
-     * @return {Boolean} - True if two lines intersect
+     * @param {misc.Line} line Another line to check intersection with
+     * @return {Boolean} True if two lines intersect
      */
     isIntersectWithLine(line) {
         return this._intersect(
@@ -90,8 +90,8 @@ class Line {
 
     /**
      * Check if it intersect with polygon
-     * @param polygon {misc.Polygon} - Polygon to check intersection with
-     * @returns {Boolean} - True if line intersect polygon
+     * @param {misc.Polygon} polygon Polygon to check intersection with
+     * @returns {Boolean} True if line intersect polygon
      */
     isIntersectWithPolygon(polygon) {
         if (this.isIntersectWithLine(new Line(

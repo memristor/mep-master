@@ -8,10 +8,10 @@
 class TaskError {
     /**
      * Default constructor for class
-     * @param source - Name of module which thrown an error
-     * @param action - Unique identifier for task error
-     * @param message - Describes more about task error
-     * @param params - Additional parameters to describe an error
+     * @param {String} source Name of module which thrown an error
+     * @param {String} action Unique identifier for task error
+     * @param {String} message Describes more about task error
+     * @param {Object} params Additional parameters to describe an error
      */
     constructor(source, action, message = '', params = {}) {
         this.action = action;

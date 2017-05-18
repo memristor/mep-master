@@ -9,8 +9,8 @@
 class Point {
     /**
      * Make new point.
-     * @param x {number} - x coordinate
-     * @param y {number} - y coordinate
+     * @param {Number} x X coordinate
+     * @param {Number} y Y coordinate
      */
     constructor(x, y) {
         this.x = x;
@@ -19,8 +19,8 @@ class Point {
 
     /**
      * Calculate Euclidean distance between two Points
-     * @param point {misc.Point} - Another point to compare with
-     * @returns {number} - Distance between two Points
+     * @param {misc.Point} point Another point to compare with
+     * @returns {number} Distance between two Points
      */
     getDistance(point) {
         return Math.sqrt(
@@ -87,7 +87,7 @@ class Point {
 
     /**
      * Clone the point
-     * @return {misc.Point} - Cloned point
+     * @return {misc.Point} Cloned point
      */
     clone() {
         return (new Point(this.x, this.y));
@@ -95,7 +95,7 @@ class Point {
 
     /**
      * Set Y coordinate
-     * @param y {number} - Y coordinate
+     * @param {Number} y Y coordinate
      */
     setY(y) {
         this.y = y;
@@ -104,7 +104,7 @@ class Point {
 
     /**
      * Set X coordinate
-     * @param x {number} - X coordinate
+     * @param {Number} x X coordinate
      */
     setX(x) {
         this.x = x;
@@ -113,7 +113,7 @@ class Point {
 
     /**
      * Return x coordinate
-     * @returns {number}
+     * @returns {Number}
      */
     getX() {
         return this.x;
@@ -121,7 +121,7 @@ class Point {
 
     /**
      * Returns y coordinate
-     * @returns {number}
+     * @returns {Number}
      */
     getY() {
         return this.y;

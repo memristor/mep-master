@@ -20,7 +20,7 @@ class TunedAngle {
      * at least one angle which will be used as default. Other angles
      * must have tag!
      *
-     * @param defaultX {integer} - Default point X coordinate
+     * @param {Number} defaultAngle Default point X coordinate
      */
     constructor(defaultAngle) {
         // If there are table dependent points
@@ -49,7 +49,7 @@ class TunedAngle {
     /**
      * Get angle depending on the chosen table in configuration.
      *
-     * @returns {number} - Angle
+     * @returns {Number} Angle
      */
     getAngle() {
         return this.angle;
