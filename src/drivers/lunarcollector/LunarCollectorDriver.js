@@ -61,7 +61,7 @@ class LunarCollectorDriver {
     }
 
     limiterPrepare() {
-        this._limiter.setPosition(400);
+        this._limiter.setPosition(420);
     }
 
     limiterOpen() {
@@ -133,14 +133,29 @@ class LunarCollectorDriver {
     }
 
     async lunarEject() {
-        this._servoPump.setSpeed(300);
+      this._servoPump.setSpeed(300);
 
-        // Eject a lunar
-        this._vacuumPump.write(0);
-        try { await this._servoPump.go(850); } catch (e) {}
-        this._cylinder.write(1);
-        await Delay(1000);
-        this._cylinder.write(0);
+     // Eject a lunar
+     this._vacuumPump.write(0);
+     try { await this._servoPump.go(850); } catch (e) {}
+     this._cylinder.write(1);
+     await Delay(1000);
+     this._cylinder.write(0);
+    }
+
+    async lunarKick(){
+      this._servoPump.setSpeed(500);
+
+      // Eject a lunar
+      this._vacuumPump.write(0);
+      try { await this._servoPump.go(400); } catch (e) {}
+      await Delay(500);
+      this._cylinder.write(1);
+      await Delay(300);
+      try { await this._servoPump.go(850); } catch (e) {}
+
+      await Delay(100);
+      this._cylinder.write(0);
     }
 
     async lunarInject() {
