@@ -96,9 +96,15 @@ class MotionDriver extends EventEmitter  {
         this._direction = MotionDriver.DIRECTION_UNDEFINED;
 
         this.communicator = Mep.DriverManager.getDriver(config['@dependencies'].communicator);
-        this.communicator.on('data', this._onDataReceived.bind(this));
+        
 
         this._waitACKQueue = {};
+        
+        if(this.config.cid === undefined) {
+			this.communicator.on('data', this._onDataReceived.bind(this));
+		} else {
+			this.communicator.on('data_' + this.config.cid, this._onDataReceivedCAN.bind(this));
+		}
     }
 
     _waitACK(type) {
@@ -461,7 +467,7 @@ class MotionDriver extends EventEmitter  {
             (buffer.readInt8(3) << 8) | (buffer.readInt8(4) & 0xFF)
         );
         let orientation = (buffer.readInt8(5) << 8) | (buffer.readInt8(6) & 0xFF);
-		let speed = buffer.readInt8(7);
+		// let speed = buffer.readInt8(7);
 		
         // Checks
         if ([MotionDriver.STATE_MOVING,
@@ -527,6 +533,21 @@ class MotionDriver extends EventEmitter  {
         delete this._waitACKQueue[buffer.readUInt8()];
     }
 
+	_onDataReceivedCAN(buffer) {
+		if(buffer.length == 0) return;
+		let type = buffer.readUInt8(0);
+		let buf = buffer.slice(1);
+		
+		if (type == 'P'.charCodeAt(0) && buf.length === 7) {
+            this._onPReceived(buf);
+        }
+        else if (type == 'A'.charCodeAt(0) && buf.length === 0) {
+            this._onAReceived(buf);
+        }
+        else if (type == 'C'.charCodeAt(0) && buf.length === 4) {
+            this._onCReceived(buf);
+        }
+	}
     /**
      * Callback will be called when new packet is arrived and it will dispatch event to new
      * callback depending on packet type
