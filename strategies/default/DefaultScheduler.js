@@ -42,13 +42,13 @@ class DefaultScheduler extends Scheduler {
 
             // new Module1Task(this, { weight: 920, time: 10 }),
             // new Module2Task(this, { weight: 900, time: 10 }),
-            new Module3Task(this, { weight: 780, time: 5 }),
-            new Module5Task(this, { weight: 775, time: 5 }),
-            new Module4Task(this, { weight: 770, time: 5 }),
-            new PushSideCartridgeTask(this, { weight: 760, time: 3 }),
+            //new Module3Task(this, { weight: 780, time: 5 }),
+            //new Module5Task(this, { weight: 775, time: 5 }),
+            //new Module4Task(this, { weight: 770, time: 5 }),
+            //new PushSideCartridgeTask(this, { weight: 760, time: 3 }),
 
-            new CollectBackRocketTask(this, { weight: 820, time: 20 }),
-            new EjectStartCartridgeTask(this, { weight: 800, time: 7 })
+            //new CollectBackRocketTask(this, { weight: 820, time: 20 }),
+            //EjectStartCartridgeTask(this, { weight: 800, time: 7 })
         ];
 
         this._onTick = this._onTick.bind(this);
@@ -162,19 +162,22 @@ class DefaultScheduler extends Scheduler {
             });
             for (let i = 0; i < 2; i++) {
                 try {
+                  if(i == 0)
                     await lunar.collect();
+                  if(i == 1)
+                    await lunar.collect(1000);
                 } catch (e) {
                     Mep.Log.error(TAG, 'Lunar.collect', e);
                 }
-                try {
+               try {
                     await Mep.Motion.straight(-40);
                 } catch (e) {
                     Mep.Log.error(TAG, 'Motion.straight', e);
                 }
-                await Delay(1500);
-                lunar.prepare().catch((e) => {
+                //await Delay(1500);
+                /* lunar.prepare().catch((e) => {
                     Mep.Log.error(TAG, 'Lunar.prepare', e);
-                });
+                });*/
                 try {
                     await Mep.Motion.straight(40)
                 } catch (e) {
@@ -188,8 +191,10 @@ class DefaultScheduler extends Scheduler {
                 if (numberOfFails === 2) {
                     break;
                 }
+
+
             }
-            lunar.trackStop();
+            //lunar.trackStop();
         } catch (e) {
             Mep.Log.error(TAG, e);
         }

@@ -105,12 +105,12 @@ class LunarCollectorDriver {
         return count;
     }
 
-    collect() {
+    collect(customTimeout = 2000) {
         this.trackStart();
-        this._leftTrack.setSpeed(1023, true);
-        this._rightTrack.setSpeed(1023);
-        let leftHandPromise = this._leftHand.go(500, { tolerance: 150 });
-        let rightHandPromise = this._rightHand.go(515, { tolerance: 150 });
+        this._leftTrack.setSpeed(1023);
+        this._rightTrack.setSpeed(1023, true);
+        let leftHandPromise = this._leftHand.go(500, { tolerance: 150, timeout: customTimeout});
+        let rightHandPromise = this._rightHand.go(515, { tolerance: 150, timeout: customTimeout });
 
         return Promise.all([
             leftHandPromise,
@@ -181,7 +181,7 @@ class LunarCollectorDriver {
         // Prepare mechanisms for rotation
         this._colorSensor.start(50);
         this._colorRotator.write(0); // NOTE: this is temporary because motors are in series and should be in parallel
-        this._colorServo.setPosition(730);
+        this._colorServo.setPosition(585);
 		this.trackStart();
 
         // Rotate until color
