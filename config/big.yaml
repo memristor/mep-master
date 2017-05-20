@@ -230,10 +230,19 @@ Drivers:
     "@dependencies":
       communicator: CanDriver
     cid: 0x00007F12
-    min: 150
+    min: 0
     max: 255
     direction: 'output'
     mode: 'analog'
+
+  ColorRotator2:
+    "@class": drivers/pin/PinDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 0x00007F07
+    direction: 'output'
+    mode: 'digital'
 
   CircularEjector:
     "@class": drivers/pin/PinDriver
@@ -270,5 +279,6 @@ Drivers:
       backDetector: BackLunarDetector
       middleDetector: MiddleLunarDetector
       colorRotator: ColorRotator
+      colorRotator2: ColorRotator2
       colorSensor: ColorSensor
       colorServo: ColorServo

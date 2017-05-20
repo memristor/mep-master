@@ -102,7 +102,7 @@ class DefaultScheduler extends Scheduler {
         try { await lunar.collect(); } catch (e) {}
 
         // Wait to empty
-        await Delay(1000);
+       await Delay(1000);
         for (let i = 0; i < 10; i++) {
             await Delay(600);
             if (lunar.isEmpty() === true) {
@@ -112,7 +112,7 @@ class DefaultScheduler extends Scheduler {
             // Go up-down with limiter
             if (lunar.isLastOnly() === true) {
                 if (i % 5 === 0) {
-                    lunar.limiterOpen();
+                    // lunar.limiterOpen();
                 } else {
                     lunar.limiterPrepare();
                 }
@@ -127,7 +127,7 @@ class DefaultScheduler extends Scheduler {
         lunar.prepare().catch(() => {});
 
         // START: Budz za izbacivanje posljednje zaglavljenog valjka
-        await Delay(2000);
+        // await Delay(2000); Sta ce nam Delay?
         for (let i = 0; i < 10; i++) {
             await Delay(600);
             if (lunar.isEmpty() === true) {
@@ -162,8 +162,10 @@ class DefaultScheduler extends Scheduler {
             });
             for (let i = 0; i < 2; i++) {
                 try {
-                  if(i == 0)
+                  if(i == 0){
                     await lunar.collect();
+                    // await Delay(500);
+                  }
                   if(i == 1)
                     await lunar.collect(1000);
                 } catch (e) {

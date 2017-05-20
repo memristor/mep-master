@@ -35,6 +35,7 @@ class LunarCollectorDriver {
         this._circularEjector = Mep.getDriver(this.config['@dependencies']['circularEjector']);
         this._colorSensor = Mep.getDriver(this.config['@dependencies']['colorSensor']);
         this._colorRotator = Mep.getDriver(this.config['@dependencies']['colorRotator']);
+        this._colorRotator2 = Mep.getDriver(this.config['@dependencies']['colorRotator2']);
         this._colorServo = Mep.getDriver(this.config['@dependencies']['colorServo']);
 
         this._middleDetector = Mep.getDriver(this.config['@dependencies']['middleDetector']);
@@ -70,6 +71,7 @@ class LunarCollectorDriver {
 
     trackStart() {
         this._bigTrack.write(100);
+        this._circularEjector.write(1);
     }
 
     trackStop() {
@@ -168,8 +170,9 @@ class LunarCollectorDriver {
 
     async colorStandby() {
         await Delay(100);
-        this._colorServo.setPosition(600);
+        this._colorServo.setPosition(585);
         this._colorRotator.write(255);
+        this._colorRotator2.write(0);
         this._colorSensor.stop();
         this._circularEjector.stop();
     }
@@ -181,7 +184,8 @@ class LunarCollectorDriver {
         // Prepare mechanisms for rotation
         this._colorSensor.start(50);
         this._colorRotator.write(0); // NOTE: this is temporary because motors are in series and should be in parallel
-        this._colorServo.setPosition(585);
+        this._colorRotator2.write(1);
+        this._colorServo.setPosition(730);
 		this.trackStart();
 
         // Rotate until color
@@ -246,6 +250,7 @@ class LunarCollectorDriver {
             this._leftTrack.setSpeed(0);
             this._rightTrack.setSpeed(0);
             this._colorRotator.write(255);
+            this._colorRotator2.write(0);
             this.limiterOpen();
         } catch (e) {}
     }

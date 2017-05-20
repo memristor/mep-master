@@ -18,7 +18,7 @@ class CollectStartRocketTask extends Task {
 
             this.common.robot.monochromeModules = 4;
             await this.common.collect2();
-            lunar.trackStop();
+            //lunar.trackStop();
             await Mep.Motion.straight(-100, { speed: 150 });
 
             this.finish();
