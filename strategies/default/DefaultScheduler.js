@@ -40,19 +40,19 @@ class DefaultScheduler extends Scheduler {
                 avoidanceStrategy: 'reject',
                 avoidanceStrategyDelay: 5000 }),
 
-            // new Module1Task(this, { weight: 920, time: 10 }),
-            // new Module2Task(this, { weight: 900, time: 10 }),
-            //new Module3Task(this, { weight: 780, time: 5 }),
-            //new Module5Task(this, { weight: 775, time: 5 }),
-            //new Module4Task(this, { weight: 770, time: 5 }),
-            //new PushSideCartridgeTask(this, { weight: 760, time: 3 }),
+            new Module1Task(this, { weight: 920, time: 10 }),
+            new Module2Task(this, { weight: 900, time: 10 }),
+            new Module3Task(this, { weight: 780, time: 5 }),
+            new Module5Task(this, { weight: 775, time: 5 }),
+            new Module4Task(this, { weight: 770, time: 5 }),
+            new PushSideCartridgeTask(this, { weight: 760, time: 3 }),
 
-            //new CollectBackRocketTask(this, { weight: 820, time: 20 }),
-            //EjectStartCartridgeTask(this, { weight: 800, time: 7 })
+            new CollectBackRocketTask(this, { weight: 820, time: 20 }),
+            new EjectStartCartridgeTask(this, { weight: 800, time: 7 })
         ];
 
         this._onTick = this._onTick.bind(this);
-        this._push = this._push.bind(this);
+        this._newPush = this._newPush.bind(this);
         this._collect = this._collect.bind(this);
         this._collect2 = this._collect2.bind(this);
 
@@ -60,7 +60,7 @@ class DefaultScheduler extends Scheduler {
         this.runTask(this.tasks[0]);
 
         // Common
-        this.common.push = this._push;
+        this.common.push = this._newPush;
         this.common.collect = this._collect;
         this.common.collect2 = this._collect2;
         this.common.terrain = {
@@ -99,7 +99,7 @@ class DefaultScheduler extends Scheduler {
 
         //lunar.prepare().catch(() => {});
         try { await lunar.limiterOpenSafe(); } catch (e) {}
-        try { lunar.collect(); } catch (e) {}
+        try { lunar.collect(500); } catch (e) {}
 
         // Wait to empty
        await Delay(1000);
@@ -130,9 +130,8 @@ class DefaultScheduler extends Scheduler {
 
         // Last module
         lunar.prepare().catch(() => {});
-
         // START: Budz za izbacivanje posljednje zaglavljenog valjka
-        // await Delay(2000); Sta ce nam Delay?
+        await Delay(2000);// Sta ce nam Delay?
         for (let i = 0; i < 10; i++) {
             await Delay(600);
             if (lunar.isEmpty() === true) {
@@ -150,8 +149,8 @@ class DefaultScheduler extends Scheduler {
         }
         lunar.limiterOpen();
         await Delay(600);
-        await Mep.Motion.straight(30);
-        await Mep.Motion.straight(-30);
+        // await Mep.Motion.straight(30);
+        // await Mep.Motion.straight(-30);
         lunar.prepare().catch(() => {});
         // END: Budz
 
@@ -159,6 +158,26 @@ class DefaultScheduler extends Scheduler {
         await Mep.Motion.straight(100);
     }
 
+    async _newPush(){
+      if (this.common.robot.colorfulModules >= 1) {
+          try { await lunar.rotate(); } catch (e) {}
+          this.common.robot.colorfulModules--;
+      }
+      try { await lunar.limiterOpenSafe(); } catch (e) {}
+      try { lunar.collect(500); } catch (e) {}
+      for(let i=0;i<4;i++){
+        if (lunar.isEmpty() === true) {
+            break;
+        }
+        lunar.trackStart();
+        await Delay(500);
+        await Mep.Motion.straight(30);
+        await Mep.Motion.straight(-30);
+        lunar.collect();
+        await Delay(500);
+      }
+      await Mep.Motion.straight(100);
+    }
     async _collect2() {
         let numberOfFails = 0;
         try {
