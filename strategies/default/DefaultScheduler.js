@@ -33,12 +33,9 @@ class DefaultScheduler extends Scheduler {
         this.tasks = [
             new InitTask(this, { weight: 10000, time: 10 }),
 
-            new CollectStartRocketTask(this, { weight: 1000, time: 20 }),
-            new PushMiddleCartridgeTask(this, {
-                weight: 980,
-                time: 3,
-                avoidanceStrategy: 'reject',
-                avoidanceStrategyDelay: 5000 }),
+            //new CollectStartRocketTask(this, { weight: 1000, time: 20 }),
+            //new PushMiddleCartridgeTask(this, {weight: 980,time: 3,avoidanceStrategy: 'reject',avoidanceStrategyDelay: 5000 }),
+
 
             // new Module1Task(this, { weight: 920, time: 10 }),
             // new Module2Task(this, { weight: 900, time: 10 }),
@@ -48,7 +45,7 @@ class DefaultScheduler extends Scheduler {
             //new PushSideCartridgeTask(this, { weight: 760, time: 3 }),
 
             //new CollectBackRocketTask(this, { weight: 820, time: 20 }),
-            //EjectStartCartridgeTask(this, { weight: 800, time: 7 })
+            new EjectStartCartridgeTask(this, { weight: 800, time: 7 })
         ];
 
         this._onTick = this._onTick.bind(this);

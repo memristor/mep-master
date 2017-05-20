@@ -15,10 +15,13 @@ class EjectStartCartridgeTask extends Task {
     async onRun() {
         // Define points
         //let points = [ new TunedPoint(-1200, 0), new TunedPoint(-1200, 115), new TunedPoint(-1200, 230)];
+
         let points = [ new TunedPoint(-1200, 80, [ 1200, -80, 'blue' ]) ];
 
 
         try {
+          /*
+
             // Go to position
             lunar.trackStart();
             await Mep.Motion.go(new TunedPoint(-1110, 80, [ 1100, 80, 'blue' ]),
@@ -26,8 +29,11 @@ class EjectStartCartridgeTask extends Task {
             await Mep.Motion.go(new TunedPoint(-1190, -90, [ 1200, -200, 'blue' ]),
                 { speed: 70, backward: (Mep.isOppositeSide() ? false : true) });
             await Mep.Motion.rotate(new TunedAngle(90, [ -90, 'blue' ]));
+*/
+//NOTE: posle testiranja otkomentarisati!
 
             // Eject first lunar module
+            try { await lunar.servoPumpGo(350);} catch(e) {Mep.console.log();} //prvo nosac izadje da ne bi smetao okretacu boje
             try { await lunar.rotate(); } catch (e) { }
             await lunar.lunarTake();
             await lunar.lunarEject();
@@ -53,6 +59,8 @@ class EjectStartCartridgeTask extends Task {
 
                 // Rotate
                 await Delay(200);
+
+
                 try { await lunar.rotate(); } catch (e) { }
 
                 // Eject

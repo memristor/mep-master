@@ -134,6 +134,20 @@ class LunarCollectorDriver {
         await Delay(1000);
     }
 
+    async servoPumpGo(position){
+      await this._servoPump.go(position);
+    }
+
+    async vacuumPump(value){
+      //1 ukljucena
+      this._vacuumPump.write(value);
+    }
+
+    async cylinder(position){
+      //1 donji polozaj
+      this._cylinder.write(position);
+    }
+
     async lunarEject() {
       this._servoPump.setSpeed(300);
 
@@ -141,8 +155,14 @@ class LunarCollectorDriver {
      this._vacuumPump.write(0);
      try { await this._servoPump.go(850); } catch (e) {}
      this._cylinder.write(1);
-     await Delay(1000);
+     await Delay(100);
      this._cylinder.write(0);
+
+     //NOTE: Djole: rucica se vraca u pripremnu poziciju nakon sto je ostavila valjak
+          //U ovoj poziciji ne smeta okretacu boje
+     await Delay(400);
+     this.servoPumpGo(350);
+
     }
 
     async lunarKick(){
@@ -206,6 +226,10 @@ class LunarCollectorDriver {
                 colorSensor.removeListener('changed', colorChangedPromise);
             }, timeout);
         });
+}
+
+    async colorServoGo(position){
+        this._colorServo.setPosition(position);
     }
 
     hold() {
