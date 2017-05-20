@@ -96,10 +96,10 @@ class MotionDriver extends EventEmitter  {
         this._direction = MotionDriver.DIRECTION_UNDEFINED;
 
         this.communicator = Mep.DriverManager.getDriver(config['@dependencies'].communicator);
-        
+
 
         this._waitACKQueue = {};
-        
+
         if(this.config.cid === undefined) {
 			this.communicator.on('data', this._onDataReceived.bind(this));
 		} else {
@@ -148,6 +148,8 @@ class MotionDriver extends EventEmitter  {
             this.orientation
         );
         this.setConfig(MotionDriver.CONFIG_SEND_STATUS_INTERVAL, this.config.refreshDataPeriod, 0);
+        this.setConfig(28, 1.70, 2);
+        this.setConfig(29, 1.2, 1);
         this.requestRefreshData();
 
         return new Promise((resolve) => {
@@ -468,7 +470,7 @@ class MotionDriver extends EventEmitter  {
         );
         let orientation = (buffer.readInt8(5) << 8) | (buffer.readInt8(6) & 0xFF);
 		// let speed = buffer.readInt8(7);
-		
+
         // Checks
         if ([MotionDriver.STATE_MOVING,
                 MotionDriver.STATE_IDLE,
@@ -537,7 +539,7 @@ class MotionDriver extends EventEmitter  {
 		if(buffer.length == 0) return;
 		let type = buffer.readUInt8(0);
 		let buf = buffer.slice(1);
-		
+
 		if (type == 'P'.charCodeAt(0) && buf.length === 7) {
             this._onPReceived(buf);
         }

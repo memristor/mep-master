@@ -97,9 +97,9 @@ class DefaultScheduler extends Scheduler {
             this.common.robot.colorfulModules--;
         }
 
-        lunar.prepare().catch(() => {});
+        //lunar.prepare().catch(() => {});
         try { await lunar.limiterOpenSafe(); } catch (e) {}
-        try { await lunar.collect(); } catch (e) {}
+        try { lunar.collect(); } catch (e) {}
 
         // Wait to empty
        await Delay(1000);
@@ -114,14 +114,19 @@ class DefaultScheduler extends Scheduler {
                 if (i % 5 === 0) {
                     // lunar.limiterOpen();
                 } else {
-                    lunar.limiterPrepare();
+                    //lunar.limiterPrepare();
                 }
             }
         }
         lunar.limiterOpen();
         await Delay(200);
-        await Mep.Motion.straight(30);
-        await Mep.Motion.straight(-30);
+
+        //zakomentarisali: djole i blazic
+        //isao napred nazad dva puta
+        //testirati kako ce se ponasati bez ovog napred-nazad
+
+        //await Mep.Motion.straight(30);
+        //await Mep.Motion.straight(-30);
 
         // Last module
         lunar.prepare().catch(() => {});

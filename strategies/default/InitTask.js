@@ -61,11 +61,13 @@ class InitTask extends Task {
 
         // Mep.getDriver('ServoLimiter').setPosition(480);
 
+
         await starter.waitStartSignal(new Console());
+
 
         try {
             await Mep.Motion.go(new TunedPoint(-360, -550, [ 365, -550, 'blue' ]),
-                { speed: 110, backward: true, tolerance: 0, radius: 180 });
+                { speed: 255, backward: true, tolerance: 0, radius: 180 });
 
             // await Mep.Motion.go(new TunedPoint(-350, -350), { speed: 70, backward: true });
         } catch (e) {

@@ -14,14 +14,15 @@ class PushMiddleCartridgeTask extends Task {
         // Move to position to go back
         try {
             await Mep.Motion.go(
-                new TunedPoint(0, -150, [ 0, -150, 'blue' ]),
-                { speed: 110, backward: true, tolerance: 0, radius: 200, obstacle: 500, friend: 5000 });
+                new TunedPoint(0, -100, [ 0, -150, 'blue' ]),
+                { speed: 210, backward: true, tolerance: 0, radius: 200, obstacle: 500, friend: 5000 });
+            await Delay(100);
             await Mep.Motion.go(
-                new TunedPoint(0, -30, [ 0, -30, 'blue' ]),
+                new TunedPoint(0, -20, [ 0, -20, 'blue' ]),
                 { speed: 110, backward: true });
             await Mep.Motion.go(
-                new TunedPoint(0, 25, [ 0, 25, 'blue' ]),
-                { speed: 110, backward: true });
+                new TunedPoint(0, 30, [ 0, 30, 'blue' ]),
+                { speed: 50, backward: true });
         }
         catch (e) {
             Mep.Log.error(TAG, e);
