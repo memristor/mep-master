@@ -11,11 +11,11 @@ const TAG = 'CollectBackRocketTask';
 class CollectBackRocketTask extends Task {
     async onRun() {
         try {
-            await Mep.Motion.go(new TunedPoint(-1100, 370, [ 1100, 340, 'blue' ]), { speed: 180, backward: false, tolerance: -1 });
-            await Mep.Motion.go(new TunedPoint(-1230, 370, [ 1250, 340, 'blue' ]), { speed: 70, backward: false, tolerance: -1 });
+            await Mep.Motion.go(new TunedPoint(-1100, 370, [ 1100, 340, 'blue' ]), { speed: 200, backward: false, tolerance: -1 });
+            await Mep.Motion.go(new TunedPoint(-1210, 370, [ 1250, 340, 'blue' ]), { speed: 80, backward: false, tolerance: -1 });
             await this.common.collect2();
             this.common.robot.colorfulModules = 2;
-            lunar.standby();
+            lunar.collect();
             await Mep.Motion.straight(-70);
 
             this.finish();

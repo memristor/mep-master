@@ -40,15 +40,15 @@ class DefaultScheduler extends Scheduler {
                 avoidanceStrategy: 'reject',
                 avoidanceStrategyDelay: 5000 }),
 
-            new Module1Task(this, { weight: 920, time: 10 }),
+          /*  // new Module1Task(this, { weight: 920, time: 10 }),
             new Module2Task(this, { weight: 900, time: 10 }),
-            new Module3Task(this, { weight: 780, time: 5 }),
+            // new Module3Task(this, { weight: 780, time: 5 }),
             new Module5Task(this, { weight: 775, time: 5 }),
             new Module4Task(this, { weight: 770, time: 5 }),
-            new PushSideCartridgeTask(this, { weight: 760, time: 3 }),
+            new PushSideCartridgeTask(this, { weight: 760, time: 3 }), */
 
-            new CollectBackRocketTask(this, { weight: 820, time: 20 }),
-            new EjectStartCartridgeTask(this, { weight: 800, time: 7 })
+            new CollectBackRocketTask(this, { weight: 600, time: 20 }),
+            new EjectStartCartridgeTask(this, { weight: 590, time: 7 })
         ];
 
         this._onTick = this._onTick.bind(this);
