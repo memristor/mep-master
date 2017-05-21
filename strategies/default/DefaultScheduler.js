@@ -40,12 +40,12 @@ class DefaultScheduler extends Scheduler {
                 avoidanceStrategy: 'reject',
                 avoidanceStrategyDelay: 5000 }),
 
-          /*  // new Module1Task(this, { weight: 920, time: 10 }),
+            // new Module1Task(this, { weight: 920, time: 10 }),
             new Module2Task(this, { weight: 900, time: 10 }),
             // new Module3Task(this, { weight: 780, time: 5 }),
-            new Module5Task(this, { weight: 775, time: 5 }),
-            new Module4Task(this, { weight: 770, time: 5 }),
-            new PushSideCartridgeTask(this, { weight: 760, time: 3 }), */
+            new Module5Task(this, { weight: 775, time: 5 }), //NOTE: Namesteno
+            new Module4Task(this, { weight: 770, time: 5 }), //NOTE: krzne kad se okrene
+            new PushSideCartridgeTask(this, { weight: 760, time: 3 }),
 
             new CollectBackRocketTask(this, { weight: 600, time: 20 }),
             new EjectStartCartridgeTask(this, { weight: 590, time: 7 })
@@ -164,7 +164,7 @@ class DefaultScheduler extends Scheduler {
           this.common.robot.colorfulModules--;
       }
       try { await lunar.limiterOpenSafe(); } catch (e) {}
-      try { lunar.collect(500); } catch (e) {}
+      try { lunar.prepare(); /*lunar.collect(500);*/ } catch (e) {}
       for(let i=0;i<4;i++){
         if (lunar.isEmpty() === true) {
             break;
@@ -176,7 +176,7 @@ class DefaultScheduler extends Scheduler {
         lunar.collect();
         await Delay(500);
       }
-      await Mep.Motion.straight(100);
+      await Mep.Motion.straight(150);
     }
     async _collect2() {
         let numberOfFails = 0;
@@ -190,8 +190,11 @@ class DefaultScheduler extends Scheduler {
                     await lunar.collect();
                     // await Delay(500);
                   }
-                  if(i == 1)
-                    await lunar.collect(1000);
+                  if(i == 1){
+                    await lunar.collect(500);
+                    await lunar.prepare();
+                    await lunar.collect(500);
+                  }
                 } catch (e) {
                     Mep.Log.error(TAG, 'Lunar.collect', e);
                 }

@@ -13,8 +13,8 @@ class Module4Task extends Task {
 		try {
 			lunar.limiterClose();
             lunar.prepare().catch(() => {});
-            await Mep.Motion.go(new TunedPoint(-1020, -100, [ 1020, -100, 'blue' ]));
-            await Mep.Motion.go(new TunedPoint(-1155, -250, [ 1160, -250, 'blue' ]));
+            await Mep.Motion.go(new TunedPoint(-1020, -100, [ 1020, -100, 'blue' ]), {radius: 1});
+            await Mep.Motion.go(new TunedPoint(-1155, -250, [ 1160, -250, 'blue' ]), {radius: 1});
 			await lunar.collect();
             await Delay(1000);
 			await Mep.Motion.straight(-100);

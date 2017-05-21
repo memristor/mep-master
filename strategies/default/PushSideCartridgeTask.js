@@ -11,6 +11,7 @@ const TAG = 'PushSideCartridgeTask';
 class PushSideCartridgeTask extends Task {
     async onRun() {
         this.common.robot.monochromeModules = 0;
+
         try {
             await Mep.Motion.go(new TunedPoint(-870, 80, [ 870, 80, 'blue' ]), { backward: true });
             this.common.terrain.lunar3Available = false;

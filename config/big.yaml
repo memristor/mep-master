@@ -95,7 +95,7 @@ Drivers:
     "@load": true
     "@dependencies":
       communicator: CanDriver
-    cid: 1501
+    cid: 0x0000AB01
     tolerance: 10
     type: 'hsv'
     colors:
@@ -135,7 +135,7 @@ Drivers:
     "@load": true
     "@dependencies":
       communicator: CanDriver
-    cid: 1502
+    cid: 0x0000AB02
     direction: 'output'
     mode: 'analog'
     max: 30

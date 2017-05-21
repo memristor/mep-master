@@ -156,11 +156,11 @@ class LunarCollectorDriver {
      try { await this._servoPump.go(830); } catch (e) {}
      await Delay(100);
      this._cylinder.write(1);
-     
+
     }
 
     async lunarKick(){
-      this._servoPump.setSpeed(500);
+      this._servoPump.setSpeed(1023);
 
       // Eject a lunar
       this._vacuumPump.write(0);
