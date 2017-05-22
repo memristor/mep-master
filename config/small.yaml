@@ -15,3 +15,49 @@ Drivers:
       communicator: CanDriver
     id: 1
     cid: 0x00007F00
+
+  ColorRotator1:
+    "@class": drivers/pin/PinDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 0x00007F13
+    min: 0
+    max: 255
+    direction: 'output'
+    mode: 'analog'
+
+  ColorRotator2:
+    "@class": drivers/pin/PinDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 0x00007F14
+    min: 0
+    max: 255
+    direction: 'output'
+    mode: 'analog'
+
+  DirectionBall:
+    "@class": drivers/dynamixel/DynamixelDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    id: 20
+    cid: 0x00007F00
+
+    ColorRamp:
+      "@class": drivers/dynamixel/DynamixelDriver
+      "@load": true
+      "@dependencies":
+        communicator: CanDriver
+      id: 21
+      cid: 0x00007F00
+
+      BallPicker:
+        "@class": drivers/dynamixel/DynamixelDriver
+        "@load": true
+        "@dependencies":
+          communicator: CanDriver
+        id: 50
+        cid: 0x00007F00
