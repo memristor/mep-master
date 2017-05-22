@@ -46,18 +46,42 @@ Drivers:
     id: 20
     cid: 0x00007F00
 
-    ColorRamp:
-      "@class": drivers/dynamixel/DynamixelDriver
-      "@load": true
-      "@dependencies":
-        communicator: CanDriver
-      id: 21
-      cid: 0x00007F00
+  ColorRamp:
+    "@class": drivers/dynamixel/DynamixelDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    id: 21
+    cid: 0x00007F00
 
-      BallPicker:
-        "@class": drivers/dynamixel/DynamixelDriver
-        "@load": true
-        "@dependencies":
-          communicator: CanDriver
-        id: 50
-        cid: 0x00007F00
+  BallPicker:
+    "@class": drivers/dynamixel/DynamixelDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    id: 50
+    cid: 0x00007F00
+
+  LaserBack:
+    "@class": drivers/infrared/InfraredDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    infraredMaxDistance: 200
+    sensorAngle: -90
+    sensorX: 100
+    sensorY: -70
+    cid: 0x00007F21
+    objectSize: 150
+
+  LaserFront:
+    "@class": drivers/infrared/InfraredDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    infraredMaxDistance: 200
+    sensorAngle: -90
+    sensorX: 100
+    sensorY: -70
+    cid: 0x00007F11
+    objectSize: 150
