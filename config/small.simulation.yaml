@@ -1,0 +1,10 @@
+Drivers:
+ MotionDriver:
+  "@class": "drivers/motion/MotionDriverSimulator"
+  "@dependencies":
+
+ CanDriver:
+  "@class": "drivers/can/CanDriverSimulator"
+
+ Uart:
+  "@load": 0xff

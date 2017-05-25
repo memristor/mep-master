@@ -7,6 +7,7 @@ host: ''
 obstacleMaxPeriod: 300
 duration: 90
 volume: 1280
+friendIp: 192.168.12.145
 
 Log:
   Console:
@@ -36,12 +37,6 @@ Drivers:
     precision: 2
     refreshDataPeriod: 100
 
-  MotionDriverController:
-    "@class": drivers/motion/MotionDriverController
-    "@load": true
-    "@dependencies":
-      motionDriver: MotionDriver
-
   CanDriver:
     "@class": drivers/can/CanDriver
     "@load": true
@@ -52,11 +47,8 @@ Drivers:
     "@class": drivers/starter/StarterDriver
     "@load": true
     type: keyboard
-    delayTimer: 400
-  UsageDriver:
-    "@class": drivers/usage/UsageDriver
-    "@load": true
-    refreshPeriod: 600
+    delayTimer:
+
 Services:
   PositionService:
   MotionService:
@@ -75,29 +67,27 @@ Services:
       relative: false
   TerrainService:
     staticObstacles:
-    - - x: -550
-        y: 1001
-      - x: -700
-        y: 370
-      - x: 0
-        y: 20
-      - x: 700
-        y: 370
-      - x: 550
-        y: 1001
-    - - x: -790
-        y: 1001
-      - x: -950
-        y: 400
-      - x: -1501
-        y: 330
-    - - x: -1501
-        y: -550
-      - x: -850
-        y: -200
-      - x: -600
-        y: -400
-      - x: -600
-        y: -1001
+    # Middle
+    - [{ x: -550, y: 1001 }, { x: -700, y: 370 }, { x: 0, y: 20 }, { x: 700, y: 370 }, { x: 550, y: 1001 }]
+
+    # Our corner
+    - [{ x: -790, y: 1001 }, { x: -950, y: 400 }, { x: -1501, y: 330 }]
+
+    # Our start position
+    - [{ x: -1501, y: -550 }, { x: -1100, y: -500 }, { x: -850, y: -200 }, { x: -600, y: -400 }, { x: -600, y: -1001 }]
+
+
+    # Their start position
+    - [{ x: 1501, y: -550 }, { x: 1100, y: -500 }, { x: 850, y: -200 }, { x: 600, y: -400 }, { x: 600, y: -1001 }]
+
+    # Their corner
+    - [{ x: 790, y: 1001 }, { x: 950, y: 400 }, { x: 1501, y: 330 }]
+
+    # Our side cartridge
+    - [{ x: -1500, y: 220 }, { x: -1300, y: 220 }, { x: -1300, y: -350 }, { x: -1500, y: -350 } ]
+
+    # Their side cartridge
+    - [{ x: 1500, y: 220 }, { x: 1300, y: 220 }, { x: 1300, y: -350 }, { x: 1500, y: -350 } ]
+
   SchedulerService:
   ShareService:

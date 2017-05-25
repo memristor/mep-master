@@ -41,12 +41,14 @@ class LunarCollectorDriver {
         this._middleDetector = Mep.getDriver(this.config['@dependencies']['middleDetector']);
         this._frontDetector = Mep.getDriver(this.config['@dependencies']['frontDetector']);
         this._backDetector = Mep.getDriver(this.config['@dependencies']['backDetector']);
+        this._circularInjector = Mep.getDriver(this.config['@dependencies']['circularInjector']);
 
         this._leftHand.setSpeed(600);
         this._rightHand.setSpeed(600);
         this._servoPump.setSpeed(300);
         this._servoPump.setPosition(200); // Put put inside robot
         //this.colorStandby();
+
     }
 
     async limiterOpenSafe() {
@@ -108,6 +110,7 @@ class LunarCollectorDriver {
     }
 
     collect(customTimeout = 2000) {
+        this._circularInjector.write(1);
         this.trackStart();
         this._leftTrack.setSpeed(1023);
         this._rightTrack.setSpeed(1023, true);
@@ -244,6 +247,7 @@ class LunarCollectorDriver {
     }
 
     standby() {
+        this._circularInjector.write(0);
         this._leftTrack.setSpeed(0);
         this._rightTrack.setSpeed(0);
         this.trackStop();
@@ -259,6 +263,7 @@ class LunarCollectorDriver {
     }
 
     turnOff() {
+        this._circularInjector.write(1);
         try {
             this.trackStop();
             this._leftTrack.setSpeed(0);

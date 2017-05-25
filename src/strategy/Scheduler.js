@@ -25,7 +25,7 @@ class Scheduler {
         process.on('unhandledRejection', this.onUnhandledTaskError.bind(this));
 
         this.common = {};
-        this._timeIsUp = false;
+        this._disabled = false;
         this._previousTask = '';
     }
 
@@ -60,16 +60,24 @@ class Scheduler {
         return this.tasks;
     }
 
+    disable() {
+        this._disabled = true;
+    }
+
     runNextTask() {
         let nextTask = Mep.Scheduler.recommendNextTask(this.tasks);
         if (nextTask !== null) {
-            if (this._timeIsUp === false) {
+            if (this._disabled === false) {
                 this.runTask(nextTask);
             } else {
                 Mep.Log.info(TAG, 'Tasks are blocked, time\'s up');
             }
         } else {
             Mep.Log.info(TAG, 'No more tasks');
+
+            // Try to run next task again
+            // This way scheduler may run suspended task again
+            setTimeout(this.runNextTask, 1000);
         }
     }
 

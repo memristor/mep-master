@@ -36,7 +36,7 @@ class InitTask extends Task {
         //Mep.getDriver('ColorServo').setPosition(730); // 600
 
         // lunar.rotate().catch((e) => { console.log(e); });
-        //lunar.openLimiter();
+        // lunar.openLimiter();
         // lunar.collect().catch(() => {});
         // Mep.getDriver('CollectorBigTrack').write(0);
         // Mep.getDriver('ServoCollectorTrackRight').setSpeed(0);

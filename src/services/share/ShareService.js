@@ -20,7 +20,8 @@ const TAG = 'ShareService';
 class ShareService extends EventEmitter {
     init(config) {
         this.config = Object.assign({
-            protocol: 'Udp'
+            protocol: 'Udp',
+            position: true
         }, config);
 
         this._lastFriendPosition = null;
@@ -29,11 +30,15 @@ class ShareService extends EventEmitter {
         this._onObstacleDetected = this._onObstacleDetected.bind(this);
         this._onPositionChanged = this._onPositionChanged.bind(this);
 
-        this.communicator = new (require('./protocols/' + this.config.protocol + '.js'))();
+        this.communicator = new (require('./protocols/' + this.config.protocol + '.js'))({
+            ip: Mep.Config.get('friendIp')
+        });
         this.communicator.on('packet', this._onPacketReceived);
 
         // Mep.Terrain.on('obstacleDetected', this._onObstacleDetected);
-        Mep.Position.on('positionChanged', this._onPositionChanged);
+        if (this.config.position === true) {
+            Mep.Position.on('positionChanged', this._onPositionChanged);
+        }
     }
 
     getLastFriendPosition() {

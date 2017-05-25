@@ -253,6 +253,15 @@ Drivers:
     direction: 'output'
     mode: 'digital'
 
+  CircularInjector:
+    "@class": drivers/pin/PinDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 0x00007F08
+    direction: 'output'
+    mode: 'digital'
+
   ColorServo:
     "@class": drivers/dynamixel/DynamixelDriver
     "@load": true
@@ -282,3 +291,9 @@ Drivers:
       colorRotator2: ColorRotator2
       colorSensor: ColorSensor
       colorServo: ColorServo
+      circularInjector: CircularInjector
+
+Services:
+  MotionService:
+    moveOptions:
+      obstacle: 4000

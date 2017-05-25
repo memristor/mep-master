@@ -40,7 +40,9 @@ class TunedPoint {
             }
 
             // Check for similar table
-            if (arguments[i][2].indexOf(table) >= 0) {
+            let baseTableInput = arguments[i][2].split('_')[0];
+            let baseTableConfig = table.split('_')[0];
+            if (baseTableInput === baseTableConfig) {
                 this.point = new Point(arguments[i][0], arguments[i][1]);
             }
 

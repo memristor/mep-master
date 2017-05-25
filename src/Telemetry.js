@@ -55,8 +55,8 @@ class Telemetry extends EventEmitter {
         if (this.active === false) return;
 
         let packet = {
-            from: 'core:' + Config.get('robot'),
-            to: 'dash:' + Config.get('robot'),
+            from: 'core:big', // + Config.get('robot'),
+            to: 'dash:big', // + Config.get('robot'),
             tag: tag,
             //date: new Date(),
             action: action,

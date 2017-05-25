@@ -25,17 +25,16 @@ class Udp extends EventEmitter {
         }, config);
 
         this._onMessageReceived = this._onMessageReceived.bind(this);
+        this._onBind = this._onBind.bind(this);
 
         // Set up socket
         this.socket = dgram.createSocket('udp4');
-        this.socket.bind(this.config.sourcePort, '0.0.0.0');
-        if (this.config.broadcast === true) {
-            let socket = this.socket;
-            this.socket.on('listening', () => {
-                socket.setBroadcast(true);
-            });
-        }
+        this.socket.bind(this.config.sourcePort, this._onBind);
         this.socket.on('message', this._onMessageReceived);
+    }
+
+    _onBind() {
+        //this.socket.setBroadcast(true);
     }
 
     _onMessageReceived(data) {

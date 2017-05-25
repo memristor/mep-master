@@ -3,7 +3,13 @@ global.Mep = require('../../Mep');
 const ShareService = require('./ShareService');
 
 let share = new ShareService();
-share.init();
+share.init({
+    position: false
+});
+
+share.on('packet', (packet) => {
+    console.log(packet);
+});
 
 setTimeout(() => {
     console.log('sent');

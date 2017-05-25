@@ -29,7 +29,7 @@ class Module2Task extends Task {
 			await Mep.Motion.go(new TunedPoint(-890, 50, [ 808, 65, 'blue' ]), {speed: 255, radius: 1, /*tolerance: 40*/ });
 			lunar.limiterClose();
 			await Mep.Motion.straight(60);
-			await lunar.collect();
+            try { await lunar.collect(); } catch (e) { Mep.Log.error(TAG, e); }
 			await Delay(500);
 			//await Mep.Motion.straight(-30);	//NOTE: bilo -50
             lunar.standby().catch(() => {});

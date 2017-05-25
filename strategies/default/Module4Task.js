@@ -15,7 +15,7 @@ class Module4Task extends Task {
             lunar.prepare().catch(() => {});
             await Mep.Motion.go(new TunedPoint(-1020, -100, [ 1020, -100, 'blue' ]), {radius: 1});
             await Mep.Motion.go(new TunedPoint(-1155, -250, [ 1160, -250, 'blue' ]), {radius: 1});
-			await lunar.collect();
+            try { await lunar.collect(); } catch (e) { Mep.Log.error(TAG, e); }
             await Delay(1000);
 			await Mep.Motion.straight(-100);
 

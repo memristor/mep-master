@@ -3,8 +3,8 @@ Drivers:
     type: 'keyboard'
 
   MotionDriver:
-    startPosition: [ -610, -790, [ -610, -790, 'yellow' ], [ 610, -790, 'blue' ] ]
-    startOrientation: [ -90, [ -90, 'yellow' ] ]
+    startPosition: [ -1350, -790, [ 1350, -790, 'blue' ] ]
+    startOrientation: [ 90, [ 90, 'yellow' ] ]
     startSpeed: 100
     refreshDataPeriod: 120
 
@@ -85,3 +85,9 @@ Drivers:
     sensorY: -70
     cid: 0x00007F11
     objectSize: 150
+
+Services:
+  MotionService:
+    moveOptions:
+      obstacle: 1500
+      friend: 1000

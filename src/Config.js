@@ -56,6 +56,12 @@ if (process.env.MEP_TEST) {
             describe: 'MEP Server IP and port, eg. 127.0.0.1:1117',
             type: 'string',
             default: ''
+        },
+        'i': {
+            alias: 'friendIp',
+            describe: 'IP of friend robot to enable communication',
+            type: 'string',
+            default: '192.168.12.1'
         }
     });
 
