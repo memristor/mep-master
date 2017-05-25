@@ -10,7 +10,9 @@
     "test": "mocha --slow 0 --require test/Init",
     "docs": "esdoc",
     "start": "node src/Bootstrap.js --harmony-async-await",
-    "simulation": "node --harmony-async-await src/Bootstrap.js -s -v 127.0.0.1:1117"
+    "simulation": "node --harmony-async-await src/Bootstrap.js -s -v 127.0.0.1:1117",
+    "dev_debug_multicast": "node %NODE_DEBUG_OPTION% ./src/services/share/ShareService.experiment.js"
+
   },
   "repository": {
     "type": "git",
