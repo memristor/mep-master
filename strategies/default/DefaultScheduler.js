@@ -34,15 +34,13 @@ class DefaultScheduler extends Scheduler {
             new InitTask(this, { weight: 10000, time: 10 }),
 
             new CollectStartRocketTask(this, { weight: 1000, time: 20 }),
-            new PushMiddleCartridgeTask(this, {
-                weight: 980,
-                time: 3,
-                avoidanceStrategy: 'reject',
-                avoidanceStrategyDelay: 5000 }),
+            new PushMiddleCartridgeTask(this, { weight: 980, time: 3}),
 
             // new Module1Task(this, { weight: 920, time: 10 }),
-            new Module2Task(this, { weight: 900, time: 10 }),
             // new Module3Task(this, { weight: 780, time: 5 }),
+
+
+            new Module2Task(this, { weight: 900, time: 10 }),
             new Module5Task(this, { weight: 775, time: 5 }), //NOTE: Namesteno
             new Module4Task(this, { weight: 770, time: 5 }), //NOTE: krzne kad se okrene
             new PushSideCartridgeTask(this, { weight: 760, time: 3 }),
@@ -173,57 +171,56 @@ class DefaultScheduler extends Scheduler {
         await Delay(500);
         await Mep.Motion.straight(30);
         await Mep.Motion.straight(-30);
-        lunar.collect();
+       try { lunar.collect(); } catch (e) {}
         await Delay(500);
       }
       await Mep.Motion.straight(150);
     }
+
     async _collect2() {
-        let numberOfFails = 0;
         try {
             lunar.limiterClose().catch((e) => {
                 Mep.Log.error(TAG, 'Lunar.closeLimiter', e);
             });
-            for (let i = 0; i < 2; i++) {
-                try {
-                  if(i == 0){
-                    await lunar.collect();
-                    // await Delay(500);
-                  }
-                  if(i == 1){
-                    await lunar.collect(500);
-                    await lunar.prepare();
-                    await lunar.collect(500);
-                  }
-                } catch (e) {
-                    Mep.Log.error(TAG, 'Lunar.collect', e);
-                }
-               try {
-                    await Mep.Motion.straight(-40);
-                } catch (e) {
-                    Mep.Log.error(TAG, 'Motion.straight', e);
-                }
-                //await Delay(1500);
-                /* lunar.prepare().catch((e) => {
-                    Mep.Log.error(TAG, 'Lunar.prepare', e);
-                });*/
-                try {
-                    await Mep.Motion.straight(40)
-                } catch (e) {
-                    Mep.Log.error(TAG, 'Motion.straight', e);
-                }
-
-                if (lunar.numberOfModules() === 0) {
-                    i--;
-                    numberOfFails++;
-                }
-                if (numberOfFails === 2) {
-                    break;
-                }
 
 
+            // Collect first
+            lunar.collect();
+            await Delay(500);
+            try {
+                await Mep.Motion.straight(-40)
+            } catch (e) {
+                Mep.Log.error(TAG, 'Motion.straight', e);
             }
-            //lunar.trackStop();
+            await Delay(300);
+            lunar.prepare().catch((e) => { Mep.Log.error(TAG, 'Lunar.prepare', e); });
+
+
+            // Collect second
+            try {
+                await Mep.Motion.straight(40);
+            } catch (e) {
+                Mep.Log.error(TAG, 'Motion.straight', e);
+            }
+            lunar.collect();
+            await Delay(500);
+            try {
+                await Mep.Motion.straight(-40);
+            } catch (e) {
+                Mep.Log.error(TAG, 'Motion.straight', e);
+            }
+            await Delay(300);
+            lunar.prepare().catch((e) => { Mep.Log.error(TAG, 'Lunar.prepare', e); });
+
+
+            try {
+                await Mep.Motion.straight(40);
+            } catch (e) {
+                Mep.Log.error(TAG, 'Motion.straight', e);
+            }
+
+            lunar.trackStop();
+
         } catch (e) {
             Mep.Log.error(TAG, e);
         }
@@ -233,12 +230,12 @@ class DefaultScheduler extends Scheduler {
         try {
             await this._collect2();
 
-            try { await lunar.collect(); } catch (e) { Mep.Log.error(TAG, 'Lunar.collect', e); }
-            await Delay(2000);
+            lunar.collect();
+            await Delay(1500);
             lunar.prepare().catch(() => { Mep.Log.error(TAG, 'Lunar.prepare', e); });
-            await Delay(1000);
+            await Delay(500);
 
-            try { await lunar.collect(); } catch (e) { Mep.Log.error(TAG, 'Lunar.collect', e); }
+            lunar.collect();
             await Delay(500);
             lunar.hold();
             lunar.trackStop();

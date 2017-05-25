@@ -17,7 +17,8 @@ class InitTask extends Task {
 
         await starter.waitStartSignal(new Console());
 
-        await Mep.Motion.go(new TunedPoint(-500, -790, [500, -790, 'blue']), { speed: 100 });
+
+        await Mep.Motion.go(new TunedPoint(-500, -790, [500, -790, 'blue']), { speed: 105 });
 
         this.finish();
     } 

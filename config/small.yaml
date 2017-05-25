@@ -3,8 +3,8 @@ Drivers:
     type: 'keyboard'
 
   MotionDriver:
-    startPosition: [ -1350, -790, [ 1350, -790, 'blue' ] ]
-    startOrientation: [ 90, [ 90, 'yellow' ] ]
+    startPosition: [ -1200, -790, [ 1350, -790, 'blue' ] ]
+    startOrientation: [ 0, [ 0, 'yellow' ] ]
     startSpeed: 100
     refreshDataPeriod: 120
 
@@ -16,18 +16,7 @@ Drivers:
     id: 1
     cid: 0x00007F00
 
-  ColorRotator1:
-    "@class": drivers/pin/PinDriver
-    "@load": true
-    "@dependencies":
-      communicator: CanDriver
-    cid: 0x00007F13
-    min: 0
-    max: 255
-    direction: 'output'
-    mode: 'analog'
-
-  ColorRotator2:
+  ColorRotator:
     "@class": drivers/pin/PinDriver
     "@load": true
     "@dependencies":
@@ -45,6 +34,18 @@ Drivers:
       communicator: CanDriver
     id: 20
     cid: 0x00007F00
+
+  ColorSensor:
+    "@class": drivers/color/ColorDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 0x000005D1
+    tolerance: 10
+    type: 'hsv'
+    colors:
+      yellow: [ 28, 32, 250 ]
+      blue: [ 155, 32, 230 ]
 
   ColorRamp:
     "@class": drivers/dynamixel/DynamixelDriver

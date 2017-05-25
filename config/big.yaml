@@ -68,7 +68,7 @@ Drivers:
 
   LaserFrontLeft:
     "@class": drivers/infrared/InfraredDriver
-    "@load": false
+    "@load": true
     "@dependencies":
       communicator: CanDriver
     infraredMaxDistance: 300
@@ -80,7 +80,7 @@ Drivers:
 
   LaserFrontRight:
     "@class": drivers/infrared/InfraredDriver
-    "@load": false
+    "@load": true
     "@dependencies":
       communicator: CanDriver
     infraredMaxDistance: 300
@@ -296,4 +296,4 @@ Drivers:
 Services:
   MotionService:
     moveOptions:
-      obstacle: 4000
+      obstacle: 5000

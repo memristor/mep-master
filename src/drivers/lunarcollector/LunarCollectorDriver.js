@@ -109,18 +109,13 @@ class LunarCollectorDriver {
         return count;
     }
 
-    collect(customTimeout = 2000) {
+    collect() {
         this._circularInjector.write(1);
         this.trackStart();
         this._leftTrack.setSpeed(1023);
         this._rightTrack.setSpeed(1023, true);
-        let leftHandPromise = this._leftHand.go(500, { tolerance: 150, timeout: customTimeout});
-        let rightHandPromise = this._rightHand.go(515, { tolerance: 150, timeout: customTimeout });
-
-        return Promise.all([
-            leftHandPromise,
-            rightHandPromise
-        ]);
+        this._leftHand.setPosition(500);
+        this._rightHand.setPosition(515);
     }
 
     async lunarTake() {

@@ -22,11 +22,6 @@ Log:
 Telemetry:
   port: 1200
 Drivers:
-  Uart:
-    "@class": drivers/uart/Uart
-    "@load": true
-    protocol: PLLSP
-
   MotionDriver:
     "@class": drivers/motion/MotionDriver
     "@load": true

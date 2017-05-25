@@ -57,7 +57,7 @@ class EjectStartCartridgeTask extends Task {
 
                 // Eject
                 await lunar.lunarTake();
-                lunar.collect().catch(() => {});
+                lunar.collect();
                 await lunar.lunarEject();
                 await Delay(250);
             }

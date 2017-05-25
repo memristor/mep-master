@@ -77,7 +77,7 @@ class Scheduler {
 
             // Try to run next task again
             // This way scheduler may run suspended task again
-            setTimeout(this.runNextTask, 1000);
+            // setTimeout(this.runNextTask, 1000);
         }
     }
 

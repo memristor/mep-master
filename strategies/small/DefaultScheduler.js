@@ -33,6 +33,10 @@ class DefaultScheduler extends Scheduler {
         this._onTick = this._onTick.bind(this);
         this._onMessage = this._onMessage.bind(this);
 
+        // Drivers
+        this._colorRotator = Mep.getDriver('ColorRotator');
+        this._colorRamp = Mep.getDriver('ColorRamp');
+
         // Subscribe on ticks
         starterDriver.on('tick', this._onTick);
 
@@ -65,8 +69,45 @@ class DefaultScheduler extends Scheduler {
         }
     }
 
-    async _colorRotate() {
+    async _colorUp() {
+        this._colorServo.setPosition(445);
+        this._colorRotator.write(180);
+        this._colorSensor.stop();
+        await Delay(500);
+    }
 
+    async _colorDown() {
+        this._colorServo.setPosition(130);
+        this._colorSensor.start(50);
+        this._colorRotator.write(0);
+        await Delay(500);
+    }
+
+    async _colorRotate() {
+        let scheduler = this;
+        let timeout = 5000;
+        let requiredColor = (Mep.Config.get('table').indexOf('blue') >= 0) ? 'blue' : 'yellow';
+
+        await this._colorDown();
+
+        // Rotate until color
+        return new Promise((resolve, reject) => {
+            let colorSensor = this._colorSensor;
+            let colorChangedPromise = (color) => {
+                if (color === requiredColor) {
+                    colorSensor.removeListener('changed', colorChangedPromise);
+                    setTimeout(resolve, 150); // Resolve with delay
+                    scheduler._colorUp();
+                }
+            };
+
+            this._colorSensor.on('changed', colorChangedPromise);
+            setTimeout(() => {
+                reject();
+                scheduler._colorUp();
+                colorSensor.removeListener('changed', colorChangedPromise);
+            }, timeout);
+        });
     }
 
     async _pick() {
