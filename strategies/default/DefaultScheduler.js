@@ -37,12 +37,11 @@ class DefaultScheduler extends Scheduler {
             new PushMiddleCartridgeTask(this, { weight: 980, time: 3}),
 
             // new Module1Task(this, { weight: 920, time: 10 }),
-            // new Module3Task(this, { weight: 780, time: 5 }),
 
-
+            new Module3Task(this, { weight: 770, time: 5 }),
             new Module2Task(this, { weight: 900, time: 10 }),
-            new Module5Task(this, { weight: 775, time: 5 }), //NOTE: Namesteno
-            new Module4Task(this, { weight: 770, time: 5 }), //NOTE: krzne kad se okrene
+            new Module5Task(this, { weight: 780, time: 5 }), //NOTE: Namesteno
+            new Module4Task(this, { weight: 790, time: 5 }), //NOTE: krzne kad se okrene
             new PushSideCartridgeTask(this, { weight: 760, time: 3 }),
 
             new CollectBackRocketTask(this, { weight: 600, time: 20 }),
@@ -169,12 +168,19 @@ class DefaultScheduler extends Scheduler {
         }
         lunar.trackStart();
         await Delay(500);
+        try { lunar.collect(); } catch (e) {}
         await Mep.Motion.straight(30);
-        await Mep.Motion.straight(-30);
-       try { lunar.collect(); } catch (e) {}
+          //NOTE: proba
+          if(i === 3){
+            await Mep.Motion.straight(-35);
+          }
+        else{
+          await Mep.Motion.straight(-30);
+        }
         await Delay(500);
       }
       await Mep.Motion.straight(150);
+        try { lunar.close(); } catch (e) {}
     }
 
     async _collect2() {
@@ -193,7 +199,7 @@ class DefaultScheduler extends Scheduler {
                 Mep.Log.error(TAG, 'Motion.straight', e);
             }
             await Delay(300);
-            lunar.prepare().catch((e) => { Mep.Log.error(TAG, 'Lunar.prepare', e); });
+            //lunar.prepare().catch((e) => { Mep.Log.error(TAG, 'Lunar.prepare', e); });
 
 
             // Collect second
@@ -210,7 +216,7 @@ class DefaultScheduler extends Scheduler {
                 Mep.Log.error(TAG, 'Motion.straight', e);
             }
             await Delay(300);
-            lunar.prepare().catch((e) => { Mep.Log.error(TAG, 'Lunar.prepare', e); });
+            //lunar.prepare().catch((e) => { Mep.Log.error(TAG, 'Lunar.prepare', e); });
 
 
             try {
