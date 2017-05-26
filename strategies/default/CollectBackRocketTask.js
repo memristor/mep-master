@@ -13,13 +13,12 @@ class CollectBackRocketTask extends Task {
         try {
             await Mep.Motion.go(new TunedPoint(-1100, 370, [ 1100, 340, 'blue' ]), { speed: 200, backward: false, tolerance: -1 });
             await Mep.Motion.go(new TunedPoint(-1230, 370, [ 1245, 340, 'blue' ]), { speed: 80, backward: false, tolerance: -1 });
-            await this.common.collect2();
-            this.common.robot.colorfulModules = 2;
+            await this.common.collect();
+            this.common.robot.colorfulModules = 4;
             lunar.collect();
-            await Mep.Motion.straight(-90);
             await Delay(400);
-            lunar.prepare().catch(() => {});
-
+            lunar.prepare(500, 515).catch(() => {});
+            await Mep.Motion.straight(-90);
             this.finish();
         } catch (e) {
             switch (e.action) {

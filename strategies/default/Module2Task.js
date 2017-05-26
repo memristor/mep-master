@@ -19,7 +19,7 @@ class Module2Task extends Task {
             lunar.collect();
             await Delay(2000);
             lunar.standby().catch(() => {});
-
+						this.common.robot.colorfulModules++;
             this.finish();
 		} catch (e) {
 			Mep.Log.error(TAG, e);

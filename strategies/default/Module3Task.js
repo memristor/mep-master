@@ -23,7 +23,7 @@ class Module3Task extends Task {
             lunar.prepare().catch(() => {});
 			//await Mep.Motion.go(new TunedPoint(-700, 260, [ 735, 250, 'blue' ]));
 			//NOTE: probno,namestiti za plavu
-			await Mep.Motion.go(new TunedPoint(-1060, 106, [ 735, 250, 'blue' ]), {speed:  70});
+			await Mep.Motion.go(new TunedPoint(-1060, 106, [ 740, 255, 'blue' ]), {speed:  70});
 			//-951, 55
             lunar.collect();
             lunar.hold();

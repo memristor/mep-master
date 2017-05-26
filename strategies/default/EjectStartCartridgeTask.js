@@ -64,7 +64,7 @@ class EjectStartCartridgeTask extends Task {
                 await Delay(250);
             }
 
-            this.common.robot.colorfulModules = 0;
+            this.common.robot.colorfulModules = 1;
             lunar.standby();
 
             // Go away from edge

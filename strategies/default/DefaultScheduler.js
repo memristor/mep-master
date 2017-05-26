@@ -38,14 +38,15 @@ class DefaultScheduler extends Scheduler {
 
             // new Module1Task(this, { weight: 920, time: 10 }),
 
-            new Module3Task(this, { weight: 770, time: 5 }),
+            // new Module3Task(this, { weight: 770, time: 5 }),
             new Module2Task(this, { weight: 900, time: 10 }),
             new Module5Task(this, { weight: 780, time: 5 }), //NOTE: Namesteno
             new Module4Task(this, { weight: 790, time: 5 }), //NOTE: krzne kad se okrene
             new PushSideCartridgeTask(this, { weight: 760, time: 3 }),
 
             new CollectBackRocketTask(this, { weight: 600, time: 20 }),
-            new EjectStartCartridgeTask(this, { weight: 590, time: 7 })
+            new EjectStartCartridgeTask(this, { weight: 590, time: 7 }),
+            new PushSideCartridgeTask(this, { weight: 550, time: 3 })
         ];
 
         this._onTick = this._onTick.bind(this);
