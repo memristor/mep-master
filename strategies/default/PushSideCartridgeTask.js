@@ -15,7 +15,7 @@ class PushSideCartridgeTask extends Task {
         try {
             await Mep.Motion.go(new TunedPoint(-870, 80, [ 870, 80, 'blue' ]), { speed: 150, backward: true });
             this.common.terrain.lunar3Available = false;
-            await Mep.Motion.go(new TunedPoint(-677, 293, [ 690, 305, 'blue' ]), { speed: 150, backward: true });
+            await Mep.Motion.go(new TunedPoint(-680, 305, [ 690, 305, 'blue' ]), { speed: 150, backward: true });
             await this.common.push();
             this.common.robot.colorfulModules = 0;
             this.finish();

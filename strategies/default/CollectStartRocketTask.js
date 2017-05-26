@@ -13,7 +13,7 @@ class CollectStartRocketTask extends Task {
         try {
             lunar.prepare();
             await Mep.Motion.go(
-                new TunedPoint(-355, -737, [ 355, -735, 'blue' ]),
+                new TunedPoint(-355, -740, [ 355, -735, 'blue' ]),
                 { speed: 130, backward: false });
 
             this.common.robot.monochromeModules = 4;
