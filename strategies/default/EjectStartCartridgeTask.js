@@ -22,7 +22,7 @@ class EjectStartCartridgeTask extends Task {
 
         try {
             // Go to position
-            lunar.trackStart();
+            lunar.trackStop();
             await Mep.Motion.go(new TunedPoint(-1110, 80, [ 1100, 80, 'blue' ]),
                 { backward: (Mep.isOppositeSide() ? false : true) });
             await Mep.Motion.go(new TunedPoint(-1190, -90, [ 1200, -90, 'blue' ]),
@@ -33,7 +33,6 @@ class EjectStartCartridgeTask extends Task {
             try { await lunar.rotate(); } catch (e) { }
             await lunar.lunarTake();
             await lunar.lunarEject();
-
             // Eject other lunar modules
             lunar.trackStart();
             for (let i = 0; i < points.length; i++) {

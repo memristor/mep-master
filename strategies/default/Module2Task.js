@@ -17,7 +17,7 @@ class Module2Task extends Task {
 			lunar.limiterClose();
 			await Mep.Motion.straight(80, { speed: 90 });
             lunar.collect();
-            await Delay(2000);
+            await Delay(1500);
             lunar.standby().catch(() => {});
 						this.common.robot.colorfulModules++;
             this.finish();
