@@ -16,7 +16,7 @@ class InitTask extends Task {
         // await Delay(200);
 
 
-        Mep.getDriver('MotionDriver').softStop();
+        // Mep.getDriver('MotionDriver').softStop();
 
 
         // Mep.getDriver('ServoLimiter').setPosition(560);
@@ -62,8 +62,6 @@ class InitTask extends Task {
         // lunar.trackStart();
         // lunar.limiterOpen();
 
-        // Mep.getDriver('ServoLimiter').setPosition(480);
-
         await starter.waitStartSignal(new Console());
 
 
@@ -71,7 +69,7 @@ class InitTask extends Task {
             // await this.common.collect(); return;
 
             await Mep.Motion.go(new TunedPoint(-360, -550, [ 365, -550, 'blue' ]),
-                { speed: 200, backward: true, tolerance: 0, radius: 150 });
+                { speed: 170, backward: true, tolerance: 0, radius: 150 });
 
 
             // await Mep.Motion.go(new TunedPoint(-350, -350), { speed: 70, backward: true });

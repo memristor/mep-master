@@ -16,7 +16,6 @@ class FinalTask extends Task {
         }
 
         Mep.getDriver('CanDriver').disable();
-        Mep.getDriver('Uart').disable();
 
         await Delay(2000);
 

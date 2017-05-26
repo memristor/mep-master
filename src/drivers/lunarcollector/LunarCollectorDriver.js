@@ -19,7 +19,7 @@ class LunarCollectorDriver {
     constructor(name, config) {
         this.config = Object.assign({
             ejectorSpeed: 150,
-            colorTimeout: 5000
+            colorTimeout: 6000
         }, config);
         this.name = name;
 
@@ -249,8 +249,8 @@ class LunarCollectorDriver {
         this.trackStop();
         this._cylinder.write(0);
         this._servoPump.go(200);
-        let leftHandPromise = this._leftHand.go(860);
-        let rightHandPromise = this._rightHand.go(160);
+        let leftHandPromise = this._leftHand.go(840);
+        let rightHandPromise = this._rightHand.go(180);
 
         return Promise.all([
             leftHandPromise,

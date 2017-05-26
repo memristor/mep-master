@@ -48,6 +48,7 @@ class Scheduler {
                 // this.runNextTask();
             }
         } else {
+            Mep.Log.error(TAG, reason);
             throw Error(reason);
         }
     }

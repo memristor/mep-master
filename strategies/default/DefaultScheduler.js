@@ -242,7 +242,7 @@ class DefaultScheduler extends Scheduler {
             await Delay(500);
 
             lunar.collect();
-            await Delay(500);
+            await Delay(700);
             lunar.hold();
             lunar.trackStop();
         } catch (e) {

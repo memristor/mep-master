@@ -9,7 +9,7 @@ Drivers:
     mode: 'digital'
 
   StarterDriver:
-    type: 'keyboard' # keyboard, rope
+    type: 'rope' # keyboard, rope
     "@dependencies":
       ropePin: RopePin
 
@@ -68,7 +68,7 @@ Drivers:
 
   LaserFrontLeft:
     "@class": drivers/infrared/InfraredDriver
-    "@load": true
+    "@load": false
     "@dependencies":
       communicator: CanDriver
     infraredMaxDistance: 300
@@ -80,7 +80,7 @@ Drivers:
 
   LaserFrontRight:
     "@class": drivers/infrared/InfraredDriver
-    "@load": true
+    "@load": false
     "@dependencies":
       communicator: CanDriver
     infraredMaxDistance: 300

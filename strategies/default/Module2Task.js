@@ -13,7 +13,7 @@ const TAG = 'Module2Task';
 class Module2Task extends Task {
 	async onRun(){
 		try {
-			await Mep.Motion.go(new TunedPoint(-890, 50, [ 808, 65, 'blue' ]), { speed: 190 });
+			await Mep.Motion.go(new TunedPoint(-808, 65, [ 808, 65, 'blue' ]), { speed: 190 });
 			lunar.limiterClose();
 			await Mep.Motion.straight(80, { speed: 90 });
             lunar.collect();
