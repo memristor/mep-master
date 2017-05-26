@@ -15,7 +15,7 @@ class Module5Task extends Task {
             lunar.limiterClose();
             lunar.prepare().catch(() => {});
             await Mep.Motion.go(new TunedPoint(-1040, 370, [ 1040, 370, 'blue' ]), { speed : 160 });
-            await Mep.Motion.go(new TunedPoint(-770, 690, [ 840, 650, 'blue' ]), { speed : 70 });
+            await Mep.Motion.go(new TunedPoint(-770, 690, [ 850, 670, 'blue' ]), { speed : 70 });
             lunar.collect();
             await Delay(1000);
             await Mep.Motion.go(new TunedPoint(-1000, 360, [ 1000, 360, 'blue' ]), { backward: true, speed: 130 });

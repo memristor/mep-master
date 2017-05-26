@@ -161,7 +161,7 @@ class DefaultScheduler extends Scheduler {
           this.common.robot.colorfulModules--;
       }
       try { await lunar.limiterOpenSafe(); } catch (e) {}
-      try { lunar.prepare(); /*lunar.collect(500);*/ } catch (e) {}
+      try { lunar.collect(500); } catch (e) {}
       for(let i=0;i<4;i++){
         if (lunar.isEmpty() === true) {
             break;
