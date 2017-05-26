@@ -13,25 +13,11 @@ const TAG = 'Module2Task';
 class Module2Task extends Task {
 	async onRun(){
 		try {
-      //lunar.limiterClose();
-			//lunar.prepare();
-			/*
-			MotionDriver.on('positionChanged', (name, pos) => {
-				if(pos.getDistance(new Point(-890, 50)) < 200) {
-					this.removeListener('positionChanged');
-					lunar.limiterClose();
-					lunar.collect();
-				}
-			});
-			*/
-			//await Mep.Motion.go(new TunedPoint(-890, 50, [ 900, 73, 'blue' ]), {speed: 255, radius: 1});
-//NOTE: napisati za zutu, dodat tolerance da bi produzio dalje manjom brzinom
-			await Mep.Motion.go(new TunedPoint(-890, 50, [ 808, 65, 'blue' ]), {speed: 255, radius: 1, /*tolerance: 40*/ });
+			await Mep.Motion.go(new TunedPoint(-890, 50, [ 808, 65, 'blue' ]), { speed: 190 });
 			lunar.limiterClose();
-			await Mep.Motion.straight(60);
-            try { await lunar.collect(); } catch (e) { Mep.Log.error(TAG, e); }
-			await Delay(500);
-			//await Mep.Motion.straight(-30);	//NOTE: bilo -50
+			await Mep.Motion.straight(80, { speed: 90 });
+            lunar.collect();
+            await Delay(2000);
             lunar.standby().catch(() => {});
 
             this.finish();

@@ -10,7 +10,7 @@ class LeaveBallsTask extends Task {
         try {
             await Mep.Motion.go(new TunedPoint(-450, -450, [450, -450, 'blue']), { speed: 50, backward: true });
             while (true) {
-                if (this.common.leaveBallEnabled === true) {
+                if (this.common.leaveBallEnabled === false) {
                     break;
                 }
                 await Delay(300);

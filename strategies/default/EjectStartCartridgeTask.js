@@ -15,7 +15,9 @@ class EjectStartCartridgeTask extends Task {
     async onRun() {
         // Define points
         //let points = [ new TunedPoint(-1200, 0), new TunedPoint(-1200, 115), new TunedPoint(-1200, 230)];
-        let points = [ new TunedPoint(-1200, 80, [ 1200, -80, 'blue' ]), new TunedPoint(-1200, 200, [1200, -200, 'blue']) ];
+        let points = [
+            new TunedPoint(-1200, 80, [ 1200, -200, 'blue' ]),
+            new TunedPoint(-1200, 200, [ 1200, -350, 'blue']) ];
 
 
         try {
@@ -23,7 +25,7 @@ class EjectStartCartridgeTask extends Task {
             lunar.trackStart();
             await Mep.Motion.go(new TunedPoint(-1110, 80, [ 1100, 80, 'blue' ]),
                 { backward: (Mep.isOppositeSide() ? false : true) });
-            await Mep.Motion.go(new TunedPoint(-1190, -90, [ 1200, -200, 'blue' ]),
+            await Mep.Motion.go(new TunedPoint(-1190, -90, [ 1200, -90, 'blue' ]),
                 { speed: 70, backward: (Mep.isOppositeSide() ? false : true) });
             await Mep.Motion.rotate(new TunedAngle(90, [ -90, 'blue' ]));
 
@@ -36,7 +38,7 @@ class EjectStartCartridgeTask extends Task {
             lunar.trackStart();
             for (let i = 0; i < points.length; i++) {
                 // Move to ejection location
-                await Mep.Motion.go( points[i], { speed: 70, backward: (Mep.isOppositeSide() ? true : false) });
+                await Mep.Motion.go(points[i], { speed: 70, backward: false });
 
                 // Wait for module and if there is no module break
                 let moduleFound = false;
@@ -61,15 +63,6 @@ class EjectStartCartridgeTask extends Task {
                 await lunar.lunarEject();
                 await Delay(250);
             }
-            //last module
-            lunar.trackStart();
-            await Delay(500);
-            lunar.trackStop();
-            try { await lunar.rotate(); } catch (e) { }
-            await lunar.lunarTake();
-            await lunar.lunarPullOtherModules();
-            await Mep.Motion.forward(150);
-            await lunar.lunarEject();
 
             this.common.robot.colorfulModules = 0;
             lunar.standby();

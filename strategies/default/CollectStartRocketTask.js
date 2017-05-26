@@ -13,7 +13,7 @@ class CollectStartRocketTask extends Task {
         try {
             lunar.prepare();
             await Mep.Motion.go(
-                new TunedPoint(-355, -737, [ 355, -727, 'blue' ]),
+                new TunedPoint(-355, -737, [ 355, -735, 'blue' ]),
                 { speed: 130, backward: false });
 
             this.common.robot.monochromeModules = 4;
@@ -23,6 +23,12 @@ class CollectStartRocketTask extends Task {
 
             this.finish();
         } catch (e) {
+            switch (e.action) {
+                case 'stuck':
+                    await Delay(500);
+                    try { await Mep.Motion.straight(200, { opposite: true }); } catch (e) { Mep.Log.error(TAG, e); }
+                    break;
+            }
             Mep.Log.error(TAG, e);
             this.suspend();
         }

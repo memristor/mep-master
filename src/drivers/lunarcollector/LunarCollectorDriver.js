@@ -125,7 +125,9 @@ class LunarCollectorDriver {
         // Take a lunar
         this._cylinder.write(0);
         this._vacuumPump.write(1);
-        try { await this._servoPump.go(200); } catch (e) {}
+        this._servoPump.setPosition(200);
+        await Delay(500);
+
         this._cylinder.write(1);
         await Delay(1000);
         this._cylinder.write(0);
@@ -135,15 +137,13 @@ class LunarCollectorDriver {
     async lunarEject() {
       this._servoPump.setSpeed(1023);
 
-     // Eject a lunar
-
-     try { await this._servoPump.go(830); } catch (e) {}
+     this._servoPump.go(830);
+     await Delay(500);
      this._vacuumPump.write(0);
      await Delay(100);
      this._cylinder.write(1);
      await Delay(1000);
      this._cylinder.write(0);
-
     }
 
     async lunarPullOtherModules(){
@@ -198,6 +198,7 @@ class LunarCollectorDriver {
         this._colorRotator.write(0); // NOTE: this is temporary because motors are in series and should be in parallel
         this._colorRotator2.write(1);
         this._colorServo.setPosition(730);
+        this._circularInjector.write(0);
 		this.trackStart();
 
         // Rotate until color
@@ -258,7 +259,8 @@ class LunarCollectorDriver {
     }
 
     turnOff() {
-        this._circularInjector.write(1);
+        this._vacuumPump.write(0);
+        this._circularInjector.write(0);
         try {
             this.trackStop();
             this._leftTrack.setSpeed(0);

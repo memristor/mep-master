@@ -75,7 +75,7 @@ Drivers:
     sensorAngle: 110
     sensorX: 0
     sensorY: 70
-    cid: 0x00007F24
+    cid: 0x00007F11
     objectSize: 150
 
   LaserFrontRight:

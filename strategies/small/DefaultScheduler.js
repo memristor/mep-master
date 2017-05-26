@@ -63,7 +63,7 @@ class DefaultScheduler extends Scheduler {
 
     _onTick(secondsPassed) {
         if (secondsPassed > 88 && this._finalTaskExecuted === false) {
-            this.scheduler.disable();
+            this.disable();
             this.runTask(this._finalTask);
             this._finalTaskExecuted = true;
         }

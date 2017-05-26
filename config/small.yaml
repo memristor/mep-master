@@ -1,10 +1,21 @@
 Drivers:
+  RopePin:
+    "@class": drivers/pin/PinDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 0x00007F10
+    direction: 'input'
+    mode: 'digital'
+
   StarterDriver:
-    type: 'keyboard'
+    type: 'keyboard' # keyboard, rope
+    "@dependencies":
+      ropePin: RopePin
 
   MotionDriver:
-    startPosition: [ -1200, -790, [ 1350, -790, 'blue' ] ]
-    startOrientation: [ 0, [ 0, 'yellow' ] ]
+    startPosition: [ -1200, -790, [ 1200, -790, 'blue' ] ]
+    startOrientation: [ 180, [ 0, 'yellow' ] ]
     startSpeed: 100
     refreshDataPeriod: 120
 
@@ -69,21 +80,33 @@ Drivers:
     "@dependencies":
       communicator: CanDriver
     infraredMaxDistance: 200
-    sensorAngle: -90
-    sensorX: 100
-    sensorY: -70
-    cid: 0x00007F21
+    sensorAngle: 90
+    sensorX: 0
+    sensorY: 0
+    cid: 0x00007F0C
     objectSize: 150
 
-  LaserFront:
+  LaserFrontLeft:
     "@class": drivers/infrared/InfraredDriver
     "@load": true
     "@dependencies":
       communicator: CanDriver
     infraredMaxDistance: 200
     sensorAngle: -90
-    sensorX: 100
-    sensorY: -70
+    sensorX: 0
+    sensorY: 0
+    cid: 0x00007F21
+    objectSize: 150
+
+  LaserFrontRight:
+    "@class": drivers/infrared/InfraredDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    infraredMaxDistance: 200
+    sensorAngle: -90
+    sensorX: 0
+    sensorY: 0
     cid: 0x00007F11
     objectSize: 150
 

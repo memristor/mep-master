@@ -14,13 +14,21 @@ class Module3Task extends Task {
 	async onRun(){
 		try {
 			lunar.limiterClose();
-			await Mep.Motion.go(new TunedPoint(-900, 60, [ 920, 70, 'blue' ]));
-            lunar.prepare().catch(() => {});
-			await Mep.Motion.go(new TunedPoint(-700, 260, [ 735, 250, 'blue' ]));
-            try { await lunar.collect(); } catch (e) { Mep.Log.error(TAG, e); }
-            await Mep.Motion.go(new TunedPoint(-923, 83, [ 920, 83, 'blue' ]), { backward: true });
+			//await Mep.Motion.go(new TunedPoint(-900, 60, [ 920, 70, 'blue' ]));
 
-            // lunar.standby().catch(() => {});
+			//NOTE: probno
+			await Mep.Motion.go(new TunedPoint(-714, 106, [ 920, 70, 'blue' ]), {speed: 210});
+
+			//-764,69
+            lunar.prepare().catch(() => {});
+			//await Mep.Motion.go(new TunedPoint(-700, 260, [ 735, 250, 'blue' ]));
+			//NOTE: probno,namestiti za plavu
+			await Mep.Motion.go(new TunedPoint(-1060, 106, [ 735, 250, 'blue' ]), {speed:  70});
+			//-951, 55
+            lunar.collect();
+            lunar.hold();
+            await Delay(400);
+            await Mep.Motion.go(new TunedPoint(-923, 83, [ 920, 83, 'blue' ]), { backward: true });
             this.common.robot.colorfulModules++;
 
             this.finish();

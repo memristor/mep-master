@@ -14,7 +14,11 @@ class InitTask extends Task {
     async onRun() {
         // Mep.getDriver('FrontLunarDetector').on('changed', (val) => { if (val === 1) console.log('Lunars:', ++counter); });
         // await Delay(200);
-        // Mep.getDriver('MotionDriver').softStop();
+
+
+        Mep.getDriver('MotionDriver').softStop();
+
+
         // Mep.getDriver('ServoLimiter').setPosition(560);
         // await Mep.Motion.straight(-200, { speed: 110 });
 
@@ -60,8 +64,6 @@ class InitTask extends Task {
 
         // Mep.getDriver('ServoLimiter').setPosition(480);
 
-
-
         await starter.waitStartSignal(new Console());
 
 
@@ -69,7 +71,8 @@ class InitTask extends Task {
             // await this.common.collect(); return;
 
             await Mep.Motion.go(new TunedPoint(-360, -550, [ 365, -550, 'blue' ]),
-                { speed: 255, backward: true, tolerance: 0, radius: 150 });
+                { speed: 200, backward: true, tolerance: 0, radius: 150 });
+
 
             // await Mep.Motion.go(new TunedPoint(-350, -350), { speed: 70, backward: true });
         } catch (e) {

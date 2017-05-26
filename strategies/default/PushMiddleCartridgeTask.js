@@ -15,10 +15,10 @@ class PushMiddleCartridgeTask extends Task {
         try {
             await Mep.Motion.go(
                 new TunedPoint(10, -100, [ 0, -150, 'blue' ]),
-                { speed: 210, backward: true, tolerance: 0, radius: 200, obstacle: 1000, friend: 5000 });
+                { speed: 210, backward: true, tolerance: 0, radius: 200, obstacle: 1000, friend: 2000 });
             await Delay(100);
             await Mep.Motion.go(
-                 new TunedPoint(30, -20, [ 0, -20, 'blue' ]),
+                 new TunedPoint(30, -40, [ 0, -40, 'blue' ]),
                 { speed: 110, backward: true });
             await Mep.Motion.go(
                 new TunedPoint(30, 30, [ 0, 30, 'blue' ]),

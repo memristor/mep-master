@@ -379,7 +379,6 @@ class MotionDriver extends EventEmitter  {
      * @param {Number} speed Speed (0 - 255)
      */
     setSpeed(speed) {
-        speed = (speed * 0.8) | 0;
         this._activeSpeed = speed | 0;
         this._sendCommand(Buffer.from([
             'V'.charCodeAt(0),

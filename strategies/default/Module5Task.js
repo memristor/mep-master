@@ -14,11 +14,12 @@ class Module5Task extends Task {
 		try {
             lunar.limiterClose();
             lunar.prepare().catch(() => {});
-            await Mep.Motion.go(new TunedPoint(-770, 650, [ 770, 655, 'blue' ]), { speed : 70, radius: 1});
-            try { await lunar.collect(); } catch (e) { Mep.Log.error(TAG, e); }
-            await Delay(500);
+            await Mep.Motion.go(new TunedPoint(-1040, 370, [ 1040, 370, 'blue' ]), { speed : 160 });
+            await Mep.Motion.go(new TunedPoint(-770, 690, [ 840, 650, 'blue' ]), { speed : 70 });
+            lunar.collect();
+            await Delay(1000);
+            await Mep.Motion.go(new TunedPoint(-1000, 360, [ 1000, 360, 'blue' ]), { backward: true, speed: 130 });
             lunar.standby().catch(() => {});
-            await Mep.Motion.go(new TunedPoint(-1000, 360, [ 1000, 360, 'blue' ]), { radius: 1 ,backward: true, speed: 130 });
 
             //lunar.standby().catch(() => {});
             Mep.Share.send({ leaveBallEnabled: true });
