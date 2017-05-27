@@ -58,6 +58,7 @@ if (process.env.MEP_TEST) {
             default: ''
         },
         'i': {
+            // obsolete, see Udp.js for multicast example
             alias: 'friendIp',
             describe: 'IP of friend robot to enable communication',
             type: 'string',
