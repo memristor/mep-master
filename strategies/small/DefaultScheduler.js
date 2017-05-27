@@ -12,6 +12,8 @@ const InitTask = require('./InitTask');
 const FinalTask = require('./FinalTask');
 const SmallHoleTask = require('./SmallHoleTask');
 const LeaveBallTask = require('./LeaveBallsTask');
+const LeaveRampTask = require('./LeaveRampTask');
+const DragModuleTask = require('./DragModuleTask');
 
 const TAG = 'DefaultScheduler';
 
@@ -26,6 +28,8 @@ class DefaultScheduler extends Scheduler {
 
         // Array of tasks. Note that init and final tasks are not included in this array.
         this.tasks = [
+			new LeaveRampTask(this, { weight: 9999999 }),
+			new DragModuleTask(this, {weight: 10001}),
             new SmallHoleTask(this, { weight: 10000, time: 10 }),
             new LeaveBallTask(this, { weight: 1000, time: 10 })
         ];
@@ -113,6 +117,7 @@ class DefaultScheduler extends Scheduler {
     async _pick() {
         ballPicker.setPosition(100);
         await Delay(500);
+        ballPicker.setSpeed(200);
         ballPicker.setPosition(400);
         await Delay(500);
     }
@@ -120,6 +125,7 @@ class DefaultScheduler extends Scheduler {
     async _leave() {
         ballPicker.setPosition(100);
         await Delay(500);
+        try { await Mep.Motion.straight(150); } catch(e) {}
         ballPicker.setPosition(400);
         await Delay(500);
     }
