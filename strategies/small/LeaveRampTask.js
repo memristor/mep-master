@@ -29,10 +29,6 @@ class SmallHoleTask extends Task {
         await Delay(500);
         this.finish();
     }
-
-    isAvailable() {
-        return true;
-    }
 }
 
 module.exports = SmallHoleTask;

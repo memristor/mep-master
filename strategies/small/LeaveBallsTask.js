@@ -32,6 +32,13 @@ class LeaveBallsTask extends Task {
 			//this.common.liftDirBall();
 			try { await Mep.Motion.straight(-100, { speed: 50 }); } catch(e) {}
 			await this.common.leave();
+
+            r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(-1200, -200, [1200, -514, 'blue']), { speed: 80, backward: true });r=0;} catch(e) {}}
+            r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(-300, -200, [1200, -514, 'blue']), { speed: 80, backward: true });r=0;} catch(e) {}}
+
+
+            /*
+            // Collecting and leaving balls from another angle
 			r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(-1200, -450, [1200, -450, 'blue']), { speed: 80, backward: true });r=0;} catch(e) {}}
 			r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(-1000, -450, [1000, -450, 'blue']), { speed: 80, backward: true });r=0;} catch(e) {}}
 			
@@ -44,6 +51,7 @@ class LeaveBallsTask extends Task {
 			try { await Mep.Motion.straight(-100, { speed: 30 }); } catch(e) {}
 			await this.common.leave();
 			try { await Mep.Motion.straight(50); } catch(e) {}
+			*/
 			this.finish();
 
         } catch (e) {

@@ -35,8 +35,8 @@ class DefaultScheduler extends Scheduler {
         this.tasks = [
             new InitTask(this, { weight: 10000, time: 10 }),
 
-            new CollectStartRocketTask(this, { weight: 1000, time: 20 }),
-            new PushMiddleCartridgeTask(this, { weight: 980, time: 3}),
+          //  new CollectStartRocketTask(this, { weight: 1000, time: 20 }),
+          //  new PushMiddleCartridgeTask(this, { weight: 980, time: 3}),
 
             // new Module1Task(this, { weight: 920, time: 10 }),
 

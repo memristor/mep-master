@@ -194,6 +194,7 @@ class LunarCollectorDriver {
         let requiredColor = (Mep.Config.get('table').indexOf('blue') >= 0) ? 'blue' : 'yellow';
 
         // Prepare mechanisms for rotation
+        await Mep.getDriver('ServoPump').setPosition(200); //NOTE: dodao djole, obrisati ukoliko    je nepotrebno
         this._colorSensor.start(50);
         this._colorRotator.write(0); // NOTE: this is temporary because motors are in series and should be in parallel
         this._colorRotator2.write(1);

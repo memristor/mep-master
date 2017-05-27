@@ -36,9 +36,7 @@ class SmallHoleTask extends Task {
             await this.common.pick();
             this.common.robot.ballsLoaded = true;
 
-            await Mep.Motion.straight(100);
-
-            this.common.lowerDirBall();
+            await Mep.Motion.straight(-100);
             this.finish();
         } catch (e) {
             switch (e.action) {

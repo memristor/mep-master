@@ -32,12 +32,11 @@ class DefaultScheduler extends Scheduler {
 
         // Array of tasks. Note that init and final tasks are not included in this array.
         this.tasks = [
-			
 			new LeaveRampTask(this, { weight: 9999999 }),
-			new DragModuleTask(this, {weight: 10001}),
-            new SmallHoleTask(this, { weight: 10000, time: 10 }),
-            new LeaveBallTask(this, { weight: 1000, time: 10 })
-            
+
+			new DragModuleTask(this, {weight: 800 }),
+            new SmallHoleTask(this, { weight: 1000, time: 10 }),
+            new LeaveBallTask(this, { weight: 900, time: 10 })
         ];
 
         this._onTick = this._onTick.bind(this);
