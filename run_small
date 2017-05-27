@@ -1,0 +1,2 @@
+#!/bin/bash
+NODE_PATH=$HOME/node_modules ./mep -t yellow -c ../strategies/small/DefaultScheduler.js -r small

@@ -52,6 +52,7 @@ class DefaultScheduler extends Scheduler {
         starterDriver.on('tick', this._onTick);
 
         this.common.colorRotate = this._colorRotate.bind(this);
+        this.common.colorUp = this._colorUp.bind(this);
         this.common.pick = this._pick;
         this.common.leave = this._leave;
 
@@ -66,7 +67,6 @@ class DefaultScheduler extends Scheduler {
         };
         this.common.leaveBallEnabled = false;
 
-		console.log('javascript fail');
         // Init task is always first
         this.runTask(this._initTask);
 
@@ -113,13 +113,16 @@ class DefaultScheduler extends Scheduler {
 
     async _colorDown() {
 		this._colorRamp.setSpeed(500);
-        this._colorRamp.setPosition(330);
+        this._colorRamp.setPosition(250);
         await Delay(500);
         this._colorRamp.setSpeed(150);
-        this._colorRamp.setPosition(270);
+        this._colorRamp.setPosition(280);
+        await Delay(100);
+        this._colorRamp.setPosition(280);
         this._colorSensor.start(30);
         this._colorRotator.write(150);
         await Delay(500);
+        
     }
 
     async _colorRotate() {
@@ -142,7 +145,7 @@ class DefaultScheduler extends Scheduler {
 
             this._colorSensor.on('changed', colorChangedPromise);
             setTimeout(() => {
-                reject();
+                resolve();
                 scheduler._colorTmpUp();
                 colorSensor.removeListener('changed', colorChangedPromise);
             }, timeout);

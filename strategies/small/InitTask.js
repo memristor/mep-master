@@ -16,8 +16,8 @@ const TAG = 'InitTask';
 class InitTask extends Task {
     async onRun() {
         directionBall.setPosition(170);
-        Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_STUCK_ROTATION_MAX_FAIL_COUNT, 300);
-        Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_STUCK_DISTANCE_MAX_FAIL_COUNT, 300);
+        Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_STUCK_ROTATION_MAX_FAIL_COUNT, 500);
+        Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_STUCK_DISTANCE_MAX_FAIL_COUNT, 500);
         Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_PID_R_P, 1.5);
         Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_PID_R_D, 95);
         //Mep.getDriver('MotionDriver').softStop();

@@ -15,7 +15,7 @@ class DragModuleTask extends Task {
         try {
             await Mep.Motion.go(new TunedPoint(-260, -706, [260, -706, 'blue']),{backward: false});
             await Mep.Motion.go(new TunedPoint(-244, -168, [244, -168, 'blue']),{backward: false});
-            await Mep.Motion.go(new TunedPoint(-515, -210, [558, -210, 'blue']),{backward: false});
+            await Mep.Motion.go(new TunedPoint(-515, -210, [515, -210, 'blue']),{backward: false});
             await Mep.Motion.go(new TunedPoint(-533, -692, [533, -692, 'blue']),{backward: false});
             this.finish();
         } catch (e) {

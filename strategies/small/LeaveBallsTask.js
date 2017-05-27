@@ -9,7 +9,7 @@ const TAG = 'LeaveBallsTask';
 
 class LeaveBallsTask extends Task {
     async onRun() {
-		
+		var r=1;
         try {
 			
 			// // start position for yellow -1200, -790
@@ -25,21 +25,22 @@ class LeaveBallsTask extends Task {
             }*/
 
             //this.common.lowerDirBall();
-            await Mep.Motion.go(new TunedPoint(-512, -156, [512, -156, 'blue']), { speed: 80, backward: false });
-			await Mep.Motion.go(new TunedPoint(-900, -100, [900, -100, 'blue']), { speed: 80, backward: false });
-			await Mep.Motion.go(new TunedPoint(-1200, -400, [1315, -400, 'blue']), { speed: 80, backward: false });
-			await Mep.Motion.go(new TunedPoint(-1200, -514, [1296, -514, 'blue']), { speed: 80, backward: true });
+            r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(-512, -156, [512, -156, 'blue']), { speed: 80, backward: false });r=0;} catch(e) {}}
+			r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(-900, -100, [900, -100, 'blue']), { speed: 80, backward: false });r=0;} catch(e) {}}
+			r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(-1200, -400, [1200, -400, 'blue']), { speed: 80, backward: false });r=0;} catch(e) {}}
+			r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(-1200, -514, [1200, -514, 'blue']), { speed: 80, backward: true });r=0;} catch(e) {}}
 			//this.common.liftDirBall();
-			try { await Mep.Motion.straight(-100, { speed: 30 }); } catch(e) {}
+			try { await Mep.Motion.straight(-100, { speed: 50 }); } catch(e) {}
 			await this.common.leave();
-			await Mep.Motion.go(new TunedPoint(-1200, -450, [1296, -400, 'blue']), { speed: 80, backward: true });
-			await Mep.Motion.go(new TunedPoint(-1000, -450, [1296, -400, 'blue']), { speed: 80, backward: true });
+			r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(-1200, -450, [1200, -450, 'blue']), { speed: 80, backward: true });r=0;} catch(e) {}}
+			r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(-1000, -450, [1000, -450, 'blue']), { speed: 80, backward: true });r=0;} catch(e) {}}
 			
-			try { await Mep.Motion.straight(-100, { speed: 30 }); } catch(e) {}
+			try { await Mep.Motion.straight(-100, { speed: 50 }); } catch(e) {}
 			await this.common.pick();
 			
-			await Mep.Motion.go(new TunedPoint(-1200, -450, [1296, -400, 'blue']), { speed: 80, backward: true });
-			await Mep.Motion.go(new TunedPoint(-1200, -514, [1296, -514, 'blue']), { speed: 80, backward: true });
+			r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(-1200, -450, [1200, -450, 'blue']), { speed: 80, backward: true }); r=0;} catch(e) {}}
+			r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(-1200, -514, [1200, -514, 'blue']), { speed: 80, backward: true }); r=0;} catch(e) {}}
+			//Mep.Motion.ro
 			try { await Mep.Motion.straight(-100, { speed: 30 }); } catch(e) {}
 			await this.common.leave();
 			try { await Mep.Motion.straight(50); } catch(e) {}
@@ -63,6 +64,7 @@ class LeaveBallsTask extends Task {
             Mep.Log.error(TAG, e);
 
             // You have to finish or suspend task
+            
             this.suspend();
             
         }
