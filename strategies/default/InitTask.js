@@ -61,6 +61,7 @@ class InitTask extends Task {
 
         // lunar.trackStart();
         // lunar.limiterOpen();
+        Mep.getDriver('ServoCollectorTrackRight').setSpeed(1023);
 
         await starter.waitStartSignal(new Console());
 

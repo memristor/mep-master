@@ -19,6 +19,8 @@ const Module5Task = require('./Module5Task');
 const FinalTask = require('./FinalTask');
 const myTestTask = require('./myTestTask');
 
+const backLunarDetector = Mep.getDriver('BackLunarDetector');
+
 const TAG = 'DefaultScheduler';
 
 class DefaultScheduler extends Scheduler {
@@ -53,6 +55,7 @@ class DefaultScheduler extends Scheduler {
         this._newPush = this._newPush.bind(this);
         this._collect = this._collect.bind(this);
         this._collect2 = this._collect2.bind(this);
+        this._asyncRotateOnColor = this._asyncRotateOnColor.bind(this);
 
         // Init task is always first
         this.runTask(this.tasks[0]);
@@ -61,6 +64,7 @@ class DefaultScheduler extends Scheduler {
         this.common.push = this._newPush;
         this.common.collect = this._collect;
         this.common.collect2 = this._collect2;
+        this.common.asyncRotateOnColor = this._asyncRotateOnColor;
         this.common.terrain = {
             startRocketModules: 4,
             backRocketModules: 4,
@@ -70,6 +74,7 @@ class DefaultScheduler extends Scheduler {
             lunar3Available: true
         };
         this.common.robot = {
+            backLunarOnColor: false,
             colorfulModules: 0,
             monochromeModules: 0,
             rejectedOnTheMiddle: false
@@ -78,6 +83,26 @@ class DefaultScheduler extends Scheduler {
         // Last task
         this._starterDriver = Mep.getDriver('StarterDriver');
         this._starterDriver.on('tick', this._onTick);
+    }
+
+    _asyncRotateOnColor() {
+        let scheduler = this;
+
+        let onBackSensorDetected = (detected) => {
+            if (detected === true) {
+                lunar.rotate()
+                    .then(() => { scheduler.common.robot.backLunarOnColor = true; })
+                    .catch(() => {});
+            }
+        };
+
+        if (backLunarDetector.getLastValue() > 0) {
+            lunar.rotate()
+                .then(() => { scheduler.common.robot.backLunarOnColor = true; })
+                .catch(() => {});
+        } else {
+            backLunarDetector.on('changed', onBackSensorDetected);
+        }
     }
 
     _onTick(secondsPassed) {
@@ -91,7 +116,7 @@ class DefaultScheduler extends Scheduler {
     async _push() {
         // We can rotate one module
         if (this.common.robot.colorfulModules >= 1) {
-            try { await lunar.rotate(); } catch (e) {}
+            // try { await lunar.rotate(); } catch (e) {}
             this.common.robot.colorfulModules--;
         }
 
@@ -158,7 +183,7 @@ class DefaultScheduler extends Scheduler {
 
     async _newPush(){
       if (this.common.robot.colorfulModules >= 1) {
-          try { await lunar.rotate(); } catch (e) {}
+          //try { await lunar.rotate(); } catch (e) {}
           this.common.robot.colorfulModules--;
       }
       try { await lunar.limiterOpenSafe(); } catch (e) {}
