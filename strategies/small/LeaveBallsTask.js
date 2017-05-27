@@ -3,21 +3,42 @@ const Delay = Mep.require('misc/Delay');
 const TunedPoint = Mep.require('strategy/TunedPoint');
 const TunedAngle = Mep.require('strategy/TunedAngle');
 
+const directionBall = Mep.getDriver('DirectionBall');
+
 const TAG = 'LeaveBallsTask';
 
 class LeaveBallsTask extends Task {
     async onRun() {
+		
         try {
-            await Mep.Motion.go(new TunedPoint(-450, -450, [450, -450, 'blue']), { speed: 50, backward: true });
+			
+			// // start position for yellow -1200, -790
+			// +750 +340
+			// left of ramp
+            await Mep.Motion.go(new TunedPoint(-450, -450, [450, -450, 'blue']), { speed: 50, backward: true, pf: true });
+            /*
             while (true) {
                 if (this.common.leaveBallEnabled === false) {
                     break;
                 }
                 await Delay(300);
-            }
+            }*/
 
-            await Mep.Motion.go(new TunedPoint(-1320, -420), { obstacle: 1000, friend: 2000, speed: 100, pf: true });
-            await Mep.Motion.go(new TunedPoint(-1320, -500), { speed: 50 });
+			directionBall.setPosition(500);
+			await Mep.Motion.go(new TunedPoint(-900, -135, [900, -135, 'blue']), { speed: 50, backward: true });
+			await Mep.Motion.go(new TunedPoint(-1315, -393, [1315, -393, 'blue']), { speed: 50, backward: true });
+			await Mep.Motion.go(new TunedPoint(-1296, -514, [1296, -514, 'blue']), { speed: 50, backward: true });
+			try { await Mep.Motion.straight(-200); } catch(e) {}
+			await this.common.leave();
+			await Mep.Motion.go(new TunedPoint(-1296, -400, [1296, -400, 'blue']), { speed: 50 });
+			this.finish();
+			return;
+			
+			// at leaving point
+			await Mep.Motion.go(new TunedPoint(-1320, -420), { obstacle: 1000, friend: 2000, speed: 50, pf: true });
+			// goint toward it
+            await Mep.Motion.go(new TunedPoint(-1320, -530), { speed: 50, backward: true, pf: true });
+            
 
             await this.common.leave();
             this.common.robot.ballsLoaded = false;
@@ -38,9 +59,11 @@ class LeaveBallsTask extends Task {
                     // Obstacle is detected and detection timeout is exceeded
                     break;
             }
+            Mep.Log.error(TAG, e);
 
             // You have to finish or suspend task
             this.suspend();
+            
         }
     }
 

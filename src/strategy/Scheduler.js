@@ -48,7 +48,6 @@ class Scheduler {
                 // this.runNextTask();
             }
         } else {
-            Mep.Log.error(TAG, reason);
             throw Error(reason);
         }
     }
@@ -66,6 +65,7 @@ class Scheduler {
     }
 
     runNextTask() {
+		let tasks = this.getTasks();
         let nextTask = Mep.Scheduler.recommendNextTask(this.tasks);
         if (nextTask !== null) {
             if (this._disabled === false) {
@@ -78,7 +78,7 @@ class Scheduler {
 
             // Try to run next task again
             // This way scheduler may run suspended task again
-            // setTimeout(this.runNextTask, 1000);
+            setTimeout(() => { this.runNextTask(tasks); }, 1000);
         }
     }
 

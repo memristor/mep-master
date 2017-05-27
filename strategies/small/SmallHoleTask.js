@@ -12,18 +12,28 @@ const TAG = 'SmallHoleTask';
 
 class SmallHoleTask extends Task {
     async onRun() {
+		Mep.Position.on('positionChanged', (pos) => {
+			if( (pos.getDistance(new TunedPoint(-450, -450, [450, -450, 'blue']).getPoint()) < 200 ) ) {
+				directionBall.setPosition(512);
+				Mep.Position.on('positionChanged', (pos2) => {
+					if( (pos2.getDistance(new TunedPoint(-450, -450, [450, -450, 'blue']).getPoint()) > 200 ) ) {
+						directionBall.setPosition(100);
+					}
+				});
+			}
+		});
         try {
             await Mep.Motion.go(new TunedPoint(-450, -450, [450, -450, 'blue']), { obstacle: 1000, friend: 2000, speed: 100, pf: true });
 
             directionBall.setPosition(170);
             try {
-                await Mep.Motion.go(new TunedPoint(-650, -450, [650, -450, 'blue']), {speed: 50, backward: true});
+                await Mep.Motion.go(new TunedPoint(-750, -450, [750, -450, 'blue']), {speed: 50, backward: true});
             } catch (e) {}
             await this.common.pick();
             this.common.robot.ballsLoaded = true;
 
-            await Mep.Motion.straight(-50);
-            directionBall.setPosition(500);
+            await Mep.Motion.straight(100);
+            //directionBall.setPosition(500);
             this.finish();
         } catch (e) {
             switch (e.action) {
@@ -45,10 +55,24 @@ class SmallHoleTask extends Task {
             this.suspend();
         }
     }
+   
+   /* 
+    _onTick(secondsPassed) {
+		console.log('Seconds passed', secondsPassed);
+		if (secondsPassed > (Mep.Config.get('duration') - 3) && this._finalTaskExecuted === false) {
+			this._finalTaskExecuted = true;
+			// this.runTask(this._finalTask);
+			// this._finalTaskExecuted = true;
+		}
+	}
+	*/
 
     isAvailable() {
         return (this.common.robot.ballsLoaded === false);
     }
 }
+
+
+
 
 module.exports = SmallHoleTask;

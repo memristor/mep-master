@@ -3,6 +3,7 @@ const TunedPoint = Mep.require('strategy/TunedPoint');
 const TunedAngle = Mep.require('strategy/TunedAngle');
 const Delay = Mep.require('misc/Delay');
 const Console = require('./Console');
+const MotionDriver = Mep.require('drivers/motion/MotionDriver');
 
 // Drivers
 const starter = Mep.getDriver('StarterDriver');
@@ -14,24 +15,20 @@ const TAG = 'InitTask';
 
 class InitTask extends Task {
     async onRun() {
-        ballPicker.setSpeed(400);
-        ballPicker.setPosition(190);
+		
+        
         directionBall.setPosition(170);
+        Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_STUCK_ROTATION_MAX_FAIL_COUNT, 500);
+        Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_STUCK_DISTANCE_MAX_FAIL_COUNT, 500);
+        Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_PID_R_P, 1.5);
+        Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_PID_R_D, 95);
+        Mep.getDriver('MotionDriver').softStop();
         await starter.waitStartSignal(new Console());
-
-        for (let i = 0; i < 3; i++) {
-            try {
-                await Mep.Motion.go(new TunedPoint(-500, -790, [500, -790, 'blue']), { speed: 110 });
-                await Delay(200);
-                ballPicker.setPosition(445);
-                directionBall.setPosition(500);
-                i = 3;
-            } catch (e) {
-
-            }
-        }
+		await Delay(8000);
+		ballPicker.setSpeed(400);
+        ballPicker.setPosition(190);
         this.finish();
-    } 
+    }
 }
 
 module.exports = InitTask;
