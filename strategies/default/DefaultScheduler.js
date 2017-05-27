@@ -206,7 +206,20 @@ class DefaultScheduler extends Scheduler {
         }
         await Delay(500);
       }
-      await Mep.Motion.straight(150);
+      //await Mep.Motion.straight(150); NOTE: ovo je bilo
+      //**************************************************
+      await Mep.Motion.straight(50); //NOTE: dodato
+      try {
+          await Mep.Motion.straight(-50);
+      } catch (e) {
+          Mep.Log.error(TAG, 'Motion.straight', e);
+      }
+      try {
+          await Mep.Motion.straight(150);
+      } catch (e) {
+          Mep.Log.error(TAG, 'Motion.straight', e);
+      }
+      //****************************************** NOTE: dodato radi poslednjeg modula koji nekad viri
         try { lunar.close(); } catch (e) {}
     }
 
@@ -251,7 +264,6 @@ class DefaultScheduler extends Scheduler {
             } catch (e) {
                 Mep.Log.error(TAG, 'Motion.straight', e);
             }
-
             lunar.trackStop();
 
         } catch (e) {
