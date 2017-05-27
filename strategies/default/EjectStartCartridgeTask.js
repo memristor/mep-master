@@ -17,7 +17,7 @@ class EjectStartCartridgeTask extends Task {
         //let points = [ new TunedPoint(-1200, 0), new TunedPoint(-1200, 115), new TunedPoint(-1200, 230)];
         let points = [
             new TunedPoint(-1200, 80, [ 1200, -200, 'blue' ]),
-            new TunedPoint(-1200, 200, [ 1200, -350, 'blue']) ];
+            new TunedPoint(-1200, 180, [ 1200, -350, 'blue']) ];
 
 
         try {
@@ -30,7 +30,7 @@ class EjectStartCartridgeTask extends Task {
             await Mep.Motion.rotate(new TunedAngle(90, [ -90, 'blue' ]));
 
             // Eject first lunar module
-            try { await lunar.rotate(); } catch (e) { }
+            // try { await lunar.rotate(); } catch (e) { }
             await lunar.lunarTake();
             await lunar.lunarEject();
             // Eject other lunar modules
@@ -64,6 +64,7 @@ class EjectStartCartridgeTask extends Task {
             }
 
             this.common.robot.colorfulModules = 1;
+            this.common.asyncRotateOnColor();
             lunar.standby();
 
             // Go away from edge

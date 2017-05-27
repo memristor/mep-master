@@ -15,16 +15,14 @@ const TAG = 'InitTask';
 
 class InitTask extends Task {
     async onRun() {
-		
-        
         directionBall.setPosition(170);
-        Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_STUCK_ROTATION_MAX_FAIL_COUNT, 500);
-        Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_STUCK_DISTANCE_MAX_FAIL_COUNT, 500);
+        Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_STUCK_ROTATION_MAX_FAIL_COUNT, 300);
+        Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_STUCK_DISTANCE_MAX_FAIL_COUNT, 300);
         Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_PID_R_P, 1.5);
         Mep.getDriver('MotionDriver').setConfig(MotionDriver.CONFIG_PID_R_D, 95);
-        Mep.getDriver('MotionDriver').softStop();
+        //Mep.getDriver('MotionDriver').softStop();
         await starter.waitStartSignal(new Console());
-		await Delay(8000);
+		// await Delay(8000);
 		ballPicker.setSpeed(400);
         ballPicker.setPosition(190);
         this.finish();

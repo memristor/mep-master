@@ -6,6 +6,9 @@ const Point = Mep.require('misc/Point');
 const lunar = Mep.getDriver('LunarCollector');
 const Console = require('./Console');
 
+const servoPump = Mep.getDriver('ServoPump');
+const cylinder = Mep.getDriver('Cylinder');
+
 const TAG = 'PushSideCartridgeTask';
 
 class PushSideCartridgeTask extends Task {
@@ -15,7 +18,23 @@ class PushSideCartridgeTask extends Task {
         try {
             await Mep.Motion.go(new TunedPoint(-870, 80, [ 870, 80, 'blue' ]), { speed: 150, backward: true });
             this.common.terrain.lunar3Available = false;
-            await Mep.Motion.go(new TunedPoint(-680, 305, [ 690, 305, 'blue' ]), { speed: 150, backward: true });
+
+            // Kick module
+            /*
+            await Mep.Motion.rotate(new TunedAngle(-140));
+            await Mep.Motion.go(new TunedPoint(-726, 229, [ 870, 80, 'blue' ]), { speed: 150, backward: true });
+            servoPump.setPosition(830);
+            cylinder.write(1);
+            await Delay(600);
+            await Mep.Motion.rotate(new TunedAngle(-20));
+            servoPump.setPosition(200);
+            cylinder.write(0);
+            await Delay(600);
+            */
+
+
+
+            await Mep.Motion.go(new TunedPoint(-673, 312, [ 683, 312, 'blue' ]), { speed: 150, backward: true });
             await this.common.push();
             this.common.robot.colorfulModules = 0;
             this.finish();

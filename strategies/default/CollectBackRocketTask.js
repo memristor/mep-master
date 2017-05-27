@@ -19,7 +19,8 @@ class CollectBackRocketTask extends Task {
             lunar.collect();
             await Delay(400);
             lunar.prepare(500, 515).catch(() => {});
-            await Mep.Motion.straight(-90);
+            // await Mep.Motion.straight(-150);
+            await Mep.Motion.go(new TunedPoint(-1000, 370, [ 1000, 340, 'blue' ]), { speed: 80, backward: true });
             this.finish();
         } catch (e) {
             switch (e.action) {

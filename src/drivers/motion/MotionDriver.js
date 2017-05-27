@@ -148,9 +148,10 @@ class MotionDriver extends EventEmitter  {
             this.orientation
         );
         this.setConfig(MotionDriver.CONFIG_SEND_STATUS_INTERVAL, this.config.refreshDataPeriod, 0);
-        this.setConfig(28, 2.85, 2);
+        this.setConfig(28, 3.0, 2);
         this.setConfig(29, 1.2, 1);
         this.setConfig(30, 0.2, 1);
+        //this.setConfig(27, 10, 0);
         this.requestRefreshData();
 
         return new Promise((resolve) => {

@@ -15,7 +15,7 @@ class LeaveBallsTask extends Task {
 			// // start position for yellow -1200, -790
 			// +750 +340
 			// left of ramp
-            await Mep.Motion.go(new TunedPoint(-450, -450, [450, -450, 'blue']), { speed: 50, backward: true, pf: true });
+            //await Mep.Motion.go(new TunedPoint(-450, -450, [450, -450, 'blue']), { speed: 50, backward: true, pf: true });
             /*
             while (true) {
                 if (this.common.leaveBallEnabled === false) {
@@ -24,26 +24,27 @@ class LeaveBallsTask extends Task {
                 await Delay(300);
             }*/
 
-			directionBall.setPosition(500);
-			await Mep.Motion.go(new TunedPoint(-900, -135, [900, -135, 'blue']), { speed: 50, backward: true });
-			await Mep.Motion.go(new TunedPoint(-1315, -393, [1315, -393, 'blue']), { speed: 50, backward: true });
-			await Mep.Motion.go(new TunedPoint(-1296, -514, [1296, -514, 'blue']), { speed: 50, backward: true });
-			try { await Mep.Motion.straight(-200); } catch(e) {}
+            //this.common.lowerDirBall();
+            await Mep.Motion.go(new TunedPoint(-512, -156, [512, -156, 'blue']), { speed: 80, backward: false });
+			await Mep.Motion.go(new TunedPoint(-900, -100, [900, -100, 'blue']), { speed: 80, backward: false });
+			await Mep.Motion.go(new TunedPoint(-1200, -400, [1315, -400, 'blue']), { speed: 80, backward: false });
+			await Mep.Motion.go(new TunedPoint(-1200, -514, [1296, -514, 'blue']), { speed: 80, backward: true });
+			//this.common.liftDirBall();
+			try { await Mep.Motion.straight(-100, { speed: 30 }); } catch(e) {}
 			await this.common.leave();
-			await Mep.Motion.go(new TunedPoint(-1296, -400, [1296, -400, 'blue']), { speed: 50 });
-			this.finish();
-			return;
+			await Mep.Motion.go(new TunedPoint(-1200, -450, [1296, -400, 'blue']), { speed: 80, backward: true });
+			await Mep.Motion.go(new TunedPoint(-1000, -450, [1296, -400, 'blue']), { speed: 80, backward: true });
 			
-			// at leaving point
-			await Mep.Motion.go(new TunedPoint(-1320, -420), { obstacle: 1000, friend: 2000, speed: 50, pf: true });
-			// goint toward it
-            await Mep.Motion.go(new TunedPoint(-1320, -530), { speed: 50, backward: true, pf: true });
-            
+			try { await Mep.Motion.straight(-100, { speed: 30 }); } catch(e) {}
+			await this.common.pick();
+			
+			await Mep.Motion.go(new TunedPoint(-1200, -450, [1296, -400, 'blue']), { speed: 80, backward: true });
+			await Mep.Motion.go(new TunedPoint(-1200, -514, [1296, -514, 'blue']), { speed: 80, backward: true });
+			try { await Mep.Motion.straight(-100, { speed: 30 }); } catch(e) {}
+			await this.common.leave();
+			try { await Mep.Motion.straight(50); } catch(e) {}
+			this.finish();
 
-            await this.common.leave();
-            this.common.robot.ballsLoaded = false;
-
-            this.finish();
         } catch (e) {
             switch (e.action) {
                 case 'stuck':

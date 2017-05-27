@@ -66,6 +66,17 @@ Drivers:
     id: 21
     cid: 0x00007F00
 
+  ColorIrSensor:
+    "@class": drivers/infrared/InfraredDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    infraredMaxDistance: 20
+    sensorAngle: 0
+    sensorX: 0
+    sensorY: 0
+    cid: 0x00007F0E
+    objectSize: 1
   BallPicker:
     "@class": drivers/dynamixel/DynamixelDriver
     "@load": true

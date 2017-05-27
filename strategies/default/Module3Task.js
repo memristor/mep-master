@@ -13,6 +13,9 @@ const TAG = 'Module3Task';
 class Module3Task extends Task {
 	async onRun(){
 		try {
+            await Mep.Motion.go(new TunedPoint(-900, 60, [ 920, 70, 'blue' ]));
+
+			/*
 			lunar.limiterClose();
 			//await Mep.Motion.go(new TunedPoint(-900, 60, [ 920, 70, 'blue' ]));
 
@@ -29,7 +32,9 @@ class Module3Task extends Task {
             lunar.hold();
             await Delay(400);
             await Mep.Motion.go(new TunedPoint(-923, 83, [ 920, 83, 'blue' ]), { backward: true });
+
             this.common.robot.colorfulModules++;
+            */
 
             this.finish();
 		} catch (e) {

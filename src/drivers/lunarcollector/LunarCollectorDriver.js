@@ -60,7 +60,7 @@ class LunarCollectorDriver {
 
     limiterClose() {
         this._circularEjector.write(0);
-        return this._limiter.go(480);
+        return this._limiter.go(470);
     }
 
     limiterPrepare() {
@@ -114,8 +114,8 @@ class LunarCollectorDriver {
         this.trackStart();
         this._leftTrack.setSpeed(1023);
         this._rightTrack.setSpeed(1023, true);
-        this._leftHand.setPosition(500);
-        this._rightHand.setPosition(515);
+        this._leftHand.setPosition(490);
+        this._rightHand.setPosition(520);
     }
 
     async lunarTake() {
@@ -138,9 +138,9 @@ class LunarCollectorDriver {
       this._servoPump.setSpeed(1023);
 
      this._servoPump.go(830).catch(() => {});
-     await Delay(800);
+     await Delay(1200);
      this._vacuumPump.write(0);
-     await Delay(100);
+     await Delay(200);
      this._cylinder.write(1);
      await Delay(1000);
      this._cylinder.write(0);

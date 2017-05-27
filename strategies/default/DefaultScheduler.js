@@ -88,8 +88,9 @@ class DefaultScheduler extends Scheduler {
     _asyncRotateOnColor() {
         let scheduler = this;
 
-        let onBackSensorDetected = (detected) => {
-            if (detected === true) {
+        let onBackSensorDetected = (value) => {
+            backLunarDetector.removeListener('changed', onBackSensorDetected);
+            if (value > 0) {
                 lunar.rotate()
                     .then(() => { scheduler.common.robot.backLunarOnColor = true; })
                     .catch(() => {});

@@ -9,7 +9,7 @@ Drivers:
     mode: 'digital'
 
   StarterDriver:
-    type: 'keyboard' # keyboard, rope
+    type: 'rope' # keyboard, rope
     "@dependencies":
       ropePin: RopePin
 
