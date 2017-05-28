@@ -12,31 +12,24 @@ const TAG = 'SmallHoleTask';
 
 class SmallHoleTask extends Task {
     async onRun() {
-        /*
-		Mep.Position.on('positionChanged', (pos) => {
-			if( (pos.getDistance(new TunedPoint(-450, -450, [450, -450, 'blue']).getPoint()) < 200 ) ) {
-                this.common.lowerDirBall();
-				Mep.Position.on('positionChanged', (pos2) => {
-					if( (pos2.getDistance(new TunedPoint(-450, -450, [450, -450, 'blue']).getPoint()) > 200 ) ) {
-						directionBall.setPosition(100);
-					}
-				});
-			}
-		});
-		*/
-
         try {
-            await Mep.Motion.go(new TunedPoint(-450, -450, [450, -450, 'blue']), {
-                obstacle: 1000, friend: 2000, speed: 100, backward: false });
-
-            this.common.lowerDirBall();
             try {
-                await Mep.Motion.go(new TunedPoint(-750, -450, [750, -450, 'blue']), {speed: 50, backward: true});
+                await Mep.Motion.go(new TunedPoint(-630, -550, [630, -550, 'blue']), {speed: 50, backward: true});
             } catch (e) {}
-            await this.common.pick();
+
+            try {
+                await Mep.Motion.rotate(new TunedAngle(-30), {speed: 50, backward: true});
+            } catch (e) {}
+
+            try { await this.common.pick(); } catch (e) { Mep.Log.error(TAG, e); }
             this.common.robot.ballsLoaded = true;
 
-            await Mep.Motion.straight(-100);
+            await Delay(800);
+            try { await Mep.Motion.straight(170); } catch (e) { Mep.Log.error(TAG, e); }
+
+            // Wait for signal message
+            while (this.common.leaveBallEnabled === false) { await Delay(300); }
+
             this.finish();
         } catch (e) {
             switch (e.action) {

@@ -40,8 +40,6 @@ class Module5Task extends Task {
             servoPump.setPosition(200);
             */
 
-            //lunar.standby().catch(() => {});
-            Mep.Share.send({ leaveBallEnabled: true });
 
             this.finish();
         } catch (e) {

@@ -18,6 +18,10 @@ class CollectStartRocketTask extends Task {
 
             this.common.robot.monochromeModules = 4;
             await this.common.collect();
+
+            // Send message to SMALL robot
+            Mep.Share.send({ leaveStartEnabled: true });
+
             //lunar.trackStop();
             await Mep.Motion.straight(-100, { speed: 150 });
 

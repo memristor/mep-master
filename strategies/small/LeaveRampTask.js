@@ -8,27 +8,27 @@ const ballPicker = Mep.getDriver('BallPicker');
 const directionBall = Mep.getDriver('DirectionBall');
 
 
-const TAG = 'SmallHoleTask';
+const TAG = 'LeaveRampTask';
 
-class SmallHoleTask extends Task {
+class LeaveRampTask extends Task {
     async onRun() {
+        // Wait for signal message
+        while (this.common.leaveStartEnabled === false) { await Delay(300); }
+
        for (let i = 0; i < 10; i++) {
             try {
 				// start position for yellow -1200, -790
 				// go forward +700 from starting pos
-                await Mep.Motion.go(new TunedPoint(-500, -790, [500, -790, 'blue']), { speed: 100 });
-                // await Mep.Motion.go(new TunedPoint(-500, -790, [500, -790, 'blue']), { speed: 80 });
-                //await Delay(500);
-                break;
+                await Mep.Motion.go(new TunedPoint(-450, -790, [450, -790, 'blue']), { speed: 100 });
             } catch (e) {
-                i = 3;
+
             }
         }
         ballPicker.setPosition(445);
-        directionBall.setPosition(512);
-        await Delay(500);
+        this.common.lowerDirBall();
+
         this.finish();
     }
 }
 
-module.exports = SmallHoleTask;
+module.exports = LeaveRampTask;

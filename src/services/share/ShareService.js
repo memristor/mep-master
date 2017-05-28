@@ -21,7 +21,8 @@ class ShareService extends EventEmitter {
     init(config) {
         this.config = Object.assign({
             protocol: 'Udp',
-            position: true
+            position: true,
+            ip: ''
         }, config);
 
         this._lastFriendPosition = null;
@@ -31,7 +32,7 @@ class ShareService extends EventEmitter {
         this._onPositionChanged = this._onPositionChanged.bind(this);
 
         this.communicator = new (require('./protocols/' + this.config.protocol + '.js'))({
-            ip: Mep.Config.get('friendIp')
+            ip: (this.config.ip !== '') ? this.config.ip : Mep.Config.get('friendIp')
         });
         this.communicator.on('packet', this._onPacketReceived);
 
@@ -83,7 +84,7 @@ class ShareService extends EventEmitter {
     }
 
     _onPacketReceived(packet) {
-        Mep.Log.debug(TAG, packet);
+        // Mep.Log.debug(TAG, packet);
 
         // Do something with data
         switch (packet.type) {

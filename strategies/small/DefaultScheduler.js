@@ -64,7 +64,10 @@ class DefaultScheduler extends Scheduler {
         this.common.robot = {
             ballsLoaded: false
         };
-        this.common.leaveBallEnabled = false;
+
+        let test = false;
+        this.common.leaveBallEnabled = test;
+        this.common.leaveStartEnabled = test;
 
         // Init task is always first
         this.runTask(this._initTask);
@@ -73,8 +76,11 @@ class DefaultScheduler extends Scheduler {
     }
 
     _onMessage(message) {
+        console.log(message);
         if (message.leaveBallEnabled !== undefined) {
             this.common.leaveBallEnabled = message.leaveBallEnabled;
+        } else if (message.leaveStartEnabled !== undefined) {
+            this.common.leaveStartEnabled = message.leaveStartEnabled;
         }
     }
 
@@ -172,7 +178,7 @@ class DefaultScheduler extends Scheduler {
 
     async _leave() {
         ballPicker.setPosition(100);
-        await Delay(500);
+        await Delay(900);
         var good = false;
         while(!good) {
 			try { 

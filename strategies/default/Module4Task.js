@@ -12,12 +12,13 @@ class Module4Task extends Task {
 	async onRun(){
 		try {
 			lunar.limiterClose();
-						lunar.startTrack();	//da bi dosao do kraja onaj koji je tek pokupljen
-																//NOTE: implementirati da ovo traje samo par sekundi u toku kretanja ka tacki
+			lunar.trackStart();	// Da bi dosao do kraja onaj koji je tek pokupljen
+
             lunar.prepare().catch(() => {});
             // await Mep.Motion.go(new TunedPoint(-1020, -100, [ 1020, -100, 'blue' ]), { speed: 120 });
             await Mep.Motion.go(new TunedPoint(-1155, -250, [ 1160, -270, 'blue' ]), { speed: 120 });
-						lunar.collect();
+            Mep.Share.send({ leaveBallEnabled: true });
+            lunar.collect();
             await Delay(1000);
 			await Mep.Motion.straight(-100);
 

@@ -13,10 +13,8 @@ const TAG = 'DragModuleTask';
 class DragModuleTask extends Task {
     async onRun() {
         try {
-            await Mep.Motion.go(new TunedPoint(-260, -706, [260, -706, 'blue']),{backward: false});
-            await Mep.Motion.go(new TunedPoint(-244, -168, [244, -168, 'blue']),{backward: false});
-            await Mep.Motion.go(new TunedPoint(-515, -210, [515, -210, 'blue']),{backward: false});
-            await Mep.Motion.go(new TunedPoint(-533, -692, [533, -692, 'blue']),{backward: false});
+            await Mep.Motion.go(new TunedPoint(-500, -150, [ 500, -150, 'blue']), { backward: false });
+            await Mep.Motion.go(new TunedPoint(-500, -692, [ 500, -692, 'blue']), { backward: false });
             this.finish();
         } catch (e) {
             switch (e.action) {

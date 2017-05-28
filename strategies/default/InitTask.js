@@ -65,6 +65,7 @@ class InitTask extends Task {
 
         Mep.getDriver('ColorServo').setPosition(585);
         Mep.getDriver('ServoPump').setPosition(200);
+        lunar.limiterClose();
         await starter.waitStartSignal(new Console());
 
 

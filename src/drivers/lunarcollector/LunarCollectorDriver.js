@@ -139,9 +139,10 @@ class LunarCollectorDriver {
 
      this._servoPump.go(830).catch(() => {});
      await Delay(1200);
-     this._vacuumPump.write(0);
-     await Delay(200);
      this._cylinder.write(1);
+     this._vacuumPump.write(0);
+     //await Delay(200);
+     //this._cylinder.write(1);
      await Delay(1000);
      this._cylinder.write(0);
     }
