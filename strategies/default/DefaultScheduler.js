@@ -39,15 +39,19 @@ class DefaultScheduler extends Scheduler {
             new PushMiddleCartridgeTask(this, { weight: 980, time: 3}),
 
             // new Module1Task(this, { weight: 920, time: 10 }),
-
             // new Module3Task(this, { weight: 770, time: 5 }),
+
+
             new Module2Task(this, { weight: 900, time: 10 }),
             new Module5Task(this, { weight: 780, time: 5 }), //NOTE: Namesteno
             new Module4Task(this, { weight: 790, time: 5 }), //NOTE: krzne kad se okrene
             new PushSideCartridgeTask(this, { weight: 760, time: 3 }),
 
             new CollectBackRocketTask(this, { weight: 600, time: 20 }),
+
+            //NOTE: prveriti points(dodata jos jedna tacka, samim tim duzi length)
             new EjectStartCartridgeTask(this, { weight: 590, time: 7 }),
+            //new PushLastOnSideTask(this, { weight: 550, time: 3 })
             new PushSideCartridgeTask(this, { weight: 550, time: 3 })
         ];
 

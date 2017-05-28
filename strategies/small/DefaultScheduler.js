@@ -32,11 +32,13 @@ class DefaultScheduler extends Scheduler {
 
         // Array of tasks. Note that init and final tasks are not included in this array.
         this.tasks = [
-			new LeaveRampTask(this, { weight: 9999999 }),
 
-			new DragModuleTask(this, {weight: 800 }),
-            new SmallHoleTask(this, { weight: 1000, time: 10 }),
-            new LeaveBallTask(this, { weight: 900, time: 10 })
+            new LeaveRampTask(this, { weight: 9999999 }),
+            // new TestTask(this, { weight: 700, time: 1 }),
+
+            new DragModuleTask(this, {weight: 800 }),
+            // new SmallHoleTask(this, { weight: 1000, time: 10 }),
+            // new LeaveBallTask(this, { weight: 900, time: 10 })
         ];
 
         this._onTick = this._onTick.bind(this);
@@ -106,7 +108,7 @@ class DefaultScheduler extends Scheduler {
         // this._colorRotator.write(250);
         this._colorSensor.stop();
     }
-    
+
     async _colorUp() {
         this._colorRamp.setSpeed(300);
         this._colorRamp.setPosition(20);
@@ -117,7 +119,7 @@ class DefaultScheduler extends Scheduler {
     }
 
     async _colorDown() {
-		this._colorRamp.setSpeed(500);
+        this._colorRamp.setSpeed(500);
         this._colorRamp.setPosition(250);
         await Delay(500);
         this._colorRamp.setSpeed(150);
@@ -127,7 +129,7 @@ class DefaultScheduler extends Scheduler {
         this._colorSensor.start(30);
         this._colorRotator.write(150);
         await Delay(500);
-        
+
     }
 
     async _colorRotate() {
@@ -168,7 +170,7 @@ class DefaultScheduler extends Scheduler {
     }
 
     async _pick() {
-		ballPicker.setSpeed(500);
+        ballPicker.setSpeed(500);
         ballPicker.setPosition(100);
         await Delay(700);
         ballPicker.setSpeed(100);
@@ -181,14 +183,14 @@ class DefaultScheduler extends Scheduler {
         await Delay(900);
         var good = false;
         while(!good) {
-			try { 
-				await Mep.Motion.straight(150);
-				good=true;
-			} catch(e) { 
-				good=false;
-			}
-		}
-		ballPicker.setSpeed(500);
+            try {
+                await Mep.Motion.straight(150);
+                good=true;
+            } catch(e) {
+                good=false;
+            }
+        }
+        ballPicker.setSpeed(500);
         ballPicker.setPosition(400);
         await Delay(600);
     }

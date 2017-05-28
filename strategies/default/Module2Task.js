@@ -15,6 +15,7 @@ class Module2Task extends Task {
 		try {
 			await Mep.Motion.go(new TunedPoint(-808, 65, [ 808, 65, 'blue' ]), { speed: 190 });
 			lunar.limiterClose();
+			lunar.prepare();
 			await Mep.Motion.straight(80, { speed: 90 });
             lunar.collect();
             await Delay(1500);

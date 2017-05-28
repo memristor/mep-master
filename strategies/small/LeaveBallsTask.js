@@ -33,7 +33,7 @@ class LeaveBallsTask extends Task {
 			try { await Mep.Motion.straight(-100, { speed: 50 }); } catch(e) {}
 			await this.common.leave();
 
-            r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(-1200, -200, [1200, -514, 'blue']), { speed: 80, backward: false });r=0;} catch(e) {}}
+            r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(-1200, -200, [1200, -200, 'blue']), { speed: 80, backward: false });r=0;} catch(e) {}}
             // r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(-300, -200, [1200, -514, 'blue']), { speed: 80, backward: true });r=0;} catch(e) {}}
 
 

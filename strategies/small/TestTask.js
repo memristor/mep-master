@@ -17,19 +17,32 @@ class TestTask extends Task {
     async onRun() {
 		this.common.lowerDirBall();
 		try {
+		    let r;
+
 			// directionBall.setPosition(170);
-			await starter.waitStartSignal(new Console());
+			await Delay(500);
+
+            r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(400, -415, [-400, -415, 'blue']), {speed: 100}); r=0;} catch(e) {}}
+            r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(810, -80, [-810, -80, 'blue']), { speed: 100 }); r=0;} catch(e) {}}
+            r=1; while(r) { try { await Mep.Motion.go(new TunedPoint(1160, -180, [-1160, -180, 'blue']), { speed: 100 }); r=0;} catch(e) {}}
+
+
+            // try{ await Mep.Motion.go(new TunedPoint(1250, 240, [-1250, 240, 'blue']), { speed: 90, pf: true }); } catch(e){ }
+            try { await Mep.Motion.rotate(new TunedAngle(-90, [ 90, 'blue' ])) } catch (e) {}
+
+
+            await this.common.colorRotate();
+			await Mep.Motion.straight(-90);
+
 			await this.common.colorRotate();
-			await Mep.Motion.straight(90);
+			await Mep.Motion.straight(-90);
 			await this.common.colorRotate();
-			await Mep.Motion.straight(90);
+			await Mep.Motion.straight(-90);
 			await this.common.colorRotate();
-			await Mep.Motion.straight(90);
+			await Mep.Motion.straight(-90);
 			await this.common.colorRotate();
-			await Mep.Motion.straight(90);
-			await this.common.colorRotate();
-			await Mep.Motion.straight(90);
-			
+			await Mep.Motion.straight(-90);
+
 			this.finish();
 		} catch(e) {
 			Mep.Log.error(TAG, e);

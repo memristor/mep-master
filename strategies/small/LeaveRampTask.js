@@ -15,7 +15,10 @@ class LeaveRampTask extends Task {
         // Wait for signal message
         while (this.common.leaveStartEnabled === false) { await Delay(300); }
 
-       for (let i = 0; i < 10; i++) {
+        ballPicker.setPosition(190);
+        await Delay(200);
+
+        for (let i = 0; i < 10; i++) {
             try {
 				// start position for yellow -1200, -790
 				// go forward +700 from starting pos
