@@ -18,11 +18,11 @@ if [ $SHOW_LOGO = true ]; then
     echo "|  \/  | ___ _ __ ___  _ __(_)___| |_ ___  _ __"
     echo "| |\/| |/ _ \ |_   _ \| |__| / __| __/ _ \|  __|"
     echo "| |  | |  __/ | | | | | |  | \__ \ || (_) | |"
-    echo "|_|  |_|\___|_| |_| |_|_|  |_|___/\__\___/|_| @2017"
+    echo "|_|  |_|\___|_| |_| |_|_|  |_|___/\__\___/|_| @2016-2017"
     echo ""
 fi
 
-# Apply performance
+# Apply performance improvements
 if [ $PERFORMANCE = true ]; then
     export NODE_ENV=production
 
@@ -32,5 +32,5 @@ if [ $PERFORMANCE = true ]; then
         PERFORMANCE_PREFIX="nice -n -20 "
     fi
 fi
-${PERFORMANCE_PREFIX} node --harmony-async-await --nolazy src/Bootstrap.js "$@"
+${PERFORMANCE_PREFIX} node --nolazy src/Bootstrap.js "$@"
 

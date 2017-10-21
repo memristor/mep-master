@@ -1,7 +1,6 @@
 const Path = require('path');
 const NConf = require('nconf');
 const Yargs = require('yargs');
-const fs = require('fs');
 const CONFIG_DIR = Path.join(__dirname, '../config');
 
 // We have chosen yaml over json because it supports hexadecimal numbers
@@ -69,7 +68,7 @@ if (process.env.MEP_TEST) {
     // Set general CLI options
     let yargs = Yargs
         .usage('Usage: ./mep [options]')
-        .example('./mep -p -r=small -t=green_table_1', 'Use small robot on green table and turn off log messages')
+        .example('./mep -t yellow -c ../strategies/small/DefaultScheduler.js -r small', 'Use small robot on green table and turn off log messages')
         .help('h')
         .alias('h', 'help')
         .epilog('Copyright @2016 Memristor')

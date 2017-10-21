@@ -4,15 +4,17 @@
   "description": "Memristor's Eurobot Platform",
   "main": "src/Bootstrap.js",
   "directories": {
-    "test": "tests"
+    "test": "tests",
+    "src": "src"
+  },
+  "engines": {
+    "node": ">8.3.0"
   },
   "scripts": {
     "test": "mocha --slow 0 --require test/Init",
     "docs": "esdoc",
-    "start": "node src/Bootstrap.js --harmony-async-await",
-    "simulation": "node --harmony-async-await src/Bootstrap.js -s -v 127.0.0.1:1117",
-    "dev_debug_multicast": "node %NODE_DEBUG_OPTION% ./src/services/share/ShareService.experiment.js"
-
+    "start": "node src/Bootstrap.js",
+    "simulation": "node src/Bootstrap.js -s -v 127.0.0.1:1117"
   },
   "repository": {
     "type": "git",
