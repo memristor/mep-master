@@ -21,7 +21,7 @@
     "url": "git+https://github.com/Memristor-Robotics/mep-master.git"
   },
   "author": "Darko Lukic <lukicdarkoo@gmail.com>",
-  "license": "ISC",
+  "license": "GPL-2.0",
   "homepage": "https://memristor-robotics.github.io/",
   "dependencies": {
     "bindings": "^1.2.1",
