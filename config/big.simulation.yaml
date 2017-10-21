@@ -1,10 +1,13 @@
-Drivers: 
- MotionDriver: 
-  "@class": "drivers/motion/MotionDriverSimulator"
-  "@dependencies":
+Drivers:
+  StarterDriver:
+    type: 'keyboard'
 
- CanDriver: 
-  "@class": "drivers/can/CanDriverSimulator"
+  MotionDriver:
+    "@class": "drivers/motion/MotionDriverSimulator"
+    "@dependencies":
 
- Uart: 
-  "@load": 0xff
+  CanDriver:
+    "@class": "drivers/can/CanDriverSimulator"
+
+  Uart:
+    "@load": 0xff

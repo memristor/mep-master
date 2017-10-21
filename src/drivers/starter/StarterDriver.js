@@ -87,14 +87,13 @@ class StarterDriver extends EventEmitter {
      * @param t {Object} - Context for interactive prompt
      * @return {Promise}
      */
-    waitStartSignal(t = null) {
+    waitStartSignal() {
         let starterDriver = this;
 
         Mep.Log.info('Software is initialized');
 
         return new Promise((resolve, reject) => {
             switch (starterDriver.config.type) {
-                // Delay mode
                 case 'delay':
                     setTimeout(() => {
                         resolve();
@@ -115,7 +114,6 @@ class StarterDriver extends EventEmitter {
                     this._ropePin.on('changed', pinListener);
                     break;
 
-                // Keyboard mode
                 case 'keyboard':
                     const rl = readline.createInterface({
                         input: process.stdin,
@@ -124,7 +122,7 @@ class StarterDriver extends EventEmitter {
                     });
 
                     Mep.Log.info('Press [ENTER] to start executing commands...');
-                    Mep.Log.info('You can type a command (eg. `Mep.Motion.go()` or `t.home()`)...');
+                    Mep.Log.info('You can type a command (eg. `go(100, 100)`)...');
 
                     rl.on('line', (line) => {
                         if (line.length === 0) {

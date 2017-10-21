@@ -14,6 +14,9 @@ const TAG = 'LunarCollector';
  * @param {String} config.rightHand Name of Dynamixel driver which runs right hand
  * @memberOf drivers.lunarcollector
  * @author Darko Lukic <lukicdarkoo@gmail.com>
+ * @deprecated Collection of methods (like this) should be put inside strategy.
+ * Drivers are only abstraction on top of shared hardware components!
+ * TODO: Delete this driver as soon as big robot is taken down.
  */
 class LunarCollectorDriver {
     constructor(name, config) {

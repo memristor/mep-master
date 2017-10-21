@@ -48,7 +48,7 @@ if (process.env.MEP_TEST) {
             alias: 'scheduler',
             describe: 'Path to strategy\'s scheduler',
             type: 'path',
-            default: Path.join(__dirname, '/../strategies/default/DefaultScheduler.js')
+            default: '../strategies/default/DefaultScheduler.js'
         },
         'v': {
             alias: 'server',

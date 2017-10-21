@@ -1,16 +1,8 @@
-const Scheduler = Mep.require('strategy/Scheduler');
-const Point = Mep.require('misc/Point');
-const TunedPoint = Mep.require('strategy/TunedPoint');
-const Delay = Mep.require('misc/Delay');
-
-// Drivers
+require('./Common');
 const starterDriver = Mep.getDriver('StarterDriver');
-
-// Tasks
 const InitTask = require('./InitTask');
 const FinalTask = require('./FinalTask');
 const SampleTask = require('./SampleTask');
-
 
 const TAG = 'DefaultScheduler';
 
