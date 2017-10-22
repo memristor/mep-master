@@ -1,11 +1,11 @@
 'use strict';
-/** @namespace misc */
+/** @namespace misc.geometry */
 
 const Point = require('./Point');
 
 /**
  * Line in 2D space
- * @memberof misc
+ * @memberof misc.geometry
  */
 class Line {
     /**

@@ -3,11 +3,11 @@
 
 const TaskError = Mep.require('strategy/TaskError');
 const EventEmitter = require('events').EventEmitter;
-const Point = Mep.require('misc/Point');
+const Point = Mep.require('misc/geometry/Point');
 const MotionDriver = Mep.require('drivers/motion/MotionDriver');
 const MotionTargetQueue = require('./MotionTargetQueue');
-const Line = Mep.require('misc/Line');
-const Misc = Mep.require('misc/Misc');
+const Line = Mep.require('misc/geometry/Line');
+const Misc = Mep.require('misc/geometry/Misc');
 
 const TAG = 'MotionService';
 

@@ -1,6 +1,6 @@
 /** @namespace strategy */
 
-const Point = Mep.require('misc/Point');
+const Point = Mep.require('misc/geometry/Point');
 
 const TAG = 'TunedPoint';
 

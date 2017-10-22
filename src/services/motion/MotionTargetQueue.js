@@ -2,7 +2,7 @@
 /** @namespace services.motion */
 
 const MotionTarget = require('./MotionTarget');
-const Line = Mep.require('misc/Line');
+const Line = Mep.require("misc/geometry/Line");
 
 const TAG = 'MotionTargetQueue';
 

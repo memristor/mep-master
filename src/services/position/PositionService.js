@@ -1,7 +1,7 @@
 'use strict';
 /** @namespace services.position */
 
-const Point = Mep.require('misc/Point');
+const Point = Mep.require("misc/geometry/Point");
 const EventEmitter = require('events').EventEmitter;
 
 const TAG = 'PositionService';

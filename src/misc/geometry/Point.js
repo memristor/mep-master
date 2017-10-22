@@ -1,9 +1,12 @@
 'use strict';
 
+/** @namespace misc.geometry */
+
 /**
  * Point in 2D space
  *
  * @author Darko Lukic <lukicdarkoo@gmail.com>
+ * @memberOf misc.geometry
  * @type {misc.Point}
  */
 class Point {

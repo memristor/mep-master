@@ -2,7 +2,7 @@
 /** @namespace services.terrain.pathfinding */
 
 const PathFindingBinder = require('bindings')('pathfinding').PathFindingBinder;
-const Point = Mep.require('misc/Point');
+const Point = Mep.require("misc/geometry/Point");
 
 let TAG = 'Pathfinding';
 

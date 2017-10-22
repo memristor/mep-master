@@ -5,7 +5,7 @@ const EventEmitter = require('events');
 const readline = require('readline');
 
 const TunedPoint = Mep.require('strategy/TunedPoint');
-const Point = Mep.require('misc/Point');
+const Point = Mep.require("misc/geometry/Point");
 
 const TAG = 'StarterDriver';
 

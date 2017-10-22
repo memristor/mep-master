@@ -1,7 +1,7 @@
 'use strict';
 /** @namespace drivers.motion */
 
-const Point = Mep.require('misc/Point');
+const Point = Mep.require("misc/geometry/Point");
 const EventEmitter = require('events');
 const Buffer = require('buffer').Buffer;
 const TaskError = Mep.require('strategy/TaskError');

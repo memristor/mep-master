@@ -1,15 +1,15 @@
 'use strict';
 
-/** @namespace misc */
+/** @namespace misc.geometry */
 
-const Point = Mep.require('misc/Point');
+const Point = Mep.require("misc/geometry/Point");
 
 const TAG = 'Polygon';
 
 /**
  * Describes an polygon
  * @see https://en.wikipedia.org/wiki/Polygon
- * @memberOf misc
+ * @memberOf misc.geometry
  */
 class Polygon {
     /**

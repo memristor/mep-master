@@ -1,8 +1,8 @@
 'use strict';
 /** @namespace services.terrain */
 
-const Point = Mep.require('misc/Point');
-const Polygon = Mep.require('misc/Polygon');
+const Point = Mep.require("misc/geometry/Point");
+const Polygon = Mep.require("misc/geometry/Polygon");
 const PathFinding = require('./pathfinding/PathFinding');
 const EventEmitter = require('events').EventEmitter;
 

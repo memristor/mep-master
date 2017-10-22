@@ -1,7 +1,7 @@
 'use strict';
 /** @namespace strategy */
 
-const Point = Mep.require('misc/Point');
+const Point = Mep.require("misc/geometry/Point");
 
 const TAG = 'Task';
 
