@@ -1,5 +1,5 @@
 const assert = require('assert');
-const Point = Mep.require('misc/Point');
+const Point = Mep.require('misc/geometry/Point');
 
 describe('Point', () => {
     let point = new Point(100, 200);

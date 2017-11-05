@@ -11,7 +11,7 @@ describe('Mep', () => {
         });
 
         it('should not throw an error if library is valid', () => {
-            assert.doesNotThrow(Mep.require.bind(Mep, 'misc/Point'), /not allowed/);
+            assert.doesNotThrow(Mep.require.bind(Mep, 'misc/geometry/Point'), /not allowed/);
         });
     });
 

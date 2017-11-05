@@ -7,8 +7,12 @@ class SampleTask extends Task {
             // - get close to destination with high speed and than to reduce speed,
             // - first movement in task start with path finding turned on,
             // - define `obstacle` ([ms] after command will be rejected if obstacle is detected in hazard region)
-            await go(0, 0, { obstacle: 1000, friend: 2000, speed: 200, pf: true });
-            await go(0, 100, { speed: 50 });
+            // await go(0, 0, { obstacle: 1000, friend: 2000, speed: 200, pf: true });
+            // await go(0, 100, { speed: 50 });
+
+            // Just go forward and backward
+            await straight(100);
+            await straight(-100);
 
             // You have to finish or suspend task
             this.finish();

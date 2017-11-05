@@ -1,6 +1,6 @@
 const TerrainService = Mep.require('services/terrain/TerrainService');
-const Point = Mep.require('misc/Point');
-const Polygon = Mep.require('misc/Polygon');
+const Point = Mep.require('misc/geometry/Point');
+const Polygon = Mep.require('misc/geometry/Polygon');
 const assert = require('assert');
 
 describe('TerrainService', () => {

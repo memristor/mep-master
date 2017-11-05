@@ -1,6 +1,6 @@
 const sinon = require('sinon');
 const InfraredDriver = require('../src/drivers/infrared/InfraredDriver');
-const Point = Mep.require('misc/Point');
+const Point = Mep.require('misc/geometry/Point');
 const Buffer = require('buffer').Buffer;
 const assert = require('assert');
 
