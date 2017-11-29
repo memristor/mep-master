@@ -1,6 +1,6 @@
 [![Build Status](https://semaphoreci.com/api/v1/lukicdarkoo/mep-master/branches/master/shields_badge.svg)](https://semaphoreci.com/lukicdarkoo/mep-master)
-[![API Doc](https://doc.esdoc.org/github.com/Memristor-Robotics/mep-master/badge.svg)](https://doc.esdoc.org/github.com/Memristor-Robotics/mep-master/identifiers.html)
-[![Code Climate](https://codeclimate.com/github/Memristor-Robotics/mep-master//badges/gpa.svg)](https://codeclimate.com/github/Memristor-Robotics/mep-master)
+[![API Doc](https://doxdox.org/images/badge-flat.svg)](https://doxdox.org/Memristor-Robotics/mep-master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/23de86cb5cd79b8a5d3d/maintainability)](https://codeclimate.com/github/Memristor-Robotics/mep-master/maintainability)
 [![Dependencies](https://david-dm.org/Memristor-Robotics/mep-master.svg)](https://david-dm.org/Memristor-Robotics/mep-master/)
 
 # MEP (Memristor's Eurobot Platform)
