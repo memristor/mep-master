@@ -4,6 +4,7 @@ performance: false
 robot: ''
 scheduler: ''
 host: ''
+server: ''
 obstacleMaxPeriod: 300
 duration: 90
 volume: 1280

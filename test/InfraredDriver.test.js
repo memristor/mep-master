@@ -4,21 +4,19 @@ const Point = Mep.require('misc/geometry/Point');
 const Buffer = require('buffer').Buffer;
 const assert = require('assert');
 
-describe('InfraredDriverTest', () => {
-    let infraredDriver;
+const CAN = Mep.require('drivers/can/CanDriverSimulator');
 
-    before((done) => {
-        Mep.init().then(() => {
-            infraredDriver = new InfraredDriver('InfraredDriver', {
-                sensorAngle: 60,
-                infraredMaxDistance: 200,
-                sensorX: -10,
-                sensorY: 10,
-                cid: 0,
-                '@dependencies': { communicator: 'CanDriver' }
-            });
-            done();
-        });
+
+
+describe('InfraredDriverTest', () => {
+    let ican = new CAN('CANTest');
+    let infraredDriver = new InfraredDriver('InfraredDriver', {
+        sensorAngle: 60,
+        infraredMaxDistance: 200,
+        sensorX: -10,
+        sensorY: 10,
+        cid: 1,
+        _communicator: ican
     });
 
     describe('#processDetection(true)', () => {

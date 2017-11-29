@@ -51,9 +51,7 @@ class InfraredDriver extends EventEmitter {
         if (typeof config.cid === 'undefined') {
             throw '`config.cid` is not defined';
         }
-        if (typeof config['@dependencies'].communicator === 'undefined') {
-            throw 'Infrared driver requires driver which enables communication with electronics board (eg. CanDriver)';
-        }
+
         this.config = Object.assign({
             objectSize: 150,
             sensorX: 0,
@@ -66,7 +64,11 @@ class InfraredDriver extends EventEmitter {
         this._enabled = true;
 
         // Subscribe on communicator
-        this.canDriver = Mep.getDriver(this.config['@dependencies'].communicator);
+        if (this.config._communicator === undefined) {
+            this.canDriver = Mep.getDriver(this.config['@dependencies'].communicator);
+        } else {
+            this.canDriver = this.config._communicator;
+        }
         this.canDriver.on('data_' + this.config.cid, this.processDetection.bind(this));
 
         // Approximation of detected object

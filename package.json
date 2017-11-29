@@ -11,7 +11,7 @@
     "node": ">8.3.0"
   },
   "scripts": {
-    "test": "mocha --slow 0 --require test/Init",
+    "test": "mocha --slow 0 test/Init.js",
     "docs": "esdoc",
     "start": "node src/Bootstrap.js",
     "simulation": "node src/Bootstrap.js -s -v 127.0.0.1:1117"

@@ -1,22 +1,20 @@
 const Path = require('path');
 const NConf = require('nconf');
 const Yargs = require('yargs');
+NConf.formats.yaml = require('nconf-yaml');
 const CONFIG_DIR = Path.join(__dirname, '../config');
 
 // We have chosen yaml over json because it supports hexadecimal numbers
-NConf.formats.yaml = require('nconf-yaml');
 NConf.use('memory');
 
 // Choose the top level config file
 if (process.env.MEP_TEST) {
-    NConf.add('general', {
+    // Fill the rest of the configuration with default values
+    NConf.use('test', {
         format: NConf.formats.yaml,
         type: 'file',
         file: CONFIG_DIR + '/test.yaml'
     });
-
-    NConf.load();
-
 } else {
     // Set config parameters from CLI
     NConf.argv({
@@ -71,33 +69,32 @@ if (process.env.MEP_TEST) {
         .example('./mep -t yellow -c ../strategies/small/DefaultScheduler.js -r small', 'Use small robot on green table and turn off log messages')
         .help('h')
         .alias('h', 'help')
-        .epilog('Copyright @2016 Memristor')
+        .epilog('Copyright @2016 - 2018 Memristor')
         .argv;
 
 
     if (NConf.get('simulation') === true) {
-        NConf.add('simulation', {
+        NConf.use('simulation', {
             format: NConf.formats.yaml,
             type: 'file',
             file: CONFIG_DIR + '/' + NConf.get('robot') + '.simulation.yaml'
         });
     }
 
-    NConf.add('robot', {
+    NConf.use('robot', {
         format: NConf.formats.yaml,
         type: 'file',
         file: CONFIG_DIR + '/' + NConf.get('robot') + '.yaml'
     });
-
-    // Fill the rest of the configuration with default values
-    NConf.add('general', {
-        format: NConf.formats.yaml,
-        type: 'file',
-        file: CONFIG_DIR + '/default.yaml'
-    });
-
-    NConf.load();
-
 }
+
+// Fill the rest of the configuration with default values
+NConf.use('general', {
+    format: NConf.formats.yaml,
+    type: 'file',
+    file: CONFIG_DIR + '/default.yaml'
+});
+
+NConf.load();
 
 module.exports = NConf;
