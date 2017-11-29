@@ -1,19 +1,13 @@
 {
+  "title": "MEP Master",
   "source": "src",
-  "destination": "docs/api",
-  "access": [
-    "public",
-    "protected",
-    "private"
-  ],
+  "destination": "./docs/api",
   "includes": [
     "\\.js$"
   ],
   "excludes": [
     "\\.experiment.js$"
   ],
-  "unexportIdentifier": true,
-  "undocumentIdentifier": false,
   "test": {
     "type": "mocha",
     "source": "test"
@@ -29,16 +23,8 @@
       "./docs/Inspiration.md",
       "./docs/Services_vs_Drivers.md"
     ],
-    "design": [ ],
-    "installation": [ ],
-    "usage": [ ],
-    "tutorial": [ ],
-    "configuration": [ ],
     "example": [
       "./docs/Creating_Driver.md"
     ],
-    "advanced": [ ],
-    "faq": [ ],
-    "changelog": [ ]
   }
 }
