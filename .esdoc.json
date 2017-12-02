@@ -1,30 +1,32 @@
 {
-  "title": "MEP Master",
-  "source": "src",
+  "source": "./src",
   "destination": "./docs/api",
-  "includes": [
-    "\\.js$"
-  ],
-  "excludes": [
-    "\\.experiment.js$"
-  ],
-  "test": {
-    "type": "mocha",
-    "source": "test"
-  },
-  "manual": {
-    "index": "README.md",
-    "overview": [
-      "./docs/Log.md",
-      "./docs/About.md",
+  "includes": [ "\\.js$" ],
+  "excludes": [ "\\.experiment.js$" ],
 
-      "./docs/Goals.md",
-      "./docs/Guide.md",
-      "./docs/Inspiration.md",
-      "./docs/Services_vs_Drivers.md"
-    ],
-    "example": [
-      "./docs/Creating_Driver.md"
-    ],
-  }
+  "plugins": [
+    {
+      "name": "esdoc-standard-plugin",
+      "option": {
+        "brand": {
+          "title": "MEP Master"
+        },
+        "manual": {
+          "index": "README.md",
+          "files": [
+            "./docs/Introduction.md",
+            "./docs/Source_Roadmap.md",
+            "./docs/Log.md",
+            "./docs/Goals.md",
+            "./docs/Inspiration.md",
+            "./docs/Creating_Driver.md"
+          ]
+        },
+        "test": {
+          "type": "mocha",
+          "source": "test"
+        }
+      }
+    }
+  ]
 }

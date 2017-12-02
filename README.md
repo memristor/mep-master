@@ -31,6 +31,6 @@ check for arguments
 ## Documentation
 create a documentation locally
 ```
-npm run-script docs
+npm run docs
 ```
 or check for [online docs](https://doc.esdoc.org/github.com/Memristor-Robotics/mep-master/identifiers.html)

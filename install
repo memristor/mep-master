@@ -13,7 +13,7 @@ else
 fi
 
 # Install global Node.js modules
-sudo npm install -g esdoc mocha node-gyp
+sudo npm install -g mocha node-gyp
 
 # Clone the repo
 git clone https://github.com/Memristor-Robotics/mep-master.git --depth 1

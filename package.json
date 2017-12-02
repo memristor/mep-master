@@ -12,7 +12,7 @@
   },
   "scripts": {
     "test": "mocha --slow 0 test/Init.js",
-    "docs": "esdoc",
+    "docs": "./node_modules/.bin/esdoc",
     "start": "node src/Bootstrap.js",
     "simulation": "node src/Bootstrap.js -s -v 127.0.0.1:1117"
   },
@@ -35,5 +35,9 @@
     "socketcan": "^2.2.2",
     "termios": "^0.1.3",
     "usage": "^0.7.1"
+  },
+  "devDependencies": {
+    "esdoc": "^1.0.4",
+    "esdoc-standard-plugin": "^1.0.0"
   }
 }
