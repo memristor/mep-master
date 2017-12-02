@@ -9,9 +9,13 @@
       "name": "esdoc-standard-plugin",
       "option": {
         "brand": {
-          "title": "MEP Master"
+          "title": "MEP Master",
+          "logo": "./docs/assets/logo.jpg",
+          "site": "https://memristor-robotics.github.io/",
+          "repository": "https://github.com/Memristor-Robotics/mep-master.git"
         },
         "manual": {
+          "globalIndex": true,
           "index": "README.md",
           "files": [
             "./docs/Introduction.md",
