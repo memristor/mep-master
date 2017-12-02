@@ -84,7 +84,6 @@ class StarterDriver extends EventEmitter {
 
     /**
      * Wait a start match signal (pulled rope, pressed key or delay)
-     * @param t {Object} - Context for interactive prompt
      * @return {Promise}
      */
     waitStartSignal() {

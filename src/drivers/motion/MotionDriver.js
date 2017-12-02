@@ -413,10 +413,11 @@ class MotionDriver extends EventEmitter  {
     /**
      * Move robot to absolute position but robot make curves to speed up motion. This
      * command requires `finishCommand()` before next motion command.
+     *
      * @param {misc.Point} position Required position of the robot
-     * @param {Number} direction Direction, can be MotionDriver.DIRECTION_FORWARD or
-     * MotionDriver.DIRECTION_BACKWARD
-     * @param {Number} tolerance Radius
+     * @param {Number} direction Direction, can be MotionDriver.DIRECTION_FORWARD or MotionDriver.DIRECTION_BACKWARD
+     * @param {Number} radius
+     * @param {Number} tolerance
      */
     moveToCurvilinear(position, direction, radius, tolerance) {
         let motionDriver = this;

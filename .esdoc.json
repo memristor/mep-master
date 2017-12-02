@@ -8,6 +8,8 @@
     {
       "name": "esdoc-standard-plugin",
       "option": {
+        "undocumentIdentifier": {"enable": false},
+        "unexportedIdentifier": {"enable": true},
         "brand": {
           "title": "MEP Master",
           "logo": "./docs/assets/logo.jpg",
