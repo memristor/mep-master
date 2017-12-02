@@ -1,6 +1,4 @@
 const Scheduler = Mep.require('strategy/Scheduler');
-const Point = Mep.require('misc/Point');
-const TunedPoint = Mep.require('strategy/TunedPoint');
 const Delay = Mep.require('misc/Delay');
 const lunar = Mep.getDriver('LunarCollector');
 
@@ -17,7 +15,6 @@ const Module3Task = require('./Module3Task');
 const Module4Task = require('./Module4Task');
 const Module5Task = require('./Module5Task');
 const FinalTask = require('./FinalTask');
-const myTestTask = require('./myTestTask');
 
 const backLunarDetector = Mep.getDriver('BackLunarDetector');
 
@@ -29,9 +26,6 @@ class DefaultScheduler extends Scheduler {
 
         this._finalTaskExecuted = false;
         this._finalTask = new FinalTask(this, { weight: 10000, time: 0 });
-		this.tasks2 = [
-			new myTestTask(this, {})
-		];
         this.tasks = [
             new InitTask(this, { weight: 10000, time: 10 }),
 

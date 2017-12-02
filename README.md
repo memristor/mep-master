@@ -9,17 +9,10 @@ MEP is a development platform for easy building and prototyping software for rob
 Read more about Memristor at [our website](https://memristor-robotics.github.io/).
 
 ## Installation
-*only for Debian distros
+*only for Debian & Arch distros
 
-- Install Node.js & npm
 ```
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-sudo apt-get install -y nodejs
-```
-- Install git `sudo apt-get install git`
-- Install MEP
-```
-git clone https://github.com/Memristor-Robotics/mep-master.git --depth 1 && cd mep-master && sudo ./install
+curl https://raw.githubusercontent.com/Memristor-Robotics/mep-master/master/install | sh
 ```
 
 ## Execute

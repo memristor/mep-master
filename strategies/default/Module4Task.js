@@ -2,7 +2,6 @@ const Task = Mep.require('strategy/Task');
 const TunedPoint = Mep.require('strategy/TunedPoint');
 const TunedAngle = Mep.require('strategy/TunedAngle');
 const Delay = Mep.require('misc/Delay');
-const Point = Mep.require('misc/Point');
 const lunar = Mep.getDriver('LunarCollector');
 const MotionDriver = Mep.require('drivers/motion/MotionDriver');
 

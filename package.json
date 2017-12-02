@@ -30,6 +30,7 @@
     "nan": "^2.3.5",
     "nconf": "^0.9.1",
     "nconf-yaml": "^1.0.2",
+    "pathfinding": "file:src/services/terrain/pathfinding",
     "sinon": "^4.1.1",
     "socketcan": "^2.2.2",
     "termios": "^0.1.3",

@@ -1,22 +1,26 @@
 #!/bin/bash
 
-if [ "$1" != "--only-native" ]; then
-    # Install npm global dependencies
-    npm install -g jsdoc mocha node-gyp
+# Usage `curl https://raw.githubusercontent.com/Memristor-Robotics/mep-master/master/install | sh`
 
-    # Install npm dependencies
-    npm install
+# Install Node.js
+if [ -f "/etc/arch-release" ]; then
+    sudo pacman -S nodejs npm --noconfirm
+    sudo pacman -S git --noconfirm
+else
+    curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+    sudo apt install -y nodejs
+    sudo apt install -y git
 fi
 
-# Install native add-ons
-# node-gyp configure --directory src/drivers/modbus
-# node-gyp build --directory src/drivers/modbus
+# Install global Node.js modules
+sudo npm install -g esdoc mocha node-gyp
 
-# node-gyp configure --directory src/drivers/motion
-# node-gyp build --directory src/drivers/motion
+# Clone the repo
+git clone https://github.com/Memristor-Robotics/mep-master.git --depth 1
+cd mep-master
 
-node-gyp configure --directory src/services/terrain/pathfinding
-node-gyp build --directory src/services/terrain/pathfinding
+# Install dependencies
+npm install
 
-# Run tests to check of everything is OK
+# Test
 npm test
