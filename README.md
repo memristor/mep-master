@@ -1,13 +1,11 @@
 [![Build Status](https://semaphoreci.com/api/v1/lukicdarkoo/mep-master/branches/master/shields_badge.svg)](https://semaphoreci.com/lukicdarkoo/mep-master)
-[![API Doc](https://doxdox.org/images/badge-flat.svg)](https://doxdox.org/Memristor-Robotics/mep-master)
+[![Documentation](https://doc.esdoc.org/github.com/Memristor-Robotics/mep-master/badge.svg)](https://doc.esdoc.org/github.com/Memristor-Robotics/mep-master/)
+[![Slack](http://strk.kbt.io/tmp/matrix_badge.svg)](https://memristor-robotics.slack.com/messages)
 [![Maintainability](https://api.codeclimate.com/v1/badges/23de86cb5cd79b8a5d3d/maintainability)](https://codeclimate.com/github/Memristor-Robotics/mep-master/maintainability)
 [![Dependencies](https://david-dm.org/Memristor-Robotics/mep-master.svg)](https://david-dm.org/Memristor-Robotics/mep-master/)
 
-# MEP (Memristor's Eurobot Platform)
-MEP is a development platform for easy building and prototyping software for robots. It allows developing drivers for hardware modules, implementation of control algorithms and testing new strategies.
-
-Read more about Memristor at [our website](https://memristor-robotics.github.io/).
-
+# mep-master
+**mep-master** is a brain of Memristor's Eurobot development platform. This project provicdes a simple API to interact with robot's actuators and sensors, as well as sensor fusion, communication, task scheduling and path finding.
 ## Installation
 *only for Debian & Arch distros
 
@@ -25,12 +23,15 @@ check for arguments
 ./mep --help
 ```
 
-## Dashboard (simulator & other tools)
-[Check here for more details](https://github.com/Memristor-Robotics/mep-dash)
+## Other commands
+- generate local documentation `npm run docs`,
+- run tests `npm test`,
+- example of custom command `npm run small` (check `package.json > scripts > small`)  
 
-## Documentation
-create a documentation locally
-```
-npm run docs
-```
-or check for [online docs](https://doc.esdoc.org/github.com/Memristor-Robotics/mep-master/manual/Introduction.html)
+## Quick Links
+[Simulator](https://github.com/Memristor-Robotics/mep-dash) | 
+[Introduction](https://doc.esdoc.org/github.com/Memristor-Robotics/mep-master/manual/Introduction.html) |
+[References](https://doc.esdoc.org/github.com/Memristor-Robotics/mep-master/identifiers.html) |
+[Slack](https://memristor-robotics.slack.com/) |
+[Trello](https://trello.com/b/96UlYfvl/memristor) |
+[Website](https://memristor-robotics.github.io/)
