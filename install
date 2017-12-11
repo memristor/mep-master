@@ -7,6 +7,7 @@ if [ -f "/etc/arch-release" ]; then
     sudo pacman -S nodejs npm --noconfirm
     sudo pacman -S git --noconfirm
 else
+    sudo apt update
     curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
     sudo apt install -y nodejs
     sudo apt install -y git
