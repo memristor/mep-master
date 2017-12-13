@@ -4,13 +4,21 @@
 
 # Install Node.js
 if [ -f "/etc/arch-release" ]; then
+    # Arch distributions
     sudo pacman -S nodejs npm --noconfirm
     sudo pacman -S git --noconfirm
 else
-    sudo apt update
-    curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
-    sudo apt install -y nodejs
+    # Debian distros
+    # sudo apt update
     sudo apt install -y git
+
+    if [ "$(uname -a | grep armv6l)" ]; then
+        # ARMv6 (Raspberry Pi Zero (W))
+        curl https://raw.githubusercontent.com/sdesalas/node-pi-zero/master/install-node-v8.9.0.sh | sh
+    else
+        curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+        sudo apt install -y nodejs
+    fi
 fi
 
 # Install global Node.js modules
