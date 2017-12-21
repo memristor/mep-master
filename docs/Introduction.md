@@ -51,7 +51,29 @@ Now, the rest should be easy.
 Please check ```./mep -h``` for more parameters.
 
 ## Strategy
-TODO
+Strategy defines robot's behaviour, what robot should do and how to react on opponent strategy
+or hardware failure. Each **strategy** consist of many tasks and each **task** consists of 
+multiple **commands**. A brain of each strategy is **scheduler** which should have advanced
+logic (eg. AI) and it orders task priority by environment.  
+
+Strategies are designed to be easily editable by students who don't have background in programming!
+
+### Setting up new strategy
+In `strategy` directory is located [boilerplate strategy](../strategies/boilerplate). 
+Boilerplate strategy is very simple and well documented strategy intended to be base code for your 
+new strategy.  
+
+Please follow [this tutorial](../strategies/boilerplate/README.md) to set up new strategy.
+
+### List of commands
+In file `src/strategy/Shortcut.js` is list of shortcuts you can easily use in your strategy. Also, you
+can extend list of shortcuts by putting in common file like it is done in [boilerplate example](../strategies/boilerplate/Common.js). 
+
+- `go(x, y[, params])` Go to location (x, y) using additional params. Eg. `go(10, 20)` or `go(10, 20, { backward: true })`
+- `rotate(angle[, params])` Rotate robot for given angle.
+- `straight(distance)` Move robot straight for given distance in mm.
+- `home()` Return robot to it's home position.
+- `await delay(mills)` Do nothing for *mills* milliseconds.
 
 ## Configuration
 TODO
@@ -87,13 +109,11 @@ Every driver must be added in configuration file. By adding our driver
 in configuration file DriverManager knows that our driver should be instantiated.
 ```
 ...
-Drivers: {
-   ...
-   HelloWorldDriver: {
-       @class: 'drivers/skeleton/HelloWorldDriver',
-       @init: true
-   }
-}
+Drivers:
+  ...
+  HelloWorldDriver:
+    '@class': 'drivers/skeleton/HelloWorldDriver',
+    '@init': true
 ```
 An example of a driver in configuration file.
 
