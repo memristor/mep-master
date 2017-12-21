@@ -29,9 +29,9 @@ check for arguments
 - example of custom command `npm run small` (check `package.json > scripts > small`)  
 
 ## Long of it
-Please use following links for more detailed documentation:  
-[Introduction](https://doc.esdoc.org/github.com/Memristor-Robotics/mep-master/manual/Introduction.html) |
-[References](https://doc.esdoc.org/github.com/Memristor-Robotics/mep-master/identifiers.html)
+Please use following links for more detailed documentation: 
+- [Introduction](docs/Introduction.md)
+- [References](https://doc.esdoc.org/github.com/Memristor-Robotics/mep-master/identifiers.html)
 
 ## Quick Links
 [Simulator](https://github.com/Memristor-Robotics/mep-dash) | 
