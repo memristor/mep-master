@@ -49,23 +49,21 @@ Now, the rest should be easy.
 Please check ```./mep -h``` for more parameters.
 
 ## Strategy
-Strategy defines robot's behaviour, what robot should do and how to react on opponent strategy
-or hardware failure. Each **strategy** consist of many tasks and each **task** consists of 
-multiple **commands**. A brain of each strategy is **scheduler** which should have advanced
-logic (eg. AI) and it orders task priority by environment.  
+The strategy defines robot's behaviour, what robot should do and how to react to opponent strategy
+or hardware failure. Each **strategy** consist of many tasks and each **task** consists of multiple **commands**. A brain of each strategy is **scheduler** which should have advanced
+logic (eg. AI) and it orders task priority by the environment.  
 
-Strategies are designed to be easily editable by students who don't have background in programming!
+> Strategies are designed to be easily editable by students who don't have a background in programming!
 
 ### Setting up new strategy
 In `strategy` directory is located [boilerplate strategy](../strategies/boilerplate). 
-Boilerplate strategy is very simple and well documented strategy intended to be base code for your 
-new strategy.  
+The boilerplate strategy is very simple and well-documented strategy intended to be base code for your new strategy.  
 
 Please follow [this tutorial](../strategies/boilerplate/README.md) to set up new strategy.
 
 ### List of commands
-In file `src/strategy/Shortcut.js` is list of shortcuts you can easily use in your strategy. Also, you
-can extend list of shortcuts for each strategy by putting in common file like it is done in [boilerplate example](../strategies/boilerplate/Common.js). 
+In file `src/strategy/Shortcut.js` is a list of shortcuts you can easily use in your strategy. Also, you
+can extend the list of shortcuts for each strategy by putting in a common file like it is done in [boilerplate example](../strategies/boilerplate/Common.js). 
 
 Note that all commands are asynchronous and you need keyword `await` in front of command if you want to wait it is fully executed.
 
@@ -84,6 +82,16 @@ Note that all commands are asynchronous and you need keyword `await` in front of
   - alias [`src.misc.delay()`](../src/misc/Delay.js)
 
 ## Configuration
+All configuration files are located in `config` directory. Configuration is used to:
+- configure services (eg. static obstacles, default parameters for movement...),
+- initialize and configure drivers (eg. communication protocols, analogue and digital pins, motion driver...) &
+- general purpose parameters (eg. logging, table name, match duration...).
+
+Default configuration is located in `config/default.yaml` and it is overriden by `config/[robot_name].yaml`. And if simulation is turned on than `config/default.yaml` and `config/[robot_name].yaml` are overriden by `config/[robot_name].simulation.yaml`. Therefore, config files are inherited as `config/default.yaml` > `config/[robot_name].yaml` > `config/[robot_name].simulation.yaml`.
+
+> Just like strategies, the configuration is designed to be easily editable by students who don't have a background in programming!
+
+### Initializing PinDriver
 TODO
 
 ## Drivers
@@ -91,7 +99,7 @@ Provides an abstraction on top of many hardware components.
 
 ### Hello World Driver
 `HelloWorldDriver` meets minimal requirements to become a driver. All drivers are located drivers
-```
+```javascript
 class HelloWorldDriver {
   constructor(name, config) {
     Mep.Log.debug('Hello World');
@@ -104,19 +112,19 @@ Each driver gets variables `name` and `config` in constructor. `name` is unique
 name of each driver instance, and `config` is configuration object for
 instance of the driver.
 
-Method `provides()` can return empty array or array of strings which
-represents data that can be provided by a driver. If driver provides
-some type of data it must meets a requirements for that type of data. More
+Method `provides()` can return an empty array or array of strings which
+represents data that can be provided by a driver. If the driver provides
+some type of data it must meet requirements for that type of data. More
 will be explained.
 
 All drivers are located in directory `/drivers` and by convention have
 dedicated directory, eg. SkeletonDriver is stored in
 `/drivers/skeleton/HelloWorldDriver.js`.
 
-Every driver must be added in configuration file. By adding our driver
-in configuration file DriverManager knows that our driver should be instantiated.
-```
-...
+Every driver must be added in a configuration file. By adding our driver
+in configuration file, DriverManager knows that our driver should be instantiated.
+
+```yaml
 Drivers:
   ...
   HelloWorldDriver:
@@ -124,9 +132,3 @@ Drivers:
     '@init': true
 ```
 An example of a driver in configuration file.
-
-
-### PinDriver
-Let's explain how PinDriver works (`drivers/pin/PinDriver.js`) as it is a good example.
-
-
