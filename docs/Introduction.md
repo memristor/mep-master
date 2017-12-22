@@ -12,11 +12,9 @@ and patterns are the result of many years of experience competing on Eurobot com
 MEP master is the central component in MEP and it has a role of the brain in the system. It designed to run on Linux based
 embedded development boards (like Raspberry Pi).
 
-![MEP Simple](./assets/mep-simple.png)  
-_Big picture simple_
-  
-![MEP Full](./assets/mep-full.png)  
-_Big picture full_
+| Big picture simple                     | Big picture full                   |
+|:--------------------------------------:|:----------------------------------:|
+| ![MEP Simple](./assets/mep-simple.png) | ![MEP Full](./assets/mep-full.png) |
 
 ## Getting Started
 For easy understanding, in further text, Raspberry Pi will be used as a development board.
