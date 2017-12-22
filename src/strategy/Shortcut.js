@@ -21,6 +21,7 @@ class Shortcut {
         global.Task = Mep.require('strategy/Task');
 
         global.delay = Mep.require('misc/Delay');
+        global.driver = Mep.getDriver;
 
         global.go = (x, y, config) => {
             return Mep.Motion.go(new TunedPoint(x, y), config)
