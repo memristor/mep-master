@@ -29,18 +29,18 @@ Please use one of those Linux images:
 - official Linux distribution for Raspberry Pi (https://www.raspberrypi.org/downloads/raspbian/) or
 - Memristor's Raspbian edition (https://drive.google.com/drive/folders/0B8iyR5YUITZYYVFyWHNlaDNXMVk)
 
-### SSH
+### SSH connection
 To connect to Raspberry Pi from your computer and type commands remotely SSH is required. To configure SSH please
 follow next tutorial:
 https://www.raspberrypi.org/documentation/remote-access/ssh/
 
-### Installation
+### mep-master installation
 Please make sure your SSH connection is ready because all following commands will be used in SSH! To install MEP master
 please use the following command:
-```git clone https://github.com/Memristor-Robotics/mep-master.git --depth 1 && cd mep-master && ./install```
+```curl https://raw.githubusercontent.com/Memristor-Robotics/mep-master/master/install | sh```
 The command will download MEP master source files and install all dependencies.
 
-### Hello World
+### Hello World move
 Before your robot make the first step please check if everything is connected properly (eg. batteries and electronic boards),
 put your robot in the middle of a terrain and run:
 ```./mep -c ../strategies/boilerplate/DefaultScheduler.js```
@@ -67,13 +67,23 @@ Please follow [this tutorial](../strategies/boilerplate/README.md) to set up new
 
 ### List of commands
 In file `src/strategy/Shortcut.js` is list of shortcuts you can easily use in your strategy. Also, you
-can extend list of shortcuts by putting in common file like it is done in [boilerplate example](../strategies/boilerplate/Common.js). 
+can extend list of shortcuts for each strategy by putting in common file like it is done in [boilerplate example](../strategies/boilerplate/Common.js). 
 
-- `go(x, y[, params])` Go to location (x, y) using additional params. Eg. `go(10, 20)` or `go(10, 20, { backward: true })`
+Note that all commands are asynchronous and you need keyword `await` in front of command if you want to wait it is fully executed.
+
+- `go(x, y[, params])` Go to location (x, y) using additional params.
+  - alias [`services.motion.MotionService.go()`](../src/services/motion/MotionService.js)
+  - example `await go(0, 0)` Go to the center of a terrain.
+  - example `await go(0, 0, { backward: true })` Go to the center of a terrain, but go backwards.
 - `rotate(angle[, params])` Rotate robot for given angle.
+  - alias [`services.motion.MotionService.rotate()`](../src/services/motion/MotionService.js)
+  - example `await rotate(50)` Rotate robot for 50 degrees in the current position.
 - `straight(distance)` Move robot straight for given distance in mm.
+  - alias [`services.motion.MotionService.straight()`](../src/services/motion/MotionService.js)
+  - example `await straight(50)` Move robot 50mm forward.
 - `home()` Return robot to it's home position.
-- `await delay(mills)` Do nothing for *mills* milliseconds.
+- `delay(mills)` Do nothing for *mills* milliseconds.
+  - alias [`src.misc.delay()`](../src/misc/Delay.js)
 
 ## Configuration
 TODO
