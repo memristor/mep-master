@@ -25,6 +25,9 @@ fi
 sudo npm install -g mocha node-gyp
 
 # Clone the repo
+if [ -d "mep-master" ]; then
+  sudo rm -rf mep-master
+fi
 git clone https://github.com/Memristor-Robotics/mep-master.git --depth 1
 cd mep-master
 
