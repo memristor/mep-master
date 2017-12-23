@@ -79,7 +79,9 @@ Note that all commands are asynchronous and you need keyword `await` in front of
   - example `await straight(50)` Move robot 50mm forward.
 - `home()` Return robot to it's home position.
 - `delay(mills)` Do nothing for *mills* milliseconds.
-  - alias [`src.misc.delay()`](../src/misc/Delay.js)
+  - alias [`misc.delay()`](../src/misc/Delay.js)
+- `driver(driverName)` Get driver instance by it's name.
+  - alias [`drivers.DriverManager.getDriver()`](../src/drivers/DriverManager.js)
 
 ## Configuration
 All configuration files are located in `config` directory. Configuration is used to:
@@ -92,7 +94,34 @@ Default configuration is located in `config/default.yaml` and it is overriden by
 > Just like strategies, the configuration is designed to be easily editable by students who don't have a background in programming!
 
 ### Initializing PinDriver
-TODO
+PinDriver is just an example and in a similar way you can initialize and configure any other driver. List of available drivers is available in directory [`src/drivers`](../src/drivers).  
+
+Here is an example how to add driver configuration (eg. `config/big.yaml`):
+```yaml
+Drivers:
+  CollectorBigTrack:
+    "@class": drivers/pin/PinDriver
+    "@load": true
+    "@dependencies":
+      communicator: CanDriver
+    cid: 0x00007F06
+    direction: 'output'
+    mode: 'digital'
+```
+and how to use initialized driver in strategies:
+```javascript
+driver('CollectorBigTrack').write(100)
+```
+`CollectorBigTrack` is unique name of driver that is used in strategies to acccess to the instance of the driver, as well as to tag purpose of driver (to be more readable). `@class`, `@load` and `@dependecies` are parameters that every driver have to have and have following meaning:
+- `@class` JavaScript class that defines behaviour of driver (eg. [`drivers/pin/PinDriver`](../src/drivers/pin/PinDriver.js)).
+- `@load` Determines if driver should initialized and can be `true` or `false`. It is useful when you want to quickly disable driver or disable driver by overriding that parameter.
+- `@dependencies` List dependecies that drivers has. If driver has dependencies than dependencies will be loaded first and if one of dependecies fails you will be notified why your driver doesn't work.
+Other parameters are driver specific:
+- `cid` Communication ID (or CAN ID).
+- `direction` Pin can be output or input. 
+- `mode` Mode can be digital or analog.
+
+> You can find all driver specific parameters in a source code (if does't exist in API reference) in constructor of driver (eg. [`drivers/pin/PinDriver`](../src/drivers/pin/PinDriver.js), look for `Object.assign`).
 
 ## Drivers
 Provides an abstraction on top of many hardware components.
