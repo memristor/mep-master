@@ -112,7 +112,7 @@ and how to use initialized driver in strategies:
 ```javascript
 driver('CollectorBigTrack').write(100)
 ```
-`CollectorBigTrack` is unique name of driver that is used in strategies to acccess to the instance of the driver, as well as to tag purpose of driver (to be more readable). `@class`, `@load` and `@dependecies` are parameters that every driver have to have and have following meaning:
+`CollectorBigTrack` is unique name of driver that is used in strategies to acccess to the instance of the driver, as well as to tag purpose of driver (to be more readable). `@class`, `@load` and `@dependecies` is minimal set of parameters for each driver and it has following meaning:
 - `@class` JavaScript class that defines behaviour of driver (eg. [`drivers/pin/PinDriver`](../src/drivers/pin/PinDriver.js)).
 - `@load` Determines if driver should initialized and can be `true` or `false`. It is useful when you want to quickly disable driver or disable driver by overriding that parameter.
 - `@dependencies` List dependecies that drivers has. If driver has dependencies than dependencies will be loaded first and if one of dependecies fails you will be notified why your driver doesn't work.
