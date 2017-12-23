@@ -34,7 +34,7 @@ https://www.raspberrypi.org/documentation/remote-access/ssh/
 
 ### mep-master installation
 Please make sure your SSH connection is ready because all following commands will be used in SSH! To install MEP master
-please use the following command:
+use the following command:
 ```curl https://raw.githubusercontent.com/Memristor-Robotics/mep-master/master/install | sh```
 The command will download MEP master source files and install all dependencies.
 
@@ -46,7 +46,7 @@ This command will execute a strategy located in `strategies/boilerplate` and you
 If the robot went forward and backwards then congratulations! That means software, electronics and basic mechanisms works fine.
 Now, the rest should be easy.
 
-Please check ```./mep -h``` for more parameters.
+Check ```./mep -h``` for more parameters.
 
 ## Strategy
 The strategy defines robot's behaviour, what robot should do and how to react to opponent strategy
