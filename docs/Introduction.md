@@ -24,8 +24,8 @@ Please follow official Raspbian installation instructions
 https://www.raspberrypi.org/documentation/installation/installing-images/README.md
 
 Please use one of those Linux images:
-- ![official Linux distribution for Raspberry Pi](https://www.raspberrypi.org/downloads/raspbian/) or
-- ![Memristor's Raspbian edition](https://drive.google.com/drive/folders/0B8iyR5YUITZYYVFyWHNlaDNXMVk)
+- [official Linux distribution for Raspberry Pi](https://www.raspberrypi.org/downloads/raspbian/) or
+- [Memristor's Raspbian edition](https://drive.google.com/drive/folders/0B8iyR5YUITZYYVFyWHNlaDNXMVk)
 
 ### SSH connection
 To connect to Raspberry Pi from your computer and type commands remotely SSH is required. To configure SSH please
