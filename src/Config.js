@@ -46,7 +46,7 @@ if (process.env.MEP_TEST) {
             alias: 'scheduler',
             describe: 'Path to strategy\'s scheduler',
             type: 'path',
-            default: '../strategies/default/DefaultScheduler.js'
+            default: 'strategies/default/DefaultScheduler.js'
         },
         'v': {
             alias: 'server',
@@ -66,7 +66,7 @@ if (process.env.MEP_TEST) {
     // Set general CLI options
     let yargs = Yargs
         .usage('Usage: ./mep [options]')
-        .example('./mep -t yellow -c ../strategies/small/DefaultScheduler.js -r small', 'Use small robot on green table and turn off log messages')
+        .example('./mep -t yellow -c strategies/small/DefaultScheduler.js -r small', 'Use small robot on green table and turn off log messages')
         .help('h')
         .alias('h', 'help')
         .epilog('Copyright @2016 - 2018 Memristor')

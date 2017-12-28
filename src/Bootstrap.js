@@ -1,4 +1,5 @@
 'use strict';
+const Path = require('path');
 global.Mep = require('./Mep');
 
 async function bootstrap() {
@@ -13,8 +14,13 @@ async function bootstrap() {
     await Mep.init();
 
     // Load strategy
+    let schedulerPath = Mep.Config.get('scheduler');
+    if (Path.isAbsolute(schedulerPath) === false) {
+        schedulerPath = Path.join('../', schedulerPath);
+    }
+    
     try {
-        let Scheduler = require(Mep.Config.get('scheduler'));
+        let Scheduler = require(schedulerPath);
         new Scheduler();
     } catch (e) {
         Mep.Log.error('Strategy', e);

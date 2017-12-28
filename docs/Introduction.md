@@ -41,7 +41,7 @@ The command will download MEP master source files and install all dependencies.
 ### Hello World move
 Before your robot make the first step please check if everything is connected properly (eg. batteries and electronic boards),
 put your robot in the middle of a terrain and run:
-```./mep -c ../strategies/boilerplate/DefaultScheduler.js```
+```./mep -c strategies/boilerplate/DefaultScheduler.js```
 This command will execute a strategy located in `strategies/boilerplate` and your robot should go 10cm forward and backwards.
 If the robot went forward and backwards then congratulations! That means software, electronics and basic mechanisms works fine.
 Now, the rest should be easy.

@@ -15,7 +15,7 @@
     "docs": "./node_modules/.bin/esdoc",
     "start": "node src/Bootstrap.js",
     "simulation": "node src/Bootstrap.js -s -v 127.0.0.1:1117",
-    "small": "NODE_PATH=$HOME/node_modules ./mep -t yellow -c ../strategies/small/DefaultScheduler.js -r small"
+    "small": "NODE_PATH=$HOME/node_modules ./mep -t yellow -c strategies/small/DefaultScheduler.js -r small"
   },
   "repository": {
     "type": "git",
