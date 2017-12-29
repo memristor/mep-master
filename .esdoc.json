@@ -24,8 +24,7 @@
             "./docs/Source_Roadmap.md",
             "./docs/Log.md",
             "./docs/Goals.md",
-            "./docs/Inspiration.md",
-            "./docs/Creating_Driver.md"
+            "./docs/Telemetry.md"
           ]
         },
         "test": {
